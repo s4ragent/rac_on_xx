@@ -1,5 +1,5 @@
 #!/bin/bash
-curl  https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+curl -O https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 rpm -ivh epel-release-latest-7.noarch.rpm
 yum -y --enablerepo=epel groupinstall Xfce
 yum -y install xrdp
