@@ -6,8 +6,8 @@
 
 VCONF=/etc/vxlan
 LOG=/var/log/vxlan
-ipcmd=/usr/share/sbin/ip
-bridgecmd=/usr/share/sbin/bridge
+ipcmd=/sbin/ip
+bridgecmd=/sbin/bridge
 # Check the configuration directory                                                                                      
 if [ ! -d $VCONF ]; then                                         
     echo "**vxlan: configuration directory ($VCONF) not found!" >>$LOG
