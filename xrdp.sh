@@ -10,4 +10,4 @@ cat << 'EOF' | sudo tee /etc/skel/.Xclients
 #!/bin/bash
 exec xfce4-session
 EOF
-chmod +x ~/.Xclients
+chmod +x /etc/skel/.Xclients
