@@ -24,7 +24,8 @@ LOG=/var/log/vxlan
 ipcmd=/sbin/ip
 bridgecmd=/sbin/bridge
 # Check the configuration directory                                                                                      
-if [ ! -d $VCONF ]; then                                         
+if [ ! -d $VCONF ]; then
+    date >>$LOG
     echo "**vxlan: configuration directory ($VCONF) not found!" >>$LOG
     exit                                                                   
 fi
