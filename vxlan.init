@@ -4,6 +4,13 @@
 # version:      0.1
 # author:       knopp
 
+#VCONF samble
+#vInterface = vxlan10
+#Id = 10
+#Ether = eth0
+#List = /etc/vxlan/all.ip
+#Address = 192.168.0.11/24
+
 VCONF=/etc/vxlan
 LOG=/var/log/vxlan
 ipcmd=/sbin/ip
