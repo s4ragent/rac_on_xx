@@ -1,0 +1,108 @@
+#!/bin/sh
+# vxlan         vxlan init configuration
+# chkconfig:    2345 40 80
+# version:      0.1
+# author:       knopp
+
+VCONF=/etc/vxlan
+LOG=/var/log/vxlan
+ipcmd=/usr/share/sbin/ip
+bridgecmd=/usr/share/sbin/bridge
+# Check the configuration directory                                                                                      
+if [ ! -d $VCONF ]; then                                         
+    echo "**vxlan: configuration directory ($VCONF) not found!" >>$LOG
+    exit                                                                   
+fi
+
+
+getvxlanconf()
+{
+  vdev="$(grep -i -e '^[[:space:]]*vInterface' $conf | sed 's/[[:space:]]//g; s/^.*=//g')"
+  id="$(grep -i -e '^[[:space:]]*Id' $conf | sed 's/[[:space:]]//g; s/^.*=//g')"
+  rdev="$(grep -i -e '^[[:space:]]*Ether' $conf | sed 's/[[:space:]]//g; s/^.*=//g')"
+  addr="$(grep -i -e '^[[:space:]]*Address' $conf | sed 's/[[:space:]]//g; s/^.*=//g')"
+  iplist="$(grep -i -e '^[[:space:]]*List' $conf | sed 's/[[:space:]]//g; s/^.*=//g')"
+  #get myip 
+  myip=`$ipcmd addr show $rdev | grep 'inet ' | awk -F '[/ ]' '{print $6}'` 
+  #get broadcast addr 
+  eval `ipcalc -s -b $addr`
+}
+
+init_vxlan(){
+  [ -n "$vdev" ] && \
+  [ -n "$id" ]   && \
+  [ -n "$rdev" ] && \
+  [ -n "$addr" ] && \
+  [ -n "$BROADCAST" ] && \
+  { 
+    exe_log "$ipcmd link add $vdev type vxlan id $id dev $rdev" 
+    exe_log "$ipcmd addr add $addr broadcast $BROADCAST dev $vdev" 
+    exe_log "$ipcmd link set $vdev up" 
+  }
+}
+
+stop_vxlan(){
+  [ -n "$vdev" ] && \
+  [ -n "$id" ]   && \
+  [ -n "$rdev" ] && \
+  [ -n "$addr" ] && \
+  [ -n "$BROADCAST" ] && \
+  { 
+    exe_log "$ipcmd link del $vdev" 
+  }
+}
+
+fdb_append(){
+  [ -n "$iplist" ] && \
+  [ -f $iplist ] && \
+  { 
+    for ip in  `cat $iplist`
+    do
+      if [ $ip != $myip ]; then
+		exe_log "$bridgecmd fdb append 00:00:00:00:00:00 dev $vdev dst $ip" 
+      fi
+    done
+  }
+}
+
+exe_log(){
+         echo "" >>$LOG
+	 date >>$LOG
+         echo $1 >>$LOG
+         $1 >>$LOG 2>&1
+}
+
+case "$1" in
+  start)
+    for conf in $VCONF/*.conf 
+    do
+      getvxlanconf
+      init_vxlan
+      fdb_append
+    done
+    touch /var/lock/subsys/vxlan
+    ;;
+
+  stop)
+    for conf in $VCONF/*.conf 
+    do
+      getvxlanconf
+      stop_vxlan
+    done
+    rm -f /var/lock/subsys/vxlan
+    ;;
+
+  restart)
+    $0 stop
+    $0 start
+    ;;
+  
+  reload)
+    for conf in $VCONF/*.conf 
+    do
+      getvxlanconf
+      fdb_append
+    done
+    touch f /var/lock/subsys/vxlan
+    ;;
+esac
