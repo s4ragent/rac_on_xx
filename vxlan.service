@@ -2,7 +2,7 @@
 Description=vxlan auto start
 Requires=network.target
 After=network.target
-Before=docker.service
+Before=sshd.service
 
 [Service]
 Type=oneshot
