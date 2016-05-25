@@ -1,24 +1,20 @@
-parse_yaml(){
-   local prefix=$2
-   local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
-   sed -ne "s|^\($s\):|\1|" \
-        -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
-        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
-   awk -F$fs '{
-      indent = length($1)/2;
-      vname[indent] = $2;
-      for (i in vname) {if (i > indent) {delete vname[i]}}
-      if (length($3) > 0) {
-         vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
-         printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
-      }
-   }'
-}
-
-#get variables from vars.yml
-eval $(parse_yaml vars.yml)
+#!/bin/bash
+source ./vars.sh
 
 NETWORKS=($NETWORK)
+
+creategcedisk(){
+	gcloud compute disks create "$1" --size $2 --type "pd-ssd"
+}
+
+creategceinstance(){
+	name=$1
+	ip=$2
+	disksize=$3
+	diskname="${1}-2"
+	createdisk  $diskname $disksize
+	gcloud compute instances create $name  --private-network-ip $ip --machine-type "n1-highmem-2" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-standard" --boot-disk-device-name $name --boot-disk-size 200GB  --disk "name=$diskname,device-name=$diskname,mode=rw,boot=no,auto-delete=yes"
+}
 
 getnodename ()
 {
@@ -598,5 +594,7 @@ case "$1" in
   "create_clonepl_startsh" ) shift;create_clonepl_startsh $*;;
   "exessh" ) shift;exessh $*;;
   "exerootssh" ) shift;exerootssh $*;;
+  "creategcedisk" ) shift;creategcedisk $*;;
+  "creategceinstance" ) shift;creategceinstance $*;;  
   * ) echo "Ex " ;;
 esac
