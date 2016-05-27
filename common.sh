@@ -16,19 +16,6 @@ ORAINVENTORY="/u01/app/oraInventory"
 INSTALL_LANG="ja"
 NETWORKS=($NETWORK)
 
-creategcedisk(){
-	gcloud compute disks create "$1" --size $2 --type "pd-ssd"
-}
-
-creategceinstance(){
-	name=$1
-	ip=$2
-	disksize=$3
-	diskname="${1}-2"
-	creategcedisk  $diskname $disksize
-	gcloud compute instances create $name  --private-network-ip $ip --machine-type "n1-highmem-2" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-standard" --boot-disk-device-name $name --boot-disk-size 200GB  --disk "name=$diskname,device-name=$diskname,mode=rw,boot=no,auto-delete=yes" --metadata startup-script-url=https://raw.githubusercontent.com/s4ragent/rac_on_gce/master/gcestartup.sh
-}
-
 getmynumber()
 {
 	MyIp=`ip a show eth0 | grep "inet " | awk -F '[/ ]' '{print $6}'`
@@ -71,21 +58,6 @@ getip ()
 	fi
 }
 
-createvxlanconf()
-{
-        local vxlanip=`getip $1 $2 $3`
-        #get network prefix     
-        eval `ipcalc -s -p ${NETWORKS[$1]}/24`
-        cat >/etc/vxlan/vxlan${1}.conf <<EOF
-vInterface = vxlan${1}
-Id = 1${1}
-Ether = eth0
-List = /etc/vxlan/all.ip
-Address = ${vxlanip}/${PREFIX}
-EOF
-        chkconfig vxlan on
-        service vxlan restart
-}
 
 createansiblehost(){
 	cat > hosts/localhost <<EOF
@@ -614,7 +586,6 @@ case "$1" in
   "getip" ) shift;getip $*;;
   "createdns" ) shift;createdns $*;;
   "createuser" ) shift;createuser $*;;
-  "createvxlanconf" ) shift;createvxlanconf $*;;
   "createnfsclient" ) shift;createnfsclient $*;;
   "createansiblehost" ) shift;createansiblehost $*;;
   "setupkernel" ) shift;setupkernel $*;;
@@ -622,8 +593,6 @@ case "$1" in
   "create_clonepl_startsh" ) shift;create_clonepl_startsh $*;;
   "exessh" ) shift;exessh $*;;
   "exerootssh" ) shift;exerootssh $*;;
-  "creategcedisk" ) shift;creategcedisk $*;;
-  "creategceinstance" ) shift;creategceinstance $*;;
   "getmynumber" ) shift;getmynumber $*;;
   * ) echo "Ex " ;;
 esac
