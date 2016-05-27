@@ -25,4 +25,4 @@ done
 
 chmod 0700  /usr/local/bin/vxlan.init
 systemctl enable vxlan.service
-systemctl start  vxlan.service
+systemctl restart  vxlan.service
