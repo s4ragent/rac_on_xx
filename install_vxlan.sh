@@ -7,16 +7,17 @@ for i in $NODE_LIST ;
 do
 	echo $i >> /etc/vxlan/all.ip
 done
-CNT=0
+
+CNT=1
 MyNumber=`getmynumber`
-for j in $NETWORK
+for j in "${NETWORKS[@]}"
 do
         vxlanip=`getip $CNT real $MyNumber`
         #get network prefix     
-        eval `ipcalc -s -p ${NETWORKS[$CNT]}/24`
-        cat >/etc/vxlan/vxlan${CNT}.conf <<EOF
-vInterface = vxlan${CNT}
-Id = 1${CNT}
+        eval `ipcalc -s -p ${NETWORKS[$j]}/24`
+        cat >/etc/vxlan/vxlan${j}.conf <<EOF
+vInterface = vxlan${j}
+Id = 1${j}
 Ether = eth0
 List = /etc/vxlan/all.ip
 Address = ${vxlanip}/${PREFIX}
