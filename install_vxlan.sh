@@ -26,5 +26,5 @@ EOF
 done
 
 chmod 0700  /usr/local/bin/vxlan.init
-systemctl enable vxlan >>/tmp/vxlanlog 2>&1
-systemctl restart vxlan >>/tmp/vxlanlog 2>&1
+systemctl enable vxlan 
+systemctl restart vxlan
