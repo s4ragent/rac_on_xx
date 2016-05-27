@@ -24,6 +24,16 @@ do
 done
 }
 
+deleteall(){
+CNT=0
+for i in $NODE_LIST ;
+do
+	NODENAME=`getnodename $CNT`
+	delete $NODENAME
+	CNT=`expr $CNT + 1`
+done
+}
+
 ssh(){
 name=$1
 gcloud compute ssh $name 
@@ -37,6 +47,7 @@ gcloud compute instances delete $name
 
 case "$1" in
   "ssh" ) shift;ssh $*;;
+  "deleteall" ) shift;deleteall $*;;
   "startallinstance" ) shift;startallinstance $*;;
   "delete" ) shift;delete $*;;
   "creategcedisk" ) shift;creategcedisk $*;;
