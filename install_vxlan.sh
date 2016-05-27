@@ -11,7 +11,7 @@ CNT=1
 MyNumber=getmynumber
 for NETWORK in $NETWORKS
 do
-        vxlanip=`getip $MyNumber real $CNT`
+        vxlanip=`getip $CNT real $MyNumber`
         #get network prefix     
         eval `ipcalc -s -p ${NETWORKS[$CNT]}/24`
         cat >/etc/vxlan/vxlan${CNT}.conf <<EOF
