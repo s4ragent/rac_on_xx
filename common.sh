@@ -609,6 +609,7 @@ case "$1" in
   "exessh" ) shift;exessh $*;;
   "exerootssh" ) shift;exerootssh $*;;
   "creategcedisk" ) shift;creategcedisk $*;;
-  "creategceinstance" ) shift;creategceinstance $*;;  
+  "creategceinstance" ) shift;creategceinstance $*;;
+  "getmynumber" ) shift;getmynumber $*;;
   * ) echo "Ex " ;;
 esac
