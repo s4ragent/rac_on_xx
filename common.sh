@@ -16,6 +16,20 @@ creategceinstance(){
 	gcloud compute instances create $name  --private-network-ip $ip --machine-type "n1-highmem-2" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-standard" --boot-disk-device-name $name --boot-disk-size 200GB  --disk "name=$diskname,device-name=$diskname,mode=rw,boot=no,auto-delete=yes" --metadata startup-script-url=https://raw.githubusercontent.com/s4ragent/rac_on_gce/master/gcestartup.sh
 }
 
+getmynumber()
+{
+	MyIp=`ip a show eth0 | grep "inet " | awk -F '[/ ]' '{print $6}'`
+	LIST=`cat /etc/vxlan/all.ip`
+	CNT=1
+	for i in $LIST ;
+	do
+	      	if [ $i == $MyIp ]; then
+	      		echo $CNT
+	      	fi
+	      	CNT=`expr $CNT + 1`
+	done
+}
+
 getnodename ()
 {
   echo "$NODEPREFIX"`printf "%.3d" $1`
