@@ -7,7 +7,7 @@ for i in $NODE_LIST ;
 do
 	echo $i >> /etc/vxlan/all.ip
 done
-CNT=0
+CNT=1
 MyNumber=getmynumber
 for NETWORK in $NETWORKS
 do
@@ -21,6 +21,7 @@ Ether = eth0
 List = /etc/vxlan/all.ip
 Address = ${vxlanip}/${PREFIX}
 EOF
+	CNT=`expr $CNT + 1`
 done
 
 chmod 0700  /usr/local/bin/vxlan.init
