@@ -15,9 +15,12 @@ creategceinstance(){
 }
 
 startallinstance(){
+CNT=0
 for i in $NODE_LIST ;
 do
-	creategceinstance 
+	NODENAME=`getnodename $CNT`+".$DOMAIN_NAME"
+	creategceinstance $NODENAME $i $ISCSI_DISKSIZE
+	CNT=`expr $CNT + 1`
 done
 }
 
