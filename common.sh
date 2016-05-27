@@ -1,6 +1,19 @@
 #!/bin/bash
-source ./vars.sh
-
+NODE_LIST="10.140.0.5 10.140.0.6 10.140.0.7"
+SCALEIO_DISK_SIZE=100
+NETWORK="192.168.0.0 192.168.100.0"
+BASE_IP=50
+NODEPREFIX="node"
+DOMAIN_NAME="public"
+SCAN_NAME="scan"
+GRID_PASSWORD="grid123"
+ORACLE_PASSWORD="oracle123"
+ORA_ORACLE_BASE="/u01/app/oracle"
+ORA_ORACLE_HOME="/u01/app/oracle/product/12.1.0/dbhome_1"
+GRID_ORACLE_BASE="/u01/app/grid"
+GRID_ORACLE_HOME="/u01/app/12.1.0/grid"
+ORAINVENTORY="/u01/app/oraInventory"
+INSTALL_LANG="ja"
 NETWORKS=($NETWORK)
 
 creategcedisk(){
