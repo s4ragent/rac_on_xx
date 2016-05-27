@@ -25,7 +25,7 @@ done
 }
 
 deleteall(){
-CNT=0
+CNT=1
 for i in $NODE_LIST ;
 do
 	NODENAME=`getnodename $CNT`
