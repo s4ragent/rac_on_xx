@@ -17,7 +17,7 @@ do
         eval `ipcalc -s -p ${NETWORKS[$CNT]}/24`
         cat >/etc/vxlan/vxlan${CNT}.conf <<EOF
 vInterface = vxlan${CNT}
-Id = 1${j}
+Id = 1${CNT}
 Ether = eth0
 List = /etc/vxlan/all.ip
 Address = ${vxlanip}/${PREFIX}
@@ -26,5 +26,5 @@ EOF
 done
 
 chmod 0700  /usr/local/bin/vxlan.init
-systemctl enable vxlan.service
-systemctl restart  vxlan.service
+systemctl enable vxlan
+systemctl restart vxlan
