@@ -9,7 +9,7 @@ if [ ! -e  /etc/oracle-release ]; then
   bash ./centos72oel7.sh
 fi
 if [ ! -e  /etc/vxlan/all.ip ]; then
-  bash -x ./install_vxlan.sh
+  bash ./install_vxlan.sh
 fi
 
 
