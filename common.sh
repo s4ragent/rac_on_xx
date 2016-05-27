@@ -38,6 +38,7 @@ getmynumber()
 	do
 	      	if [ $i == $MyIp ]; then
 	      		echo $CNT
+	      		break
 	      	fi
 	      	CNT=`expr $CNT + 1`
 	done
