@@ -7,7 +7,7 @@ for i in $NODE_LIST ;
 do
 	echo $i >> /etc/vxlan/all.ip
 done
-CNT=1
+CNT=0
 MyNumber=`getmynumber`
 for j in $NETWORKS
 do
