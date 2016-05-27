@@ -8,7 +8,7 @@ do
 	echo $i >> /etc/vxlan/all.ip
 done
 CNT=1
-MyNumber=getmynumber
+MyNumber=`getmynumber`
 for NETWORK in $NETWORKS
 do
         vxlanip=`getip $CNT real $MyNumber`
