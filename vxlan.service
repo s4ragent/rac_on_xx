@@ -8,6 +8,7 @@ Before=sshd.service
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/local/bin/vxlan.init start
+ExecStop=/usr/local/bin/vxlan.init stop
 User=root
 Group=root
 
