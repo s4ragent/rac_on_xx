@@ -13,9 +13,14 @@ if [ ! -e  /etc/oracle-release ]; then
   bash ./centos72oel7.sh
 fi
 
+if [ ! -e  /etc/addn-hosts ]; then
+  bash ./dnsmasq_nm.sh
+fi
+
 if [ ! -e  /etc/vxlan/all.ip ]; then
   bash ./install_vxlan.sh
 fi
+
 
 
 
