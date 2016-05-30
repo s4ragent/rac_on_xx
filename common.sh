@@ -160,36 +160,6 @@ createsshkey(){
     	done
 }
 
-createdns(){
-
-cat << EOF >/etc/hosts
-127.0.0.1       localhost
-EOF
-
-getip 0 scan >> /etc/hosts
-for i in `seq 1 64`; do
-  nodename=`getnodename $i`
-  echo "`getip 0 real $i` $nodename".${DOMAIN_NAME}" $nodename" >> /etc/hosts
-  vipnodename=$nodename"-vip"
-  vipi=`expr $i + 100`
-  echo "`getip 0 real $vipi` $vipnodename".${DOMAIN_NAME}" $vipnodename" >> /etc/hosts
-done
-
-
-cat << EOT >> /etc/dnsmasq.conf
-listen-address=127.0.0.1
-resolv-file=/etc/resolv.dnsmasq.conf
-conf-dir=/etc/dnsmasq.d
-user=root
-EOT
-
-cat << EOT >> /etc/resolv.dnsmasq.conf
-nameserver 8.8.8.8
-nameserver 8.8.4.4
-EOT
-chkconfig dnsmasq on
-service dnsmasq start
-}
 
 createrules()
 {
