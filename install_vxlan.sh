@@ -10,7 +10,7 @@ done
 
 CNT=0
 MyNumber=`getmynumber`
-for j in `seq 1 ${#NETWORKS[@]}`
+for j in $NETWORK
 do
         vxlanip=`getip $CNT real $MyNumber`
         #get network prefix     
