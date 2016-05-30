@@ -18,7 +18,7 @@ if [ ! -e  /etc/addn-hosts ]; then
 fi
 
 if [ ! -e  /etc/vxlan/all.ip ]; then
-  bash ./install_vxlan.sh
+  bash -x ./install_vxlan.sh >> /tmp/vxlan.log 2>&1
 fi
 
 
