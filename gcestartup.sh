@@ -11,6 +11,7 @@ fi
 
 if [ ! -e  /etc/oracle-release ]; then
   bash ./centos72oel7.sh
+  exit
 fi
 
 if [ ! -e  /etc/addn-hosts ]; then
