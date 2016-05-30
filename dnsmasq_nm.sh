@@ -17,5 +17,5 @@ for i in `seq 1 64`; do
   echo "`getip 0 vip $i` $vipnodename".${DOMAIN_NAME}" $vipnodename" >> /etc/addn-hosts
 done
 
-
+systemctl restart NetworkManager
 
