@@ -88,29 +88,48 @@ exe_log(){
          $1 >>$LOG 2>&1
 }
 
-case "$1" in
-  start)
-    for conf in $VCONF/*.conf 
-    do
-      getvxlanconf
-      init_vxlan
-      fdb_append
-    done
-    touch /var/lock/subsys/vxlan
-    ;;
 
+vxlan_start(){
+	for conf in $VCONF/*.conf 
+	do
+		getvxlanconf
+      		init_vxlan
+      		fdb_append
+    	done
+    	touch /var/lock/subsys/vxlan
+}
+
+vxlan_stop(){
+	for conf in $VCONF/*.conf 
+	do
+		getvxlanconf
+		stop_vxlan
+	done
+	rm -f /var/lock/subsys/vxlan
+}
+
+nm_init(){
+	 if [ "$2" ="up" ]; then
+  		vxlan_start
+  	elif [ "$2" = "down" ]; then
+  		vxlan_stop
+	fi
+}
+
+case "$1" in
+  eth0)
+	nm_init
+    ;;
+  start)
+	vxlan_start
+    ;;
   stop)
-    for conf in $VCONF/*.conf 
-    do
-      getvxlanconf
-      stop_vxlan
-    done
-    rm -f /var/lock/subsys/vxlan
+	vxlan_stop
     ;;
 
   restart)
-    $0 stop
-    $0 start
+    vxlan_stop
+    vxlan_start
     ;;
   
   reload)
