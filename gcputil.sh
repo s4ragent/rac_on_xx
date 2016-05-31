@@ -1,6 +1,11 @@
 #!/bin/bash
 source ./common.sh
 
+get_console(){
+name=$1
+gcloud compute instances get-serial-port-output $name
+}
+
 creategcedisk(){
 	gcloud compute disks create "$1" --size $2 --type "pd-ssd"
 }
@@ -47,6 +52,7 @@ gcloud compute instances delete $name
 
 case "$1" in
   "ssh" ) shift;ssh $*;;
+  "get_console" ) shift;get_console $*;;  
   "deleteall" ) shift;deleteall $*;;
   "startallinstance" ) shift;startallinstance $*;;
   "delete" ) shift;delete $*;;
