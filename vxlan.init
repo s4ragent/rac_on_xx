@@ -118,20 +118,18 @@ nm_init(){
 
 case "$1" in
   eth0)
-	nm_init
+    nm_init
     ;;
   start)
-	vxlan_start
+    vxlan_start
     ;;
   stop)
-	vxlan_stop
+    vxlan_stop
     ;;
-
   restart)
     vxlan_stop
     vxlan_start
     ;;
-  
   reload)
     for conf in $VCONF/*.conf 
     do
