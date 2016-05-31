@@ -109,7 +109,7 @@ vxlan_stop(){
 }
 
 nm_init(){
-	 if [ "$2" ="up" ]; then
+	if [ "$2" = "up" ]; then
   		vxlan_start
   	elif [ "$2" = "down" ]; then
   		vxlan_stop
