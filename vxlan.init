@@ -109,17 +109,16 @@ vxlan_stop(){
 }
 
 nm_init(){
-	if [ "$2" = "up" ]; then
+	if [ "$1" = "up" ]; then
   		vxlan_start
-  	elif [ "$2" = "down" ]; then
+  	elif [ "$1" = "down" ]; then
   		vxlan_stop
 	fi
 }
 
 case "$1" in
   eth0)
-    nm_init
-    ;;
+    shift;nm_init $*;;
   start)
     vxlan_start
     ;;
