@@ -1,7 +1,7 @@
 #!/bin/bash
 source ./common.sh
-cp ./vxlan.service /etc/systemd/system/vxlan.service
-cp ./vxlan.init /usr/local/bin/vxlan.init
+#cp ./vxlan.service /etc/systemd/system/vxlan.service
+#cp ./vxlan.init /usr/local/bin/vxlan.init
 mkdir -p /etc/vxlan/
 for i in $NODE_LIST ;
 do
@@ -25,6 +25,10 @@ EOF
 	CNT=`expr $CNT + 1`
 done
 
-chmod 0700  /usr/local/bin/vxlan.init
-ln -s /etc/systemd/system/vxlan.service /etc/systemd/system/multi-user.target.wants/vxlan.service
-systemctl start vxlan
+#chmod 0700  /usr/local/bin/vxlan.init
+#ln -s /etc/systemd/system/vxlan.service /etc/systemd/system/multi-user.target.wants/vxlan.service
+#systemctl start vxlan
+cp ./vxlan.init /etc/NetworkManager/dispatcher.d/10_vxlan
+chmod 0700  /etc/NetworkManager/dispatcher.d/10_vxlan
+systemctl enable NetworkManager-dispatcher.service
+systemctl start NetworkManager-dispatcher.service
