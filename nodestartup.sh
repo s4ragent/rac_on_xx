@@ -35,12 +35,12 @@ if [ ! -e  /home/oracle ]; then
 fi
 
 PreRPM=`rpm -qa | grep $PreInstallRPM | wc -l`
-if [ $PreRPM -gt 0 ]; then
+if [ $PreRPM -eq 0 ]; then
   yum -y install $PreInstallRPM
 fi
 
 Kernel=` grep grid /etc/security/limits.conf | wc -l`
-if [ $Kernel -gt 0 ]; then
+if [ $Kernel -eq 0 ]; then
   bash ./setupkernel.sh
 fi
 
