@@ -1,8 +1,9 @@
 #!/bin/bash
 mkdir -p ${GRID_ORACLE_BASE}
 mkdir -p ${GRID_ORACLE_HOME}
-mkdir -p ${SHARED_CONFIG}
-mkdir -p ${SHARED_DATA}
+mkdir -p ${GRID_CONFIG}
+mkdir -p ${ORA_DATA}
+mkdir -p ${WORK}
 chown -R grid:oinstall ${MOUNT_PATH}
 mkdir -p ${ORA_ORACLE_BASE}
 chown oracle:oinstall ${ORA_ORACLE_BASE}
