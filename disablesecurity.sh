@@ -6,3 +6,5 @@ setenforce 0
 ##disable firewalled##
 systemctl stop firewalld
 systemctl disable firewalled
+
+touch /root/disablesecuritydone
