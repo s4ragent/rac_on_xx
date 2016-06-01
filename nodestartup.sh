@@ -4,8 +4,12 @@ if [ ! -e  /root/rac_on_gce ]; then
   git clone https://github.com/s4ragent/rac_on_gce /root/rac_on_gce
 fi
 cd /root/rac_on_gce
+source ./common.sh
 
-bash ./disablesecurity.sh
+if [ ! -e  /root/disablesecuritydone ]; then
+  bash ./disablesecurity.sh
+fi
+
 
 HasSwap=`free | grep Swap | awk '{print $2}'`
 if [ "$HasSwap" = "0" ]; then
