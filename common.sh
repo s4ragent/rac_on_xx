@@ -20,6 +20,7 @@ GRID_ORACLE_HOME="/u01/app/12.1.0/grid"
 ORAINVENTORY="/u01/app/oraInventory"
 NFS_ROOT="/nfs"
 INSTALL_LANG="ja"
+PreInstallRPM="oracle-rdbms-server-12cR1-preinstall"
 NETWORKS=($NETWORK)
 
 getmynumber()
