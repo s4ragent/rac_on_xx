@@ -42,7 +42,7 @@ do
 	#delete $NODENAME
 	CNT=`expr $CNT + 1`
 done
-delete $INSTANCES
+delete "$INSTANCES"
 }
 
 ssh(){
