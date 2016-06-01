@@ -1,4 +1,5 @@
 #!/bin/bash
+source ./common.sh
 yum -y install nfs-utils
 
 mkdir -p ${GRID_ORACLE_BASE}
