@@ -32,6 +32,7 @@ done
 }
 
 deleteall(){
+delete nfs
 CNT=1
 for i in $NODE_LIST ;
 do
