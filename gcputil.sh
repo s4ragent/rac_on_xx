@@ -32,14 +32,17 @@ done
 }
 
 deleteall(){
-delete nfs
+#delete nfs
+local INSTANCES="nfs"
 CNT=1
 for i in $NODE_LIST ;
 do
 	NODENAME=`getnodename $CNT`
-	delete $NODENAME
+	INSTANCES="$INSTANCES $NODENAME"
+	#delete $NODENAME
 	CNT=`expr $CNT + 1`
 done
+delete $INSTANCES
 }
 
 ssh(){
