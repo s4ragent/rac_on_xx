@@ -15,16 +15,18 @@ creategceinstance(){
 	ip=$2
 	disksize=$3
 	diskname="${1}-2"
-	creategcedisk  $diskname $disksize
-	gcloud compute instances create $name  --private-network-ip $ip --machine-type "n1-highmem-2" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-standard" --boot-disk-device-name $name --boot-disk-size 200GB  --disk "name=$diskname,device-name=$diskname,mode=rw,boot=no,auto-delete=yes" --metadata startup-script-url=https://raw.githubusercontent.com/s4ragent/rac_on_gce/master/gcestartup.sh
+	#creategcedisk  $diskname $disksize
+	#gcloud compute instances create $name  --private-network-ip $ip --machine-type "n1-highmem-2" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-standard" --boot-disk-device-name $name --boot-disk-size 200GB  --disk "name=$diskname,device-name=$diskname,mode=rw,boot=no,auto-delete=yes" --metadata startup-script-url=https://raw.githubusercontent.com/s4ragent/rac_on_gce/master/gcestartup.sh
+	gcloud compute instances create $name --private-network-ip $ip --machine-type "n1-highmem-2" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-standard" --boot-disk-device-name $name --boot-disk-size 200GB  --metadata startup-script-url=https://raw.githubusercontent.com/s4ragent/rac_on_gce/master/$4
 }
 
 startallinstance(){
+creategceinstance nfs $NFS_SERVER $ISCSI_DISKSIZE nfsstartup.sh	
 CNT=1
 for i in $NODE_LIST ;
 do
 	NODENAME=`getnodename $CNT`
-	creategceinstance $NODENAME $i $ISCSI_DISKSIZE
+	creategceinstance $NODENAME $i $ISCSI_DISKSIZE nodestartup.sh
 	CNT=`expr $CNT + 1`
 done
 }
