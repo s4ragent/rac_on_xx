@@ -38,3 +38,16 @@ PreRPM=`rpm -qa | grep $PreInstallRPM | wc -l`
 if [ $PreRPM -gt 0 ]; then
   yum -y install $PreInstallRPM
 fi
+
+Kernel=` grep grid /etc/security/limits.conf | wc -l`
+if [ $Kernel -gt 0 ]; then
+  bash ./setupkernel.sh
+fi
+
+if [ ! -e  /etc/ntp.conf ]; then
+  systemctl stop ntpd
+  systemctl disable ntpd
+  mv /etc/ntp.conf /etc/ntp.conf.original
+  rm -f /var/run/ntpd.pid
+fi
+
