@@ -5,6 +5,8 @@ if [ ! -e  /root/rac_on_gce ]; then
 fi
 cd /root/rac_on_gce
 
+bash ./disablesecurity.sh
+
 HasSwap=`free | grep Swap | awk '{print $2}'`
 if [ "$HasSwap" = "0" ]; then
   bash ./createswap.sh
