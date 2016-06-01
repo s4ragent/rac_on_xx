@@ -34,5 +34,7 @@ if [ ! -e  /home/oracle ]; then
   bash -x ./createnfsclient.sh
 fi
 
-
-
+PreRPM=`rpm -qa | grep $PreInstallRPM | wc -l`
+if [ $PreRPM -gt 0 ]; then
+  yum -y install $PreInstallRPM
+fi
