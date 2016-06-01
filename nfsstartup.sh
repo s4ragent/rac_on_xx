@@ -5,6 +5,6 @@ if [ ! -e  /root/rac_on_gce ]; then
 fi
 cd /root/rac_on_gce
 
-if [ ! -e  /etc/exports ]; then
+if [ ! -e /nfs ]; then
   bash ./createnfs.sh
 fi
