@@ -25,10 +25,8 @@ fi
 
 if [ ! -e  /home/oracle ]; then
   bash -x ./createuser.sh
-fi
-
-if [ ! -e  $WORK ]; then
   bash -x ./createnfsclient.sh
 fi
+
 
 
