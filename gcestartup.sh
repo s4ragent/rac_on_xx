@@ -23,6 +23,12 @@ if [ ! -e  /etc/vxlan/all.ip ]; then
   bash -x ./install_vxlan.sh >> /tmp/vxlan.log 2>&1
 fi
 
+if [ ! -e  /home/oracle ]; then
+  bash -x ./createuser.sh
+fi
 
+if [ ! -e  $WORK ]; then
+  bash -x ./createnfsclient.sh
+fi
 
 
