@@ -56,6 +56,7 @@ EOF
 ### for grid install####
 export ORACLE_BASE=${GRID_ORACLE_BASE}
 export ORACLE_HOME=${GRID_ORACLE_HOME}
+export ORACLE_HOSTNAME=${ORACLE_HOSTNAME}
 EOF
 
   cat >> /home/grid/.bash_profile <<'EOF'
