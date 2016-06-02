@@ -21,6 +21,7 @@ ORAINVENTORY="/u01/app/oraInventory"
 NFS_ROOT="/nfs"
 INSTALL_LANG="ja"
 PreInstallRPM="oracle-rdbms-server-12cR1-preinstall"
+LimitsConf="oracle-rdbms-server-12cR1-preinstall"
 NETWORKS=($NETWORK)
 
 getmynumber()
