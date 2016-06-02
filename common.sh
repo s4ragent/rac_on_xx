@@ -3,26 +3,28 @@ NFS_SERVER="10.140.0.3"
 NODE_LIST="10.140.0.5 10.140.0.6 10.140.0.7"
 ISCSI_DISKSIZE=100
 NETWORK="192.168.0.0 192.168.100.0"
+NETWORKS=($NETWORK)
+INSTALL_LANG="ja"
 BASE_IP=50
 NODEPREFIX="node"
 DOMAIN_NAME="public"
 SCAN_NAME="scan"
 GRID_PASSWORD="grid123"
 ORACLE_PASSWORD="oracle123"
+NFS_ROOT="/nfs"
 GRID_CONFIG="/u01/config"
 ORA_DATA="/u01/data"
 MOUNT_PATH="/u01"
 WORK="/u01/work"
 ORA_ORACLE_BASE="/u01/app/oracle"
-ORA_ORACLE_HOME="/u01/app/oracle/product/12.1.0/dbhome_1"
 GRID_ORACLE_BASE="/u01/app/grid"
+###version specific
+ORA_ORACLE_HOME="/u01/app/oracle/product/12.1.0/dbhome_1"
 GRID_ORACLE_HOME="/u01/app/12.1.0/grid"
 ORAINVENTORY="/u01/app/oraInventory"
-NFS_ROOT="/nfs"
-INSTALL_LANG="ja"
 PreInstallRPM="oracle-rdbms-server-12cR1-preinstall"
 LimitsConf="oracle-rdbms-server-12cR1-preinstall"
-NETWORKS=($NETWORK)
+######
 
 getmynumber()
 {
