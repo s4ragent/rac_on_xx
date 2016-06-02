@@ -39,9 +39,8 @@ if [ $PreRPM -eq 0 ]; then
   yum -y install $PreInstallRPM
 fi
 
-Kernel=` grep grid /etc/security/limits.conf | wc -l`
-if [ $Kernel -eq 0 ]; then
-  bash ./setupkernel.sh
+if [ ! -e  /etc/security/limits.d/${LimitsConf}-grid.conf ]; then
+  bash ./limits.sh
 fi
 
 if [ ! -e  /etc/ntp.conf ]; then
