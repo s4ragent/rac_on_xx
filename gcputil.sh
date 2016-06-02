@@ -25,7 +25,8 @@ creategceinstance nfs $NFS_SERVER $ISCSI_DISKSIZE nfsstartup.sh
 CNT=1
 for i in $NODE_LIST ;
 do
-	NODENAME=`getnodename $CNT`
+	#NODENAME=`getnodename $CNT`
+	NODENAME=${DOMAIN_NAME}$i
 	creategceinstance $NODENAME $i $ISCSI_DISKSIZE nodestartup.sh
 	CNT=`expr $CNT + 1`
 done
@@ -37,7 +38,8 @@ local INSTANCES="nfs"
 CNT=1
 for i in $NODE_LIST ;
 do
-	NODENAME=`getnodename $CNT`
+	#NODENAME=`getnodename $CNT`
+	NODENAME=${DOMAIN_NAME}$i
 	INSTANCES="$INSTANCES $NODENAME"
 	#delete $NODENAME
 	CNT=`expr $CNT + 1`
