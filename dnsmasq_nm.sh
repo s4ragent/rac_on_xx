@@ -3,6 +3,7 @@ source ./common.sh
 cat >  /etc/NetworkManager/conf.d/dns.conf <<EOF
 [main]
 dns=dnsmasq
+ipv4.dns-search=$DOMAIN_NAME
 EOF
 
 cat>  /etc/NetworkManager/dnsmasq.d/hosts << EOF
