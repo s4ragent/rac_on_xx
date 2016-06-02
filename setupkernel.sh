@@ -1,4 +1,6 @@
 #!/bin/bash
+source ./common.sh
+
 sed -i 's/oracle/#oracle/' /etc/security/limits.conf
 cat >> /etc/security/limits.conf <<EOF
 #this is for oracle install#
