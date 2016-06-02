@@ -20,7 +20,7 @@ creategceinstance(){
 	gcloud compute instances create $name --private-network-ip $ip --machine-type "n1-highmem-2" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-standard" --boot-disk-device-name $name --boot-disk-size 200GB  --metadata startup-script-url=https://raw.githubusercontent.com/s4ragent/rac_on_gce/master/$4
 }
 
-startallinstance(){
+startall(){
 creategceinstance nfs $NFS_SERVER $ISCSI_DISKSIZE nfsstartup.sh	
 CNT=1
 for i in $NODE_LIST ;
@@ -60,7 +60,7 @@ case "$1" in
   "ssh" ) shift;ssh $*;;
   "get_console" ) shift;get_console $*;;  
   "deleteall" ) shift;deleteall $*;;
-  "startallinstance" ) shift;startallinstance $*;;
+  "startall" ) shift;startall $*;;
   "delete" ) shift;delete $*;;
   "creategcedisk" ) shift;creategcedisk $*;;
   "creategceinstance" ) shift;creategceinstance $*;;
