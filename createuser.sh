@@ -1,5 +1,7 @@
 #!/bin/bash
 source ./common.sh
+MyNumber=`getmynumber`
+ORACLE_HOSTNAME=`getnodename $MyNumber`.${DOMAIN_NAME}
 
   ###delete user ###
   userdel -r oracle
@@ -40,6 +42,7 @@ EOF
 ### for oracle install ####
 export ORACLE_BASE=${ORA_ORACLE_BASE}
 export ORACLE_HOME=${ORA_ORACLE_HOME}
+export ORACLE_HOSTNAME=${ORACLE_HOSTNAME}
 EOF
 
   cat >> /home/oracle/.bash_profile <<'EOF'
