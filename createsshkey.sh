@@ -7,10 +7,11 @@ if [ "$MyNumber" = "1" ] ; then
 	ssh-keygen -t rsa -P "" -f $WORK/id_rsa
 
 	CNT=1
-	for i in NODE_LIST; do
+	for i in $NODE_LIST; do
       		nodename=`getnodename $CNT`
       		nodeip=`getip 0 real $CNT`
       		ssh-keyscan -T 180 -t rsa $nodename >> $WORK/known_hosts
+      		ssh-keyscan -T 180 -t rsa ${nodename}.${DOMAIN_NAME} >> $WORK/known_hosts
       		ssh-keyscan -T 180 -t rsa $nodeip >> $WORK/known_hosts
       		CNT=`expr $CNT + 1`
 	done
