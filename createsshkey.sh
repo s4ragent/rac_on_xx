@@ -6,7 +6,7 @@ if [ "$MyNumber" = "1" ] ; then
 	rm -rf $WORK/known_hosts
 	ssh-keygen -t rsa -P "" -f $WORK/id_rsa
 
-	$CNT=1
+	CNT=1
 	for i in NODE_LIST; do
       		nodename=`getnodename $CNT`
       		nodeip=`getip 0 real $CNT`
@@ -33,6 +33,10 @@ do
         chmod 700 /home/$user/.ssh
         chmod 600 /home/$user/.ssh/*
 done
+if [ ! -e  /root/.ssh/authorized_keys ]; then
+  mkdir -p /root/.ssh
+fi
 cat $WORK/id_rsa.pub /root/.ssh/authorized_keys
 chmod 600 /root/.ssh/authorized_keys
+chmod 700 /root/.ssh
   
