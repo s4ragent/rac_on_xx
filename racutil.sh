@@ -1,6 +1,14 @@
 #!/bin/bash
 source ./common.sh
 
+exessh(){
+	ssh -i id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $1@`getnodename $2`
+}
+
+exerootssh(){
+	ssh -i $1 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getnodename $2`
+}
+
 gridstatus(){
 	ssh -i id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real $1` $GRID_ORACLE_HOME/bin/crsctl status resource -t
 }
