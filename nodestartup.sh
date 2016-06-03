@@ -50,3 +50,6 @@ if [ ! -e  /etc/ntp.conf ]; then
   rm -f /var/run/ntpd.pid
 fi
 
+if [ ! -e  /home/grid/.ssh/id_rsa ]; then
+  bash ./createsshkey.sh
+fi
