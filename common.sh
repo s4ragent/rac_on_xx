@@ -24,6 +24,11 @@ GRID_ORACLE_HOME="/u01/app/12.1.0/grid"
 ORAINVENTORY="/u01/app/oraInventory"
 PreInstallRPM="oracle-rdbms-server-12cR1-preinstall"
 LimitsConf="oracle-rdbms-server-12cR1-preinstall"
+DB_MEDIA1="linuxamd64_12102_database_1of2.zip"
+DB_MEDIA2="linuxamd64_12102_database_2of2.zip"
+GRID_MEDIA1="linuxamd64_12102_grid_1of2.zip"
+GRID_MEDIA2="linuxamd64_12102_grid_2of2.zip"
+DOWNLOAD_CMD="gsutil cp gs://s4ragent2848/"
 ######
 
 getmynumber()
