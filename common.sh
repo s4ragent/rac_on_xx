@@ -76,32 +76,9 @@ getip ()
 	fi
 }
 
-exessh(){
-	ssh -i id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $1@`getnodename $2`
-}
-
-exerootssh(){
-	ssh -i $1 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getnodename $2`
-}
-
 
 case "$1" in
-  "gridstatus" ) shift;gridstatus $*;;
-  "createoraclehome" ) shift;createoraclehome $*;;
-  "createimg" ) shift;createimg $*;;
-  "creatersp" ) shift;creatersp $*;;
-  "createsshkey" ) shift;createsshkey $*;;
-  "exedbca" ) shift;exedbca $*;;
-  "exedbca2") shift;exedbca2 $*;;
-  "deletedb") shift;deletedb $*;;
   "getip" ) shift;getip $*;;
-  "createnfsclient" ) shift;createnfsclient $*;;
-  "createansiblehost" ) shift;createansiblehost $*;;
-  "setupkernel" ) shift;setupkernel $*;;
-  "cleanGIDB" ) shift;cleanGIDB $*;;
-  "create_clonepl_startsh" ) shift;create_clonepl_startsh $*;;
-  "exessh" ) shift;exessh $*;;
-  "exerootssh" ) shift;exerootssh $*;;
   "getmynumber" ) shift;getmynumber $*;;
   * ) echo "Ex " ;;
 esac
