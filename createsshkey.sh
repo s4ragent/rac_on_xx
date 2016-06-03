@@ -8,8 +8,14 @@ if [ "$MyNumber" = "1" ] ; then
 
 	CNT=1
 	for i in $NODE_LIST; do
-      		nodename=`getnodename $CNT`
+	      	nodename=`getnodename $CNT`
       		nodeip=`getip 0 real $CNT`
+
+		while [ ! -e $WORK/$nodename ]
+		do
+			sleep 10
+		done
+
       		ssh-keyscan -T 180 -t rsa $nodename >> $WORK/known_hosts
       		ssh-keyscan -T 180 -t rsa ${nodename}.${DOMAIN_NAME} >> $WORK/known_hosts
       		ssh-keyscan -T 180 -t rsa $nodeip >> $WORK/known_hosts
