@@ -78,6 +78,7 @@ getip ()
 
 
 case "$1" in
+  "getnodename" ) shift;getnodename $*;;
   "getip" ) shift;getip $*;;
   "getmynumber" ) shift;getmynumber $*;;
   * ) echo "Ex " ;;
