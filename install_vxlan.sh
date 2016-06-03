@@ -30,5 +30,6 @@ done
 #systemctl start vxlan
 cp ./vxlan.init /etc/NetworkManager/dispatcher.d/10_vxlan
 chmod 0700  /etc/NetworkManager/dispatcher.d/10_vxlan
+bash /etc/NetworkManager/dispatcher.d/10_vxlan eth0 up
 systemctl enable NetworkManager-dispatcher.service
 systemctl start NetworkManager-dispatcher.service
