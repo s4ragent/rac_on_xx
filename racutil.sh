@@ -8,7 +8,7 @@ gridstatus(){
 creatersp()
 {
     NODECOUNT=1
-    for i in `seq 1 $1`;
+    for i in `seq 1 $NODELISTCOUNT`;
     do
       NODENAME=`getnodename $i`
       if [ $NODECOUNT = 1 ] ; then
@@ -20,7 +20,7 @@ creatersp()
     done
     
     NODECOUNT=1
-    for i in `seq 1 $1`;
+    for i in `seq 1 $NODELISTCOUNT`;
 	do
 		if [ $NODECOUNT = 1 ] ; then
 			DB_CLUSTER_NODES=`getnodename $NODECOUNT`
@@ -141,7 +141,7 @@ PROXY_USER=
 PROXY_PWD=
 EOF
 
-    for i in `seq 1 $1`;
+    for i in `seq 1 $NODELISTCOUNT`;
     do
       NODENAME=`getnodename $i`
       echo "$NODENAME ${NODENAME}-vip">> /home/grid/clusterlist.ccf
@@ -166,7 +166,7 @@ exedbca(){
 	dbcaoption="$dbcaoption -characterSet $CHARSET -nationalCharacterSet $NCHAR -totalMemory $MEMORYTARGET -databaseType $DATABASETYPE"
 
 	NODECOUNT=1
-	for i in `seq 1 $1`;
+	for i in `seq 1 $NODELISTCOUNT`;
 	do
 		if [ $NODECOUNT = 1 ] ; then
 			dbcaoption="$dbcaoption -nodelist `getnodename $NODECOUNT`"
@@ -192,7 +192,7 @@ exedbca2(){
         dbcaoption="$dbcaoption -nodelist `getnodename 1`"
 	$ORA_ORACLE_HOME/bin/dbca $dbcaoption
 
-	for i in `seq 2 $1`;
+	for i in `seq 2 $NODELISTCOUNT`;
 	do
         	dbcaoption="-silent -addInstance -gdbName $DBNAME"
 		dbcaoption="$dbcaoption -nodelist `getnodename $i`"
