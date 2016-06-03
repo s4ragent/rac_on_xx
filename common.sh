@@ -30,6 +30,9 @@ GRID_MEDIA1="linuxamd64_12102_grid_1of2.zip"
 GRID_MEDIA2="linuxamd64_12102_grid_2of2.zip"
 DOWNLOAD_CMD="gsutil cp gs://s4ragent2848/"
 ######
+NODELISTS=($NODE_LIST)
+NODECOUNT=${#NODELISTS[@]}
+
 
 getmynumber()
 {
