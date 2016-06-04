@@ -44,6 +44,7 @@ if [ ! -e  /root/.ssh/authorized_keys ]; then
   mkdir -p /root/.ssh
 fi
 cat $WORK/id_rsa.pub >> /root/.ssh/authorized_keys
-chmod 600 /root/.ssh/authorized_keys
+cp $WORK/id_rsa /root/.ssh/id_rsa
 chmod 700 /root/.ssh
+chmod 600 /root/.ssh/*
   
