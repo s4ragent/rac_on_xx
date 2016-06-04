@@ -2,15 +2,15 @@
 source ./common.sh
 
 exessh(){
-	ssh -i id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $1@`getnodename $2`
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $1@`getnodename $2`
 }
 
 exerootssh(){
-	ssh -i $1 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getnodename $2`
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getnodename $2`
 }
 
 gridstatus(){
-	ssh -i id_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real $1` $GRID_ORACLE_HOME/bin/crsctl status resource -t
+	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real $1` $GRID_ORACLE_HOME/bin/crsctl status resource -t
 }
 
 creatersp()
@@ -183,12 +183,12 @@ exedbca(){
 		fi
 			NODECOUNT=`expr $NODECOUNT + 1`
 	done
-	$ORA_ORACLE_HOME/bin/dbca $dbcaoption
+	echo "$ORA_ORACLE_HOME/bin/dbca $dbcaoption"
 }
 
 deletedb(){
 	dbcaoption="-silent -deleteDatabase -sourceDB $DBNAME" 
-	$ORA_ORACLE_HOME/bin/dbca $dbcaoption
+	echo "$ORA_ORACLE_HOME/bin/dbca $dbcaoption"
 }
 
 exedbca2(){
@@ -208,7 +208,46 @@ exedbca2(){
 	done
 }
 
+
+install_grid_db_dbca(){
+	creatersp
+	#### runinstaller(grid)
+	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real 1` /media/grid/runInstaller -silent -responseFile /home/grid/grid.rsp -ignoreSysPrereqs -ignorePrereq
+	### orainstRoot.sh
+	for i in `seq 1 $NODELISTCOUNT`;
+	do
+		ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getip 0 real $i` /u01/app/oraInventory/orainstRoot.sh
+	done
+	### root.sh (grid)
+	for i in `seq 1 $NODELISTCOUNT`;
+	do
+		ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getip 0 real $i` ${GRID_ORACLE_HOME}/root.sh
+	done
+	### asmca
+	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real 1` ${GRID_ORACLE_HOME}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=/home/grid/asm.rsp
+	### gridstatus
+	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real 1` ${GRID_ORACLE_HOME}/bin/crsctl status resource -t
+	
+	#### runinstaller(db)
+	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null oracle@`getip 0 real 1` /media/database/runInstaller -silent -responseFile /home/oracle/db.rsp -ignoreSysPrereqs -ignorePrereq
+	
+	### root.sh (db)
+	for i in `seq 1 $NODELISTCOUNT`;
+	do
+		ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getip 0 real $i` ${ORA_ORACLE_HOME}/root.sh
+	done
+	#### dbca
+	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null oracle@`getip 0 real 1` `exedbca`
+
+	### gridstatus
+	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real 1` ${GRID_ORACLE_HOME}/bin/crsctl status resource -t
+}
+
 case "$1" in
+  "install_grid_db_dbca" ) shift;install_grid_db_dbca $*;;
+  "runinstallgrid" ) shift;runinstallgrid $*;;
+  "asmca" ) shift;asmca $*;;
+  "runinstalldb" ) shift;runinstalldb $*;;
   "gridstatus" ) shift;gridstatus $*;;
   "creatersp" ) shift;creatersp $*;;
   "exedbca" ) shift;exedbca $*;;
