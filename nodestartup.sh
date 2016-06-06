@@ -27,12 +27,12 @@ if [ ! -e  /etc/addn-hosts ]; then
   bash ./dnsmasq_nm.sh
 fi
 
-if [ ! -e  /etc/NetworkManager/dispatcher.d/30_hostname ]; then
-  bash -x ./sethostname.sh
-fi
-
 if [ ! -e  /etc/vxlan/all.ip ]; then
   bash -x ./install_vxlan.sh >> /tmp/vxlan.log 2>&1
+fi
+
+if [ ! -e  /etc/NetworkManager/dispatcher.d/30_hostname ]; then
+  bash -x ./sethostname.sh
 fi
 
 if [ ! -e  /home/oracle ]; then
