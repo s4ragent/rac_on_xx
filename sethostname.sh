@@ -8,7 +8,7 @@ cat >/etc/NetworkManager/dispatcher.d/30_hostname << EOF
 #!/bin/bash
 set_hostname()
 {
-  hostnamectl set-hostname $nodename.{DOMAIN_NAME}
+  hostnamectl set-hostname $nodename.${DOMAIN_NAME}
 }
 EOF
 
@@ -18,4 +18,4 @@ case "$1" in
     shift;set_hostname $*;;
 esac
 EOF
-/etc/NetworkManager/dispatcher.d/30_hostname
+chmod 0700 /etc/NetworkManager/dispatcher.d/30_hostname
