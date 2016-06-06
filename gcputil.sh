@@ -38,8 +38,8 @@ local INSTANCES="nfs"
 CNT=1
 for i in $NODE_LIST ;
 do
-	#NODENAME=`getnodename $CNT`
-	NODENAME=${DOMAIN_NAME}$CNT
+	NODENAME=`getnodename $CNT`
+	#NODENAME=${DOMAIN_NAME}$CNT
 	INSTANCES="$INSTANCES $NODENAME"
 	#delete $NODENAME
 	CNT=`expr $CNT + 1`
