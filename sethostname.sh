@@ -4,9 +4,11 @@ source ./common.sh
 MyNumber=`getmynumber`
 nodename=`getnodename $MyNumber`
 
-echo 
-supersede host-name "node001.public";
-/etc/dhclient.conf (END)
+cat >> /etc/dhclient.conf <<EOF
+supersede host-name $nodename.${DOMAIN_NAME};
+supersede domain-search "${DOMAIN_NAME}";
+EOF
+
 
 
 
