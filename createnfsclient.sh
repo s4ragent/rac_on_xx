@@ -22,4 +22,5 @@ mount -a
 
 chown -R grid:oinstall ${MOUNT_PATH}
 chown -R oracle:oinstall ${ORA_ORACLE_BASE}
+chown -R oracle:oinstall ${ORA_ORACLE_HOME}
 chmod -R 775 ${MOUNT_PATH}
