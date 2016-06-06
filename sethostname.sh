@@ -13,7 +13,6 @@ set_hostname()
   echo "nameserver 127.0.0.1" >> /etc/resolv.conf
   echo "127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4" > /etc/hosts
   echo "::1         localhost localhost.localdomain localhost6 localhost6.localdomain6" >> /etc/hosts
-EOF
 }
 EOF
 
