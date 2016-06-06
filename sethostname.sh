@@ -9,7 +9,7 @@ supersede host-name $nodename.${DOMAIN_NAME},domain-name ${DOMAIN_NAME};
 EOF
 
 touch /root/hostnamedone
-
+reboot
 
 
 
