@@ -273,13 +273,12 @@ install_grid_db_dbca(){
 case "$1" in
   "install_grid_db_dbca" ) shift;install_grid_db_dbca $*;;
   "runinstallgrid" ) shift;runinstallgrid $*;;
-  orainstRoot
-  gridrootsh
+  "orainstRoot" ) shift;orainstRoot $*;;
+  "gridrootsh" ) shift;gridrootsh $*;;
   "asmca" ) shift;asmca $*;;
   "gridstatus" ) shift;gridstatus $*;;
   "runinstalldb" ) shift;runinstalldb $*;;
-  dbrootsh
-
+  "dbrootsh" ) shift;dbrootsh $*;;
   "creatersp" ) shift;creatersp $*;;
   "exedbca" ) shift;exedbca $*;;
   "exedbca2") shift;exedbca2 $*;;
