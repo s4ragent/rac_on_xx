@@ -31,7 +31,7 @@ if [ ! -e  /etc/vxlan/all.ip ]; then
   bash -x ./install_vxlan.sh >> /tmp/vxlan.log 2>&1
 fi
 
-if [ ! -e  /etc/NetworkManager/dispatcher.d/30_hostname ]; then
+if [ ! -e  /root/hostnamedone ]; then
   bash -x ./sethostname.sh
 fi
 
