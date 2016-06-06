@@ -9,6 +9,8 @@ supersede host-name $nodename.${DOMAIN_NAME};
 supersede domain-search "${DOMAIN_NAME}";
 EOF
 
+touch /root/hostnamedone
+
 
 
 
