@@ -268,6 +268,8 @@ install_grid_db_dbca(){
 
 	### gridstatus
 	gridstatus
+	
+	touch /root/createdb
 }
 
 case "$1" in
