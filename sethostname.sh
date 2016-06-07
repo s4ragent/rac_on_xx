@@ -26,7 +26,6 @@ chmod 0700 /etc/NetworkManager/dispatcher.d/30_hostname
 bash /etc/NetworkManager/dispatcher.d/30_hostname vxlan0 up
 
 touch /root/hostnamedone
-reboot
 
 
 
