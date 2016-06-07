@@ -67,3 +67,7 @@ fi
 if [ ! -e  /root/downloaded ]; then
   bash ./download.sh
 fi
+
+if [ ! -e  /root/createdb ]; then
+  bash ./racutil.sh install_grid_db_dbca
+fi
