@@ -63,6 +63,7 @@ touch $WORK/$nodename
 if [ ! -e  /home/grid/.ssh/id_rsa ]; then
   bash ./createsshkey.sh
 fi
+
 if [ ! -e  /root/downloaded ]; then
   bash ./download.sh
 fi
