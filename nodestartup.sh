@@ -20,6 +20,7 @@ fi
 
 if [ ! -e  /etc/oracle-release ]; then
   bash ./centos72oel7.sh
+  reboot
   exit
 fi
 
@@ -33,6 +34,8 @@ fi
 
 if [ ! -e  /root/hostnamedone ]; then
   bash -x ./sethostname.sh
+  reboot
+  exit
 fi
 
 if [ ! -e  /home/oracle ]; then
