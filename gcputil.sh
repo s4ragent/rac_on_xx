@@ -47,6 +47,10 @@ done
 delete "$INSTANCES"
 }
 
+deleteandstart(){
+	deleteall && startall
+}
+
 ssh(){
 name=$1
 gcloud compute ssh $name 
@@ -60,11 +64,11 @@ gcloud compute instances delete $name
 
 case "$1" in
   "ssh" ) shift;ssh $*;;
+  "deleteandstart" ) shift;deleteandstart $*;; 
   "get_console" ) shift;get_console $*;;  
   "deleteall" ) shift;deleteall $*;;
   "startall" ) shift;startall $*;;
   "delete" ) shift;delete $*;;
   "creategcedisk" ) shift;creategcedisk $*;;
   "creategceinstance" ) shift;creategceinstance $*;;
-  * ) echo "Ex " ;;
 esac
