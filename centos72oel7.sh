@@ -13,4 +13,4 @@ yum -y reinstall --enablerepo=ol7_optional_latest `cat centospacks2`
 yum -y update --enablerepo=ol7_optional_latest `cat centospacks2`
 rm -f centospacks
 rm -f centospacks2
-reboot
+
