@@ -6,7 +6,7 @@ if [ ! -e  /root/rac_on_xx ]; then
   git clone https://github.com/s4ragent/rac_on_xx /root/rac_on_xx
 fi
 cd /root/rac_on_xx/gce
-source ./nodestartup.sh
+bash ./nodestartup.sh
 
 cd /root/rac_on_xx/gce
 if [ ! -e  /root/downloaded ]; then
