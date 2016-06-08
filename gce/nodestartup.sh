@@ -5,7 +5,7 @@ if [ ! -e  /root/rac_on_xx ]; then
   yum -y install git
   git clone https://github.com/s4ragent/rac_on_xx /root/rac_on_xx
 fi
-cd /root/rac_on_gce
+cd /root/rac_on_xx
 source ./common.sh
 
 if [ ! -e  /root/disablesecuritydone ]; then
