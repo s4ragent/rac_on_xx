@@ -17,7 +17,7 @@ creategceinstance(){
 	diskname="${1}-2"
 	#creategcedisk  $diskname $disksize
 	#gcloud compute instances create $name  --private-network-ip $ip --machine-type "n1-highmem-2" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-standard" --boot-disk-device-name $name --boot-disk-size 200GB  --disk "name=$diskname,device-name=$diskname,mode=rw,boot=no,auto-delete=yes" --metadata startup-script-url=https://raw.githubusercontent.com/s4ragent/rac_on_gce/master/gcestartup.sh
-	gcloud compute instances create $name --private-network-ip $ip --machine-type "n1-highmem-2" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-standard" --boot-disk-device-name $name --boot-disk-size 200GB  --metadata startup-script-url=https://raw.githubusercontent.com/s4ragent/rac_on_gce/master/$4
+	gcloud compute instances create $name --private-network-ip $ip --machine-type "n1-highmem-2" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-standard" --boot-disk-device-name $name --boot-disk-size 200GB  --metadata startup-script-url=https://raw.githubusercontent.com/s4ragent/rac_on_gce/master/gce/$4
 }
 
 startall(){
