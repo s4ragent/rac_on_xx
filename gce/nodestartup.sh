@@ -62,7 +62,7 @@ if [ ! -e  /etc/ntp.conf ]; then
   rm -f /var/run/ntpd.pid
 fi
 
-if [ ! -e  /etc/skel/.Xclients ]; then
+if [ ! -e  /root/xrdpdone ]; then
   bash ./xrdp.sh
 fi
 
