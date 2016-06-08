@@ -8,11 +8,6 @@ fi
 cd /root/rac_on_xx
 source ./common.sh
 
-if [ ! -e  /root/disablesecuritydone ]; then
-  bash ./disablesecurity.sh
-fi
-
-
 HasSwap=`free | grep Swap | awk '{print $2}'`
 if [ "$HasSwap" = "0" ]; then
   bash ./createswap.sh
@@ -24,12 +19,23 @@ if [ ! -e  /etc/oracle-release ]; then
   exit
 fi
 
+if [ ! -e  /root/xrdpdone ]; then
+  bash ./xrdp.sh
+fi
+
+PreRPM=`rpm -qa | grep $PreInstallRPM | wc -l`
+if [ $PreRPM -eq 0 ]; then
+  yum -y install $PreInstallRPM
+fi
+
+
+
 if [ ! -e  /etc/addn-hosts ]; then
   bash ./dnsmasq_nm.sh
 fi
 
 if [ ! -e  /etc/vxlan/all.ip ]; then
-  bash -x ./install_vxlan.sh >> /tmp/vxlan.log 2>&1
+  bash -x ./install_vxlan.sh
 fi
 
 if [ ! -e  /root/hostnamedone ]; then
@@ -46,10 +52,10 @@ if [ ! -e  /root/createnfsclientdone ]; then
   bash -x ./createnfsclient.sh
 fi
 
-PreRPM=`rpm -qa | grep $PreInstallRPM | wc -l`
-if [ $PreRPM -eq 0 ]; then
-  yum -y install $PreInstallRPM
+if [ ! -e  /root/disablesecuritydone ]; then
+  bash ./disablesecurity.sh
 fi
+
 
 if [ ! -e  /etc/security/limits.d/${LimitsConf}-grid.conf ]; then
   bash ./limits.sh
@@ -60,10 +66,6 @@ if [ ! -e  /etc/ntp.conf ]; then
   systemctl disable ntpd
   mv /etc/ntp.conf /etc/ntp.conf.original
   rm -f /var/run/ntpd.pid
-fi
-
-if [ ! -e  /root/xrdpdone ]; then
-  bash ./xrdp.sh
 fi
 
 MyNumber=`getmynumber`
