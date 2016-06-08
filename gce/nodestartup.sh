@@ -38,11 +38,11 @@ if [ ! -e  /root/hostnamedone ]; then
   exit
 fi
 
-if [ ! -e  /root/createuser ]; then
+if [ ! -e  /root/createuserdone ]; then
   bash -x ./createuser.sh
 fi
 
-if [ ! -e  /root/createnfsclient ]; then
+if [ ! -e  /root/createnfsclientdone ]; then
   bash -x ./createnfsclient.sh
 fi
 
@@ -60,6 +60,10 @@ if [ ! -e  /etc/ntp.conf ]; then
   systemctl disable ntpd
   mv /etc/ntp.conf /etc/ntp.conf.original
   rm -f /var/run/ntpd.pid
+fi
+
+if [ ! -e  /etc/skel/.Xclients ]; then
+  bash ./xrdp.sh
 fi
 
 MyNumber=`getmynumber`
