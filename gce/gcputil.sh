@@ -23,11 +23,17 @@ creategceinstance(){
 startall(){
 creategceinstance nfs $NFS_SERVER $ISCSI_DISKSIZE nfsstartup.sh	
 CNT=1
+
+$startup="nodestartup.sh"
+if [ "$1" = "silent" ]; then
+  $startup="nodestartup_silent.sh"
+fi
+
 for i in $NODE_LIST ;
 do
 	NODENAME=`getnodename $CNT`
 	#NODENAME=${DOMAIN_NAME}$CNT
-	creategceinstance $NODENAME $i $ISCSI_DISKSIZE nodestartup.sh
+	creategceinstance $NODENAME $i $ISCSI_DISKSIZE $startup
 	CNT=`expr $CNT + 1`
 done
 }
@@ -48,7 +54,7 @@ delete "$INSTANCES"
 }
 
 deleteandstart(){
-	deleteall && startall
+	deleteall && startall $1
 }
 
 ssh(){
