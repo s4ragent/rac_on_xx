@@ -25,4 +25,4 @@ chown -R oracle:oinstall ${ORA_ORACLE_BASE}
 chown -R oracle:oinstall ${ORA_ORACLE_HOME}
 chmod -R 775 ${MOUNT_PATH}
 
-touch /root/createnfsclient
+touch /root/createnfsclientdone
