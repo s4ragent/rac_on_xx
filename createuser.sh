@@ -66,4 +66,4 @@ export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/jdk/bin:${PATH}
 export LD_LIBRARY_PATH=$ORACLE_HOME/lib
 EOF
 
-touch /root/createuser
+touch /root/createuserdone
