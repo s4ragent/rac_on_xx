@@ -58,7 +58,7 @@ if [ ! -e  /etc/security/limits.d/${LimitsConf}-grid.conf ]; then
   bash ./limits.sh
 fi
 
-if [ ! -e  /etc/ntp.conf ]; then
+if [ -e  /etc/ntp.conf ]; then
   systemctl stop ntpd
   systemctl disable ntpd
   mv /etc/ntp.conf /etc/ntp.conf.original
