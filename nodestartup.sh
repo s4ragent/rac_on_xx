@@ -38,8 +38,11 @@ if [ ! -e  /root/hostnamedone ]; then
   exit
 fi
 
-if [ ! -e  /home/oracle ]; then
+if [ ! -e  /root/createuser ]; then
   bash -x ./createuser.sh
+fi
+
+if [ ! -e  /root/createnfsclient ]; then
   bash -x ./createnfsclient.sh
 fi
 
