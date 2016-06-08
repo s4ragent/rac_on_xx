@@ -4,7 +4,7 @@ MAINTAINER @s4r_agent
 RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 #installpackages
 RUN yum --enablerepo=ol7_addons -y install oracle-rdbms-server-12cR1-preinstall tar unzip dnsmasq nfs-utils vnc-server xrdp
-RUN yum -y gropupinstall "Server With GUI"
+RUN yum -y groupinstall "Server With GUI"
 RUN yum -y reinstall glibc-common
 RUN yum -y clean all
 RUN ln -s /dev/null /etc/systemd/system/getty@tty1.service &&\
