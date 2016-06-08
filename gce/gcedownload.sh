@@ -1,6 +1,5 @@
 #!/bin/bash
 source ../common.sh
-MyNumber=`getmynumber`
 mkdir -p /media
 
 yum -y install unzip
