@@ -7,3 +7,13 @@ if [ ! -e  /root/rac_on_xx ]; then
 fi
 cd /root/rac_on_xx/gce
 source ./nodestartup.sh
+
+cd /root/rac_on_xx/gce
+if [ ! -e  /root/downloaded ]; then
+  bash ./gcedownload.sh
+fi
+
+cd /root/rac_on_xx
+if [ ! -e  /root/createdb ]; then
+  bash ./racutil.sh install_grid_db_dbca
+fi
