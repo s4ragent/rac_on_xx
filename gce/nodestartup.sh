@@ -28,8 +28,6 @@ if [ $PreRPM -eq 0 ]; then
   yum -y install $PreInstallRPM
 fi
 
-
-
 if [ ! -e  /etc/addn-hosts ]; then
   bash ./dnsmasq_nm.sh
 fi
@@ -55,7 +53,6 @@ fi
 if [ ! -e  /root/disablesecuritydone ]; then
   bash ./disablesecurity.sh
 fi
-
 
 if [ ! -e  /etc/security/limits.d/${LimitsConf}-grid.conf ]; then
   bash ./limits.sh
