@@ -1,7 +1,7 @@
 #!/bin/bash
 rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 #yum -y --enablerepo=epel groupinstall Xfce
-sudo yum -y group install "GNOME Desktop"
+sudo yum -y group install "Server With GUI"
 yum -y install vnc-server
 yum -y install xrdp
 systemctl enable xrdp
