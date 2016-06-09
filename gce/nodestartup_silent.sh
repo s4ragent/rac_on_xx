@@ -19,9 +19,9 @@ if [ ! -e  /etc/oracle-release ]; then
   exit
 fi
 
-#if [ ! -e  /root/xrdpdone ]; then
-#  bash ./xrdp.sh
-#fi
+if [ ! -e  /root/xrdpdone ]; then
+  bash ./xrdp.sh
+fi
 
 PreRPM=`rpm -qa | grep $PreInstallRPM | wc -l`
 if [ $PreRPM -eq 0 ]; then
