@@ -15,7 +15,7 @@ createnetwork(){
 }
 
 run(){
-    docker run -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 $3 $IMAGE /sbin/init
+    docker run -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 -v /sys/fs/cgroup:/sys/fs/cgroup:ro $3 $IMAGE /sbin/init
 }
 
 runall(){
