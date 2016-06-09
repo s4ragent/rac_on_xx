@@ -29,23 +29,6 @@ runall(){
 
 }
 
-runall(){
-creategceinstance nfs $NFS_SERVER $ISCSI_DISKSIZE nfsstartup.sh	
-CNT=1
-
-startup="nodestartup.sh"
-if [ "$1" = "silent" ]; then
-  startup="nodestartup_silent.sh"
-fi
-
-for i in $NODE_LIST ;
-do
-	NODENAME=`getnodename $CNT`
-	#NODENAME=${DOMAIN_NAME}$CNT
-	creategceinstance $NODENAME $i $ISCSI_DISKSIZE $startup
-	CNT=`expr $CNT + 1`
-done
-}
 
 case "$1" in
   "createnetwork" ) shift;createnetwork $*;;
