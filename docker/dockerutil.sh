@@ -4,7 +4,8 @@ source ../common.sh
 IMAGE="s4ragent/rac_on_xx:OEL7"
 BRNAME="racbr"
 #CAP_OPS="--cap-add=NET_ADMIN"
-CAP_OPS="--privileged=true"
+DOCKER_CAPS="--privileged=true"
+TMPFS_OPS="--tmpfs size=1200000k"
 
 createnetwork(){
     SEGMENT=`echo $NFS_SERVER | grep -Po '\d{1,3}\.\d{1,3}\.'`
@@ -14,7 +15,36 @@ createnetwork(){
 }
 
 run(){
-    docker run $*
+    docker run -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 $3 $IMAGE /sbin/init
+}
+
+runall(){
+    HasNework=`docker network ls | grep racbr | wc -l`
+    if [ "$HasNework" = "0" ]; then
+        createnework
+    fi
+    
+    
+    run nfs $NFS_SERVER "-v /docker$NFS_ROOT:$NFS_ROOT:rw"	
+
+}
+
+runall(){
+creategceinstance nfs $NFS_SERVER $ISCSI_DISKSIZE nfsstartup.sh	
+CNT=1
+
+startup="nodestartup.sh"
+if [ "$1" = "silent" ]; then
+  startup="nodestartup_silent.sh"
+fi
+
+for i in $NODE_LIST ;
+do
+	NODENAME=`getnodename $CNT`
+	#NODENAME=${DOMAIN_NAME}$CNT
+	creategceinstance $NODENAME $i $ISCSI_DISKSIZE $startup
+	CNT=`expr $CNT + 1`
+done
 }
 
 case "$1" in
