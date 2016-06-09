@@ -23,6 +23,10 @@ ORACLE_HOSTNAME=`getnodename $MyNumber`.${DOMAIN_NAME}
   useradd -u 501 -m -g oinstall -G dba,oper,asmdba -d /home/oracle -s /bin/bash -c"Oracle Software Owner" oracle
   useradd -u 2001 -m -g oinstall -G asmadmin,asmdba,asmoper -d /home/grid -s /bin/bash -c "Grid Infrastructure Owner" grid
 
+##edit password ##
+echo "grid:$GRID_PASSWORD" | chpasswd
+echo "oracle:$ORACLE_PASSWORD" | chpasswd
+
 ### edit bash &bashrc ###
    cat >> /home/oracle/.bashrc <<'EOF'
 #this is for oracle install#
