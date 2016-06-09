@@ -53,8 +53,6 @@ GRID_MEDIA2="linuxamd64_12102_grid_2of2.zip"
 ######
 GOOGLESTORAGE="gs://s4ragent2848/"
 
-
-
 getmynumber()
 {
 	MyIp=`ip a show eth0 | grep "inet " | awk -F '[/ ]' '{print $6}'`
