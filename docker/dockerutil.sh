@@ -1,6 +1,11 @@
 #!/bin/bash
 source ../common.sh
 
+IMAGE="s4ragent/rac_on_xx:OEL7"
+BRNAME="racbr"
+#CAP_OPS="--cap-add=NET_ADMIN"
+CAP_OPS="--privileged=true"
+
 createnetwork(){
     SEGMENT=`echo $NFS_SERVER | grep -Po '\d{1,3}\.\d{1,3}\.'`
     DOCKERSUBNET="${SEGMENT}0.0/16"
@@ -9,7 +14,7 @@ createnetwork(){
 }
 
 run(){
-    
+    docker run 
 }
 
 case "$1" in
