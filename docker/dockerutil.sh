@@ -8,11 +8,14 @@ createnetwork(){
     docker network create -d bridge --subnet=$DOCKERSUBNET racbr
 }
 
-
+run(){
+    
+}
 
 case "$1" in
   "createnetwork" ) shift;createnetwork $*;;
-  "runall" ) shift;startall $*;;
+  "runall" ) shift;runall $*;;
+  "run" ) shift;run $*;;
   "startall" ) shift;startall $*;;
   "deleteall" ) shift;deleteall $*;;
   "stopall" ) shift;stopall $*;;
