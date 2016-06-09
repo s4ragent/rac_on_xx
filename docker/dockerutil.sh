@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./common.sh
+source ../common.sh
 
 createnetwork(){
     SEGMENT=`echo $NFS_SERVER | grep -Po '\d{1,3}\.\d{1,3}\.'`
