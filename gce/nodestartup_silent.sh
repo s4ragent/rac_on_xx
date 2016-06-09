@@ -19,9 +19,9 @@ if [ ! -e  /etc/oracle-release ]; then
   exit
 fi
 
-if [ ! -e  /root/xrdpdone ]; then
-  bash ./xrdp.sh
-fi
+#if [ ! -e  /root/xrdpdone ]; then
+#  bash ./xrdp.sh
+#fi
 
 PreRPM=`rpm -qa | grep $PreInstallRPM | wc -l`
 if [ $PreRPM -eq 0 ]; then
@@ -74,12 +74,15 @@ if [ ! -e  /home/grid/.ssh/id_rsa ]; then
 fi
 
 cd /root/rac_on_xx/gce
-if [ ! -e  /root/downloaded ]; then
-  bash ./gcedownload.sh
+if [ "$MyNumber" = "1" ] ; then
+  if [ ! -e  /root/downloaded ]; then
+    bash ./gcedownload.sh
+  fi
 fi
 
 cd /root/rac_on_xx
-if [ ! -e  /root/createdb ]; then
-  ls /u01/app
-  bash ./racutil.sh install_grid_db_dbca
+if [ "$MyNumber" = "1" ] ; then
+  if [ ! -e  /root/createdb ]; then
+    bash ./racutil.sh install_grid_db_dbca
+  fi
 fi
