@@ -14,7 +14,7 @@ createnetwork(){
 }
 
 run(){
-    docker run 
+    docker run $*
 }
 
 case "$1" in
