@@ -80,5 +80,6 @@ fi
 
 cd /root/rac_on_xx
 if [ ! -e  /root/createdb ]; then
+  ls /u01/app
   bash ./racutil.sh install_grid_db_dbca
 fi
