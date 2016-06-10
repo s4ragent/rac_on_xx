@@ -22,7 +22,7 @@ run(){
 runall(){
     HasNework=`docker network ls | grep racbr | wc -l`
     if [ "$HasNework" = "0" ]; then
-        createnework
+        createnetwork
     fi
     
     
