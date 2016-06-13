@@ -31,7 +31,7 @@ runall(){
 }
 
 buildimage(){
-    docker build -t $IMAGE --no-cache=true ../images/OEL7-init
+    docker build -t $IMAGE --no-cache=true ./images/OEL7-init
 }
 
 
