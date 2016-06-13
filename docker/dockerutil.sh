@@ -25,6 +25,9 @@ run(){
     docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${1}.${DOMAIN_NAME} --dns=127.0.0.1 --dns-search=${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 -v /sys/fs/cgroup:/sys/fs/cgroup:ro $3 $IMAGE /sbin/init
     docker cp ../../rac_on_xx $1:/root/
 }
+deleteandrun(){
+ deleteall && runall
+}
 
 runall(){
     HasNework=`docker network ls | grep racbr | wc -l`
@@ -89,6 +92,7 @@ buildimage(){
 
 
 case "$1" in
+  "deleteandrun" ) shift;deleteandrun $*;;
   "dockerexec" ) shift;dockerexec $*;;
   "createnetwork" ) shift;createnetwork $*;;
   "runall" ) shift;runall $*;;
