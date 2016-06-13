@@ -42,6 +42,6 @@ case "$1" in
   "startall" ) shift;startall $*;;
   "deleteall" ) shift;deleteall $*;;
   "stopall" ) shift;stopall $*;;
-  "buildimage" shift;buildimage $*;;
+  "buildimage") shift;buildimage $*;;
   * ) echo "Ex " ;;
 esac
