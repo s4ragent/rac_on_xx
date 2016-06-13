@@ -26,6 +26,7 @@ fi
 
 if [ ! -e  /root/createnfsclientdone ]; then
   bash -x ./createnfsclient.sh
+  systemctl enable remote-fs.target
 fi
 
 if [ ! -e  /root/disablesecuritydone ]; then
