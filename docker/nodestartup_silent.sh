@@ -13,17 +13,11 @@ if [ $PreRPM -eq 0 ]; then
 fi
 
 if [ ! -e  /etc/addn-hosts ]; then
-  bash ./dnsmasq_nm.sh
+  bash ./dnsmasq_systemctl.sh
 fi
 
 if [ ! -e  /etc/vxlan/all.ip ]; then
-  bash -x ./install_vxlan.sh
-fi
-
-if [ ! -e  /root/hostnamedone ]; then
-  bash -x ./sethostname.sh
-  reboot
-  exit
+  bash -x ./install_vxlan_systemctl.sh
 fi
 
 if [ ! -e  /root/createuserdone ]; then
