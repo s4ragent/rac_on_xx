@@ -44,7 +44,7 @@ runall(){
    do
 	NODENAME=`getnodename $CNT`
 	#NODENAME=${DOMAIN_NAME}$CNT
-	run $NODENAME $i "$TMPFS_OPS" $startup
+	run $NODENAME $i "$TMPFS_OPS -v /media/:/media:ro"
 	CNT=`expr $CNT + 1`
    done
    
