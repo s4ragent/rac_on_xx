@@ -37,7 +37,7 @@ if [ ! -e  /etc/vxlan/all.ip ]; then
 fi
 
 if [ ! -e  /root/hostnamedone ]; then
-  bash -x ./sethostname.sh
+  bash -x ./sethostname_nm.sh
   reboot
   exit
 fi
