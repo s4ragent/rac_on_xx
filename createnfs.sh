@@ -24,3 +24,5 @@ systemctl start nfs-idmap
 
 systemctl enable rpcbind
 systemctl enable nfs-server
+
+touch /root/createnfsdone
