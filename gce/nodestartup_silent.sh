@@ -33,7 +33,7 @@ if [ ! -e  /etc/addn-hosts ]; then
 fi
 
 if [ ! -e  /etc/vxlan/all.ip ]; then
-  bash -x ./install_vxlan.sh
+  bash -x ./install_vxlan_nm.sh
 fi
 
 if [ ! -e  /root/hostnamedone ]; then
