@@ -1,6 +1,9 @@
 #!/bin/bash
 source ./common.sh
-yum -y install nfs-utils
+PreRPM=`rpm -qa | grep nfs-utils | wc -l`
+if [ $PreRPM -eq 0 ]; then
+  yum -y install nfs-utils
+fi
 
 mkdir -p ${GRID_ORACLE_BASE}
 mkdir -p ${GRID_ORACLE_HOME}
