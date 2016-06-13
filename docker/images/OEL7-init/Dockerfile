@@ -12,6 +12,13 @@ MAINTAINER @s4r_agent
 #VOLUME [ “/sys/fs/cgroup” ]
 #CMD ["/sbin/init"]
 ENV container docker
+##enable epel
+RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+##installpackages
+RUN touch /var/lib/rpm/* && yum --enablerepo=ol7_addons -y install oracle-rdbms-server-12cR1-preinstall tar unzip dnsmasq nfs-utils vnc-server xrdp git
+RUN touch /var/lib/rpm/* && yum -y groupinstall "Server With GUI"
+RUN touch /var/lib/rpm/* && yum -y reinstall glibc-common
+RUN yum -y clean all
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
 rm -f /etc/systemd/system/*.wants/*;\
