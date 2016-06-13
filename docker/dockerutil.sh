@@ -48,15 +48,15 @@ runall(){
 	CNT=`expr $CNT + 1`
    done
    
-   docker exec -ti $1 bash /root/rac_on_xx/docker/nfsstartup.sh
+   docker exec -ti nfs bash /root/rac_on_xx/docker/nfsstartup.sh
    
    CNT=1
    for i in $NODE_LIST ;
    do
 	NODENAME=`getnodename $CNT`
 	#NODENAME=${DOMAIN_NAME}$CNT
-	docker exec -d $NODENAME bash /root/rac_on_xx/docker/nodestartup.sh
-	docker exec -d $NODENAME "cd /root/rac_on_xx" && bash ./createsshkey.sh
+	docker exec -ti $NODENAME bash /root/rac_on_xx/docker/nodestartup.sh
+	docker exec -ti $NODENAME "cd /root/rac_on_xx" && bash ./createsshkey.sh
 	CNT=`expr $CNT + 1`
    done
 
