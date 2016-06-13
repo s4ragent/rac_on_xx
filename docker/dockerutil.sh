@@ -49,6 +49,17 @@ runall(){
 	CNT=`expr $CNT + 1`
    done
 
+   CNT=1
+   for i in $NODE_LIST ;
+   do
+	NODENAME=`getnodename $CNT`
+	#NODENAME=${DOMAIN_NAME}$CNT
+	docker exec -d $NODENAME bash /root/rac_on_xx/docker/$4
+	CNT=`expr $CNT + 1`
+   done
+
+
+
 }
 
 delete(){
