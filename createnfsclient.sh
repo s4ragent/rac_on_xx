@@ -22,6 +22,7 @@ echo "$NFS_SERVER:${ORA_ORACLE_HOME} ${ORA_ORACLE_HOME} nfs rw,bg,hard,nointr,tc
 echo "$NFS_SERVER:${ORA_DATA} ${ORA_DATA} nfs rw,bg,hard,nointr,tcp,vers=4,timeo=600,actimeo=0 0 0" >> /etc/fstab
 echo "$NFS_SERVER:${WORK} ${WORK} nfs rw,bg,hard,nointr,tcp,vers=4,timeo=600,actimeo=0 0 0" >> /etc/fstab
 mount -a
+systemctl enable remote-fs.target
 
 chown -R grid:oinstall ${MOUNT_PATH}
 chown -R oracle:oinstall ${ORA_ORACLE_BASE}
