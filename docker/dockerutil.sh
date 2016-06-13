@@ -6,7 +6,7 @@ BRNAME="racbr"
 #CAP_OPS="--cap-add=NET_ADMIN"
 DOCKER_CAPS="--privileged=true"
 DOCKER_START_OPS="--restart=always"
-TMPFS_OPS="--tmpfs /run:rw,size=1200000k"
+TMPFS_OPS="--shm-size=1200m"
 
 dockerexec(){
 	docker exec -ti $1 /bin/bash
