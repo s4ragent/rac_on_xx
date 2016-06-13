@@ -5,6 +5,6 @@ if [ ! -e  /root/disablesecuritydone ]; then
   bash ./disablesecurity.sh
 fi
 
-if [ ! -e /nfs ]; then
+if [ ! -e /root/createnfsdone ]; then
   bash ./createnfs.sh
 fi
