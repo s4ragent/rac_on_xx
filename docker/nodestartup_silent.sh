@@ -22,8 +22,6 @@ fi
 
 if [ ! -e  /root/hostnamedone ]; then
   bash -x ./sethostname.sh
-  reboot
-  exit
 fi
 
 if [ ! -e  /root/createuserdone ]; then
