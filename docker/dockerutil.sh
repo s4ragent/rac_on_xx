@@ -24,7 +24,6 @@ run(){
     #docker run -c $CPU_SHARE -m $MEMORY_LIMIT $DOCKER_CAPS -d -h ${nodename}.${DOMAIN_NAME} --name ${nodename} --dns=127.0.0.1 -v /lib/modules:/lib/modules -v /docker/media:/media ractest:racbase$2 /sbin/init
     docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${1}.${DOMAIN_NAME} --dns=127.0.0.1 --dns-search=${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 -v /sys/fs/cgroup:/sys/fs/cgroup:ro $3 $IMAGE /sbin/init
     docker cp ../../rac_on_xx $1:/root/
-    docker exec -ti $1 bash /root/rac_on_xx/docker/$4 &
 }
 
 runall(){
@@ -33,7 +32,7 @@ runall(){
         createnetwork
     fi
 
-    run nfs $NFS_SERVER "-v /docker$NFS_ROOT:$NFS_ROOT:rw" nfsstartup.sh	
+    run nfs $NFS_SERVER "-v /docker$NFS_ROOT:$NFS_ROOT:rw" 	
 
     startup="nodestartup.sh"
     if [ "$1" = "silent" ]; then
@@ -48,15 +47,17 @@ runall(){
 	run $NODENAME $i "$TMPFS_OPS" $startup
 	CNT=`expr $CNT + 1`
    done
-
-   #CNT=1
-   #for i in $NODE_LIST ;
-   #do
-#	NODENAME=`getnodename $CNT`
-#	#NODENAME=${DOMAIN_NAME}$CNT
-#	docker exec -d $NODENAME bash /root/rac_on_xx/docker/$4
-#	CNT=`expr $CNT + 1`
-#   done
+   
+   docker exec -ti $1 bash /root/rac_on_xx/docker/nfsstartup.sh
+   
+   CNT=1
+   for i in $NODE_LIST ;
+   do
+	NODENAME=`getnodename $CNT`
+	#NODENAME=${DOMAIN_NAME}$CNT
+	docker exec -d $NODENAME bash /root/rac_on_xx/docker/nodestartup.sh
+	CNT=`expr $CNT + 1`
+   done
 
 
 
