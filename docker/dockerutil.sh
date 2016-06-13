@@ -7,6 +7,11 @@ BRNAME="racbr"
 DOCKER_CAPS="--privileged=true"
 TMPFS_OPS="--tmpfs size=1200000k"
 
+dockerexec(){
+	docker exec -ti $1 /bin/bash
+}
+
+
 createnetwork(){
     SEGMENT=`echo $NFS_SERVER | grep -Po '\d{1,3}\.\d{1,3}\.'`
     DOCKERSUBNET="${SEGMENT}0.0/16"
@@ -36,6 +41,7 @@ buildimage(){
 
 
 case "$1" in
+  "dockerexec" ) shift;dockerexec $*;;
   "createnetwork" ) shift;createnetwork $*;;
   "runall" ) shift;runall $*;;
   "run" ) shift;run $*;;
