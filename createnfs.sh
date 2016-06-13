@@ -1,6 +1,9 @@
 #!/bin/bash
 source ./common.sh
-yum -y install nfs-utils
+PreRPM=`rpm -qa | grep nfs-utils | wc -l`
+if [ $PreRPM -eq 0 ]; then
+  yum -y install nfs-utils
+fi
 #http://masahir0y.blogspot.jp/2012/12/nfs-v3-v4-rhelcentosubuntu.html
 #https://oracle-base.com/articles/12c/oracle-db-12cr1-rac-installation-on-oracle-linux-6-using-nfs
 
