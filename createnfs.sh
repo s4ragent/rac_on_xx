@@ -6,7 +6,7 @@ yum -y install nfs-utils
 
 mkdir -p $NFS_ROOT
 mkdir -p "$NFS_ROOT$GRID_CONFIG"
-dd if=/dev/zero of=$NFS_ROOT$CRS_DEV bs=1M count=$CRS_DEV_SIZE
+dd if=/dev/zero of=$NFS_ROOT$CRS_DEV bs=1M count=$CRS_DEV_SIZE &
 chmod 0660 $NFS_ROOT$CRS_DEV
 mkdir -p "$NFS_ROOT$ORA_DATA"
 mkdir -p "$NFS_ROOT$ORA_ORACLE_HOME"
