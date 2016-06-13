@@ -39,7 +39,8 @@ runall(){
     if [ "$1" = "silent" ]; then
       startup="nodestartup_silent.sh"
    fi
-
+   
+   CNT=1
    for i in $NODE_LIST ;
    do
 	NODENAME=`getnodename $CNT`
