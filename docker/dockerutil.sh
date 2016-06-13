@@ -30,6 +30,10 @@ runall(){
 
 }
 
+buildimage(){
+    docker build -t $IMAGE --no-cache=true ../images/OEL7-init
+}
+
 
 case "$1" in
   "createnetwork" ) shift;createnetwork $*;;
@@ -38,5 +42,6 @@ case "$1" in
   "startall" ) shift;startall $*;;
   "deleteall" ) shift;deleteall $*;;
   "stopall" ) shift;stopall $*;;
+  "buildimage" shift;buildimage $*;;
   * ) echo "Ex " ;;
 esac
