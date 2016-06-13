@@ -51,6 +51,27 @@ runall(){
 
 }
 
+delete(){
+	docker rm -f $1
+}
+
+deleteall(){
+    #HasNework=`docker network ls | grep racbr | wc -l`
+    #if [ "$HasNework" = "0" ]; then
+    #    createnetwork
+    #fi
+
+   CNT=1
+   for i in $NODE_LIST ;
+   do
+	NODENAME=`getnodename $CNT`
+	delete $NODENAME
+	CNT=`expr $CNT + 1`
+   done
+   delete nfs
+}
+
+
 buildimage(){
     docker build -t $IMAGE --no-cache=true ./images/OEL7-init
 }
@@ -62,6 +83,7 @@ case "$1" in
   "runall" ) shift;runall $*;;
   "run" ) shift;run $*;;
   "startall" ) shift;startall $*;;
+  "delete" ) shift;delete $*;;
   "deleteall" ) shift;deleteall $*;;
   "stopall" ) shift;stopall $*;;
   "buildimage") shift;buildimage $*;;
