@@ -32,9 +32,21 @@ runall(){
     if [ "$HasNework" = "0" ]; then
         createnetwork
     fi
-    
-    
+
     run nfs $NFS_SERVER "-v /docker$NFS_ROOT:$NFS_ROOT:rw" nfsstartup.sh	
+
+    startup="nodestartup.sh"
+    if [ "$1" = "silent" ]; then
+      startup="nodestartup_silent.sh"
+   fi
+
+   for i in $NODE_LIST ;
+   do
+	NODENAME=`getnodename $CNT`
+	#NODENAME=${DOMAIN_NAME}$CNT
+	run $NODENAME $i $TMPFS_OPS $startup
+	CNT=`expr $CNT + 1`
+   done
 
 }
 
