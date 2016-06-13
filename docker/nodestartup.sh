@@ -46,14 +46,3 @@ fi
 MyNumber=`getmynumber`
 nodename=`getnodename $MyNumber`
 touch $WORK/$nodename
-
-if [ ! -e  /home/grid/.ssh/id_rsa ]; then
-  bash ./createsshkey.sh
-fi
-
-cd /root/rac_on_xx
-if [ "$MyNumber" = "1" ] ; then
-  if [ ! -e  /root/createdb ]; then
-#    bash ./racutil.sh install_grid_db_dbca
-  fi
-fi
