@@ -7,7 +7,6 @@ source ./common.sh
 #  bash ./xrdp.sh
 #fi
 
-chmod u+s /usr/bin/ping
 
 PreRPM=`rpm -qa | grep $PreInstallRPM | wc -l`
 if [ $PreRPM -eq 0 ]; then
