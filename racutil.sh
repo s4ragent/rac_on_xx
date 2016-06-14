@@ -274,6 +274,7 @@ install_grid_db_dbca(){
 
 case "$1" in
   "install_grid_db_dbca" ) shift;install_grid_db_dbca $*;;
+  "igd" ) shift;install_grid_db_dbca $*;;
   "runinstallgrid" ) shift;runinstallgrid $*;;
   "orainstRoot" ) shift;orainstRoot $*;;
   "gridrootsh" ) shift;gridrootsh $*;;
