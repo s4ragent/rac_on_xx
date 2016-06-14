@@ -14,6 +14,7 @@ fi
 
 if [ ! -e  /etc/addn-hosts ]; then
   bash ./dnsmasq_systemd.sh
+  bash ./sethostname_systemd.sh
 fi
 
 if [ ! -e  /etc/vxlan/all.ip ]; then
