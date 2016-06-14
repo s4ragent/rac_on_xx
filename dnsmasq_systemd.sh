@@ -1,15 +1,15 @@
 #!/bin/bash
 source ./common.sh
 
-#cat << EOF >/etc/addn-hosts
-#127.0.0.1       localhost
-#::1     localhost ip6-localhost ip6-loopback
-#fe00::0 ip6-localnet
-#ff00::0 ip6-mcastprefix
-#ff02::1 ip6-allnodes
-#ff02::2 ip6-allrouters
-#EOF
-#sed -i.bak 's:/etc/hosts:/etc/addn-hosts:g' /lib64/libnss_files.so.2
+cat << EOF >/etc/addn-hosts
+127.0.0.1       localhost
+::1     localhost ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+EOF
+sed -i.bak 's:/etc/hosts:/etc/addn-hosts:g' /lib64/libnss_files.so.2
 
 getip 0 scan >> /etc/addn-hosts
 for i in `seq 1 64`; do
