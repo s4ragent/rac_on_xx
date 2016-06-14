@@ -59,10 +59,16 @@ runall(){
 	NODENAME=`getnodename $CNT`
 	#NODENAME=${DOMAIN_NAME}$CNT
 	docker exec -ti $NODENAME bash /root/rac_on_xx/docker/nodestartup.sh
+	CNT=`expr $CNT + 1`
+   done
+   
+   CNT=1
+   for i in $NODE_LIST ;
+   do
+	NODENAME=`getnodename $CNT`
 	docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./createsshkey.sh"
 	CNT=`expr $CNT + 1`
    done
-
 }
 
 delete(){
