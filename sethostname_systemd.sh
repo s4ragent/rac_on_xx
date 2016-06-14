@@ -1,5 +1,4 @@
 #!/bin/bash
-#!/bin/bash
 source ./common.sh
 
 MyNumber=`getmynumber`
