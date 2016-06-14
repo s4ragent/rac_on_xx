@@ -24,6 +24,7 @@ case "$1" in
 esac
 EOF
 chmod 0700 /usr/local/bin/sethostname.init
-bash /etc/NetworkManager/dispatcher.d/30_hostname vxlan0 up
-
+cp ./sethostname.service /etc/systemd/system/sethostname.service
+ln -s /etc/systemd/system/sethostname.service /etc/systemd/system/multi-user.target.wants/sethostname.service
+systemctl start sethostname
 touch /root/hostnamedone
