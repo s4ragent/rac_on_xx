@@ -18,7 +18,7 @@ createnetwork(){
     SEGMENT=`echo $NFS_SERVER | grep -Po '\d{1,3}\.\d{1,3}\.'`
     DOCKERSUBNET="${SEGMENT}0.0/16"
     #docker network create -d --subnet=192.168.0.0/16
-    docker network create -d bridge --mtu $MTU --subnet=$DOCKERSUBNET racbr
+    docker network create -d bridge --mtu $MTU --subnet=$DOCKERSUBNET $BRNAME
 }
 
 run(){
@@ -92,6 +92,7 @@ deleteall(){
 	CNT=`expr $CNT + 1`
    done
    delete nfs
+   docker network rm $BRNAME
 }
 
 
