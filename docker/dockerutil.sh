@@ -70,6 +70,7 @@ runall(){
 	docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./createsshkey.sh"
 	CNT=`expr $CNT + 1`
    done
+   docker exec -ti node001 bash -c "cd /root/rac_on_xx && bash ./racutil.sh igd"
 }
 
 delete(){
