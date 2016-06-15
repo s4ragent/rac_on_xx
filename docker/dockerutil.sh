@@ -35,6 +35,7 @@ runall(){
         createnetwork
     fi
 
+    rm -rf /docker$NFS_ROOT
     run nfs $NFS_SERVER "-v /docker$NFS_ROOT:$NFS_ROOT:rw" 	
 
     startup="nodestartup.sh"
