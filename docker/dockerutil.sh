@@ -7,6 +7,7 @@ BRNAME="racbr"
 DOCKER_CAPS="--privileged=true"
 DOCKER_START_OPS="--restart=always"
 TMPFS_OPS="--shm-size=1200m"
+MTU="9000"
 
 dockerexec(){
 	docker exec -ti $1 /bin/bash
@@ -17,7 +18,7 @@ createnetwork(){
     SEGMENT=`echo $NFS_SERVER | grep -Po '\d{1,3}\.\d{1,3}\.'`
     DOCKERSUBNET="${SEGMENT}0.0/16"
     #docker network create -d --subnet=192.168.0.0/16
-    docker network create -d bridge --subnet=$DOCKERSUBNET racbr
+    docker network create -d bridge --mtu $MTU --subnet=$DOCKERSUBNET racbr
 }
 
 run(){
