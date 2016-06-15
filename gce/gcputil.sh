@@ -20,6 +20,17 @@ creategceinstance(){
 	gcloud compute instances create $name --private-network-ip $ip --machine-type "n1-highmem-2" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-standard" --boot-disk-device-name $name --boot-disk-size 200GB  --metadata startup-script-url=https://raw.githubusercontent.com/s4ragent/rac_on_xx/master/gce/$4
 }
 
+create_centos(){
+		name=$1
+		gcloud compute instances create $name --machine-type "n1-highmem-8" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size 400GB
+}
+
+create_ubuntu(){
+		name=$1
+		gcloud compute instances create $name --machine-type "n1-highmem-8" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image ubuntu-1604-lts --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size 400GB
+}
+
+
 startall(){
 creategceinstance nfs $NFS_SERVER $ISCSI_DISKSIZE nfsstartup.sh	
 CNT=1
@@ -70,6 +81,8 @@ gcloud compute instances delete $name
 
 case "$1" in
   "ssh" ) shift;ssh $*;;
+  "create_centos" ) shift;create_centos $*;;
+  "create_ubuntu" ) shift;create_ubuntu $*;;
   "deleteandstart" ) shift;deleteandstart $*;; 
   "get_console" ) shift;get_console $*;;  
   "deleteall" ) shift;deleteall $*;;
