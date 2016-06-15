@@ -22,12 +22,12 @@ creategceinstance(){
 
 create_centos(){
 		name=$1
-		gcloud compute instances create $name --machine-type "n1-highmem-8" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size 400GB
+		gcloud compute instances create $name --machine-type $2 --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size 400GB
 }
 
 create_ubuntu(){
 		name=$1
-		gcloud compute instances create $name --machine-type "n1-highmem-8" --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image ubuntu-1604-lts --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size 400GB
+		gcloud compute instances create $name --machine-type $2 --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image ubuntu-1604-lts --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size 400GB
 }
 
 
