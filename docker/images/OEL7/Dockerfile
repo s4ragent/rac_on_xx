@@ -28,8 +28,6 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;\
 ln -s /usr/lib/systemd/system/systemd-user-sessions.service  /etc/systemd/system/multi-user.target.wants/systemd-user-sessions.service;\
-chmod u+s /usr/bin/ping;\
-ln -s /dev/null /etc/systemd/system/getty@tty1.service;\
-ln -s /dev/null /etc/systemd/system/serial-getty@ttyS0.service
+chmod u+s /usr/bin/ping;
 VOLUME [ "/sys/fs/cgroup" ]
 CMD ["/usr/sbin/init"]
