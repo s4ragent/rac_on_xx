@@ -13,6 +13,7 @@ exerootssh(){
 
 creatersp()
 {
+    echo "`date` creatersp start"
     NODECOUNT=1
     for i in `seq 1 $NODELISTCOUNT`;
     do
@@ -162,6 +163,8 @@ EOF
     
     chmod 755 /home/oracle/db.rsp
     chown oracle.oinstall /home/oracle/db.rsp
+
+    echo "`date` creatersp end"
 }
 
 
@@ -207,6 +210,7 @@ exedbca2(){
 }
 
 runinstallgrid(){
+     echo "`date` runinstallgrid start"
 		ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real 1` /media/grid/runInstaller -silent -responseFile /home/grid/grid.rsp -ignoreSysPrereqs -ignorePrereq
 }
 
@@ -214,39 +218,51 @@ orainstRoot(){
 	for i in `seq 1 $NODELISTCOUNT`;
 	do
 		ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getip 0 real $i` /u01/app/oraInventory/orainstRoot.sh
-	done	
+	done
+       echo "`date` runinstallgrid end"	
 }
 
 gridrootsh(){
+       echo "`date` gridrootsh start"
 	for i in `seq 1 $NODELISTCOUNT`;
 	do
 		ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getip 0 real $i` ${GRID_ORACLE_HOME}/root.sh
-	done	
+	done
+	echo "`date` gridrootsh end"
 }
 
 asmca(){
+       echo "`date` asmca start"
 	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real 1` ${GRID_ORACLE_HOME}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=/home/grid/asm.rsp
+echo "`date` asmca end"
 }
 
 gridstatus(){
 	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real 1` ${GRID_ORACLE_HOME}/bin/crsctl status resource -t
+echo "`date` gridstatus end"
 }
 
 runinstalldb(){
+echo "`date` runinstalldb start"
 	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null oracle@`getip 0 real 1` /media/database/runInstaller -silent -responseFile /home/oracle/db.rsp -ignoreSysPrereqs -ignorePrereq
-
+echo "`date` runinstalldb end"
 }
 dbrootsh(){
+echo "`date` dbrootsh start"
 	for i in `seq 1 $NODELISTCOUNT`;
 	do
 		ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getip 0 real $i` ${ORA_ORACLE_HOME}/root.sh
 	done
+echo "`date` dbrootsh end"
 }
 exedbca(){
+echo "`date` exedbca  start"
 		ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null oracle@`getip 0 real 1` `dbcastring`
+echo "`date` exedbca  end"
 }
 
 install_grid_db_dbca(){
+echo "`date` install grid db dbca start"
 	creatersp
 	#### runinstaller(grid)
 	runinstallgrid
@@ -270,6 +286,7 @@ install_grid_db_dbca(){
 	gridstatus
 	
 	touch /root/createdb
+echo "`date` install grid db dbca end"
 }
 
 case "$1" in
