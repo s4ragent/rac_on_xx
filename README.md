@@ -1,6 +1,6 @@
 rac_on_xx
 ====
-Oracle RAC on Docker/GCE/EC2 (TBA)/Azure (TBA) etc...
+Oracle RAC on Docker /GCE /EC2 (TBA) /Azure (TBA) etc...
 
 
 - docker  Oracle RAC on docker 
