@@ -8,8 +8,9 @@ rac_on_xx/docker
 ## Demo
 
 ## Requirement
-- Linux Kernel 3.18 CentOS/RHEL/OEL 7.2 
+- Linux Kernel 3.18 or CentOS/RHEL/OEL 7.2 
 - docker 1.11
+- Oracle 12c Release 1 (12.1) Clusterware and Database software 
 
 ## Usage
 
