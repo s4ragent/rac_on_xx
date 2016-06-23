@@ -54,7 +54,7 @@ DB_MEDIA2="linuxamd64_12102_database_2of2.zip"
 GRID_MEDIA1="linuxamd64_12102_grid_1of2.zip"
 GRID_MEDIA2="linuxamd64_12102_grid_2of2.zip"
 ######DOWNLOAD
-GOOGLESTORAGE="gs://s4ragent2848/"
+GOOGLESTORAGE="gs://s4ragent201622/"
 
 getmynumber()
 {
