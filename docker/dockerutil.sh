@@ -10,6 +10,10 @@ DOCKER_START_OPS="--restart=always"
 TMPFS_OPS="--shm-size=1200m"
 MTU="9000"
 
+##todo ubuntu 
+#sudo apt-get install apparmor-utils
+#sudo aa-complain /etc/apparmor.d/docker 
+
 dockerexec(){
 	docker exec -ti $1 /bin/bash
 }
