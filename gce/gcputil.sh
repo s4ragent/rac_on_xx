@@ -25,9 +25,9 @@ create_centos(){
 		gcloud compute instances create $name --machine-type $2 --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size $3
 }
 
-create(){
+create_ubuntu(){
 		name=$1
-		gcloud compute instances create $name --machine-type $2 --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size $3
+		gcloud compute instances create $name --machine-type $2 --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image-family ubuntu-1604-lts --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size $3
 }
 
 
@@ -82,7 +82,7 @@ gcloud compute instances delete $name
 case "$1" in
   "ssh" ) shift;ssh $*;;
   "create_centos" ) shift;create_centos $*;;
-  "create" ) shift;create $*;;
+  "create_ubuntu" ) shift;create_ubuntu $*;;
   "deleteandstart" ) shift;deleteandstart $*;; 
   "get_console" ) shift;get_console $*;;  
   "deleteall" ) shift;deleteall $*;;
