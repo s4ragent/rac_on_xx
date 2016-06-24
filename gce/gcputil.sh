@@ -82,7 +82,7 @@ gcloud compute instances delete $name
 case "$1" in
   "ssh" ) shift;ssh $*;;
   "create_centos" ) shift;create_centos $*;;
-  "create_ubuntu" ) shift;create_ubuntu $*;;
+  "create" ) shift;create $*;;
   "deleteandstart" ) shift;deleteandstart $*;; 
   "get_console" ) shift;get_console $*;;  
   "deleteall" ) shift;deleteall $*;;
