@@ -7,6 +7,7 @@ fi
 #http://masahir0y.blogspot.jp/2012/12/nfs-v3-v4-rhelcentosubuntu.html
 #https://oracle-base.com/articles/12c/oracle-db-12cr1-rac-installation-on-oracle-linux-6-using-nfs
 
+rm -rf $NFS_ROOT/*
 mkdir -p $NFS_ROOT
 mkdir -p "$NFS_ROOT$GRID_CONFIG"
 dd if=/dev/zero of=$NFS_ROOT$CRS_DEV bs=1M count=$CRS_DEV_SIZE
