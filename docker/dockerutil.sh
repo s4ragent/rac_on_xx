@@ -96,6 +96,7 @@ deleteall(){
 	delete $NODENAME
 	CNT=`expr $CNT + 1`
    done
+   docker exec -ti nfs bash -c "rm -rf $NFS_ROOT/*"
    delete nfs
    docker network rm $BRNAME
 }
