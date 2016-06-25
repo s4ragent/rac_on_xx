@@ -12,10 +12,42 @@ rac_on_xx/docker
 - docker 1.11
 - Oracle 12c Release 1 (12.1) Clusterware and Database software 
 
-## Usage
-
 ## Install
 >git clone https://github.com/s4ragent/rac_on_xx
+
+## Usage
+download/unzip Oracle 12c Release 1 (12.1) Clusterware and Database software
+
+    #mkdir -p /media
+    #unzip linuxamd64_12102_database_1of2.zip -d /media
+    #unzip linuxamd64_12102_database_2of2.zip -d /media
+    #unzip linuxamd64_12102_grid_1of2.zip -d /media
+    #unzip linuxamd64_12102_grid_2of2.zip -d /media
+     
+    #ls -al /media
+    total 16
+    drwxr-xr-x 4 root root 4096 May  1 21:56 .
+    drwxr-xr-x 3 root root 4096 May  1 21:53 ..
+    drwxr-xr-x 7 root root 4096 Jul  7  2014 database
+    drwxr-xr-x 7 root root 4096 Jul  7  2014 grid
+    
+execute create_racbase.sh  
+
+    #cd rac_on_xx/docker
+    #bash dockeruntil.sh runall
+
+if you want to stop first node
+
+    #bash create_racbase.sh stopnode 1
+
+and restart first node
+
+    #bash dockeruntil.sh startnode 1
+    
+if you reboot host
+
+    #bash dockeruntil.sh startall
+
 
 ## Author
 @s4r_agent
