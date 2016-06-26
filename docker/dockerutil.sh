@@ -45,11 +45,6 @@ runall(){
     rm -rf /docker$NFS_ROOT
     run nfs $NFS_SERVER "-v /docker$NFS_ROOT:$NFS_ROOT:rw" 	
 
-    startup="nodestartup.sh"
-    if [ "$1" = "silent" ]; then
-      startup="nodestartup_silent.sh"
-   fi
-   
    CNT=1
    for i in $NODE_LIST ;
    do
@@ -70,6 +65,7 @@ runall(){
 	CNT=`expr $CNT + 1`
    done
    
+    if [ "$1" = "silent" ];  then
    CNT=1
    for i in $NODE_LIST ;
    do
@@ -77,7 +73,12 @@ runall(){
 	docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./createsshkey.sh"
 	CNT=`expr $CNT + 1`
    done
-   docker exec -ti node001 bash -c "cd /root/rac_on_xx && bash ./racutil.sh igd"
+
+   NODENAME=`getnodename 1`
+   docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./racutil.sh igd"
+fi
+
+
 }
 
 delete(){
@@ -102,9 +103,24 @@ deleteall(){
    docker network rm $BRNAME
 }
 
-stop(){
-    docker stop $1
+stop(){ 
+   if [ "$1" = "nfs" ]; then
+      NODENAME=nfs
+   else
+      NODENAME=`getnodename $1`
+   fi
+    docker stop $NODENAME
 }
+
+start(){ 
+   if [ "$1" = "nfs" ]; then
+      NODENAME=nfs
+   else
+      NODENAME=`getnodename $1`
+   fi
+    docker start $NODENAME
+}
+
 
 buildimage(){
     docker build -t $IMAGE --no-cache=true ./images/OEL7
