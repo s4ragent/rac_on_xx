@@ -31,6 +31,7 @@ run(){
     docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 -v /sys/fs/cgroup:/sys/fs/cgroup:ro $3 $IMAGE /sbin/init
     docker cp ../../rac_on_xx $1:/root/
 }
+
 deleteandrun(){
  deleteall && runall
 }
@@ -101,6 +102,9 @@ deleteall(){
    docker network rm $BRNAME
 }
 
+stop(){
+    docker stop $1
+}
 
 buildimage(){
     docker build -t $IMAGE --no-cache=true ./images/OEL7
@@ -114,8 +118,10 @@ case "$1" in
   "runall" ) shift;runall $*;;
   "run" ) shift;run $*;;
   "startall" ) shift;startall $*;;
+  "start" ) shift;start $*;;
   "delete" ) shift;delete $*;;
   "deleteall" ) shift;deleteall $*;;
+  "stop" ) shift;stop $*;;
   "stopall" ) shift;stopall $*;;
   "buildimage") shift;buildimage $*;;
   * ) echo "Ex " ;;
