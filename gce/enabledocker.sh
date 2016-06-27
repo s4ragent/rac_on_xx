@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ ! -e  /root/rac_on_xx ]; then
-if [   -e /etc/debian_version ]; then
+   if [ -e /etc/debian_version ]; then
 　  apt-get update
 　  apt-get install -y git
 　 elif [ -e /etc/redhat-release ]; then
