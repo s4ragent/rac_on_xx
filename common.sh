@@ -1,5 +1,5 @@
 #!/bin/bash
-NFS_SERVER="10.140.0.3"
+NFS_SERVER="10.140.0.4"
 ##for 3nodes
 NODE_LIST="10.140.0.5 10.140.0.6 10.140.0.7"
 ##for 6nodes
