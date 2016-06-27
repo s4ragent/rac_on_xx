@@ -11,7 +11,7 @@ exerootssh(){
 
 getrootshlog()
 {
-	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real $1` "find $GRID_ORACLE_HOME/install -name root_`getnodename $1`* -exec less {} \";
+	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real $1` "find $GRID_ORACLE_HOME/install -name root_`getnodename $1`* -exec less {} \;"
 }
 
 creatersp()
