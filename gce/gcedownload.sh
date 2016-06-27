@@ -2,7 +2,12 @@
 source ../common.sh
 mkdir -p /media
 
-yum -y install unzip
+if   [ -e /etc/debian_version ] 
+  apt-get install -y unzip
+elif [ -e /etc/redhat-release ]; then
+  yum -y install unzip
+fi
+
 gsutil cp $GOOGLESTORAGE$DB_MEDIA1 /media
 gsutil cp $GOOGLESTORAGE$DB_MEDIA2 /media
 gsutil cp $GOOGLESTORAGE$GRID_MEDIA1 /media
