@@ -67,19 +67,16 @@ runall(){
    done
    
     if [ "$1" = "silent" ];  then
-   CNT=1
-   for i in $NODE_LIST ;
-   do
-	NODENAME=`getnodename $CNT`
-	docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./createsshkey.sh"
-	CNT=`expr $CNT + 1`
-   done
-
-   NODENAME=`getnodename 1`
-   docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./racutil.sh igd"
-fi
-
-
+    	CNT=1
+   	for i in $NODE_LIST ;
+   	do
+		NODENAME=`getnodename $CNT`
+		docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./createsshkey.sh"
+		CNT=`expr $CNT + 1`
+	done
+	NODENAME=`getnodename 1`
+	docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./racutil.sh igd"
+    fi
 }
 
 delete(){
@@ -116,11 +113,6 @@ stop(){
 }
 
 stopall(){
-    #HasNework=`docker network ls | grep racbr | wc -l`
-    #if [ "$HasNework" = "0" ]; then
-    #    createnetwork
-    #fi
-
    CNT=1
    for i in $NODE_LIST ;
    do
@@ -138,6 +130,17 @@ start(){
       NODENAME=`getnodename $1`
    fi
     docker start $NODENAME
+}
+
+stopall(){
+   start nfs
+   CNT=1
+   for i in $NODE_LIST ;
+   do
+	NODENAME=`getnodename $CNT`
+	start $NODENAME
+	CNT=`expr $CNT + 1`
+   done
 }
 
 
