@@ -116,8 +116,7 @@ stopall(){
    CNT=1
    for i in $NODE_LIST ;
    do
-	NODENAME=`getnodename $CNT`
-	stop $NODENAME
+	stop $CNT
 	CNT=`expr $CNT + 1`
    done
    stop nfs
@@ -137,8 +136,7 @@ stopall(){
    CNT=1
    for i in $NODE_LIST ;
    do
-	NODENAME=`getnodename $CNT`
-	start $NODENAME
+	start $CNT
 	CNT=`expr $CNT + 1`
    done
 }
