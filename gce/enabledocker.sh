@@ -1,6 +1,5 @@
 #!/bin/bash
 if [ ! -e  /root/rac_on_xx ]; then
-
 　 if   [ -e /etc/debian_version ] 
 　  apt-get update
 　  apt-get install -y git
@@ -9,7 +8,6 @@ if [ ! -e  /root/rac_on_xx ]; then
     yum clean all
     yum -y install git
    fi
-   
    git clone https://github.com/s4ragent/rac_on_xx /root/rac_on_xx
 fi
 cd /root/rac_on_xx
