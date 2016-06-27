@@ -9,7 +9,10 @@ exerootssh(){
 	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getnodename $2`
 }
 
-
+getrootshlog()
+{
+	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real $1` find $GRID_ORACLE_HOME/install -name root_`getnodename $1`* -exec less {} \;
+}
 
 creatersp()
 {
@@ -290,6 +293,7 @@ echo "`date` install grid db dbca end"
 }
 
 case "$1" in
+  "getrootshlog" ) shift;getrootshlog $*;;
   "install_grid_db_dbca" ) shift;install_grid_db_dbca $*;;
   "igd" ) shift;install_grid_db_dbca $*;;
   "runinstallgrid" ) shift;runinstallgrid $*;;
