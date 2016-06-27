@@ -8,6 +8,7 @@ elif [ -e /etc/redhat-release ]; then
   yum -y install unzip
 fi
 
+
 gsutil cp $GOOGLESTORAGE$DB_MEDIA1 /media
 gsutil cp $GOOGLESTORAGE$DB_MEDIA2 /media
 gsutil cp $GOOGLESTORAGE$GRID_MEDIA1 /media
