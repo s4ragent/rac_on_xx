@@ -1,14 +1,5 @@
 #!/bin/bash
 source ./common.sh
-
-exessh(){
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $1@`getnodename $2`
-}
-
-exerootssh(){
-	ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getnodename $2`
-}
-
 getrootshlog()
 {
 	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null grid@`getip 0 real $1` "find $GRID_ORACLE_HOME/install -name root_`getnodename $1`* -exec less {} \;"
@@ -306,7 +297,4 @@ case "$1" in
   "creatersp" ) shift;creatersp $*;;
   "exedbca" ) shift;exedbca $*;;
   "exedbca2") shift;exedbca2 $*;;
-  "exessh" ) shift;exessh $*;;
-  "exerootssh" ) shift;exerootssh $*;;
-  * ) echo "Ex " ;;
 esac
