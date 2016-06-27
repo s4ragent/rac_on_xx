@@ -131,7 +131,7 @@ start(){
     docker start $NODENAME
 }
 
-stopall(){
+startall(){
    start nfs
    CNT=1
    for i in $NODE_LIST ;
