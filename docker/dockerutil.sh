@@ -146,6 +146,9 @@ buildimage(){
     docker build -t $IMAGE --no-cache=true ./images/OEL7
 }
 
+getrootshlog(){
+	docker exec -ti `getnodename $1` /root/rac_on_xx/racutil.sh getrootshlog $1
+}
 
 case "$1" in
   "deleteandrun" ) shift;deleteandrun $*;;
