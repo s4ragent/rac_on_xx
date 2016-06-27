@@ -20,7 +20,7 @@ ORACLE_HOSTNAME=`getnodename $MyNumber`.${DOMAIN_NAME}
   groupadd -g 2001 asmadmin
   groupadd -g 2002 asmdba
   groupadd -g 2003 asmoper
-  useradd -u 501 -m -g oinstall -G dba,oper,asmdba -d /home/oracle -s /bin/bash -c"Oracle Software Owner" oracle
+  useradd -u 501 -m -g oinstall -G dba,oper,asmdba -d /home/oracle -s /bin/bash -c "Oracle Software Owner" oracle
   useradd -u 2001 -m -g oinstall -G asmadmin,asmdba,asmoper -d /home/grid -s /bin/bash -c "Grid Infrastructure Owner" grid
 
 ##edit password ##
