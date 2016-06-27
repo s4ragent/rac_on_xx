@@ -3,6 +3,7 @@ source ../common.sh
 
 IMAGE="s4ragent/rac_on_xx:OEL7"
 BRNAME="racbr"
+SHARE_VOLUME_PATH="/rac_on_docker"
 #CAP_OPS="--cap-add=NET_ADMIN"
 DOCKER_CAPS="--privileged=true"
 #DOCKER_CAPS="--cap-add=ALL --security-opt=seccomp=unconfined"
@@ -42,8 +43,8 @@ runall(){
         createnetwork
     fi
 
-    rm -rf /docker$NFS_ROOT
-    run nfs $NFS_SERVER "-v /docker$NFS_ROOT:$NFS_ROOT:rw" 	
+
+   run nfs $NFS_SERVER "-v $SHARE_VOLUME_PATH$NFS_ROOT:$NFS_ROOT:rw" 	
 
    CNT=1
    for i in $NODE_LIST ;
@@ -100,6 +101,8 @@ deleteall(){
    done
    docker exec -ti nfs bash -c "rm -rf $NFS_ROOT/*"
    delete nfs
+   
+   rm -rf $SHARE_VOLUME_PATH$NFS_ROOT/*
    docker network rm $BRNAME
 }
 
@@ -110,6 +113,22 @@ stop(){
       NODENAME=`getnodename $1`
    fi
     docker stop $NODENAME
+}
+
+stopall(){
+    #HasNework=`docker network ls | grep racbr | wc -l`
+    #if [ "$HasNework" = "0" ]; then
+    #    createnetwork
+    #fi
+
+   CNT=1
+   for i in $NODE_LIST ;
+   do
+	NODENAME=`getnodename $CNT`
+	stop $NODENAME
+	CNT=`expr $CNT + 1`
+   done
+   stop nfs
 }
 
 start(){ 
