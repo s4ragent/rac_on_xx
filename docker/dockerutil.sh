@@ -34,7 +34,7 @@ run(){
 }
 
 deleteandrun(){
- deleteall && runall
+ deleteall && runall $1
 }
 
 runall(){
