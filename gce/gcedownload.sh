@@ -2,7 +2,7 @@
 source ../common.sh
 mkdir -p /media
 
-if [ -e /etc/debian_version ] 
+if [ -e /etc/debian_version ]; then
   apt-get install -y unzip
 elif [ -e /etc/redhat-release ]; then
   yum -y install unzip
