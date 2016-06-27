@@ -147,7 +147,7 @@ buildimage(){
 }
 
 getrootshlog(){
-	docker exec -ti `getnodename $1` bash /root/rac_on_xx/racutil.sh getrootshlog $1
+	docker exec -ti `getnodename $1` "cd /root/rac_on_xx && bash /root/rac_on_xx/racutil.sh getrootshlog $1"
 }
 
 case "$1" in
