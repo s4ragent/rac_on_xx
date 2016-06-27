@@ -151,6 +151,7 @@ getrootshlog(){
 }
 
 case "$1" in
+  "getrootshlog" ) shift;getrootshlog $*;;
   "deleteandrun" ) shift;deleteandrun $*;;
   "dockerexec" ) shift;dockerexec $*;;
   "createnetwork" ) shift;createnetwork $*;;
