@@ -80,7 +80,7 @@ deleteandstart(){
 
 ssh(){
 name=$1
-gcloud compute ssh $name --ssh-flag="-L 3389:127.0.0.1:3389" $2 $3 $4 $5 $6 $6 $7 $8 $9
+gcloud compute ssh $name --ssh-flag="-L 3389:127.0.0.1:3389" $2 $3 $4 $5 $6 $7 $8 $9
 }
 
 delete(){
