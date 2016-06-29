@@ -5,4 +5,5 @@ do
     #bash dockerutil.sh deleteandrun silent >$LOG  2>&1
     docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./racutil.sh deconfig" >$LOG  2>&1
     docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./racutil.sh gridrootsh " >$LOG  2>&1
+    docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./racutil.sh gridstatus " >$LOG  2>&1
 done
