@@ -283,8 +283,13 @@ echo "`date` install grid db dbca start"
 echo "`date` install grid db dbca end"
 }
 
+deconfig(){
+
+}
+
 case "$1" in
   "getrootshlog" ) shift;getrootshlog $*;;
+  "deconfig" ) shift;deconfig $*;;
   "install_grid_db_dbca" ) shift;install_grid_db_dbca $*;;
   "igd" ) shift;install_grid_db_dbca $*;;
   "runinstallgrid" ) shift;runinstallgrid $*;;
