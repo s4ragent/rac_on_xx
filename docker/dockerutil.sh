@@ -142,7 +142,7 @@ stop(){
       NODENAME=`getnodename $1`
       loop_device_numver=`expr $1 + 100`
    fi
-   ID=`docker inspect --format='{{.Id}}'$NODENAME`
+   ID=`docker inspect --format='{{.Id}}' $NODENAME`
    docker stop $NODENAME
    losetup -d /dev/loop$loop_device_numver
    systemctl stop docker-${ID}.scope
