@@ -30,10 +30,11 @@ createnetwork(){
 #$1 nodename $2 ip $3 loop_device numver $4 loop_device mountpoint
 run(){
     #docker run -c $CPU_SHARE -m $MEMORY_LIMIT $DOCKER_CAPS -d -h ${nodename}.${DOMAIN_NAME} --name ${nodename} --dns=127.0.0.1 -v /lib/modules:/lib/modules -v /docker/media:/media ractest:racbase$2 /sbin/init
+    loop_device_numver=`expr $3 + 100`
     mkdir -p $DOCKER_VOLUME_PATH/$1
     qemu-img create -f raw -o size=100G $DOCKER_VOLUME_PATH/$1/disk.img
     mkfs.ext4 -F  $DOCKER_VOLUME_PATH/$1/disk.img
-    setuploop $3 $DOCKER_VOLUME_PATH/$1/disk.img
+    setuploop $loop_device_numver $DOCKER_VOLUME_PATH/$1/disk.img
     docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 "$TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro" $IMAGE /sbin/init
     docker cp ../../rac_on_xx $1:/root/
     docker exec -ti ${1} "mkdir -p $4"
@@ -85,7 +86,7 @@ runall(){
    do
 	NODENAME=`getnodename $CNT`
 	#NODENAME=${DOMAIN_NAME}$CNT
-	run $NODENAME $i /u01
+	run $NODENAME $i $CNT /u01
 	CNT=`expr $CNT + 1`
    done
    
