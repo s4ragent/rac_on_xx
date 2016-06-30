@@ -1,8 +1,8 @@
 #!/bin/bash
 if [ ! -e  /root/rac_on_xx ]; then
    if [ -e /etc/debian_version ]; then
-      apt-get update qemu-utils
-      apt-get install -y git screen
+      apt-get update
+      apt-get install -y git screen qemu-utils
    elif [ -e /etc/redhat-release ]; then
       sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf
       yum clean all
