@@ -39,7 +39,7 @@ run(){
     docker cp ../../rac_on_xx $1:/root/
     sleep 20
     docker exec -ti ${1} bash -c "mkdir -p $4"
-    docker exec -ti ${1} bash -c "echo \"/dev/loop${3} ${4} ext4 defaults 0 0\" >> /etc/fstab"
+    docker exec -ti ${1} bash -c "echo \"/dev/loop$loop_device_numver ${4} ext4 defaults 0 0\" >> /etc/fstab"
     docker exec -ti ${1} bash -c "mount -a"
 }
 
