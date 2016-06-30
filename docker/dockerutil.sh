@@ -35,7 +35,7 @@ run(){
     qemu-img create -f raw -o size=100G $DOCKER_VOLUME_PATH/$1/disk.img
     mkfs.ext4 -F  $DOCKER_VOLUME_PATH/$1/disk.img
     setuploop $loop_device_numver $DOCKER_VOLUME_PATH/$1/disk.img
-    docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 "$TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro" $IMAGE /sbin/init
+    docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $IMAGE /sbin/init
     docker cp ../../rac_on_xx $1:/root/
     docker exec -ti ${1} "mkdir -p $4"
     docker exec -ti ${1} echo "/dev/loop${3} ${4} ext4 defaults 0 0" >> /etc/fstab
