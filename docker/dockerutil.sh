@@ -27,42 +27,17 @@ createnetwork(){
     docker network create -d bridge -o "com.docker.network.mtu"="$MTU" --subnet=$DOCKERSUBNET $BRNAME
 }
 
-#$1 nodename $2 ip $3 loop_device numver $4 loop_device mountpoint
+#$1 node_number/nfs $2 ip $3 mount point
 run(){
     #docker run -c $CPU_SHARE -m $MEMORY_LIMIT $DOCKER_CAPS -d -h ${nodename}.${DOMAIN_NAME} --name ${nodename} --dns=127.0.0.1 -v /lib/modules:/lib/modules -v /docker/media:/media ractest:racbase$2 /sbin/init
-    loop_device_numver=`expr $3 + 100`
-    mkdir -p $DOCKER_VOLUME_PATH/$1
-    qemu-img create -f raw -o size=100G $DOCKER_VOLUME_PATH/$1/disk.img
-    mkfs.ext4 -F  $DOCKER_VOLUME_PATH/$1/disk.img
-    setuploop $loop_device_numver $DOCKER_VOLUME_PATH/$1/disk.img
-    docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $IMAGE /sbin/init
-    docker cp ../../rac_on_xx $1:/root/
-    sleep 20
-    docker exec -ti ${1} bash -c "mkdir -p $4"
-    docker exec -ti ${1} bash -c "echo \"/dev/loop$loop_device_numver ${4} ext4 defaults 0 0\" >> /etc/fstab"
-    docker exec -ti ${1} bash -c "mount -a"
-}
-
-#$1 loop_device number $2 img_file
-setuploop(){
-    if [ ! -e /dev/loop$1 ]; then
-        mknod /dev/loop$1 b 7 $1
-        chown --reference=/dev/loop0 /dev/loop$1
-        chmod --reference=/dev/loop0 /dev/loop$1
-    fi
-    cnt=0
-    while true; do
-        losetup /dev/loop$1 $2
-        if [ $? -eq 0 ]; then
-            break
-        fi
-        if [ $cnt -eq 10 ]; then
-            echo "10 times losetup failed"
-            break
-        fi
-    	cnt=`expr $cnt + 1 `
-    	sleep 3
-    done
+   if [ "$1" = "nfs" ]; then
+    	NODENAME=nfs
+   else
+    	NODENAME=`getnodename $1`
+   fi
+   mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
+   docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v $DOCKER_VOLUME_PATH/$NODENAME:$3:rw $IMAGE /sbin/init
+   docker cp ../../rac_on_xx $1:/root/
 }
 
 
@@ -76,14 +51,12 @@ runall(){
         createnetwork
     fi
 
-   run nfs $NFS_SERVER 0 /nfs 	
+   run nfs $NFS_SERVER /nfs 	
 
    CNT=1
    for i in $NODE_LIST ;
    do
-	NODENAME=`getnodename $CNT`
-	#NODENAME=${DOMAIN_NAME}$CNT
-	run $NODENAME $i $CNT /u01
+	run $CNT $i /u01
 	CNT=`expr $CNT + 1`
    done
    
@@ -137,15 +110,10 @@ deleteall(){
 stop(){ 
    if [ "$1" = "nfs" ]; then
       NODENAME=nfs
-      loop_device_numver=100
    else
       NODENAME=`getnodename $1`
-      loop_device_numver=`expr $1 + 100`
    fi
-   ID=`docker inspect --format='{{.Id}}' $NODENAME`
    docker stop $NODENAME
-   losetup -d /dev/loop$loop_device_numver
-   systemctl stop docker-${ID}.scope
 }
 
 stopall(){
