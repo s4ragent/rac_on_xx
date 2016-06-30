@@ -112,33 +112,40 @@ runall(){
 }
 
 delete(){
-	loop_device_numver=`expr $2 + 100`
-	docker rm -f $1
-	losetup -d /dev/loop$loop_device_numver
-	rm -rf $DOCKER_VOLUME_PATH/$1
+	if [ "$1" = "nfs" ]; then
+      		NODENAME=nfs
+   	else
+      		NODENAME=`getnodename $1`
+   	fi
+   	docker rm -f $NODENAME
+	rm -rf $DOCKER_VOLUME_PATH/$NODENAME
 }
 
 deleteall(){
-
+   stopall
    CNT=1
    for i in $NODE_LIST ;
    do
-	NODENAME=`getnodename $CNT`
-	delete $NODENAME $CNT
+	delete $CNT
 	CNT=`expr $CNT + 1`
    done
 
-   delete nfs 0
+   delete nfs
    docker network rm $BRNAME
 }
 
 stop(){ 
    if [ "$1" = "nfs" ]; then
       NODENAME=nfs
+      loop_device_numver=100
    else
       NODENAME=`getnodename $1`
+      loop_device_numver=`expr $1 + 100`
    fi
-    docker stop $NODENAME
+   ID=`docker inspect --format='{{.Id}}'$NODENAME`
+   docker stop $NODENAME
+   losetup -d /dev/loop$loop_device_numver
+   systemctl stop docker-${ID}.scope
 }
 
 stopall(){
