@@ -288,10 +288,10 @@ echo "`date`  deconfig start"
 	for i in `seq 1 $NODELISTCOUNT`;
 	do
               
-		if [  $i = $NODECOUNT  ] ; then
-                     CMD="perl $GRID_ORACLE_HOME/crs/install/rootcrs.pl -verbose -deconfig -force -lastnode"
+		if [  $i = $NODELISTCOUNT  ] ; then
+                     CMD="$GRID_ORACLE_HOME/crs/install/rootcrs.pl -verbose -deconfig -force -lastnode"
 		else
-			CMD="perl $GRID_ORACLE_HOME/crs/install/rootcrs.pl -verbose -deconfig -force"
+			CMD="$GRID_ORACLE_HOME/crs/install/rootcrs.pl -verbose -deconfig -force"
 		fi
 
 		ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@`getip 0 real $i` $CMD
