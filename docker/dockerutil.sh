@@ -3,7 +3,7 @@ source ../common.sh
 
 IMAGE="s4ragent/rac_on_xx:OEL7"
 BRNAME="racbr"
-SHARE_VOLUME_PATH="/rac_on_docker"
+DOCKER_VOLUME_PATH="/rac_on_docker"
 #CAP_OPS="--cap-add=NET_ADMIN"
 DOCKER_CAPS="--privileged=true --security-opt seccomp=unconfined"
 #DOCKER_CAPS="--cap-add=ALL --security-opt=seccomp=unconfined"
@@ -27,10 +27,44 @@ createnetwork(){
     docker network create -d bridge -o "com.docker.network.mtu"="$MTU" --subnet=$DOCKERSUBNET $BRNAME
 }
 
+#$1 nodename $2 ip $3 loop_device numver $4 loop_device mountpoint
 run(){
     #docker run -c $CPU_SHARE -m $MEMORY_LIMIT $DOCKER_CAPS -d -h ${nodename}.${DOMAIN_NAME} --name ${nodename} --dns=127.0.0.1 -v /lib/modules:/lib/modules -v /docker/media:/media ractest:racbase$2 /sbin/init
-    docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 -v /sys/fs/cgroup:/sys/fs/cgroup:ro $3 $IMAGE /sbin/init
+    qemu-img create -f raw -o size=100G $DOCKER_VOLUME_PATH/$1/disk.img
+    mkfs.ext4 -F  $DOCKER_VOLUME_PATH/$1/disk.img
+    setuploop $3 $DOCKER_VOLUME_PATH/$1/disk.img
+    docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 -v /sys/fs/cgroup:/sys/fs/cgroup:ro $IMAGE /sbin/init
     docker cp ../../rac_on_xx $1:/root/
+    docker exec -ti ${1} "mkdir -p $4"
+    docker exec -ti ${1} echo "/dev/loop${3} ${4} ext4 defaults 0 0" >> /etc/fstab
+    docker exec -ti ${1} "mount -a"
+}
+
+#$1 loop_device number $2 img_file
+setuploop(){
+    initloop $1
+    cnt=0
+    while true; do
+        losetup /dev/loop$1 $2
+        if [ $? -eq 0 ]; then
+            break
+        fi
+        if [ $cnt -eq 10 ]; then
+            echo "10 times losetup failed"
+            break
+        fi
+    	cnt=`expr $cnt + 1 `
+    	sleep 3
+    done
+}
+
+
+initloop(){
+    if [ ! -e /dev/loop$1 ]; then
+        mknod /dev/loop$1 b 7 $1
+        chown --reference=/dev/loop0 /dev/loop$1
+        chmod --reference=/dev/loop0 /dev/loop$1
+    fi
 }
 
 deleteandrun(){
@@ -42,9 +76,17 @@ runall(){
     if [ "$HasNework" = "0" ]; then
         createnetwork
     fi
+    
+    HasQemu=`which qemu-img | wc -l`
+    if [ "$HasQemu" = "0" ]; then
+	    if [ -e /etc/debian_version ]; then
+		apt-get -y install qemu-utils
+	    elif [ -e /etc/redhat-release ]; then
+		yum -y install qemu-img
+	    fi 
+    fi
 
-
-   run nfs $NFS_SERVER "-v $SHARE_VOLUME_PATH$NFS_ROOT:$NFS_ROOT:rw" 	
+   run nfs $NFS_SERVER 0 /nfs 	
 
    CNT=1
    for i in $NODE_LIST ;
