@@ -37,6 +37,7 @@ run(){
     setuploop $loop_device_numver $DOCKER_VOLUME_PATH/$1/disk.img
     docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $IMAGE /sbin/init
     docker cp ../../rac_on_xx $1:/root/
+    sleep 20
     docker exec -ti ${1} "mkdir -p $4"
     docker exec -ti ${1} echo "/dev/loop${3} ${4} ext4 defaults 0 0" >> /etc/fstab
     docker exec -ti ${1} "mount -a"
@@ -44,7 +45,11 @@ run(){
 
 #$1 loop_device number $2 img_file
 setuploop(){
-    initloop $1
+    if [ ! -e /dev/loop$1 ]; then
+        mknod /dev/loop$1 b 7 $1
+        chown --reference=/dev/loop0 /dev/loop$1
+        chmod --reference=/dev/loop0 /dev/loop$1
+    fi
     cnt=0
     while true; do
         losetup /dev/loop$1 $2
@@ -60,14 +65,6 @@ setuploop(){
     done
 }
 
-
-initloop(){
-    if [ ! -e /dev/loop$1 ]; then
-        mknod /dev/loop$1 b 7 $1
-        chown --reference=/dev/loop0 /dev/loop$1
-        chmod --reference=/dev/loop0 /dev/loop$1
-    fi
-}
 
 deleteandrun(){
  deleteall && runall $1
@@ -115,26 +112,23 @@ runall(){
 }
 
 delete(){
+	loop_device_numver=`expr $2 + 100`
 	docker rm -f $1
+	losetup -d /dev/loop$loop_device_numver
+	rm -rf $DOCKER_VOLUME_PATH/$1
 }
 
 deleteall(){
-    #HasNework=`docker network ls | grep racbr | wc -l`
-    #if [ "$HasNework" = "0" ]; then
-    #    createnetwork
-    #fi
 
    CNT=1
    for i in $NODE_LIST ;
    do
 	NODENAME=`getnodename $CNT`
-	delete $NODENAME
+	delete $NODENAME $CNT
 	CNT=`expr $CNT + 1`
    done
-   docker exec -ti nfs bash -c "rm -rf $NFS_ROOT/*"
-   delete nfs
-   
-   rm -rf $SHARE_VOLUME_PATH$NFS_ROOT/*
+
+   delete nfs 0
    docker network rm $BRNAME
 }
 
