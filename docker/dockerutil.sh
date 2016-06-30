@@ -33,7 +33,7 @@ run(){
     qemu-img create -f raw -o size=100G $DOCKER_VOLUME_PATH/$1/disk.img
     mkfs.ext4 -F  $DOCKER_VOLUME_PATH/$1/disk.img
     setuploop $3 $DOCKER_VOLUME_PATH/$1/disk.img
-    docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 -v /sys/fs/cgroup:/sys/fs/cgroup:ro $IMAGE /sbin/init
+    docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${1}.${DOMAIN_NAME} --name ${1} --net=$BRNAME --ip=$2 "$TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro" $IMAGE /sbin/init
     docker cp ../../rac_on_xx $1:/root/
     docker exec -ti ${1} "mkdir -p $4"
     docker exec -ti ${1} echo "/dev/loop${3} ${4} ext4 defaults 0 0" >> /etc/fstab
@@ -76,15 +76,6 @@ runall(){
     if [ "$HasNework" = "0" ]; then
         createnetwork
     fi
-    
-    HasQemu=`which qemu-img | wc -l`
-    if [ "$HasQemu" = "0" ]; then
-	    if [ -e /etc/debian_version ]; then
-		apt-get -y install qemu-utils
-	    elif [ -e /etc/redhat-release ]; then
-		yum -y install qemu-img
-	    fi 
-    fi
 
    run nfs $NFS_SERVER 0 /nfs 	
 
@@ -93,7 +84,7 @@ runall(){
    do
 	NODENAME=`getnodename $CNT`
 	#NODENAME=${DOMAIN_NAME}$CNT
-	run $NODENAME $i "$TMPFS_OPS -v /media/:/media:ro"
+	run $NODENAME $i /u01
 	CNT=`expr $CNT + 1`
    done
    
