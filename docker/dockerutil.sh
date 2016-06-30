@@ -30,6 +30,7 @@ createnetwork(){
 #$1 nodename $2 ip $3 loop_device numver $4 loop_device mountpoint
 run(){
     #docker run -c $CPU_SHARE -m $MEMORY_LIMIT $DOCKER_CAPS -d -h ${nodename}.${DOMAIN_NAME} --name ${nodename} --dns=127.0.0.1 -v /lib/modules:/lib/modules -v /docker/media:/media ractest:racbase$2 /sbin/init
+    mkdir -p $DOCKER_VOLUME_PATH/$1
     qemu-img create -f raw -o size=100G $DOCKER_VOLUME_PATH/$1/disk.img
     mkfs.ext4 -F  $DOCKER_VOLUME_PATH/$1/disk.img
     setuploop $3 $DOCKER_VOLUME_PATH/$1/disk.img
