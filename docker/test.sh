@@ -1,4 +1,7 @@
 #!/bin/bash
+
+LOG="`date "+%Y%m%d-%H%M%S"`.log"
+bash dockerutil.sh runall silent >$LOG  2>&1
 for i in `seq 1 $1`
 do
     LOG="`date "+%Y%m%d-%H%M%S"`.log"
