@@ -1,19 +1,18 @@
 #!/bin/bash
 source ../common.sh
 
+####
+#DOCKER_VOLUME_PATH="/rac_on_docker"
+
+
+####
 IMAGE="s4ragent/rac_on_xx:OEL7"
 BRNAME="racbr"
-DOCKER_VOLUME_PATH="/rac_on_docker"
 #CAP_OPS="--cap-add=NET_ADMIN"
 DOCKER_CAPS="--privileged=true --security-opt seccomp=unconfined"
 #DOCKER_CAPS="--cap-add=ALL --security-opt=seccomp=unconfined"
 DOCKER_START_OPS="--restart=always"
 TMPFS_OPS="--shm-size=1200m"
-MTU="9000"
-
-##todo ubuntu 
-#sudo apt-get install apparmor-utils
-#sudo aa-complain /etc/apparmor.d/docker 
 
 dockerexec(){
 	docker exec -ti $1 /bin/bash
@@ -23,23 +22,25 @@ dockerexec(){
 createnetwork(){
     SEGMENT=`echo $NFS_SERVER | grep -Po '\d{1,3}\.\d{1,3}\.'`
     DOCKERSUBNET="${SEGMENT}0.0/16"
-    #docker network create -d --subnet=192.168.0.0/16
-    docker network create -d bridge -o "com.docker.network.mtu"="$MTU" --subnet=$DOCKERSUBNET $BRNAME
+    docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
 }
 
 #$1 node_number/nfs $2 ip $3 mount point
 run(){
-    #docker run -c $CPU_SHARE -m $MEMORY_LIMIT $DOCKER_CAPS -d -h ${nodename}.${DOMAIN_NAME} --name ${nodename} --dns=127.0.0.1 -v /lib/modules:/lib/modules -v /docker/media:/media ractest:racbase$2 /sbin/init
+
    if [ "$1" = "nfs" ]; then
     	NODENAME=nfs
    else
     	NODENAME=`getnodename $1`
    fi
-   mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
-#  docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v $DOCKER_VOLUME_PATH/$NODENAME:$3:rw $IMAGE /sbin/init
-
-docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init
-
+   
+   if [ "$DOCKER_VOLUME_PATH" != "" ]; then
+    	mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
+	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v $DOCKER_VOLUME_PATH/$NODENAME:$3:rw $IMAGE /sbin/init
+   else
+    	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init
+   fi   
+   
    docker cp ../../rac_on_xx $NODENAME:/root/
 }
 
@@ -94,7 +95,10 @@ delete(){
       		NODENAME=`getnodename $1`
    	fi
    	docker rm -f $NODENAME
-	rm -rf $DOCKER_VOLUME_PATH/$NODENAME
+
+   	if [ "$DOCKER_VOLUME_PATH" != "" ]; then
+    		rm -rf $DOCKER_VOLUME_PATH/$NODENAME
+    	fi
 }
 
 deleteall(){
