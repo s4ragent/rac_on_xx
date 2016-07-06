@@ -82,7 +82,7 @@ runall(){
 	run $i $NODEIP /u01
 	NODE_LIST="$NODE_LIST $NODEIP"
    done
-   echo "NODELIST: $NODE_LIST" > docker/nodelist.yml
+   echo "NODE_LIST: $NODE_LIST" > docker/nodelist.yml
    createansiblehost $1
    
 }
