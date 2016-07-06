@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./common.sh
+source ../common.sh
 DOCKERSUBNET="10.153.0.0/16"
 
 
