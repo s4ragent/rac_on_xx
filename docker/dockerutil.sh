@@ -1,12 +1,12 @@
 #!/bin/bash
-cd ..
-source ../common.sh
 DOCKERSUBNET="10.153.0.0/16"
-
-
-####
 #DOCKER_VOLUME_PATH="/rac_on_docker"
 
+cd ..
+source ./common.sh
+eval $(parse_yaml docker/nodelist.yml)
+NODELISTS=($NODE_LIST)
+NODELISTCOUNT=${#NODELISTS[@]}
 
 ####
 IMAGE="s4ragent/rac_on_xx:OEL7"
@@ -82,7 +82,7 @@ runall(){
 	run $i $NODEIP /u01
 	NODE_LIST="$NODE_LIST $NODEIP"
    done
-   echo "NODELIST: $NODE_LIST" > nodelist.yml
+   echo "NODELIST: $NODE_LIST" > docker/nodelist.yml
    createansiblehost $1
    
 }
