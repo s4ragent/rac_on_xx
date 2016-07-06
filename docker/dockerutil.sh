@@ -74,7 +74,7 @@ runall(){
    NFSIP="${SEGMENT}$BASE_IP"
    run nfs $NFSIP /nfs 	
 
-   for i in `seq 1 $1`; do
+   for i in `seq 1 $1`;
    do
         NUM=`expr $BASE_IP + $i`
     	NODEIP="${SEGMENT}$NUM"
