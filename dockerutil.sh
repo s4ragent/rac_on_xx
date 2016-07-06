@@ -1,5 +1,5 @@
 #!/bin/bash
-#source ../common.sh
+source ./common.sh
 DOCKERSUBNET="10.153.0.0/16"
 
 
@@ -29,22 +29,17 @@ createnetwork(){
 
 #$1 node_number/nfs $2 ip $3 mount point
 run(){
-   
-   SEGMENT=`echo $DOCKER_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
    if [ "$1" = "nfs" ]; then
     	NODENAME=nfs
-    	NODEIP="${SEGMENT}100"
    else
     	NODENAME=`getnodename $1`
-    	NUM=`expr 100 + $i`
-    	NODEIP="${SEGMENT}$NUM"
    fi
    
    if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     	mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
-	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$NODEIP $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v $DOCKER_VOLUME_PATH/$NODENAME:$3:rw $IMAGE /sbin/init
+	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v $DOCKER_VOLUME_PATH/$NODENAME:$3:rw $IMAGE /sbin/init
    else
-    	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$NODEIP $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init
+    	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init
    fi
    
    docker cp ../../rac_on_xx $NODENAME:/root/
@@ -72,14 +67,17 @@ runall(){
 	ssh-keygen -t rsa -P "" -f $sudokey
 	chmod 600 ${sudokey}*
     fi
+   
+   SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 
-   run nfs $NFS_SERVER /nfs 	
+   NFSIP="${SEGMENT}100"
+   run nfs $NFSIP /nfs 	
 
-   CNT=1
-   for i in $NODE_LIST ;
+   for i in `seq 1 $1`; do
    do
-	run $CNT $i /u01
-	CNT=`expr $CNT + 1`
+        NUM=`expr 100 + $i`
+    	NODEIP="${SEGMENT}$NUM"
+	run $i $NODEIP /u01
    done
    
 }
