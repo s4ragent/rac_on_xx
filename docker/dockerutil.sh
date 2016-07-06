@@ -73,13 +73,16 @@ runall(){
 
    NFSIP="${SEGMENT}$BASE_IP"
    run nfs $NFSIP /nfs 	
-
+   
+   NODE_LIST=""
    for i in `seq 1 $1`;
    do
         NUM=`expr $BASE_IP + $i`
     	NODEIP="${SEGMENT}$NUM"
 	run $i $NODEIP /u01
+	NODE_LIST="$NODE_LIST $NODEIP"
    done
+   echo "NODELIST: $NODE_LIST" > nodelist.yml
    createansiblehost $1
    
 }
