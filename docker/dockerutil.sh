@@ -180,7 +180,7 @@ $NODEIP
 
 [node_other]
 EOF
-	for i in `seq 2 $1`; do
+	for i in `seq 2 $1`;
 	do
 		NUM=`expr 100 + $i`
 		NODEIP="${SEGMENT}$NUM"
