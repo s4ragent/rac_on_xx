@@ -71,15 +71,16 @@ runall(){
    
    SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 
-   NFSIP="${SEGMENT}100"
+   NFSIP="${SEGMENT}$BASE_IP"
    run nfs $NFSIP /nfs 	
 
    for i in `seq 1 $1`; do
    do
-        NUM=`expr 100 + $i`
+        NUM=`expr $BASE_IP + $i`
     	NODEIP="${SEGMENT}$NUM"
 	run $i $NODEIP /u01
    done
+   createansiblehost $1
    
 }
 
@@ -157,6 +158,36 @@ buildimage(){
 getrootshlog(){
 	docker exec -ti `getnodename $1` bash -c "cd /root/rac_on_xx && bash /root/rac_on_xx/racutil.sh getrootshlog $1"
 }
+
+createansiblehost(){
+	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+	NFSIP="${SEGMENT}$BASE_IP"
+	mkdir -p docker/hosts
+	cat > docker/hosts <<EOF
+[localhost]
+127.0.0.1
+
+[nfs]
+$NFSIP
+
+EOF
+
+	NUM=`expr $BASE_IP + 1`
+	NODEIP="${SEGMENT}$NUM"
+	cat >> docker/hosts <<EOF
+[node1]
+$NODEIP
+
+[node_other]
+EOF
+	for i in `seq 2 $1`; do
+	do
+		NUM=`expr 100 + $i`
+		NODEIP="${SEGMENT}$NUM"
+		echo $NODEIP >> docker/hosts
+	done
+}
+
 
 case "$1" in
   "getrootshlog" ) shift;getrootshlog $*;;
