@@ -14,7 +14,7 @@ DOCKER_CAPS="--privileged=true --security-opt seccomp=unconfined"
 DOCKER_START_OPS="--restart=always"
 TMPFS_OPS="--shm-size=1200m"
 sudoer="opc"
-sudokey="opc.pem"
+sudokey="opc"
 
 dockerexec(){
 	docker exec -ti $1 /bin/bash
@@ -66,7 +66,7 @@ runall(){
     
     if [  ! -e $sudokey ] ; then
 	ssh-keygen -t rsa -P "" -f $sudokey
-	chmod 600 $sudokey*
+	chmod 600 ${sudokey}*
     fi
 
    run nfs $NFS_SERVER /nfs 	
