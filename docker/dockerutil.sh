@@ -66,6 +66,7 @@ runall(){
     
     if [  ! -e $sudokey ] ; then
 	ssh-keygen -t rsa -P "" -f $sudokey
+	chmod 600 $sudokey*
     fi
 
    run nfs $NFS_SERVER /nfs 	
