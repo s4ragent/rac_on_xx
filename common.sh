@@ -16,6 +16,8 @@ parse_yaml(){
    }'
 }
 
+eval $(parse_yaml vars.yml)
+
 getmynumber()
 {
 	MyIp=`ip a show eth0 | grep "inet " | awk -F '[/ ]' '{print $6}'`
