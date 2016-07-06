@@ -43,9 +43,14 @@ run(){
     	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init
    fi
    
-   docker exec $NODENAME useradd opc                                                                                                           
-   docker exec $NODENAME bash -c "echo \"opc ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"                                                    
    docker cp ../../rac_on_xx $NODENAME:/root/
+   
+   docker exec $NODENAME useradd $sudoer                                                                                                          
+   docker exec $NODENAME bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
+   docker exec $NODENAME bash -c "mkdir /home/$sudoer/.ssh"
+   docker cp ${sudokey}.pub $NODENAME:/home/$sudoer/.ssh/authorized_keys
+   docker exec $NODENAME bash -c "chown -R ${sudoer} /home/$sudoer/.ssh && chmod 700 /home/$sudoer/.ssh && chmod 600 /home/$sudoer/.ssh/*"
+
 }
 
 
@@ -57,6 +62,10 @@ runall(){
     HasNework=`docker network ls | grep racbr | wc -l`
     if [ "$HasNework" = "0" ]; then
         createnetwork
+    fi
+    
+    if [  ! -e $sudokey ] ; then
+	ssh-keygen -t rsa -P "" -f $sudokey
     fi
 
    run nfs $NFS_SERVER /nfs 	
