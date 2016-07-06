@@ -1,0 +1,49 @@
+NETWORK: 192.168.0.0 192.168.100.0
+BASE_IP: 50
+NODEPREFIX: node
+DOMAIN_NAME: public
+SCAN_NAME: scan
+GRID_PASSWORD: grid123
+ORACLE_PASSWORD: oracle123
+NFS_ROOT: /nfs
+GRID_CONFIG: /u01/config
+ORA_DATA: /u01/data
+MOUNT_PATH: /u01
+WORK: /u01/work
+ORA_ORACLE_BASE: /u01/app/oracle
+GRID_ORACLE_BASE: /u01/app/grid
+INSTALL_LANG: ja
+#####
+CRS_PATH: /u01/config
+CRS_DEV: /u01/config/crs.img
+CRS_DEV_SIZE: 30720
+#CRS_DEV_SIZE: 10240
+CRS_DEV_STRING: /u01/config/*
+CLUSTER_NAME: node-cluster
+DBNAME: ORCL
+SIDNAME: ORCL
+SYSPASSWORD: oracle123
+SYSTEMPASSWORD: oracle123
+REDOFILESIZE: 10
+DISKGROUPNAME: CRS
+FRA: CRS
+ASMPASSWORD: oracle123
+CHARSET: AL32UTF8
+NCHAR: AL16UTF16
+MEMORYTARGET: 1800
+TEMPLATENAME: General_Purpose.dbc
+DATABASETYPE: MULTIPURPOSE
+###version specific
+ORA_ORACLE_HOME: /u01/app/oracle/product/12.1.0/dbhome_1
+GRID_ORACLE_HOME: /u01/app/12.1.0/grid
+ORAINVENTORY: /u01/app/oraInventory
+PreInstallRPM: oracle-rdbms-server-12cR1-preinstall
+LimitsConf: oracle-rdbms-server-12cR1-preinstall
+DB_MEDIA1: linuxamd64_12102_database_1of2.zip
+DB_MEDIA2: linuxamd64_12102_database_2of2.zip
+GRID_MEDIA1: linuxamd64_12102_grid_1of2.zip
+GRID_MEDIA2: linuxamd64_12102_grid_2of2.zip
+
+
+######DOWNLOAD
+GOOGLESTORAGE: gs://s4ragent201622/
