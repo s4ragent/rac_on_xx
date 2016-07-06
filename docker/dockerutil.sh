@@ -165,7 +165,6 @@ getrootshlog(){
 createansiblehost(){
 	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 	NFSIP="${SEGMENT}$BASE_IP"
-	mkdir -p docker/hosts
 	cat > docker/hosts <<EOF
 [localhost]
 127.0.0.1
