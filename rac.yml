@@ -1,0 +1,31 @@
+- hosts:
+    - node1,node_other
+  max_fail_percentage: 0
+  sudo: yes
+  tags:
+    - ec2_startup
+    - initvxlan
+  vars_files:
+    - ./vars.yml
+  gather_facts: false
+  tasks:
+    - name: "create work directory"
+      file: dest={{ WORK_DIR }} state=directory
+
+    - name: "copy varfile"
+      copy: src=vars.yml dest={{ WORK_DIR }} mode=755
+
+    - name: "copy common.sh"
+      copy: src=common.sh dest={{ WORK_DIR }} mode=755
+    
+    - name: "setup vxlan (remote public)"
+      shell: chdir={{ WORK_DIR }} ./common.sh createvxlanconf 0 real {{ item.0 + 2}}
+      run_once: yes
+      delegate_to: "{{ item.1 }}"
+      with_indexed_items: play_hosts
+    
+    - name: "setup vxlan (remote private)"
+      shell: chdir={{ WORK_DIR }} ./common.sh createvxlanconf 1 real {{ item.0 + 2}}
+      run_once: yes
+      delegate_to: "{{ item.1 }}"
+      with_indexed_items: play_hosts
