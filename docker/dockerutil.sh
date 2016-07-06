@@ -48,7 +48,8 @@ run(){
    docker exec $NODENAME bash -c "mkdir /home/$sudoer/.ssh"
    docker cp ${sudokey}.pub $NODENAME:/home/$sudoer/.ssh/authorized_keys
    docker exec $NODENAME bash -c "chown -R ${sudoer} /home/$sudoer/.ssh && chmod 700 /home/$sudoer/.ssh && chmod 600 /home/$sudoer/.ssh/*"
-
+   
+   echo $2 >> all.ip
 }
 
 
@@ -72,6 +73,7 @@ runall(){
    NFSIP="${SEGMENT}$BASE_IP"
    run nfs $NFSIP /nfs 	
    
+
    NODE_LIST=""
    for i in `seq 1 $1`;
    do
@@ -111,6 +113,7 @@ deleteall(){
 
    delete nfs
    docker network rm $BRNAME
+   rm -rf all.ip
 }
 
 stop(){ 
@@ -184,8 +187,14 @@ EOF
 	do
 		NUM=`expr 100 + $i`
 		NODEIP="${SEGMENT}$NUM"
-		echo $NODEIP >> docker/hosts
+		echo "$NODEIP" >> docker/hosts
 	done
+	cat >> docker/hosts <<EOF	
+	[all:vars]
+ansible_ssh_user=$sudoer
+ansible_ssh_private_key_file=docker/$sudokey
+
+EOF
 }
 
 
