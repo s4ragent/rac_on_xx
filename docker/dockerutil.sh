@@ -1,5 +1,7 @@
 #!/bin/bash
-source ../common.sh
+#source ../common.sh
+DOCKERSUBNET="10.153.0.0/16"
+
 
 ####
 #DOCKER_VOLUME_PATH="/rac_on_docker"
@@ -22,25 +24,27 @@ dockerexec(){
 
 
 createnetwork(){
-    SEGMENT=`echo $NFS_SERVER | grep -Po '\d{1,3}\.\d{1,3}\.'`
-    DOCKERSUBNET="${SEGMENT}0.0/16"
     docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
 }
 
 #$1 node_number/nfs $2 ip $3 mount point
 run(){
-
+   
+   SEGMENT=`echo $DOCKER_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
    if [ "$1" = "nfs" ]; then
     	NODENAME=nfs
+    	NODEIP="${SEGMENT}100"
    else
     	NODENAME=`getnodename $1`
+    	NUM=`expr 100 + $i`
+    	NODEIP="${SEGMENT}$NUM"
    fi
    
    if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     	mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
-	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v $DOCKER_VOLUME_PATH/$NODENAME:$3:rw $IMAGE /sbin/init
+	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$NODEIP $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v $DOCKER_VOLUME_PATH/$NODENAME:$3:rw $IMAGE /sbin/init
    else
-    	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init
+    	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$NODEIP $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init
    fi
    
    docker cp ../../rac_on_xx $NODENAME:/root/
@@ -78,28 +82,6 @@ runall(){
 	CNT=`expr $CNT + 1`
    done
    
-   docker exec -ti nfs bash /root/rac_on_xx/docker/nfsstartup.sh
-   
-   CNT=1
-   for i in $NODE_LIST ;
-   do
-	NODENAME=`getnodename $CNT`
-	#NODENAME=${DOMAIN_NAME}$CNT
-	docker exec -ti $NODENAME bash /root/rac_on_xx/docker/nodestartup.sh
-	CNT=`expr $CNT + 1`
-   done
-   
-    if [ "$1" = "silent" ];  then
-    	CNT=1
-   	for i in $NODE_LIST ;
-   	do
-		NODENAME=`getnodename $CNT`
-		docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./createsshkey.sh"
-		CNT=`expr $CNT + 1`
-	done
-	NODENAME=`getnodename 1`
-	docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx && bash ./racutil.sh igd"
-    fi
 }
 
 delete(){
@@ -113,6 +95,8 @@ delete(){
    	if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     		rm -rf $DOCKER_VOLUME_PATH/$NODENAME
     	fi
+    	
+    	rm -rf ${sudokey}*
 }
 
 deleteall(){
