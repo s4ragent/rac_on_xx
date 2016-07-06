@@ -43,8 +43,6 @@ run(){
     	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init
    fi
    
-   docker cp ../../rac_on_xx $NODENAME:/root/
-   
    docker exec $NODENAME useradd $sudoer                                                                                                          
    docker exec $NODENAME bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
    docker exec $NODENAME bash -c "mkdir /home/$sudoer/.ssh"
