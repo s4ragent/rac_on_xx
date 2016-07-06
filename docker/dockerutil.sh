@@ -13,6 +13,8 @@ DOCKER_CAPS="--privileged=true --security-opt seccomp=unconfined"
 #DOCKER_CAPS="--cap-add=ALL --security-opt=seccomp=unconfined"
 DOCKER_START_OPS="--restart=always"
 TMPFS_OPS="--shm-size=1200m"
+sudoer="opc"
+sudokey="opc.pem"
 
 dockerexec(){
 	docker exec -ti $1 /bin/bash
@@ -39,8 +41,10 @@ run(){
 	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v $DOCKER_VOLUME_PATH/$NODENAME:$3:rw $IMAGE /sbin/init
    else
     	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init
-   fi   
+   fi
    
+   docker exec $NODENAME useradd opc                                                                                                           
+   docker exec $NODENAME bash -c "echo \"opc ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"                                                    
    docker cp ../../rac_on_xx $NODENAME:/root/
 }
 
