@@ -4,9 +4,6 @@ DOCKERSUBNET="10.153.0.0/16"
 
 cd ..
 source ./common.sh
-eval $(parse_yaml docker/nodelist.yml)
-NODELISTS=($NODE_LIST)
-NODELISTCOUNT=${#NODELISTS[@]}
 
 ####
 IMAGE="s4ragent/rac_on_xx:OEL7"
@@ -32,9 +29,20 @@ createnetwork(){
 run(){
    if [ "$1" = "nfs" ]; then
     	NODENAME=nfs
+
+   cat > docker/inventory <<EOF
+[nfs]
+$2
+
+[dbserver]
+EOF
    else
     	NODENAME=`getnodename $1`
+    	echo $2 >> docker/inventory
    fi
+   updateansiblehost
+   
+   
    
    if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     	mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
@@ -48,8 +56,7 @@ run(){
    docker exec $NODENAME bash -c "mkdir /home/$sudoer/.ssh"
    docker cp ${sudokey}.pub $NODENAME:/home/$sudoer/.ssh/authorized_keys
    docker exec $NODENAME bash -c "chown -R ${sudoer} /home/$sudoer/.ssh && chmod 700 /home/$sudoer/.ssh && chmod 600 /home/$sudoer/.ssh/*"
-   
-   echo $2 >> docker/all.ip
+
 }
 
 
@@ -83,7 +90,6 @@ runall(){
 	NODE_LIST="$NODE_LIST $NODEIP"
    done
    echo "NODE_LIST: $NODE_LIST" > docker/nodelist.yml
-   createansiblehost $1
    
 }
 
@@ -163,39 +169,38 @@ getrootshlog(){
 	docker exec -ti `getnodename $1` bash -c "cd /root/rac_on_xx && bash /root/rac_on_xx/racutil.sh getrootshlog $1"
 }
 
-createansiblehost(){
-	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
-	NFSIP="${SEGMENT}$BASE_IP"
-	cat > docker/hosts <<EOF
-[localhost]
-127.0.0.1
+updateansiblehost(){
+   if [ "$1" = "nfs" ]; then
 
+	cat > docker/inventory <<EOF
 [nfs]
-$NFSIP
+$2
 
+[dbserver]
 EOF
 
-	NUM=`expr $BASE_IP + 1`
-	NODEIP="${SEGMENT}$NUM"
-	cat >> docker/hosts <<EOF
-[node1]
-$NODEIP
-
-[node_other]
+	cat > docker/group_vars/all.yml <<EOF
+NFS_SERVER: $2
+ansible_ssh_user: $sudoer
+ansible_ssh_private_key_file: docker/$sudokey
 EOF
-	for i in `seq 2 $1`;
-	do
-		NUM=`expr 100 + $i`
-		NODEIP="${SEGMENT}$NUM"
-		echo "$NODEIP" >> docker/hosts
-	done
-	cat >> docker/hosts <<EOF	
-	[all:vars]
-ansible_ssh_user=$sudoer
-ansible_ssh_private_key_file=docker/$sudokey
-ALLIP=docker/all.ip
 
+   else
+   	NODEIP=`expr $BASE_IP + $1`
+   	NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+   	vxlan0_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
+   	vxlan1_IP="`echo $vxlan1_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
+   	vxlan2_IP="`echo $vxlan2_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
+    	
+    	echo $2 >> docker/inventory
+    	cat > docker/host_vars/$2 <<EOF
+Hostname: ${NODENAME}.${DOMAIN_NAME}
+vxlan0_IP: $vxlan0_IP
+vxlan1_IP: $vxlan1_IP
+vxlan2_IP: $vxlan2_IP
 EOF
+   fi
+   
 }
 
 
