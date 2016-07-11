@@ -9,5 +9,6 @@
     become: yes
     shell: ps -elf | grep NetworkManager | grep -v grep | wc -l
     register: nm_enabled
+  - debug: vars=nm_enabled
   - shell: echo "nm enabled"
     when: nm_enabled.stdout != '0'
