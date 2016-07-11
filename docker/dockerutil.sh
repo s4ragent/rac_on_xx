@@ -48,6 +48,9 @@ run(){
    docker cp ${sudokey}.pub $NODENAME:/home/$sudoer/.ssh/authorized_keys
    docker exec $NODENAME bash -c "chown -R ${sudoer} /home/$sudoer/.ssh && chmod 700 /home/$sudoer/.ssh && chmod 600 /home/$sudoer/.ssh/*"
 
+   sleep 10
+   docker exec $NODENAME systemctl start sshd
+   docker exec $NODENAME systemctl enable sshd
 }
 
 
