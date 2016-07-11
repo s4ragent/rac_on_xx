@@ -1,3 +1,4 @@
 - hosts: dbserver
+  became: yes
   roles:
     - vxlan
