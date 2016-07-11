@@ -1,2 +1,2 @@
-- include: nfs.yml
-- include: db.yml
+- include: nfsserver.yml
+- include: dbserver.yml
