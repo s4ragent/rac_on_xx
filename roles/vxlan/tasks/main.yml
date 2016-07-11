@@ -8,6 +8,12 @@
   - name: "create vxlan0.conf"
     become: yes
     template: src=vxlan0.conf.j2 dest=/etc/vxlan/vxlan0.conf owner=root group=root mode=0644
+  - name: "create vxlan1.conf"
+    become: yes
+    template: src=vxlan1.conf.j2 dest=/etc/vxlan/vxlan1.conf owner=root group=root mode=0644
+  - name: "create vxlan2.conf"
+    become: yes
+    template: src=vxlan2.conf.j2 dest=/etc/vxlan/vxlan2.conf owner=root group=root mode=0644
   - name: "check network manager enabled"
     become: yes
     shell: ps -elf | grep NetworkManager | grep -v grep | wc -l
