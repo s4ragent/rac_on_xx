@@ -29,20 +29,11 @@ createnetwork(){
 run(){
    if [ "$1" = "nfs" ]; then
     	NODENAME=nfs
-
-   cat > docker/inventory <<EOF
-[nfs]
-$2
-
-[dbserver]
-EOF
    else
     	NODENAME=`getnodename $1`
-    	echo $2 >> docker/inventory
    fi
-   updateansiblehost
    
-   
+   updateansiblehost $1 $2
    
    if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     	mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
@@ -119,7 +110,6 @@ deleteall(){
 
    delete nfs
    docker network rm $BRNAME
-   rm -rf docker/all.ip
 }
 
 stop(){ 
