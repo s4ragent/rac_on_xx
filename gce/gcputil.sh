@@ -6,6 +6,10 @@ name=$1
 gcloud compute instances get-serial-port-output $name
 }
 
+reset_password(){
+	gcloud compute reset-windows-password $1
+}
+
 creategcedisk(){
 	gcloud compute disks create "$1" --size $2 --type "pd-ssd"
 }
@@ -103,6 +107,7 @@ gcloud compute instances delete $name
 
 case "$1" in
   "ssh" ) shift;ssh $*;;
+  "reset_password" ) shift;reset_password $*;;
   "create_2012" ) shift;create_2012 $*;;
   "create_rhel6" ) shift;create_rhel6 $*;;
   "create_centos" ) shift;create_centos $*;;
