@@ -5,3 +5,8 @@
   - name: "create all.ip"
     become: yes
     template: src=all.ip.j2 dest=/etc/vxlan/all.ip owner=root group=root mode=0644
+  - name: "check network manager enabled"
+    become: yes
+    shell: ps - elf | grep NetworkManager | grep -v grep | wc -l
+    register: nm_enabled
+  - debug:var=nm_enabled
