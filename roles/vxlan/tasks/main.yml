@@ -9,4 +9,4 @@
     become: yes
     shell: ps - elf | grep NetworkManager | grep -v grep | wc -l
     register: nm_enabled
-  - debug:var=nm_enabled
+  - debug: var=nm_enabled
