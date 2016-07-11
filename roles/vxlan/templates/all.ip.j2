@@ -1,4 +1,4 @@
 #
-{% for host in groups['dbservers'] %}
+{% for host in groups['dbserver'] %}
 {{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}
 {% endfor %}
