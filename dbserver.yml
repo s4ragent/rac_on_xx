@@ -1,4 +1,4 @@
 ---
-- hosts: dbserver
-  roles:
-    - vxlan
+ - hosts: dbserver
+   roles:
+     - vxlan
