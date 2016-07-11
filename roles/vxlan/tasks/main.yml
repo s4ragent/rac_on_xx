@@ -5,6 +5,9 @@
   - name: "create all.ip"
     become: yes
     template: src=all.ip.j2 dest=/etc/vxlan/all.ip owner=root group=root mode=0644
+  - name: "create vxlan0.conf"
+    become: yes
+    template: src=vxlan0.conf.j2 dest=/etc/vxlan/vxlan0.conf owner=root group=root mode=0644
   - name: "check network manager enabled"
     become: yes
     shell: ps -elf | grep NetworkManager | grep -v grep | wc -l
