@@ -1,5 +1,5 @@
 - hosts: all
   become: yes
   tasks:
-  - file: path=/etc/vxlan state=directory owner=root group=root mode=0755
-  - template: src=template/all.ip.j2 dest=/etc/vxlan/all.ip owner=root group=root mode=0644
+   - file: path=/etc/vxlan state=directory owner=root group=root mode=0755
+   - template: src=template/all.ip.j2 dest=/etc/vxlan/all.ip owner=root group=root mode=0644
