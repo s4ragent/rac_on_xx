@@ -205,7 +205,7 @@ EOF
     	
     	echo $2 >> docker/inventory
     	cat > docker/host_vars/$2 <<EOF
-Hostname: ${NODENAME}.${DOMAIN_NAME}
+NODENAME: ${NODENAME}
 vxlan0_IP: $vxlan0_IP
 vxlan1_IP: $vxlan1_IP
 vxlan2_IP: $vxlan2_IP
