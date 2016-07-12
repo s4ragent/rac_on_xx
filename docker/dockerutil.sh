@@ -74,17 +74,12 @@ runall(){
    NFSIP="${SEGMENT}$BASE_IP"
    run nfs $NFSIP /nfs 	
    
-
-   NODE_LIST=""
    for i in `seq 1 $1`;
    do
         NUM=`expr $BASE_IP + $i`
     	NODEIP="${SEGMENT}$NUM"
 	run $i $NODEIP /u01
-	NODE_LIST="$NODE_LIST $NODEIP"
    done
-   echo "NODE_LIST: $NODE_LIST" > docker/nodelist.yml
-   
 }
 
 delete(){
@@ -93,17 +88,22 @@ delete(){
    	else
       		NODENAME=`getnodename $1`
    	fi
+   	
    	docker rm -f $NODENAME
 
    	if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     		rm -rf $DOCKER_VOLUME_PATH/$NODENAME
     	fi
     	
-    	rm -rf ${sudokey}*
+    	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+    	NUM=`expr $BASE_IP + $1`
+    	NODEIP="${SEGMENT}$NUM"
+    	rm -rf docker/host_vars/$NODEIP
 }
 
 deleteall(){
    stopall
+   NODE_LIST=`ls docker/host_vars`
    CNT=1
    for i in $NODE_LIST ;
    do
@@ -113,6 +113,7 @@ deleteall(){
 
    delete nfs
    docker network rm $BRNAME
+   rm -rf ${sudokey}*
 }
 
 stop(){ 
@@ -125,6 +126,7 @@ stop(){
 }
 
 stopall(){
+   NODE_LIST=`ls docker/host_vars`	
    CNT=1
    for i in $NODE_LIST ;
    do
@@ -145,6 +147,7 @@ start(){
 
 startall(){
    start nfs
+   NODE_LIST=`ls docker/host_vars`
    CNT=1
    for i in $NODE_LIST ;
    do
