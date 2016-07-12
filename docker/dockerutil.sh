@@ -114,6 +114,8 @@ deleteall(){
    delete nfs
    docker network rm $BRNAME
    rm -rf ${sudokey}*
+   rm -rf docker/inventory
+   rm -rf dodker/group_vars/all.yml
 }
 
 stop(){ 
