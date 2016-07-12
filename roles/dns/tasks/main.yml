@@ -34,7 +34,7 @@
   - name: "restart networkManager"
     become: yes
     service: name=NetworkManager.service state=restarted
-    when: nm_enabled.stdout == '0'
+    when: nm_enabled.stdout != '0'
     tags:
       - dnsmasq
       
