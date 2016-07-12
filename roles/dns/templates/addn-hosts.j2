@@ -3,6 +3,6 @@
 {{ SCAN_NAME }}.{{ DOMAIN_NAME }} {{ scan1_IP }} 
 {{ SCAN_NAME }}.{{ DOMAIN_NAME }} {{ scan2_IP }} 
 {% for host in groups['dbserver'] %}
-{{ hostvars[host]['NODENAME'] }}.{{ DOMAIN_NAME }} {{ hostvars[host]['public_IP'] }}
-{{ hostvars[host]['NODENAME'] }}-vip.{{ DOMAIN_NAME }} {{ hostvars[host]['vip_IP'] }}
+{{ hostvars[host]['public_IP'] }} {{ hostvars[host]['NODENAME'] }}.{{ DOMAIN_NAME }}
+{{ hostvars[host]['vip_IP'] }} {{ hostvars[host]['NODENAME'] }}-vip.{{ DOMAIN_NAME }}
 {% endfor %}
