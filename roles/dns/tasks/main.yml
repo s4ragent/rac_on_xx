@@ -22,3 +22,9 @@
     service: name=NetworkManager.service state=restarted
     tags:
       - dnsmasq
+
+  - name: "create sethosts"
+    become: yes
+    template: src=30_hostname.j2 dest=/etc/NetworkManager/dispatcher.d/30_hostname owner=root group=root mode=0700
+    tags:
+      - hostname
