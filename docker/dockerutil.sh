@@ -87,6 +87,10 @@ delete(){
       		NODENAME=nfs
    	else
       		NODENAME=`getnodename $1`
+      		SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+    		NUM=`expr $BASE_IP + $1`
+    		NODEIP="${SEGMENT}$NUM"
+    		rm -rf docker/host_vars/$NODEIP
    	fi
    	
    	docker rm -f $NODENAME
@@ -95,10 +99,6 @@ delete(){
     		rm -rf $DOCKER_VOLUME_PATH/$NODENAME
     	fi
     	
-    	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
-    	NUM=`expr $BASE_IP + $1`
-    	NODEIP="${SEGMENT}$NUM"
-    	rm -rf docker/host_vars/$NODEIP
 }
 
 deleteall(){
@@ -166,6 +166,7 @@ getrootshlog(){
 }
 
 updateansiblehost(){
+   mkdir -p docker/host_vars
    if [ "$1" = "nfs" ]; then
 
 	cat > docker/inventory <<EOF
