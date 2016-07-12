@@ -46,3 +46,10 @@
     shell: bash /etc/NetworkManager/dispatcher.d/31_resolvconf vxlan0 up
     tags:
       - resolvconf
+
+  - name: "start_enable nm_dispacher"
+    become: yes
+    service: name=NetworkManager-dispatcher.service state=started enabled=yes
+    tags:
+      - hostname
+      - resolvconf
