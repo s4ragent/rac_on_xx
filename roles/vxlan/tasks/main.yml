@@ -25,4 +25,7 @@
     become: yes
     copy: path=vxlan.init dest=/etc/NetworkManager/dispatcher.d/10_vxlan owner=root group=root mode=0700
     when: nm_enabled.stdout != '0'
-   
+  - name: "start vxlan (nm)"
+    become: yes
+    shell: bash /etc/NetworkManager/dispatcher.d/10_vxlan eth0 up
+    when: nm_enabled.stdout != '0'
