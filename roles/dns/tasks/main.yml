@@ -34,3 +34,15 @@
     shell: bash /etc/NetworkManager/dispatcher.d/30_hostname vxlan0 up
     tags:
       - hostname
+
+  - name: "create setresolvconf"
+    become: yes
+    template: src=30_resolvconf.j2 dest=/etc/NetworkManager/dispatcher.d/31_resolvconf owner=root group=root mode=0700
+    tags:
+      - resolvconf
+
+  - name: "change hostname"
+    become: yes
+    shell: bash /etc/NetworkManager/dispatcher.d/31_resolvconf vxlan0 up
+    tags:
+      - resolvconf
