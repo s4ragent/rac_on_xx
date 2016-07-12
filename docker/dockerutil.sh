@@ -190,7 +190,7 @@ ansible_ssh_user: $sudoer
 ansible_ssh_private_key_file: $sudokey
 scan0_IP: $scan0_IP
 scan1_IP: $scan1_IP
-scan2_IP: $sxan2_IP
+scan2_IP: $scan2_IP
 EOF
 
    else
