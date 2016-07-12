@@ -180,10 +180,12 @@ EOF
 
    else
    	NODEIP=`expr $BASE_IP + $1`
+   	VIPIP=`expr $NODEIP + 100`
    	NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    	vxlan0_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
    	vxlan1_IP="`echo $vxlan1_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
    	vxlan2_IP="`echo $vxlan2_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
+   	vip_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$VIPIP"
     	
     	echo $2 >> docker/inventory
     	cat > docker/host_vars/$2 <<EOF
@@ -191,6 +193,8 @@ Hostname: ${NODENAME}.${DOMAIN_NAME}
 vxlan0_IP: $vxlan0_IP
 vxlan1_IP: $vxlan1_IP
 vxlan2_IP: $vxlan2_IP
+public_IP: $vxlan0_IP
+vip_IP: $vip_IP
 EOF
    fi
    
