@@ -29,3 +29,7 @@
     become: yes
     shell: bash /etc/NetworkManager/dispatcher.d/10_vxlan eth0 up
     when: nm_enabled.stdout != '0'
+  - name: "start_enable nm_dispacher)"
+    become: yes
+    systemd: name=NetworkManager-dispatcher.service state=started enabled=yes
+    when: nm_enabled.stdout != '0'
