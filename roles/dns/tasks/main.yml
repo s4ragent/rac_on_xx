@@ -41,7 +41,7 @@
     tags:
       - resolvconf
 
-  - name: "change hostname"
+  - name: "change resolvconf"
     become: yes
     shell: bash /etc/NetworkManager/dispatcher.d/31_resolvconf vxlan0 up
     tags:
