@@ -45,3 +45,7 @@
     become: yes
     copy: src=vxlan.service dest=/etc/systemd/system/vxlan.service owner=root group=root mode=0700
     when: nm_enabled.stdout == '0'
+  - name: "start_enable vxlan.service)"
+    become: yes
+    service: name=vxlan.service state=started enabled=yes
+    when: nm_enabled.stdout == '0'
