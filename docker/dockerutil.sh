@@ -170,9 +170,9 @@ getrootshlog(){
 updateansiblehost(){
    mkdir -p docker/host_vars
    if [ "$1" = "nfs" ]; then
-   	SCAN0=`expr $NODEIP - 20`
-   	SCAN1=`expr $NODEIP - 20 + 1`
-   	SCAN2=`expr $NODEIP - 20 + 2`
+   	SCAN0=`expr $BASE_IP - 20`
+   	SCAN1=`expr $BASE_IP - 20 + 1`
+   	SCAN2=`expr $BASE_IP - 20 + 2`
    	scan0_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN0"
    	scan1_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN1"
    	scan2_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN2"
