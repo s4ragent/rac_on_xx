@@ -80,6 +80,7 @@ runall(){
     	NODEIP="${SEGMENT}$NUM"
 	run $i $NODEIP /u01
    done
+   export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no"
 }
 
 delete(){
