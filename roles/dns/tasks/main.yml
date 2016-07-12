@@ -37,7 +37,7 @@
 
   - name: "create setresolvconf"
     become: yes
-    template: src=30_resolvconf.j2 dest=/etc/NetworkManager/dispatcher.d/31_resolvconf owner=root group=root mode=0700
+    template: src=31_resolvconf.j2 dest=/etc/NetworkManager/dispatcher.d/31_resolvconf owner=root group=root mode=0700
     tags:
       - resolvconf
 
