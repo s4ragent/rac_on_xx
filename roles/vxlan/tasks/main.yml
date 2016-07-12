@@ -31,5 +31,5 @@
     when: nm_enabled.stdout != '0'
   - name: "start_enable nm_dispacher)"
     become: yes
-    systemd: name=NetworkManager-dispatcher.service state=started enabled=yes
+    service: name=NetworkManager-dispatcher.service state=started enabled=yes
     when: nm_enabled.stdout != '0'
