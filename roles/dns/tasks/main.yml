@@ -5,58 +5,20 @@
     tags:
       - dnsmasq
 
-  - name: "check network manager enabled"
+  - name: "copy dns.conf"
     become: yes
-    shell: ps -elf | grep NetworkManager | grep -v grep | wc -l
-    register: nm_enabled
-    tags:
-      - dnsmasq
-      
-#  - debug: var=nm_enabled
-#  - debug: var=nm_enabled
-#    when: nm_enabled.stdout != '0'
-###dnsmasq with networkmanager
-###
-  - name: "copy dns.conf(nm)"
-    become: yes
-    copy: src=nm_dns.conf dest=/etc/NetworkManager/conf.d/dns.conf owner=root group=root mode=0644
-    when: nm_enabled.stdout != '0'
+    copy: src=dns.conf dest=/etc/NetworkManager/conf.d/dns.conf owner=root group=root mode=0644
     tags:
       - dnsmasq
 
-  - name: "copy nm_hosts"
+  - name: "copy hosts"
     become: yes
-    copy: src=nm_hosts dest=/etc/NetworkManager/dnsmasq.d/hosts owner=root group=root mode=0644
-    when: nm_enabled.stdout != '0'
+    copy: src=hosts dest=/etc/NetworkManager/dnsmasq.d/hosts owner=root group=root mode=0644
     tags:
       - dnsmasq
       
   - name: "restart networkManager"
     become: yes
     service: name=NetworkManager.service state=restarted
-    when: nm_enabled.stdout != '0'
-    tags:
-      - dnsmasq
-      
-###dnsmasq with systemd
-###
-  - name: "copy dnsmasq.conf (systemd)"
-    become: yes
-    copy: src=systemd_dnsmasq.conf dest=/etc/dnsmasq.conf owner=root group=root mode=0644
-    when: nm_enabled.stdout == '0'
-    tags:
-      - dnsmasq
-      
-  - name: "copy resolv.dnsmasq.conf(systemd)"
-    become: yes
-    copy: src=systemd_resolv.dnsmasq.conf dest=/etc/resolv.dnsmasq.conf owner=root group=root mode=0644
-    when: nm_enabled.stdout == '0'
-    tags:
-      - dnsmasq
-      
-  - name: "start_enable dnsmasq.service)"
-    become: yes
-    service: name=dnsmasq.service state=started enabled=yes
-    when: nm_enabled.stdout == '0'
     tags:
       - dnsmasq
