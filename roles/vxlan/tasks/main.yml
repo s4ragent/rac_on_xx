@@ -4,35 +4,30 @@
     file: path=/etc/vxlan state=directory owner=root group=root mode=0755
     tags:
       - vxlan_conf
-      - vxlan_reload
       
   - name: "create all.ip"
     become: yes
     template: src=all.ip.j2 dest=/etc/vxlan/all.ip owner=root group=root mode=0644
     tags:
       - vxlan_conf
-      - vxlan_reload
       
   - name: "create vxlan0.conf"
     become: yes
     template: src=vxlan0.conf.j2 dest=/etc/vxlan/vxlan0.conf owner=root group=root mode=0644
     tags:
       - vxlan_conf
-      - vxlan_reload
       
   - name: "create vxlan1.conf"
     become: yes
     template: src=vxlan1.conf.j2 dest=/etc/vxlan/vxlan1.conf owner=root group=root mode=0644
     tags:
       - vxlan_conf
-      - vxlan_reload
       
   - name: "create vxlan2.conf"
     become: yes
     template: src=vxlan2.conf.j2 dest=/etc/vxlan/vxlan2.conf owner=root group=root mode=0644
     tags:
       - vxlan_conf
-      - vxlan_reload
       
   - name: "check network manager enabled"
     become: yes
@@ -40,7 +35,6 @@
     register: nm_enabled
     tags:
       - vxlan_init
-      - vxlan_reload
       
 #  - debug: var=nm_enabled
 #  - debug: var=nm_enabled
