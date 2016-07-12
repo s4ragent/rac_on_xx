@@ -1,0 +1,18 @@
+[Unit]
+Description=vxlan auto start
+Requires=network.target
+After=network.target
+Before=sshd.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/vxlan.init start
+ExecRestart=/usr/local/bin/vxlan.init restart
+ExecReload=/usr/local/bin/vxlan.init reload
+ExecStop=/usr/local/bin/vxlan.init stop
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

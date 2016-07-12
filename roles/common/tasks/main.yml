@@ -1,0 +1,100 @@
+---
+  - name: "create /etc/vxlan"
+    become: yes
+    file: path=/etc/vxlan state=directory owner=root group=root mode=0755
+    tags:
+      - vxlan_conf
+      
+  - name: "create all.ip"
+    become: yes
+    template: src=all.ip.j2 dest=/etc/vxlan/all.ip owner=root group=root mode=0644
+    tags:
+      - vxlan_conf
+      
+  - name: "create vxlan0.conf"
+    become: yes
+    template: src=vxlan0.conf.j2 dest=/etc/vxlan/vxlan0.conf owner=root group=root mode=0644
+    tags:
+      - vxlan_conf
+      
+  - name: "create vxlan1.conf"
+    become: yes
+    template: src=vxlan1.conf.j2 dest=/etc/vxlan/vxlan1.conf owner=root group=root mode=0644
+    tags:
+      - vxlan_conf
+      
+  - name: "create vxlan2.conf"
+    become: yes
+    template: src=vxlan2.conf.j2 dest=/etc/vxlan/vxlan2.conf owner=root group=root mode=0644
+    tags:
+      - vxlan_conf
+      
+  - name: "check network manager enabled"
+    become: yes
+    shell: ps -elf | grep NetworkManager | grep -v grep | wc -l
+    register: nm_enabled
+    tags:
+      - vxlan_init
+      
+#  - debug: var=nm_enabled
+#  - debug: var=nm_enabled
+#    when: nm_enabled.stdout != '0'
+###vxlan with networkmanager
+###
+  - name: "copy vxlan.init(nm)"
+    become: yes
+    copy: src=vxlan.init dest=/etc/NetworkManager/dispatcher.d/10_vxlan owner=root group=root mode=0700
+    when: nm_enabled.stdout != '0'
+    tags:
+      - vxlan_init
+      
+  - name: "start vxlan (nm)"
+    become: yes
+    shell: bash /etc/NetworkManager/dispatcher.d/10_vxlan eth0 up
+    when: nm_enabled.stdout != '0'
+    tags:
+      - vxlan_init
+      
+  - name: "start_enable nm_dispacher)"
+    become: yes
+    service: name=NetworkManager-dispatcher.service state=started enabled=yes
+    when: nm_enabled.stdout != '0'
+    tags:
+      - vxlan_init
+
+  - name: "reload vxlan(nm)"
+    become: yes
+    shell: bash /etc/NetworkManager/dispatcher.d/10_vxlan reload
+    when: nm_enabled.stdout != '0'
+    tags:
+      - vxlan_reload
+      
+###vxlan with systemd
+###
+  - name: "copy vxlan.init(systemd)"
+    become: yes
+    copy: src=vxlan.init dest=/usr/local/bin/vxlan.init owner=root group=root mode=0700
+    when: nm_enabled.stdout == '0'
+    tags:
+      - vxlan_init
+      
+  - name: "copy vxlan.service"
+    become: yes
+    copy: src=vxlan.service dest=/etc/systemd/system/vxlan.service owner=root group=root mode=0700
+    when: nm_enabled.stdout == '0'
+    tags:
+      - vxlan_init
+      
+  - name: "start_enable vxlan.service)"
+    become: yes
+    service: name=vxlan.service state=started enabled=yes
+    when: nm_enabled.stdout == '0'
+    tags:
+      - vxlan_init
+
+  - name: "reload vxlan(systemd)"
+    become: yes
+    shell: bash /usr/local/bin/vxlan.init reload
+    when: nm_enabled.stdout == '0'
+    tags:
+      - vxlan_reload
