@@ -41,7 +41,7 @@
     tags:
       - vxlan_init
       
-  - name: "start_enable nm_dispacher)"
+  - name: "start_enable nm_dispacher"
     become: yes
     service: name=NetworkManager-dispatcher.service state=started enabled=yes
     tags:
