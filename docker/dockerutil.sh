@@ -51,6 +51,8 @@ run(){
    sleep 10
    docker exec $NODENAME systemctl start sshd
    docker exec $NODENAME systemctl enable sshd
+   docker exec $NODENAME systemctl start NetworkManager
+   docker exec $NODENAME systemctl enable NetworkManager
 }
 
 
