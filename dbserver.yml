@@ -2,3 +2,4 @@
  - hosts: dbserver
    roles:
       - vxlan
+      - dns
