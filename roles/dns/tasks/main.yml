@@ -5,21 +5,21 @@
     tags:
       - dnsmasq
 
-  - name: "copy dns.conf"
+  - name: "copy dnsmasq.conf"
     become: yes
-    copy: src=dns.conf dest=/etc/NetworkManager/conf.d/dns.conf owner=root group=root mode=0644
+    copy: src=dnsmasq.conf dest=/etc/dnsmasq.conf owner=root group=root mode=0644
     tags:
       - dnsmasq
 
-  - name: "copy hosts"
+  - name: "copy resolv.dnsmasq.conf"
     become: yes
-    copy: src=hosts dest=/etc/NetworkManager/dnsmasq.d/hosts owner=root group=root mode=0644
+    copy: src=resolv.dnsmasq.conf dest=/etc/resolv.dnsmasq.conf owner=root group=root mode=0644
     tags:
       - dnsmasq
       
-  - name: "restart networkManager"
+  - name: "start enable dnsmasq"
     become: yes
-    service: name=NetworkManager.service state=restarted
+    service: name=dnsmasq.service state=restarted enabled=yes
     tags:
       - dnsmasq
 
@@ -49,7 +49,7 @@
 
   - name: "start_enable nm_dispacher"
     become: yes
-    service: name=NetworkManager-dispatcher.service state=started enabled=yes
+    service: name=NetworkManager-dispatcher.service state=restarted enabled=yes
     tags:
       - hostname
       - resolvconf
