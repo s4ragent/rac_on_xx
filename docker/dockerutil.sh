@@ -183,8 +183,8 @@ $2
 
 [dbserver]
 EOF
-
-	cat > docker/group_vars/all.yml <<EOF
+	cp vars.yml docker/group_vars/all.yml
+	cat >> docker/group_vars/all.yml <<EOF
 NFS_SERVER: $2
 ansible_ssh_user: $sudoer
 ansible_ssh_private_key_file: $sudokey
