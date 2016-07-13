@@ -12,16 +12,21 @@
     tags:
       - createuser
 
-  - name: "create oracle user"
+  - name: "delete user"
     become: yes
-    user: name=oracle comment="Oracle Software Owner" uid=501 group=oinstall groups=dba,oper,asmdba shell=/bin/bash
+    user: name={{ item }} state=absent
+    with_items:
+      - oracle
+      - grid
     tags:
       - createuser
 
-
-  - name: "create grid user"
+  - name: "create user"
     become: yes
-    user: name=grid comment="Grid Infrastructure Owner" uid=2001 group=oinstall groups=asmadmin,asmdba,asmoper shell=/bin/bash
+    user: name={{ item.name}} uid={{ item.uid }} group=oinstall groups={{ item.groups}} shell=/bin/bash
+    with_items:
+      - { name: 'oracle', uid: '501',groups: 'dba,oper,asmdba' }
+      - { name: 'grid', uid: '2001',groups: 'asmadmin,asmdba,asmoper' }
     tags:
       - createuser
 
