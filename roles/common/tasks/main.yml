@@ -14,7 +14,7 @@
 
   - name: "delete user"
     become: yes
-    user: name={{ item }} state=absent
+    user: name={{ item }} state=absent remove=yes
     with_items:
       - oracle
       - grid
