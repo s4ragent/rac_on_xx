@@ -28,6 +28,11 @@
   - name: "create ssh key"
     local_action: shell ssh-keygen -t rsa -P "" -f id_rsa
     args:
-      creates: ~/.ssh/id_rsa
+      creates: id_rsa
     run_once: true
  
+  - name: "copy authorized key"
+    authorized_key: user={{ item }} key="{{ lookup('file', 'id_rsa') }}" 
+    with_items:
+      - oracle
+      - grid
