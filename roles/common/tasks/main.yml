@@ -32,7 +32,8 @@
     run_once: true
  
   - name: "copy authorized key"
-    authorized_key: user={{ item }} key="{{ lookup('file', 'id_rsa') }}" 
+    become: yes
+    authorized_key: user={{ item }} key="{{ lookup('file', 'id_rsa.pub') }}" 
     with_items:
       - oracle
       - grid
