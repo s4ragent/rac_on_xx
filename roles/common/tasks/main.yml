@@ -35,6 +35,8 @@
     args:
       creates: id_rsa
     run_once: true
+    tags:
+      - sshkey
  
   - name: "copy authorized key"
     become: yes
@@ -42,3 +44,14 @@
     with_items:
       - oracle
       - grid
+    tags:
+      - sshkey
+
+  - name: "copy private key"
+    become: yes
+    copy: dest=/home/{{ item }}/.ssh/id_rsa mode=600 owner={{ item }} content="{{ lookup('file', 'id_rsa') }}"
+    with_items:
+      - oracle
+      - grid
+    tags:
+      - sshkey
