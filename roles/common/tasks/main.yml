@@ -9,5 +9,17 @@
       - { name: 'asmadmin', gid: '2001' }
       - { name: 'asmdba', gid: '2002' }
       - { name: 'asmoper', gid: '2003' }
+    tags:
+      - createuser
 
+  - name: "create oracle user"
+    user: name=oracle comment="Oracle Software Owner" uid=501 group=oinstall groups=dba,oper,asmdba shell=/bin/bash
+    tags:
+      - createuser
+
+
+  - name: "create grid user"
+    user: name=grid comment="Grid Infrastructure Owner" uid=2001 group=oinstall groups=asmadmin,asmdba,asmoper shell=/bin/bash
+    tags:
+      - createuser
  
