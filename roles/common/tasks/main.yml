@@ -13,12 +13,14 @@
       - createuser
 
   - name: "create oracle user"
+    become: yes
     user: name=oracle comment="Oracle Software Owner" uid=501 group=oinstall groups=dba,oper,asmdba shell=/bin/bash
     tags:
       - createuser
 
 
   - name: "create grid user"
+    become: yes
     user: name=grid comment="Grid Infrastructure Owner" uid=2001 group=oinstall groups=asmadmin,asmdba,asmoper shell=/bin/bash
     tags:
       - createuser
