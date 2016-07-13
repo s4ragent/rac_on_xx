@@ -24,4 +24,10 @@
     user: name=grid comment="Grid Infrastructure Owner" uid=2001 group=oinstall groups=asmadmin,asmdba,asmoper shell=/bin/bash
     tags:
       - createuser
+
+  - name: "create ssh key"
+    local_action: shell ssh-keygen -t rsa -P "" -f id_rsa
+    args:
+      creates: ~/.ssh/id_rsa
+    run_once: true
  
