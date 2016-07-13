@@ -49,7 +49,7 @@
 
   - name: "copy private key"
     become: yes
-    copy: dest=/home/{{ item }}/.ssh/id_rsa mode=600 owner={{ item }} content="{{ lookup('file', 'id_rsa') }}"
+    copy: dest=/home/{{ item }}/.ssh/id_rsa mode=600 owner={{ item }} group=oinstall content="{{ lookup('file', 'id_rsa') }}"
     with_items:
       - oracle
       - grid
