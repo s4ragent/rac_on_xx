@@ -30,6 +30,22 @@
     tags:
       - createuser
 
+  - name: "copy .bashrc"
+    become: yes
+    copy: src=.bashrc dest=/home/{{ item }}/.bashrc mode=644 owner={{ item }} group=oinstall 
+    with_items:
+      - oracle
+      - grid
+    tags:
+      - createuser
+
+  - name: "copy .bash_profile"
+    become: yes
+    template: src=.bash_profile_{{ item }}.j2 dest=/home/{{ item }}/.bash_profile mode=0644 owner={{ item }} group=oinstall
+    with_items:
+      - oracle
+      - grid
+
   - name: "create ssh key"
     local_action: shell ssh-keygen -t rsa -P "" -f id_rsa
     args:
