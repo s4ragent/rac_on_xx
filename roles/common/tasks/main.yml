@@ -1,4 +1,14 @@
 ---
+  - name: "disable selinux"
+    shell: sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+    tags:
+      - security
+
+  - name: "disable selinux setenforce"
+    shell: setenforce 0
+    tags:
+      - security
+
   - name: "create group"
     become: yes
     group: name={{ item.name }} state=present gid={{ item.gid }}
