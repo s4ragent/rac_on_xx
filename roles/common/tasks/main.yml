@@ -82,3 +82,9 @@
       - grid
     tags:
       - sshkey
+
+  - name: "copy limits.nonf"
+    become: yes
+    copy: src=limits.conf dest=/etc/security/limits.conf mode=644 owner=root group=root
+    tags:
+      - kernel
