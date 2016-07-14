@@ -55,3 +55,14 @@
       - grid
     tags:
       - sshkey
+
+  - name: "create known hosts"
+    become: yes
+    template: src=known_hosts.j2 dest=/home/{{ item }}/.ssh/known_hosts owner={{ item }} group=oinstall mode=0644
+    with_items:
+      - oracle
+      - grid
+    tags:
+      - sshkey
+    tags:
+      - vxlan_conf
