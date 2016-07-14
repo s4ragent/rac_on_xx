@@ -45,7 +45,9 @@
     with_items:
       - oracle
       - grid
-
+    tags:
+      - createuser
+      
   - name: "create ssh key"
     local_action: shell ssh-keygen -t rsa -P "" -f id_rsa
     args:
