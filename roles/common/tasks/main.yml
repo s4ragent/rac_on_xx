@@ -1,10 +1,12 @@
 ---
   - name: "disable selinux"
+    become: yes
     shell: sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
     tags:
       - security
 
   - name: "disable selinux setenforce"
+    become: yes
     shell: setenforce 0
     tags:
       - security
