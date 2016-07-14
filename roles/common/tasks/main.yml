@@ -64,5 +64,3 @@
       - grid
     tags:
       - sshkey
-    tags:
-      - vxlan_conf
