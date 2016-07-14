@@ -1,8 +1,5 @@
 #
 {% for host in play_hosts %}
-{{ host }},{{ hostvars[host].ansible_default_ipv4.address }} ssh-rsa {{ hostvars[host].ansible_ssh_host_key_rsa_public }}
+{{ hostvars[host]['public_IP'] }} {{ hostvars[host]['NODENAME'] }}.{{ DOMAIN_NAME }} ssh-rsa {{ hostvars[host].ansible_ssh_host_key_rsa_public }}
+{{ hostvars[host]['public_IP'] }} {{ hostvars[host]['NODENAME'] }} ssh-rsa {{ hostvars[host].ansible_ssh_host_key_rsa_public }}
 {% endfor %}
-
-
-{{ hostvars[host]['public_IP'] }} {{ hostvars[host]['NODENAME'] }}.{{ DOMAIN_NAME }}
-{{ hostvars[host]['NODENAME'] }}
