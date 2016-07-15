@@ -1,6 +1,7 @@
 ---
  - hosts: dbserver
    roles:
+      - common
       - vxlan
       - dns
-      - common
+
