@@ -8,6 +8,7 @@
   - name: "disable selinux setenforce"
     become: yes
     shell: setenforce 0
+    ignore_errors: yes
     tags:
       - security
 
