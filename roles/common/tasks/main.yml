@@ -88,3 +88,12 @@
     copy: src=limits.conf dest=/etc/security/limits.conf mode=644 owner=root group=root
     tags:
       - kernel
+
+  - name: "create gridbase gridhome oradata orainventry"
+    become: yes
+    file: path={{ item.path }} state=directory owner={{ item.name }} group=oinstall mode=0755
+    with_items:
+      - { name: 'oracle', uid: '501',groups: 'dba,oper,asmdba' }
+      - { name: 'grid', uid: '2001',groups: 'asmadmin,asmdba,asmoper' }
+    tags:
+      - oraclehome
