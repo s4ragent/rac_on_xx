@@ -186,6 +186,9 @@ $2
 
 [dbserver]
 EOF
+   cat > docker/host_vars/$2 <<EOF
+CONTAINER_NAME: nfs
+EOF
 	cp vars.yml docker/group_vars/all.yml
 	cat >> docker/group_vars/all.yml <<EOF
 NFS_SERVER: $2
@@ -213,6 +216,7 @@ vxlan1_IP: $vxlan1_IP
 vxlan2_IP: $vxlan2_IP
 public_IP: $vxlan0_IP
 vip_IP: $vip_IP
+CONTAINER_NAME: ${NODENAME}
 EOF
    fi
    
