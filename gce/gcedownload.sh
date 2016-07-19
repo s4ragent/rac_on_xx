@@ -1,5 +1,6 @@
 #!/bin/bash
-source ../common.sh
+cd ..
+source ./common.sh
 mkdir -p /media
 
 if [ -e /etc/debian_version ]; then
