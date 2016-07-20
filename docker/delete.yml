@@ -2,4 +2,4 @@
  - hosts: dbserver
    tasks:
      - name: delete container
-       docker: name={{ CONTAINER_NAME }} state=absent
+       docker_container: name={{ CONTAINER_NAME }} image=s4ragent/rac_on_xx:OEL7"l state=absent
