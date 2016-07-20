@@ -1,1 +1,5 @@
-#
+---
+ - hosts: dbserver
+   tasks:
+     - name delete container
+       docker: name={{ CONTAINER_NAME }} state=absent
