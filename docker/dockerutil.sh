@@ -89,7 +89,7 @@ runall(){
 }
 
 deleteall(){
-   ansible-playbook -i $VIRT_TYPE/inventry $VIRT_TYPE/delete.yml
+   ansible-playbook -i $VIRT_TYPE/inventory $VIRT_TYPE/delete.yml
    rm -rf ${sudokey}*
    rm -rf $VIRT_TYPE/inventory
    rm -rf $VIRT_TYPE/group_vars
@@ -109,7 +109,7 @@ stop(){
 }
 
 stopall(){
-   ansible-playbook -i $VIRT_TYPE/inventry $VIRT_TYPE/stop.yml
+   ansible-playbook -i $VIRT_TYPE/inventory $VIRT_TYPE/stop.yml
 }
 
 start(){ 
@@ -122,7 +122,7 @@ start(){
 }
 
 startall(){
-   ansible-playbook -i $VIRT_TYPE/inventry $VIRT_TYPE/start.yml
+   ansible-playbook -i $VIRT_TYPE/inventory $VIRT_TYPE/start.yml
 }
 
 
