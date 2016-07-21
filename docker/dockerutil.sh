@@ -135,8 +135,8 @@ getrootshlog(){
 }
 
 updateansiblehost(){
-   mkdir -p docker/host_vars
-   mkdir -p docker/group_vars
+   mkdir -p $VIRT_TYPE/host_vars
+   mkdir -p $VIRT_TYPE/group_vars
    if [ "$1" = "nfs" ]; then
    	SCAN0=`expr $BASE_IP - 20`
    	SCAN1=`expr $BASE_IP - 20 + 1`
@@ -145,17 +145,17 @@ updateansiblehost(){
    	scan1_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN1"
    	scan2_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN2"
    	
-	cat > docker/inventory <<EOF
+	cat > $VIRT_TYPE/inventory <<EOF
 [nfs]
 $2
 
 [dbserver]
 EOF
-   cat > docker/host_vars/$2 <<EOF
+   cat > $VIRT_TYPE/host_vars/$2 <<EOF
 CONTAINER_NAME: nfs
 EOF
-	cp vars.yml docker/group_vars/all.yml
-	cat >> docker/group_vars/all.yml <<EOF
+	cp vars.yml $VIRT_TYPE/group_vars/all.yml
+	cat >> $VIRT_TYPE/group_vars/all.yml <<EOF
 NFS_SERVER: $2
 ansible_ssh_user: $sudoer
 ansible_ssh_private_key_file: $sudokey
@@ -173,8 +173,8 @@ EOF
    	vxlan2_IP="`echo $vxlan2_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
    	vip_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$VIPIP"
     	
-    	echo $2 >> docker/inventory
-    	cat > docker/host_vars/$2 <<EOF
+    	echo $2 >> $VIRT_TYPE/inventory
+    	cat > $VIRT_TYPE/host_vars/$2 <<EOF
 NODENAME: ${NODENAME}
 vxlan0_IP: $vxlan0_IP
 vxlan1_IP: $vxlan1_IP
