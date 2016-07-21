@@ -6,6 +6,7 @@ cd ..
 source ./common.sh
 
 ####
+VIRT_TYPE="docker"
 IMAGE="s4ragent/rac_on_xx:OEL7"
 BRNAME="racbr"
 #CAP_OPS="--cap-add=NET_ADMIN"
@@ -15,6 +16,8 @@ DOCKER_START_OPS="--restart=always"
 TMPFS_OPS="--shm-size=1200m"
 sudoer="opc"
 sudokey="opc"
+
+export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no"
 
 dockerexec(){
 	docker exec -ti $1 /bin/bash
@@ -82,43 +85,18 @@ runall(){
     	NODEIP="${SEGMENT}$NUM"
 	run $i $NODEIP /u01
    done
-   export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no"
-}
-
-delete(){
-	if [ "$1" = "nfs" ]; then
-      		NODENAME=nfs
-   	else
-      		NODENAME=`getnodename $1`
-      		SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
-    		NUM=`expr $BASE_IP + $1`
-    		NODEIP="${SEGMENT}$NUM"
-    		rm -rf docker/host_vars/$NODEIP
-   	fi
-   	
-   	docker rm -f $NODENAME
-
-   	if [ "$DOCKER_VOLUME_PATH" != "" ]; then
-    		rm -rf $DOCKER_VOLUME_PATH/$NODENAME
-    	fi
-    	
+   
 }
 
 deleteall(){
-   stopall
-   NODE_LIST=`ls docker/host_vars`
-   CNT=1
-   for i in $NODE_LIST ;
-   do
-	delete $CNT
-	CNT=`expr $CNT + 1`
-   done
-
-   delete nfs
-   docker network rm $BRNAME
+   ansible-playbook -i $VIRT_TYPE/inventry $VIRT_TYPE/delete.yml
    rm -rf ${sudokey}*
-   rm -rf docker/inventory
-   rm -rf dodker/group_vars/all.yml
+   rm -rf $VIRT_TYPE/inventory
+   rm -rf $VIRT_TYPE/group_vars
+   rm -rf $VIRT_TYPE/host_vars
+   if [ "$DOCKER_VOLUME_PATH" != "" ]; then
+    		rm -rf $DOCKER_VOLUME_PATH
+   fi
 }
 
 stop(){ 
@@ -131,14 +109,7 @@ stop(){
 }
 
 stopall(){
-   NODE_LIST=`ls docker/host_vars`	
-   CNT=1
-   for i in $NODE_LIST ;
-   do
-	stop $CNT
-	CNT=`expr $CNT + 1`
-   done
-   stop nfs
+   ansible-playbook -i $VIRT_TYPE/inventry $VIRT_TYPE/stop.yml
 }
 
 start(){ 
@@ -147,18 +118,11 @@ start(){
    else
       NODENAME=`getnodename $1`
    fi
-    docker start $NODENAME
+   docker start $NODENAME
 }
 
 startall(){
-   start nfs
-   NODE_LIST=`ls docker/host_vars`
-   CNT=1
-   for i in $NODE_LIST ;
-   do
-	start $CNT
-	CNT=`expr $CNT + 1`
-   done
+   ansible-playbook -i $VIRT_TYPE/inventry $VIRT_TYPE/start.yml
 }
 
 
@@ -172,6 +136,7 @@ getrootshlog(){
 
 updateansiblehost(){
    mkdir -p docker/host_vars
+   mkdir -p docker/group_vars
    if [ "$1" = "nfs" ]; then
    	SCAN0=`expr $BASE_IP - 20`
    	SCAN1=`expr $BASE_IP - 20 + 1`
