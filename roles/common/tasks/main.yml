@@ -89,6 +89,25 @@
     tags:
       - kernel
 
+
+  - name: "disable ntpd"
+    become: yes
+    service: name=ntpd.service state=stopped enabled=no
+    tags:
+      - ntp
+
+  - name: "mv ntpd.conf"
+    shell: mv /etc/ntp.conf /etc/ntp.conf.original
+    args:
+      creates: /etc/ntp.conf.original
+    tags:
+      - ntp
+
+  - name: "rm  ntpd.pid"
+    file: path=/var/run/ntpd.pid state=absent
+    tags:
+      - ntp
+
   - name: "create gridbase gridhome oradata orainventry"
     become: yes
     file: path={{ item.path }} state=directory owner={{ item.name }} group=oinstall mode=0755
