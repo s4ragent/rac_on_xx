@@ -5,6 +5,7 @@
      - name: stop container dbservers
        shell: docker stop {{ CONTAINER_NAME }} 
        ignore_errors: yes
+
  - hosts: nfs
    connection: local
    tasks:
