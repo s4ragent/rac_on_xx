@@ -1,10 +1,12 @@
 ---
  - hosts: dbserver
+   connection: local
    tasks:
      - name: delete container dbservers
        local_action: shell docker rm -f {{ CONTAINER_NAME }} 
        ignore_errors: yes
  - hosts: nfs
+   connection: local
    tasks:
      - name: delete container nfs
        local_action: shell docker rm -f {{ CONTAINER_NAME }} 
