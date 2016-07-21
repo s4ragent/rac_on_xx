@@ -1,1 +1,14 @@
 ---
+ - hosts: nfs
+   connection: local
+   tasks:
+     - name: start container nfs
+       shell: docker start {{ CONTAINER_NAME }} 
+       ignore_errors: yes
+
+ - hosts: dbserver
+   connection: local
+   tasks:
+     - name: start container dbservers
+       shell: docker start {{ CONTAINER_NAME }} 
+       ignore_errors: yes
