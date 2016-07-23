@@ -33,7 +33,7 @@ run(){
    if [ "$1" = "nfs" ]; then
     	NODENAME=nfs
    else
-    	NODENAME=`getnodename $1`
+    	NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
    
    updateansiblehost $1 $2
@@ -103,7 +103,7 @@ stop(){
    if [ "$1" = "nfs" ]; then
       NODENAME=nfs
    else
-      NODENAME=`getnodename $1`
+      NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
    docker stop $NODENAME
 }
@@ -116,7 +116,7 @@ start(){
    if [ "$1" = "nfs" ]; then
       NODENAME=nfs
    else
-      NODENAME=`getnodename $1`
+      NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
    docker start $NODENAME
 }
@@ -130,9 +130,6 @@ buildimage(){
     docker build -t $IMAGE --no-cache=true ./images/OEL7
 }
 
-getrootshlog(){
-	docker exec -ti `getnodename $1` bash -c "cd /root/rac_on_xx && bash /root/rac_on_xx/racutil.sh getrootshlog $1"
-}
 
 updateansiblehost(){
    mkdir -p $VIRT_TYPE/host_vars
@@ -189,7 +186,6 @@ EOF
 
 
 case "$1" in
-  "getrootshlog" ) shift;getrootshlog $*;;
   "deleteandrun" ) shift;deleteandrun $*;;
   "dockerexec" ) shift;dockerexec $*;;
   "createnetwork" ) shift;createnetwork $*;;
