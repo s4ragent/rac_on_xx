@@ -155,12 +155,11 @@ updateansiblehost(){
    	
 	cat > $VIRT_TYPE/inventory <<EOF
 [nfs]
-$2
-
+$1 ansible_ssh_host=$2
 [dbserver]
 EOF
-   cat > $VIRT_TYPE/host_vars/$2 <<EOF
-CONTAINER_NAME: nfs
+   cat > $VIRT_TYPE/host_vars/$1 <<EOF
+INSTANCE_NAME: $1
 EOF
 	cp vars.yml $VIRT_TYPE/group_vars/all.yml
 	cat >> $VIRT_TYPE/group_vars/all.yml <<EOF
@@ -181,15 +180,15 @@ EOF
    	vxlan2_IP="`echo $vxlan2_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
    	vip_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$VIPIP"
     	
-    	echo $2 >> $VIRT_TYPE/inventory
-    	cat > $VIRT_TYPE/host_vars/$2 <<EOF
+    	echo "$NODENAME ansible_ssh_host=$2" >> $VIRT_TYPE/inventory
+    	cat > $VIRT_TYPE/host_vars/$NODENAME <<EOF
 NODENAME: ${NODENAME}
 vxlan0_IP: $vxlan0_IP
 vxlan1_IP: $vxlan1_IP
 vxlan2_IP: $vxlan2_IP
 public_IP: $vxlan0_IP
 vip_IP: $vip_IP
-CONTAINER_NAME: ${NODENAME}
+INSTANCE_NAME: ${NODENAME}
 EOF
    fi
    
