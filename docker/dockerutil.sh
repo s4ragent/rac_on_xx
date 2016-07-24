@@ -13,6 +13,9 @@ export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no"
 sudoer="opc"
 sudokey="opc"
 VIRT_TYPE="docker"
+DELETE_CMD="docker rm -f"
+START_CMD="docker start"
+STOP_CMD="docker stop"
 
 parse_yaml(){
    local prefix=$2
