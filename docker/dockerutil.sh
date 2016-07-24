@@ -116,7 +116,7 @@ stop(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   docker stop $NODENAME
+   ansible-playbook -i $VIRT_TYPE/inventory $VIRT_TYPE/stopall.yml --limit $NODENAME
 }
 
 stopall(){
@@ -129,7 +129,7 @@ start(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   docker start $NODENAME
+   ansible-playbook -i $VIRT_TYPE/inventory $VIRT_TYPE/startall.yml --limit $NODENAME
 }
 
 startall(){
