@@ -102,7 +102,7 @@ runall(){
 }
 
 deleteall(){
-   ansible-playbook -i $VIRT_TYPE/inventory $VIRT_TYPE/deleteall.yml
+   ansible-playbook -i $VIRT_TYPE/inventory deleteall.yml
    
    rm -rf $VIRT_TYPE/inventory
    rm -rf $VIRT_TYPE/group_vars
@@ -120,11 +120,11 @@ stop(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   ansible-playbook -i $VIRT_TYPE/inventory $VIRT_TYPE/stopall.yml --limit $NODENAME
+   ansible-playbook -i $VIRT_TYPE/inventory stopall.yml --limit $NODENAME
 }
 
 stopall(){
-   ansible-playbook -i $VIRT_TYPE/inventory $VIRT_TYPE/stopall.yml
+   ansible-playbook -i $VIRT_TYPE/inventory stopall.yml
 }
 
 start(){ 
@@ -133,11 +133,11 @@ start(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   ansible-playbook -i $VIRT_TYPE/inventory $VIRT_TYPE/startall.yml --limit $NODENAME
+   ansible-playbook -i $VIRT_TYPE/inventory startall.yml --limit $NODENAME
 }
 
 startall(){
-   ansible-playbook -i $VIRT_TYPE/inventory $VIRT_TYPE/startall.yml
+   ansible-playbook -i $VIRT_TYPE/inventory startall.yml
 }
 
 
@@ -173,6 +173,9 @@ ansible_ssh_private_key_file: $sudokey
 scan0_IP: $scan0_IP
 scan1_IP: $scan1_IP
 scan2_IP: $scan2_IP
+DELETE_CMD: $DELETE_CMD
+START_CMD: $START_CMD
+STOP_CMD: $STOP_CMD
 EOF
 
    else
