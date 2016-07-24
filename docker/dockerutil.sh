@@ -93,7 +93,7 @@ runall(){
    do
         NUM=`expr $BASE_IP + $i`
         NODEIP="${SEGMENT}$NUM"
-        NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+        NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 	     run $NODENAME $NODEIP /u01 $i
    done
 }
