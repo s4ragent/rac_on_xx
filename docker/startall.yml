@@ -3,12 +3,12 @@
    connection: local
    tasks:
      - name: start container nfs
-       shell: docker start {{ CONTAINER_NAME }} 
+       shell: docker start {{ INSTANCE_ID }} 
        ignore_errors: yes
 
  - hosts: dbserver
    connection: local
    tasks:
      - name: start container dbservers
-       shell: docker start {{ CONTAINER_NAME }} 
+       shell: docker start {{ INSTANCE_ID }} 
        ignore_errors: yes
