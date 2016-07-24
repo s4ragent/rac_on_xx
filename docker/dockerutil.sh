@@ -39,7 +39,7 @@ createnetwork(){
     docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
 }
 
-#$1 nodename $2 ip $3 mount point
+#$1 nodename $2 ip $3 mount point $4 nodenumber
 run(){
    
    
@@ -53,7 +53,7 @@ run(){
     	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init)
    fi
    
-   updateansiblehost $NODENAME $IP $INSTANCE_ID
+   updateansiblehost $NODENAME $IP $INSTANCE_ID $4
 
    docker exec $NODENAME useradd $sudoer                                                                                                          
    docker exec $NODENAME bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
@@ -94,7 +94,7 @@ runall(){
         NUM=`expr $BASE_IP + $i`
         NODEIP="${SEGMENT}$NUM"
         NODENAME="$NODEPREFIX"`printf "%.3d" $1`
-	     run $NODENAME $NODEIP /u01
+	     run $NODENAME $NODEIP /u01 $i
    done
 }
 
@@ -142,7 +142,7 @@ buildimage(){
     docker build -t $IMAGE --no-cache=true ./images/OEL7
 }
 
-#$NODENAME $IP $INSTANCE_ID
+#$NODENAME $IP $INSTANCE_ID $nodenumber
 updateansiblehost(){
    mkdir -p $VIRT_TYPE/host_vars
    mkdir -p $VIRT_TYPE/group_vars
@@ -173,7 +173,7 @@ scan2_IP: $scan2_IP
 EOF
 
    else
-   	NODEIP=`expr $BASE_IP + $1`
+   	NODEIP=`expr $BASE_IP + $4`
    	VIPIP=`expr $NODEIP + 100`
    	vxlan0_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
    	vxlan1_IP="`echo $vxlan1_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
