@@ -159,7 +159,7 @@ $1 ansible_ssh_host=$2
 [dbserver]
 EOF
    cat > $VIRT_TYPE/host_vars/$1 <<EOF
-INSTANCE_NAME: $1
+INSTANCE_ID: $1
 EOF
 	cp vars.yml $VIRT_TYPE/group_vars/all.yml
 	cat >> $VIRT_TYPE/group_vars/all.yml <<EOF
@@ -188,7 +188,7 @@ vxlan1_IP: $vxlan1_IP
 vxlan2_IP: $vxlan2_IP
 public_IP: $vxlan0_IP
 vip_IP: $vip_IP
-INSTANCE_NAME: ${NODENAME}
+INSTANCE_ID: ${NODENAME}
 EOF
    fi
    
