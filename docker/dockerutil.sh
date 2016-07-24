@@ -96,7 +96,9 @@ runall(){
         NUM=`expr $BASE_IP + $i`
     	NODEIP="${SEGMENT}$NUM"
 	run $i $NODEIP /u01
+
    updateansiblehost $i $NODEIP
+
    done
    
 }
