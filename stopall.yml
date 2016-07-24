@@ -3,12 +3,12 @@
    connection: local
    tasks:
      - name: stop container dbservers
-       shell: {{ STOP_CMD }} {{ INSTANCE_ID }} 
+       shell: "{{ STOP_CMD }}" "{{ INSTANCE_ID }}" 
        ignore_errors: yes
 
  - hosts: nfs
    connection: local
    tasks:
      - name: stop container nfs
-       shell: {{ STOP_CMD }} {{ INSTANCE_ID }} 
+       shell: "{{ STOP_CMD }}" "{{ INSTANCE_ID }}" 
        ignore_errors: yes
