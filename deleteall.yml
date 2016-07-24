@@ -3,12 +3,12 @@
    connection: local
    tasks:
      - name: delete container dbservers
-       shell: docker rm -f {{ INSTANCE_ID }}
+       shell: {{ DELETE_CMD }} {{ INSTANCE_ID }}
        ignore_errors: yes
 
  - hosts: nfs
    connection: local
    tasks:
      - name: delete container nfs
-       shell: docker rm -f {{ INSTANCE_ID }} 
+       shell: {{ DELETE_CMD }} {{ INSTANCE_ID }} 
        ignore_errors: yes
