@@ -47,7 +47,6 @@ run(){
     	NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
    
-   updateansiblehost $1 $2
    
    if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     	mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
@@ -88,13 +87,16 @@ runall(){
    SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 
    NFSIP="${SEGMENT}$BASE_IP"
-   run nfs $NFSIP /nfs 	
+   run nfs $NFSIP /nfs
+   
+   updateansiblehost nfs $NFSIP
    
    for i in `seq 1 $1`;
    do
         NUM=`expr $BASE_IP + $i`
     	NODEIP="${SEGMENT}$NUM"
 	run $i $NODEIP /u01
+   updateansiblehost $i $NODEIP
    done
    
 }
