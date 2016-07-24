@@ -39,15 +39,9 @@ createnetwork(){
     docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
 }
 
-#$1 node_number/nfs $2 ip $3 mount point
+#$1 nodename $2 ip $3 mount point
 run(){
-   if [ "$1" = "nfs" ]; then
-    	NODENAME=nfs
-   else
-    	NODENAME="$NODEPREFIX"`printf "%.3d" $1`
-   fi
    
-   updateansiblehost $1 $2
    
    if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     	mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
@@ -56,6 +50,12 @@ run(){
     	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init
    fi
    
+   NODENAME=$1
+   IP=$2 
+   INSTANCE_ID=$1
+   
+   updateansiblehost $NODENAME $IP $INSTANCE_ID
+
    docker exec $NODENAME useradd $sudoer                                                                                                          
    docker exec $NODENAME bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
    docker exec $NODENAME bash -c "mkdir /home/$sudoer/.ssh"
@@ -90,23 +90,23 @@ runall(){
    NFSIP="${SEGMENT}$BASE_IP"
    run nfs $NFSIP /nfs
    
-   
-   
    for i in `seq 1 $1`;
    do
         NUM=`expr $BASE_IP + $i`
-    	NODEIP="${SEGMENT}$NUM"
-	run $i $NODEIP /u01
+        NODEIP="${SEGMENT}$NUM"
+        NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+	     run $NODENAME $NODEIP /u01
    done
-   
 }
 
 deleteall(){
    ansible-playbook -i $VIRT_TYPE/inventory $VIRT_TYPE/deleteall.yml
-   rm -rf ${sudokey}*
+   
    rm -rf $VIRT_TYPE/inventory
    rm -rf $VIRT_TYPE/group_vars
    rm -rf $VIRT_TYPE/host_vars
+
+   rm -rf ${sudokey}*
    if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     		rm -rf $DOCKER_VOLUME_PATH
    fi
@@ -143,7 +143,7 @@ buildimage(){
     docker build -t $IMAGE --no-cache=true ./images/OEL7
 }
 
-
+#$NODENAME $IP $INSTANCE_ID
 updateansiblehost(){
    mkdir -p $VIRT_TYPE/host_vars
    mkdir -p $VIRT_TYPE/group_vars
@@ -161,7 +161,7 @@ $1 ansible_ssh_host=$2
 [dbserver]
 EOF
    cat > $VIRT_TYPE/host_vars/$1 <<EOF
-INSTANCE_ID: $1
+INSTANCE_ID: $3
 EOF
 	cp vars.yml $VIRT_TYPE/group_vars/all.yml
 	cat >> $VIRT_TYPE/group_vars/all.yml <<EOF
@@ -176,21 +176,20 @@ EOF
    else
    	NODEIP=`expr $BASE_IP + $1`
    	VIPIP=`expr $NODEIP + 100`
-   	NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    	vxlan0_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
    	vxlan1_IP="`echo $vxlan1_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
    	vxlan2_IP="`echo $vxlan2_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
    	vip_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$VIPIP"
     	
-    	echo "$NODENAME ansible_ssh_host=$2" >> $VIRT_TYPE/inventory
-    	cat > $VIRT_TYPE/host_vars/$NODENAME <<EOF
-NODENAME: ${NODENAME}
+    	echo "$1 ansible_ssh_host=$2" >> $VIRT_TYPE/inventory
+    	cat > $VIRT_TYPE/host_vars/$1 <<EOF
+NODENAME: $1
 vxlan0_IP: $vxlan0_IP
 vxlan1_IP: $vxlan1_IP
 vxlan2_IP: $vxlan2_IP
 public_IP: $vxlan0_IP
 vip_IP: $vip_IP
-INSTANCE_ID: ${NODENAME}
+INSTANCE_ID: $3
 EOF
    fi
    
