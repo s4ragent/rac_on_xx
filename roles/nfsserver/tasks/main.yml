@@ -5,7 +5,14 @@
     tags:
       - nfsserver
       
-      
+
+
+  - name: "rm  ntpd.pid"
+    file: path={{ NFS_ROOT }} state=present
+    tags:
+      - ntp
+
+
   - name: "start_enable vxlan.service)"
     become: yes
     service: name=vxlan.service state=started enabled=yes
