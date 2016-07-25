@@ -1,4 +1,6 @@
 #!/bin/bash
+export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no"
+
 DOCKERSUBNET="10.153.0.0/16"
 #DOCKER_VOLUME_PATH="/rac_on_docker"
 IMAGE="s4ragent/rac_on_xx:OEL7"
@@ -8,7 +10,7 @@ DOCKER_CAPS="--privileged=true --security-opt seccomp=unconfined"
 #DOCKER_CAPS="--cap-add=ALL --security-opt=seccomp=unconfined"
 DOCKER_START_OPS="--restart=always"
 TMPFS_OPS="--shm-size=1200m"
-export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no"
+
 
 sudoer="opc"
 sudokey="opc"
@@ -112,6 +114,7 @@ deleteall(){
    if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     		rm -rf $DOCKER_VOLUME_PATH
    fi
+   
 }
 
 stop(){ 
@@ -214,5 +217,4 @@ case "$1" in
   "stop" ) shift;stop $*;;
   "stopall" ) shift;stopall $*;;
   "buildimage") shift;buildimage $*;;
-  * ) echo "Ex " ;;
 esac
