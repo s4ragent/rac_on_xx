@@ -1,6 +1,16 @@
 #!/bin/bash
-export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no"
 
+###VIRT_TYPE Specific value (must define value)#####
+sudoer="opc"
+sudokey="opc"
+VIRT_TYPE="docker"
+DELETE_CMD="docker rm -f"
+START_CMD="docker start"
+STOP_CMD="docker stop"
+
+################################
+
+#### docker dependent value######
 DOCKERSUBNET="10.153.0.0/16"
 #DOCKER_VOLUME_PATH="/rac_on_docker"
 IMAGE="s4ragent/rac_on_xx:OEL7"
@@ -11,34 +21,8 @@ DOCKER_CAPS="--privileged=true --security-opt seccomp=unconfined"
 DOCKER_START_OPS="--restart=always"
 TMPFS_OPS="--shm-size=1200m"
 
-
-sudoer="opc"
-sudokey="opc"
-VIRT_TYPE="docker"
-DELETE_CMD="docker rm -f"
-START_CMD="docker start"
-STOP_CMD="docker stop"
-
-parse_yaml(){
-   local prefix=$2
-   local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
-   sed -ne "s|^\($s\):|\1|" \
-        -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
-        -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
-   awk -F$fs '{
-      indent = length($1)/2;
-      vname[indent] = $2;
-      for (i in vname) {if (i > indent) {delete vname[i]}}
-      if (length($3) > 0) {
-         vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
-         printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
-      }
-   }'
-}
-
 cd ..
-eval $(parse_yaml vars.yml)
-NETWORKS=($NETWORK)
+source ./commonutil.sh
 
 createnetwork(){
     docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
@@ -46,8 +30,6 @@ createnetwork(){
 
 #$1 nodename $2 ip $3 mount point $4 nodenumber
 run(){
-   
-   
    NODENAME=$1
    IP=$2
 
@@ -58,7 +40,7 @@ run(){
     	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init)
    fi
    
-   updateansiblehost $NODENAME $IP $INSTANCE_ID $4
+   common_updateansiblehost $NODENAME $IP $INSTANCE_ID $4
 
    docker exec $NODENAME useradd $sudoer                                                                                                          
    docker exec $NODENAME bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
@@ -71,11 +53,6 @@ run(){
    docker exec $NODENAME systemctl enable sshd
    docker exec $NODENAME systemctl start NetworkManager
    docker exec $NODENAME systemctl enable NetworkManager
-}
-
-
-deleteandrun(){
- deleteall && runall $1
 }
 
 runall(){
@@ -103,13 +80,12 @@ runall(){
    done
 }
 
-deleteall(){
-   ansible-playbook -i $VIRT_TYPE/inventory deleteall.yml
-   
-   rm -rf $VIRT_TYPE/inventory
-   rm -rf $VIRT_TYPE/group_vars
-   rm -rf $VIRT_TYPE/host_vars
+deleteandrun(){
+ deleteall && runall $1
+}
 
+deleteall(){
+   common_deleteall $*
    rm -rf ${sudokey}*
    if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     		rm -rf $DOCKER_VOLUME_PATH
@@ -118,25 +94,15 @@ deleteall(){
 }
 
 stop(){ 
-   if [ "$1" = "nfs" ]; then
-      NODENAME=nfs
-   else
-      NODENAME="$NODEPREFIX"`printf "%.3d" $1`
-   fi
-   ansible-playbook -i $VIRT_TYPE/inventory stopall.yml --limit $NODENAME
+	common_stop $*
 }
 
 stopall(){
-   ansible-playbook -i $VIRT_TYPE/inventory stopall.yml
+	common_stopall $*
 }
 
 start(){ 
-   if [ "$1" = "nfs" ]; then
-      NODENAME=nfs
-   else
-      NODENAME="$NODEPREFIX"`printf "%.3d" $1`
-   fi
-   ansible-playbook -i $VIRT_TYPE/inventory startall.yml --limit $NODENAME
+	common_start $*
 }
 
 startall(){
