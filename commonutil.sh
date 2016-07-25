@@ -20,7 +20,7 @@ parse_yaml(){
 
 eval $(parse_yaml vars.yml)
 
-deleteall(){
+common_deleteall(){
    ansible-playbook -i $VIRT_TYPE/inventory deleteall.yml
    
    rm -rf $VIRT_TYPE/inventory
@@ -29,7 +29,7 @@ deleteall(){
    
 }
 
-stop(){ 
+common_stop(){ 
    if [ "$1" = "nfs" ]; then
       NODENAME=nfs
    else
@@ -38,11 +38,11 @@ stop(){
    ansible-playbook -i $VIRT_TYPE/inventory stopall.yml --limit $NODENAME
 }
 
-stopall(){
+common_stopall(){
    ansible-playbook -i $VIRT_TYPE/inventory stopall.yml
 }
 
-start(){ 
+common_start(){ 
    if [ "$1" = "nfs" ]; then
       NODENAME=nfs
    else
@@ -51,12 +51,12 @@ start(){
    ansible-playbook -i $VIRT_TYPE/inventory startall.yml --limit $NODENAME
 }
 
-startall(){
+common_startall(){
    ansible-playbook -i $VIRT_TYPE/inventory startall.yml
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber
-updateansiblehost(){
+common_updateansiblehost(){
    mkdir -p $VIRT_TYPE/host_vars
    mkdir -p $VIRT_TYPE/group_vars
    if [ "$1" = "nfs" ]; then
