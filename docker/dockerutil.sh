@@ -1,34 +1,34 @@
 #!/bin/bash
 
-###VIRT_TYPE Specific value (must define value)#####
+##common user specific value #######################
 sudoer="opc"
 sudokey="opc"
+####################################################
+#### docker user specific value  ###################
+DOCKERSUBNET="10.153.0.0/16"
+BRNAME="raconxx"
+#DOCKER_VOLUME_PATH="/rac_on_docker"
+####################################################
+####common VIRT_TYPE specific value ################
 VIRT_TYPE="docker"
 DELETE_CMD="docker rm -f"
 START_CMD="docker start"
 STOP_CMD="docker stop"
-
-################################
-
-#### docker dependent value######
-DOCKERSUBNET="10.153.0.0/16"
-#DOCKER_VOLUME_PATH="/rac_on_docker"
+####################################################
+####docker system  specific value ##################
 IMAGE="s4ragent/rac_on_xx:OEL7"
-BRNAME="racbr"
 #CAP_OPS="--cap-add=NET_ADMIN"
 DOCKER_CAPS="--privileged=true --security-opt seccomp=unconfined"
 #DOCKER_CAPS="--cap-add=ALL --security-opt=seccomp=unconfined"
 DOCKER_START_OPS="--restart=always"
 TMPFS_OPS="--shm-size=1200m"
+####################################################
 
 cd ..
 source ./commonutil.sh
 
-createnetwork(){
-    docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
-}
-
-#$1 nodename $2 ip $3 mount point $4 nodenumber
+#### VIRT_TYPE specific processing  (must define)###
+#$1 nodename $2 ip $3 mount point $4 nodenumber#####
 run(){
    NODENAME=$1
    IP=$2
@@ -55,10 +55,12 @@ run(){
    docker exec $NODENAME systemctl enable NetworkManager
 }
 
+#### VIRT_TYPE specific processing  (must define)###
+#$1 nodecount                                  #####
 runall(){
     HasNework=`docker network ls | grep racbr | wc -l`
     if [ "$HasNework" = "0" ]; then
-        createnetwork
+        docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
     fi
     
     if [  ! -e $sudokey ] ; then
@@ -86,6 +88,8 @@ deleteandrun(){
 
 deleteall(){
    common_deleteall $*
+   
+   #### VIRT_TYPE specific processing ###
    rm -rf ${sudokey}*
    if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     		rm -rf $DOCKER_VOLUME_PATH
@@ -106,7 +110,7 @@ start(){
 }
 
 startall(){
-   ansible-playbook -i $VIRT_TYPE/inventory startall.yml
+	common_startall $*
 }
 
 
@@ -114,66 +118,8 @@ buildimage(){
     docker build -t $IMAGE --no-cache=true ./images/OEL7
 }
 
-#$NODENAME $IP $INSTANCE_ID $nodenumber
-updateansiblehost(){
-   mkdir -p $VIRT_TYPE/host_vars
-   mkdir -p $VIRT_TYPE/group_vars
-   if [ "$1" = "nfs" ]; then
-   	SCAN0=`expr $BASE_IP - 20`
-   	SCAN1=`expr $BASE_IP - 20 + 1`
-   	SCAN2=`expr $BASE_IP - 20 + 2`
-   	scan0_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN0"
-   	scan1_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN1"
-   	scan2_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN2"
-   	
-	cat > $VIRT_TYPE/inventory <<EOF
-[nfs]
-$1 ansible_ssh_host=$2
-[dbserver]
-EOF
-   cat > $VIRT_TYPE/host_vars/$1 <<EOF
-INSTANCE_ID: $3
-EOF
-	cp vars.yml $VIRT_TYPE/group_vars/all.yml
-	cat >> $VIRT_TYPE/group_vars/all.yml <<EOF
-NFS_SERVER: $2
-ansible_ssh_user: $sudoer
-ansible_ssh_private_key_file: $sudokey
-scan0_IP: $scan0_IP
-scan1_IP: $scan1_IP
-scan2_IP: $scan2_IP
-DELETE_CMD: $DELETE_CMD
-START_CMD: $START_CMD
-STOP_CMD: $STOP_CMD
-EOF
-
-   else
-   	NODEIP=`expr $BASE_IP + $4`
-   	VIPIP=`expr $NODEIP + 100`
-   	vxlan0_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
-   	vxlan1_IP="`echo $vxlan1_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
-   	vxlan2_IP="`echo $vxlan2_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
-   	vip_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$VIPIP"
-    	
-    	echo "$1 ansible_ssh_host=$2" >> $VIRT_TYPE/inventory
-    	cat > $VIRT_TYPE/host_vars/$1 <<EOF
-NODENAME: $1
-vxlan0_IP: $vxlan0_IP
-vxlan1_IP: $vxlan1_IP
-vxlan2_IP: $vxlan2_IP
-public_IP: $vxlan0_IP
-vip_IP: $vip_IP
-INSTANCE_ID: $3
-EOF
-   fi
-   
-}
-
-
 case "$1" in
   "deleteandrun" ) shift;deleteandrun $*;;
-  "dockerexec" ) shift;dockerexec $*;;
-  "createnetwork" ) shift;createnetwork $*;;
   "runall" ) shift;runall $*;;
   "run" ) shift;run $*;;
   "startall" ) shift;startall $*;;
