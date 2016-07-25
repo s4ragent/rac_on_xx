@@ -1,24 +1,6 @@
 #!/bin/bash
 export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no"
 
-DOCKERSUBNET="10.153.0.0/16"
-#DOCKER_VOLUME_PATH="/rac_on_docker"
-IMAGE="s4ragent/rac_on_xx:OEL7"
-BRNAME="racbr"
-#CAP_OPS="--cap-add=NET_ADMIN"
-DOCKER_CAPS="--privileged=true --security-opt seccomp=unconfined"
-#DOCKER_CAPS="--cap-add=ALL --security-opt=seccomp=unconfined"
-DOCKER_START_OPS="--restart=always"
-TMPFS_OPS="--shm-size=1200m"
-
-
-sudoer="opc"
-sudokey="opc"
-VIRT_TYPE="docker"
-DELETE_CMD="docker rm -f"
-START_CMD="docker start"
-STOP_CMD="docker stop"
-
 parse_yaml(){
    local prefix=$2
    local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
@@ -36,13 +18,9 @@ parse_yaml(){
    }'
 }
 
-cd ..
 eval $(parse_yaml vars.yml)
-NETWORKS=($NETWORK)
 
-createnetwork(){
-    docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
-}
+
 
 #$1 nodename $2 ip $3 mount point $4 nodenumber
 run(){
@@ -109,11 +87,6 @@ deleteall(){
    rm -rf $VIRT_TYPE/inventory
    rm -rf $VIRT_TYPE/group_vars
    rm -rf $VIRT_TYPE/host_vars
-
-   rm -rf ${sudokey}*
-   if [ "$DOCKER_VOLUME_PATH" != "" ]; then
-    		rm -rf $DOCKER_VOLUME_PATH
-   fi
    
 }
 
@@ -141,11 +114,6 @@ start(){
 
 startall(){
    ansible-playbook -i $VIRT_TYPE/inventory startall.yml
-}
-
-
-buildimage(){
-    docker build -t $IMAGE --no-cache=true ./images/OEL7
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber
@@ -202,19 +170,3 @@ EOF
    fi
    
 }
-
-
-case "$1" in
-  "deleteandrun" ) shift;deleteandrun $*;;
-  "dockerexec" ) shift;dockerexec $*;;
-  "createnetwork" ) shift;createnetwork $*;;
-  "runall" ) shift;runall $*;;
-  "run" ) shift;run $*;;
-  "startall" ) shift;startall $*;;
-  "start" ) shift;start $*;;
-  "delete" ) shift;delete $*;;
-  "deleteall" ) shift;deleteall $*;;
-  "stop" ) shift;stop $*;;
-  "stopall" ) shift;stopall $*;;
-  "buildimage") shift;buildimage $*;;
-esac
