@@ -2,7 +2,7 @@
 
 ##common user specific value #######################
 sudoer="opc"
-sudokey="opc"
+sudokey="raconxx"
 ####################################################
 #### docker user specific value  ###################
 DOCKERSUBNET="10.153.0.0/16"
