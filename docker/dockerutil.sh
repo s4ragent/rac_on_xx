@@ -91,6 +91,7 @@ deleteall(){
    
    #### VIRT_TYPE specific processing ###
    rm -rf ${sudokey}*
+   docker network rm $BRNAME
    if [ "$DOCKER_VOLUME_PATH" != "" ]; then
     		rm -rf $DOCKER_VOLUME_PATH
    fi
