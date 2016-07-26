@@ -1,5 +1,4 @@
 ---
----
   - name: "install nfs packages"
     become: yes
     yum: name=nfs-utils state=present
