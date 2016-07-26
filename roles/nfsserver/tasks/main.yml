@@ -6,8 +6,8 @@
       - nfsserver
 
   - name: "create nfs root directory"
+    become: yes
     file: path={{ NFS_ROOT }} state=directory owner=root group=root mode=0755
-
     tags:
       - nfsserver
 
