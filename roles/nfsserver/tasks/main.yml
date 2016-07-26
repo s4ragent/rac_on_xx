@@ -4,8 +4,6 @@
     yum: name=nfs-utils state=present
     tags:
       - nfsserver
-      
-
 
   - name: "create nfs root directory"
     file: path={{ NFS_ROOT }} state=directory owner=root group=root mode=0755
@@ -13,17 +11,26 @@
     tags:
       - nfsserver
 
-
-  - name: "start_enable vxlan.service)"
+  - name: "restart rpcbind"
     become: yes
-    service: name=vxlan.service state=started enabled=yes
-    when: nm_enabled.stdout == '0'
+    service: name=rpcbind.service state=restarted enabled=yes
     tags:
-      - vxlan_init
+      - nfsserver
 
-  - name: "reload vxlan(systemd)"
+  - name: "restart nfs-server"
     become: yes
-    shell: bash /usr/local/bin/vxlan.init reload
-    when: nm_enabled.stdout == '0'
+    service: name=nfs-server.service state=restarted enabled=yes
     tags:
-      - vxlan_reload
+      - nfsserver
+
+  - name: "nfs-lock start"
+    become: yes
+    service: name=nfs-server.service state=started
+    tags:
+      - nfsserver
+
+  - name: "nfs-idmap start"
+    become: yes
+    service: name=nfs-idmap.service state=started
+    tags:
+      - nfsserver
