@@ -1,5 +1,7 @@
 ---
-  - mount: name={{ ORA_DATA }} src={{ NFS_SERVER }}:/ fstype=nfs opts=ro state=present
+  - name: "mount oradata"
+  - mount: name={{ ORA_DATA }} src="{{ NFS_SERVER }}:/" fstype=nfs opts=ro state=present
+
   - name: "create /etc/vxlan"
     become: yes
     file: path=/etc/vxlan state=directory owner=root group=root mode=0755
