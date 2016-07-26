@@ -1,4 +1,14 @@
 ---
+---
+  - name: "install nfs packages"
+    become: yes
+    yum: name=nfs-utils state=present
+    tags:
+      - nfsclient
+
   - name: "mount oradata"
+    become: yes
     mount: name={{ ORA_DATA }} src="{{ NFS_SERVER }}:/" fstype=nfs opts=rw,bg,hard,nointr,tcp,vers=4,timeo=600,actimeo=0 state=present
+    tags:
+      - nfsclient
 
