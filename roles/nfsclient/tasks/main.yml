@@ -11,3 +11,8 @@
     tags:
       - nfsclient
 
+  - name: "chown oradata"
+    become: yes
+    file: path={{ ORA_DATA }} state=directory owner=grid group=oinstall mode=0775
+    tags:
+      - nfsclient
