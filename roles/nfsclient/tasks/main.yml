@@ -37,10 +37,12 @@ FRA_SIZE: 5
 
   - name: "chown oradata"
     become: yes
-    file: path={{ item.name }} state=present owner=grid group=oinstall mode=0660
+    file: path={{ item.name }} state=file owner=grid group=oinstall mode=0660
     when: inventory_hostname == groups["dbserver"][0]
     with_items:
       - { name: "{{ VOTE_DEV }}" }
+      - { name: "{{ DATA_DEV }}" }
+      - { name: "{{ FRA_DEV }}" }
     tags:
       - nfsclient
 
