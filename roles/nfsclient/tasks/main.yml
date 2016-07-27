@@ -18,9 +18,21 @@
       - nfsclient
 
   - name: "create asm device vote"
-    shell: dd if=/dev/zero of={{ VOTE_DEV }} bs=1M count=$VOTE_DEV_SIZE
+    shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
     args:
-      creates: {{ VOTE_DEV }}
+      creates: {{ item.size }}
     when: inventory_hostname == groups["dbserver"][0]
+    with_items:
+      - { name: {{ VOTE_DEV }}, size: "{{ VOTE_DEV_SIZE }}" }
+    tags:
+      - nfsclient
+
+  - name: "chown oradata"
+    become: yes
+    file: path={{ item.name }} state=present owner=grid group=oinstall mode=0660
+    when: inventory_hostname == groups["dbserver"][0]
+    with_items:
+      - { name: {{ VOTE_DEV }}, size: "{{ VOTE_DEV_SIZE }}" }
+    tags:
     tags:
       - nfsclient
