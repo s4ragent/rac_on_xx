@@ -18,6 +18,7 @@
       - nfsclient
 
   - name: "create asm device vote"
+    become: yes
     shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
     args:
       creates: "{{ item.name }}"
