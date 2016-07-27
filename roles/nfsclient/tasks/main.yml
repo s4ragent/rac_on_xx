@@ -16,3 +16,11 @@
     file: path={{ ORA_DATA }} state=directory owner=grid group=oinstall mode=0775
     tags:
       - nfsclient
+
+  - name: "create asm device vote"
+    shell: dd if=/dev/zero of={{ VOTE_DEV }} bs=1M count=$VOTE_DEV_SIZE
+    args:
+      creates: {{ VOTE_DEV }}
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - nfsclient
