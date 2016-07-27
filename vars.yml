@@ -14,14 +14,17 @@ ORA_ORACLE_BASE: /u01/app/oracle
 GRID_ORACLE_BASE: /u01/app/grid
 INSTALL_LANG: ja
 #####
+##### device size = base_size + multi_size * node count
 VOTE_DEV: /u01/oradata/vote.img
+VOTE_BASE_SIZE: 0
 VOTE_MULTI_SIZE: 1578
 VOTE_DISKGROUP: VOTE
 DATA_DEV: /u01/oradata/data.img
 DATA_BASE_SIZE: 2048
 DATA_MULTI_SIZE: 1024
 FRA_DEV: /u01/oradata/fra.img
-FRA_SIZE: 5120
+FRA_BASE_SIZE: 5120
+FRA_MULTI_SIZE: 0
 ASM_STRING: /u01/oradata/*
 CLUSTER_NAME: node-cluster
 DBNAME: ORCL
