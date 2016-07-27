@@ -41,6 +41,10 @@
     tags:
       - nfsclient
 
-systemctl enable remote-fs.target
+  - name: "restart nfs-server"
+    become: yes
+    service: name=remote-fs.target enabled=yes
+    tags:
+      - nfsclient
 
  
