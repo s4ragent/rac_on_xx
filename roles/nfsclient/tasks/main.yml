@@ -30,11 +30,6 @@
     tags:
       - nfsclient
 
-
-
-: /u01/oradata/fra.img
-FRA_SIZE: 5
-
   - name: "chown oradata"
     become: yes
     file: path={{ item.name }} state=file owner=grid group=oinstall mode=0660
