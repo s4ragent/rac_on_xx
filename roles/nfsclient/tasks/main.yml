@@ -41,7 +41,7 @@
     tags:
       - nfsclient
 
-  - name: "restart nfs-server"
+  - name: "enable remote-fs.target"
     become: yes
     service: name=remote-fs.target enabled=yes
     tags:
