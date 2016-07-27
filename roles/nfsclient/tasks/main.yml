@@ -41,4 +41,6 @@
     tags:
       - nfsclient
 
+systemctl enable remote-fs.target
+
  
