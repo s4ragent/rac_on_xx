@@ -40,7 +40,7 @@ run(){
 		INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init)
 	fi
 	
-	common_updateansiblehost $NODENAME $IP $INSTANCE_ID $4
+	common_updateansiblehost $NODENAME $IP $INSTANCE_ID $4 "-ignoreSysprereqs -ignorePrereq"
 
 	docker exec $NODENAME useradd $sudoer                                                                                                          
 	docker exec $NODENAME bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
@@ -87,6 +87,7 @@ deleteandrun(){
 }
 
 deleteall(){
+	common_stopall $*
    	common_deleteall $*
    
 	#### VIRT_TYPE specific processing ###
