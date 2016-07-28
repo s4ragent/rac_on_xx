@@ -16,7 +16,7 @@ INSTALL_LANG: ja
 #####
 ##### device size = base_size + multi_size * node count
 VOTE_DEV: /u01/oradata/vote.img
-VOTE_BASE_SIZE: 0
+VOTE_BASE_SIZE: 1024
 VOTE_MULTI_SIZE: 1578
 VOTE_DISKGROUP_NAME: VOTE
 DATA_DEV: /u01/oradata/data.img
