@@ -55,7 +55,7 @@ common_startall(){
    ansible-playbook -i $VIRT_TYPE/inventory startall.yml
 }
 
-#$NODENAME $IP $INSTANCE_ID $nodenumber
+#$NODENAME $IP $INSTANCE_ID $nodenumber $runInstaller ops(-ignoreSysprereqs -ignorePrereq)
 common_updateansiblehost(){
    mkdir -p $VIRT_TYPE/host_vars
    mkdir -p $VIRT_TYPE/group_vars
@@ -83,6 +83,7 @@ ansible_ssh_private_key_file: $sudokey
 scan0_IP: $scan0_IP
 scan1_IP: $scan1_IP
 scan2_IP: $scan2_IP
+installops: "$5 $6"
 DELETE_CMD: $DELETE_CMD
 START_CMD: $START_CMD
 STOP_CMD: $STOP_CMD
