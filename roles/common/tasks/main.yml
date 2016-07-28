@@ -128,3 +128,10 @@
     yum: name={{ PreInstallRPM }}state=present enablerepo=ol7_optional_latest
     tags:
       - preinstallpackages
+
+  - name: "create swap"
+    shell: dd if=/dev/zero of=/swap bs=1M count={{ ansible_memtotal_mb }}
+  args:
+    creates: '{{ swap_file_path }}'
+
+when: ansible_swaptotal_mb < 1
