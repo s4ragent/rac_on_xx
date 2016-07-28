@@ -58,6 +58,12 @@ run(){
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodecount                                  #####
 runall(){
+	if [ "$1" = "" ]; then
+		nodecount=3
+	else
+		nodecount=$1
+	fi
+	
 	HasNework=`docker network ls | grep racbr | wc -l`
 	if [ "$HasNework" = "0" ]; then
 		docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
@@ -73,7 +79,7 @@ runall(){
 	NFSIP="${SEGMENT}$BASE_IP"
 	run nfs $NFSIP /nfs
 	
-	for i in `seq 1 $1`;
+	for i in `seq 1 $nodecount`;
 	do
 		NUM=`expr $BASE_IP + $i`
 		NODEIP="${SEGMENT}$NUM"
