@@ -19,7 +19,7 @@ oracle.install.crs.config.gpnp.gnsOption=
 oracle.install.crs.config.gpnp.gnsClientDataFile=
 oracle.install.crs.config.gpnp.gnsSubDomain=
 oracle.install.crs.config.gpnp.gnsVIPAddress=
-oracle.install.crs.config.clusterNodes={% for host in groups['dbserver'] %}{{ NODENAME }}:{{ NODENAME }}-vip{% if not loop.last %},{% endif %}{% endfor %}
+oracle.install.crs.config.clusterNodes={% for host in play_hosts %}{{ hostvars[host]['NODENAME'] }}:{{ hostvars[host]['NODENAME'] }}-vip{% if not loop.last %},{% endif %}{% endfor %}
 
 oracle.install.crs.config.networkInterfaceList=eth0:{{ ansible_eth0.ipv4.network }}:3,vxlan0:{{ vxlan0_NETWORK }}:1,vxlan1:{{ vxlan1_NETWORK }}:2,vxlan2:{{ vxlan2_NETWORK }}:4
 oracle.install.crs.config.storageOption=FLEX_ASM_STORAGE
