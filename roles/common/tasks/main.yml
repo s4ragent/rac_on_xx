@@ -130,8 +130,11 @@
       - preinstallpackages
 
   - name: "create swap"
+    become: yes
     shell: dd if=/dev/zero of=/swap bs=1M count={{ ansible_memtotal_mb }}
-  args:
-    creates: '{{ swap_file_path }}'
+    when: ansible_swaptotal_mb < 1
 
-when: ansible_swaptotal_mb < 1
+  - name: "mount swap"
+    become: yes
+    mount: src=/swap fstype=swap opts=defaults state=present
+    when: ansible_swaptotal_mb < 1
