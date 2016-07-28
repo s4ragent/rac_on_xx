@@ -18,3 +18,14 @@
     tags:
       - runinstallergrid
       - gridinstall
+
+  - name: "runInstaller(grid)"
+    become: yes
+    become_user: grid
+    shell: orainstRoot.sh
+    tags:
+      - runinstallergrid
+      - gridinstall
+
+
+
