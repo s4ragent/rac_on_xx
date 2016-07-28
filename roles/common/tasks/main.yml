@@ -123,7 +123,7 @@
     tags:
       - oraclehome
 
-  - name: "install preindtall packages"
+  - name: "install preinstall packages"
     become: yes
     yum: name={{ PreInstallRPM }}state=present enablerepo=ol7_optional_latest
     tags:
