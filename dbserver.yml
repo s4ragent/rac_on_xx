@@ -6,5 +6,5 @@
       - vxlan
       - dns
       - nfsclient
-
+      - gridinstall
 
