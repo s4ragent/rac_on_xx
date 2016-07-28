@@ -57,7 +57,6 @@ common_startall(){
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $runInstaller ops(-ignoreSysprereqs -ignorePrereq)
 common_updateansiblehost(){
-	echo $5
    mkdir -p $VIRT_TYPE/host_vars
    mkdir -p $VIRT_TYPE/group_vars
    if [ "$1" = "nfs" ]; then
@@ -84,7 +83,7 @@ ansible_ssh_private_key_file: $sudokey
 scan0_IP: $scan0_IP
 scan1_IP: $scan1_IP
 scan2_IP: $scan2_IP
-installops: $5
+installops: ${5}
 DELETE_CMD: $DELETE_CMD
 START_CMD: $START_CMD
 STOP_CMD: $STOP_CMD
