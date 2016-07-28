@@ -19,12 +19,11 @@
       - runinstallergrid
       - gridinstall
 
-  - name: "runInstaller(grid)"
+  - name: "orainstrootsh"
     become: yes
-    become_user: grid
-    shell: orainstRoot.sh
+    shell: {{ ORAINVENTORY }}/orainstRoot.sh
     tags:
-      - runinstallergrid
+      - orainstrootsh
       - gridinstall
 
 
