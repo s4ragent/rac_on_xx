@@ -125,7 +125,7 @@
 
   - name: "install preinstall packages"
     become: yes
-    yum: name={{ PreInstallRPM }}state=present enablerepo=ol7_optional_latest
+    yum: name={{ PreInstallRPM }} state=present enablerepo=ol7_optional_latest
     tags:
       - preinstallpackages
 
