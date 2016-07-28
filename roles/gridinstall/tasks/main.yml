@@ -1,1 +1,7 @@
-#
+---
+  - name: "create grid.rsp"
+    become: yes
+    template: src=grid.rsp.j2 dest=/home/grid/grid.rsp owner=grid group=oinstall mode=0644
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - gridinstall
