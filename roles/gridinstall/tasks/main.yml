@@ -8,3 +8,14 @@
       - asm
     tags:
       - gridinstall
+
+  - name: "runInstaller(grid)"
+    become: yes
+    become_user: grid
+    shell: /media/grid/runInstaller -silent -responseFile /home/grid/grid.rsp {{ INSTALL_OPS }}
+    when: inventory_hostname == groups["dbserver"][0]
+    with_items:
+      - grid
+      - asm
+    tags:
+      - gridinstall
