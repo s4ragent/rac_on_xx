@@ -1,9 +1,9 @@
 ---
-  - name: "install nfs packages"
+  - name: "install dnsmasq packages"
     become: yes
-    yum: name=nfs-utils state=present
+    yum: name=dnsmasq state=present
     tags:
-      - nfsserver
+      - dnsmasq
 
   - name: "create addn-hosts"
     become: yes
