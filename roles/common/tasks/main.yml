@@ -136,5 +136,5 @@
 
   - name: "mount swap"
     become: yes
-    mount: src=/swap fstype=swap opts=defaults state=present
+    mount: src=/swap fstype=swap opts=defaults state=mounted
     when: ansible_swaptotal_mb < 1
