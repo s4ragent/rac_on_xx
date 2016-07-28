@@ -131,7 +131,7 @@
 
   - name: "create swap"
     become: yes
-    shell: dd if=/dev/zero of=/swap bs=1M count={{ ansible_memtotal_mb }}
+    shell: dd if=/dev/zero of=/swap bs=1M count={{ ansible_memtotal_mb }} && mkswap /swap
     when: ansible_swaptotal_mb < 1
 
   - name: "mount swap"
