@@ -83,7 +83,7 @@ ansible_ssh_private_key_file: $sudokey
 scan0_IP: $scan0_IP
 scan1_IP: $scan1_IP
 scan2_IP: $scan2_IP
-installops: $INSTALL_OPS
+installops: "$INSTALL_OPS"
 DELETE_CMD: $DELETE_CMD
 START_CMD: $START_CMD
 STOP_CMD: $STOP_CMD
