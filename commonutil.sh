@@ -57,6 +57,7 @@ common_startall(){
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $runInstaller ops(-ignoreSysprereqs -ignorePrereq)
 common_updateansiblehost(){
+	echo $5
    mkdir -p $VIRT_TYPE/host_vars
    mkdir -p $VIRT_TYPE/group_vars
    if [ "$1" = "nfs" ]; then
