@@ -21,7 +21,7 @@
 
   - name: "orainstrootsh"
     become: yes
-    shell: "{{ ORAINVENTORY }}"/"orainstRoot.sh"
+    shell: "{{ ORAINVENTORY }}/orainstRoot.sh"
     tags:
       - orainstrootsh
       - gridinstall
