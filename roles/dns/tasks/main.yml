@@ -1,4 +1,10 @@
 ---
+  - name: "install nfs packages"
+    become: yes
+    yum: name=nfs-utils state=present
+    tags:
+      - nfsserver
+
   - name: "create addn-hosts"
     become: yes
     template: src=addn-hosts.j2 dest=/etc/addn-hosts owner=root group=root mode=0644
