@@ -1,1 +1,16 @@
-#
+---
+  - name: "create db.rsp"
+    become: yes
+    template: src=db.rsp.j2 dest=/home/oracle/db.rsp owner=oracle group=oinstall mode=0644
+    tags:
+      - createdbrsp
+      - dbinstall
+
+  - name: "runInstaller(grid)"
+    become: yes
+    become_user: oracle
+    shell: /media/database/runInstaller -silent -responseFile /home/oracle/db.rsp {{ INSTALL_OPS }}
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - runinstallerdb
+      - dbinstall
