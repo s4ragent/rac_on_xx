@@ -21,6 +21,9 @@
       - gridinstall
 
   - debug: var=runinstallergrid.stdout_lines
+    tags:
+      - runinstallergrid
+      - gridinstall
 
   - name: "orainstrootsh"
     become: yes
@@ -31,6 +34,19 @@
       - gridinstall
 
   - debug: var=orainstrootsh.stdout_lines
+    tags:
+      - orainstrootsh
+      - gridinstall
 
 
+  - name: "grid 1st root.sh"
+    shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
+    register: grid1strootsh_result
+    tags:
+      - grid1strootsh
+      - gridinstall
 
+  - debug: var=grid1strootsh_result.stdout_lines
+    tags:
+      - grid1strootsh
+      - gridinstall
