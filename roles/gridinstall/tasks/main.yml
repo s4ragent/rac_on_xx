@@ -20,12 +20,17 @@
       - runinstallergrid
       - gridinstall
 
+  - debug: var=runinstallergrid.stdout_lines
+
   - name: "orainstrootsh"
     become: yes
-    shell: "{{ ORAINVENTORY }}/orainstRoot.sh"
+    shell: "{{ ORAINVENTORY }}/orainstRoot.sh -silent"
+    register: orainstrootsh_result
     tags:
       - orainstrootsh
       - gridinstall
+
+  - debug: var=orainstrootsh.stdout_lines
 
 
 
