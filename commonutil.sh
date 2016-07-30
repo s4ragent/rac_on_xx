@@ -1,6 +1,6 @@
 #!/bin/bash
 export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no"
-export ANSIBLE_INVENTORY_IGNORE="~, .orig, .bak, .ini, .cfg, .retry, .pyc, .pyo, .yml, .md, .sh"
+export ANSIBLE_INVENTORY_IGNORE="~, .orig, .bak, .ini, .cfg, .retry, .pyc, .pyo, .yml, .md, .sh, images"
 
 parse_yaml(){
    local prefix=$2
