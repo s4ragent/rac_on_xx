@@ -56,6 +56,49 @@ common_startall(){
    ansible-playbook -i $VIRT_TYPE/inventory startall.yml
 }
 
+#$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
+common_update_ansible_inventory(){
+hostgroup=$5
+if [ ! -e $VIRT_TYPE/$hostgroup ]; then
+  cat > $VIRT_TYPE/$hostgroup <<EOF
+[$hostgroup]
+EOF
+fi
+
+NODEIP=`expr $BASE_IP + $4`
+VIPIP=`expr $NODEIP + 100`
+vxlan0_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
+vxlan1_IP="`echo $vxlan1_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
+vxlan2_IP="`echo $vxlan2_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
+vip_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$VIPIP"
+    	
+echo "$1 ansible_ssh_host=$2" >> $VIRT_TYPE/$hostgroup
+cat > $VIRT_TYPE/host_vars/$1 <<EOF
+NODENAME: $1
+vxlan0_IP: $vxlan0_IP
+vxlan1_IP: $vxlan1_IP
+vxlan2_IP: $vxlan2_IP
+public_IP: $vxlan0_IP
+vip_IP: $vip_IP
+INSTANCE_ID: $3
+EOF
+}
+
+common_update_all_yml(){
+cp vars.yml $VIRT_TYPE/group_vars/all.yml
+cat >> $VIRT_TYPE/group_vars/all.yml <<EOF
+ansible_ssh_user: $sudoer
+ansible_ssh_private_key_file: $sudokey
+scan0_IP: $scan0_IP
+scan1_IP: $scan1_IP
+scan2_IP: $scan2_IP
+INSTALL_OPS: "$INSTALL_OPS"
+DELETE_CMD: $DELETE_CMD
+START_CMD: $START_CMD
+STOP_CMD: $STOP_CMD
+EOF
+}
+
 #$NODENAME $IP $INSTANCE_ID $nodenumber $runInstaller ops(-ignoreSysprereqs -ignorePrereq)
 common_updateansiblehost(){
    mkdir -p $VIRT_TYPE/host_vars
