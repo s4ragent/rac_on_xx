@@ -85,8 +85,9 @@ EOF
 }
 
 common_update_all_yml(){
+if [ ! -e $VIRT_TYPE/group_vars/all.yml ]; then
 cp vars.yml $VIRT_TYPE/group_vars/all.yml
-cat >> $VIRT_TYPE/group_vars/all.yml <<EOF
+cat > $VIRT_TYPE/group_vars/all.yml <<EOF
 ansible_ssh_user: $sudoer
 ansible_ssh_private_key_file: $sudokey
 scan0_IP: $scan0_IP
@@ -97,6 +98,10 @@ DELETE_CMD: $DELETE_CMD
 START_CMD: $START_CMD
 STOP_CMD: $STOP_CMD
 EOF
+
+fi
+
+    	echo "$1 ansible_ssh_host=$2" >> $VIRT_TYPE/inventory
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $runInstaller ops(-ignoreSysprereqs -ignorePrereq)
