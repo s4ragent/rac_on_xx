@@ -22,9 +22,9 @@ parse_yaml(){
 eval $(parse_yaml vars.yml)
 
 common_deleteall(){
-   ansible-playbook -i $VIRT_TYPE/inventory deleteall.yml
+   ansible-playbook -i $VIRT_TYPE deleteall.yml
    
-   rm -rf $VIRT_TYPE/inventory
+   rm -rf $VIRT_TYPE/*.inventory
    rm -rf $VIRT_TYPE/group_vars
    rm -rf $VIRT_TYPE/host_vars
    
@@ -36,11 +36,11 @@ common_stop(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   ansible-playbook -i $VIRT_TYPE/inventory stopall.yml --limit $NODENAME
+   ansible-playbook -i $VIRT_TYPE stopall.yml --limit $NODENAME
 }
 
 common_stopall(){
-   ansible-playbook -i $VIRT_TYPE/inventory stopall.yml
+   ansible-playbook -i $VIRT_TYPE stopall.yml
 }
 
 common_start(){ 
@@ -49,18 +49,18 @@ common_start(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   ansible-playbook -i $VIRT_TYPE/inventory startall.yml --limit $NODENAME
+   ansible-playbook -i $VIRT_TYPE startall.yml --limit $NODENAME
 }
 
 common_startall(){
-   ansible-playbook -i $VIRT_TYPE/inventory startall.yml
+   ansible-playbook -i $VIRT_TYPE startall.yml
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
 common_update_ansible_inventory(){
 hostgroup=$5
-if [ ! -e $VIRT_TYPE/$hostgroup ]; then
-  cat > $VIRT_TYPE/$hostgroup <<EOF
+if [ ! -e $VIRT_TYPE/${hostgroup}.inventory ]; then
+  cat > $VIRT_TYPE/{hostgroup}.inventory <<EOF
 [$hostgroup]
 EOF
 fi
@@ -72,7 +72,7 @@ vxlan1_IP="`echo $vxlan1_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEI
 vxlan2_IP="`echo $vxlan2_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
 vip_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$VIPIP"
     	
-echo "$1 ansible_ssh_host=$2" >> $VIRT_TYPE/$hostgroup
+echo "$1 ansible_ssh_host=$2" >> $VIRT_TYPE/{hostgroup}.inventory
 cat > $VIRT_TYPE/host_vars/$1 <<EOF
 NODENAME: $1
 vxlan0_IP: $vxlan0_IP
