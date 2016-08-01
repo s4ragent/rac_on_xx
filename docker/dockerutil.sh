@@ -7,7 +7,7 @@ sudokey="raconxx"
 #### docker user specific value  ###################
 DOCKERSUBNET="10.153.0.0/16"
 BRNAME="raconxx"
-DeviceMapper_BaseSize="--storage-opt dm.basesize=100G"
+DeviceMapper_BaseSize="--storage-opt size=100G"
 #DOCKER_VOLUME_PATH="/rac_on_docker"
 ####################################################
 ####common VIRT_TYPE specific value ################
