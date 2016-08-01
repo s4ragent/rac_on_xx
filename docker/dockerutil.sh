@@ -7,6 +7,7 @@ sudokey="raconxx"
 #### docker user specific value  ###################
 DOCKERSUBNET="10.153.0.0/16"
 BRNAME="raconxx"
+DeviceMapper_BaseSize="--storage-opt dm.basesize=100G"
 #DOCKER_VOLUME_PATH="/rac_on_docker"
 ####################################################
 ####common VIRT_TYPE specific value ################
@@ -29,19 +30,23 @@ cd ..
 source ./commonutil.sh
 
 #### VIRT_TYPE specific processing  (must define)###
-#$1 nodename $2 ip $3 mount point $4 nodenumber#####
+#$1 nodename $2 ip $3 nodenumber $4 hostgroup#####
 run(){
 	NODENAME=$1
 	IP=$2
+	NODENUMBER=$3
+	HOSTGROUP=$4
+	
+	IsDeviceMapper=`docker info | grep devicemapper | grep -v grep | wc -l`
 
-	if [ "$DOCKER_VOLUME_PATH" != "" ]; then
-		mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
-		INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v $DOCKER_VOLUME_PATH/$NODENAME:$3:rw $IMAGE /sbin/init)
+	if [ "$IsDeviceMapper" != "0" ]; then
+		INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
 	else
 		INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro  $IMAGE /sbin/init)
 	fi
 	
-	common_updateansiblehost $NODENAME $IP $INSTANCE_ID $4
+	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
+	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
 	docker exec $NODENAME useradd $sudoer                                                                                                          
 	docker exec $NODENAME bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
@@ -78,15 +83,23 @@ runall(){
 	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 
 	NFSIP="${SEGMENT}$BASE_IP"
-	run nfs $NFSIP /nfs
+	run "nfs" $NFSIP 0 "nfs"
+	
+	common_update_all_yml "NFS_SERVER: $NFSIP"
 	
 	for i in `seq 1 $nodecount`;
 	do
 		NUM=`expr $BASE_IP + $i`
 		NODEIP="${SEGMENT}$NUM"
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		run $NODENAME $NODEIP /u01 $i
+		run $NODENAME $NODEIP $i "dbserver"
 	done
+	
+	CLIENTNUM=70
+	NUM=`expr $BASE_IP + $CLIENTNUM`
+	CLIENTIP="${SEGMENT}$NUM"	
+	run "client01" $CLIENTIP $CLIENTNUM "client"
+	
 }
 
 deleteandrun(){
