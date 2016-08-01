@@ -97,10 +97,10 @@ runall(){
 		run $NODENAME $NODEIP $i "dbserver"
 	done
 	
-	CLIENTNUM=70
-	NUM=`expr $BASE_IP + $CLIENTNUM`
-	CLIENTIP="${SEGMENT}$NUM"	
-	run "client01" $CLIENTIP $CLIENTNUM "client"
+#	CLIENTNUM=70
+#	NUM=`expr $BASE_IP + $CLIENTNUM`
+#	CLIENTIP="${SEGMENT}$NUM"	
+#	run "client01" $CLIENTIP $CLIENTNUM "client"
 	
 }
 
@@ -115,9 +115,6 @@ deleteall(){
 	#### VIRT_TYPE specific processing ###
 	rm -rf ${sudokey}*
 	docker network rm $BRNAME
-	if [ "$DOCKER_VOLUME_PATH" != "" ]; then
-	 		rm -rf $DOCKER_VOLUME_PATH
-	fi
    
 }
 
@@ -148,7 +145,7 @@ dm_resize(){
 	cat > /etc/systemd/system/docker.service.d/storage.conf <<'EOF'
 [Service]
 ExecStart=
-ExecStart=/usr/bin/docker daemon -H fd:// --storage-opt dm.basesize=100G --storage-opt dm.loopdatasize=1024G --storage-opt dm.loopmetadatasize=4G --storage-opt dm.fs=xfs --storage-opt dm.blocksize=512K
+ExecStart=/usr/bin/dockerd --storage-opt dm.basesize=100G --storage-opt dm.loopdatasize=1024G --storage-opt dm.loopmetadatasize=4G --storage-opt dm.fs=xfs --storage-opt dm.blocksize=512K
 EOF
 	systemctl daemon-reload
 	systemctl start docker
