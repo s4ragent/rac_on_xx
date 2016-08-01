@@ -84,6 +84,7 @@ INSTANCE_ID: $3
 EOF
 }
 
+#$1 addtional all.yml var
 common_update_all_yml(){
 if [ ! -e $VIRT_TYPE/group_vars/all.yml ]; then
 cp vars.yml $VIRT_TYPE/group_vars/all.yml
@@ -101,7 +102,8 @@ EOF
 
 fi
 
-    	echo "$1 ansible_ssh_host=$2" >> $VIRT_TYPE/inventory
+echo "$1" >> $VIRT_TYPE/group_vars/all.yml
+
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $runInstaller ops(-ignoreSysprereqs -ignorePrereq)
