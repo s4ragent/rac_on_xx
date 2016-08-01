@@ -60,7 +60,7 @@ common_startall(){
 common_update_ansible_inventory(){
 hostgroup=$5
 if [ ! -e $VIRT_TYPE/${hostgroup}.inventory ]; then
-  cat > $VIRT_TYPE/{hostgroup}.inventory <<EOF
+  cat > $VIRT_TYPE/${hostgroup}.inventory <<EOF
 [$hostgroup]
 EOF
 fi
@@ -72,7 +72,7 @@ vxlan1_IP="`echo $vxlan1_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEI
 vxlan2_IP="`echo $vxlan2_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$NODEIP"
 vip_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$VIPIP"
     	
-echo "$1 ansible_ssh_host=$2" >> $VIRT_TYPE/{hostgroup}.inventory
+echo "$1 ansible_ssh_host=$2" >> $VIRT_TYPE/${hostgroup}.inventory
 cat > $VIRT_TYPE/host_vars/$1 <<EOF
 NODENAME: $1
 vxlan0_IP: $vxlan0_IP
