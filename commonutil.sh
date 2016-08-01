@@ -86,9 +86,16 @@ EOF
 
 #$1 addtional all.yml var
 common_update_all_yml(){
+SCAN0=`expr $BASE_IP - 20`
+SCAN1=`expr $BASE_IP - 20 + 1`
+SCAN2=`expr $BASE_IP - 20 + 2`
+scan0_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN0"
+scan1_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN1"
+scan2_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN2"	
+	
 if [ ! -e $VIRT_TYPE/group_vars/all.yml ]; then
-cp vars.yml $VIRT_TYPE/group_vars/all.yml
-cat > $VIRT_TYPE/group_vars/all.yml <<EOF
+	cp vars.yml $VIRT_TYPE/group_vars/all.yml
+	cat > $VIRT_TYPE/group_vars/all.yml <<EOF
 ansible_ssh_user: $sudoer
 ansible_ssh_private_key_file: $sudokey
 scan0_IP: $scan0_IP
