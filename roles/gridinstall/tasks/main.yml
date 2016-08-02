@@ -80,6 +80,8 @@
 
   - name: "asmca"
     shell: "{{ GRID_ORACLE_HOME }}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=/home/grid/asm.rsp"
+    async: 180
+    poll: 180
     register: asmca_result
     when: inventory_hostname == groups["dbserver"][0]
     tags:
