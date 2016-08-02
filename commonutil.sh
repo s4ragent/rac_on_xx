@@ -60,6 +60,7 @@ common_startall(){
 common_update_ansible_inventory(){
 hostgroup=$5
 if [ ! -e $VIRT_TYPE/${hostgroup}.inventory ]; then
+  mkdir -p $VIRT_TYPE/host_vars
   cat > $VIRT_TYPE/${hostgroup}.inventory <<EOF
 [$hostgroup]
 EOF
@@ -94,7 +95,6 @@ scan1_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN1"
 scan2_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN2"	
 	
 if [ ! -e $VIRT_TYPE/group_vars/all.yml ]; then
-   mkdir -p $VIRT_TYPE/host_vars
    mkdir -p $VIRT_TYPE/group_vars
 	cp vars.yml $VIRT_TYPE/group_vars/all.yml
 	cat > $VIRT_TYPE/group_vars/all.yml <<EOF
