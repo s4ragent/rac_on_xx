@@ -60,7 +60,6 @@
 
   - name: "grid other root.sh"
     become: yes
-    serial: 10
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     register: gridotherrootsh_result
     when: inventory_hostname != groups["dbserver"][0]
