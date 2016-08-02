@@ -44,6 +44,8 @@
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     register: grid1strootsh_result
     when: inventory_hostname == groups["dbserver"][0]
+    async: 3600
+    poll: 10
     tags:
       - grid1strootsh
       - gridrootsh
@@ -58,11 +60,12 @@
 
   - name: "grid other root.sh"
     become: yes
+    serial: 10
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     register: gridotherrootsh_result
     when: inventory_hostname != groups["dbserver"][0]
-    async: 180
-    poll: 180
+    async: 3600
+    poll: 10
     tags:
       - gridotherrootsh
       - gridrootsh
@@ -75,13 +78,12 @@
       - gridrootsh
       - gridinstall
 
-
   - name: "asmca"
     become: yes
     become_user: grid
     shell: "{{ GRID_ORACLE_HOME }}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=/home/grid/asm.rsp"
-    async: 180
-    poll: 180
+    async: 3600
+    poll: 10
     register: asmca_result
     when: inventory_hostname == groups["dbserver"][0]
     tags:
