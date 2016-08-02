@@ -103,13 +103,11 @@
     register: crsctl_result
     tags:
       - crsctl
-      - asmca
       - gridinstall
 
   - debug: var=crsctl_result.stdout_lines
     tags:
       - crsctl
-      - asmca
       - gridinstall
 
 
