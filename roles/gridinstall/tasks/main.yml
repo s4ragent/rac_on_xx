@@ -79,6 +79,8 @@
 
 
   - name: "asmca"
+    become: yes
+    become_user: grid
     shell: "{{ GRID_ORACLE_HOME }}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=/home/grid/asm.rsp"
     async: 180
     poll: 180
