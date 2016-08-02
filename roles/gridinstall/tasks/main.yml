@@ -78,3 +78,20 @@
       - gridinstall
 
 
+  - name: "asmca"
+    shell: "{{ GRID_ORACLE_HOME }}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=/home/grid/asm.rsp"
+    register: asmca_result
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - asmca
+      - gridinstall
+
+  - debug: var=asmca_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - asmca
+      - gridinstall
+
+
+
+
