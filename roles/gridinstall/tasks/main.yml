@@ -33,15 +33,17 @@
       - orainstrootsh
       - gridinstall
 
-  - debug: var=orainstrootsh.stdout_lines
+  - debug: var=orainstrootsh_result.stdout_lines
     tags:
       - orainstrootsh
       - gridinstall
 
 
   - name: "grid 1st root.sh"
+    become: yes
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     register: grid1strootsh_result
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - grid1strootsh
       - gridinstall
