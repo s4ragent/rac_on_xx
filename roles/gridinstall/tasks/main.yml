@@ -46,9 +46,29 @@
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - grid1strootsh
+      - gridrootsh
       - gridinstall
 
   - debug: var=grid1strootsh_result.stdout_lines
+    when: inventory_hostname != groups["dbserver"][0]
     tags:
       - grid1strootsh
+      - gridrootsh
+      - gridinstall
+
+  - name: "grid other root.sh"
+    become: yes
+    shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
+    register: gridotherrootsh_result
+    when: inventory_hostname != groups["dbserver"][0]
+    tags:
+      - gridotherrootsh
+      - gridrootsh
+      - gridinstall
+
+  - debug: var=gridotherrootsh_result.stdout_lines
+    when: inventory_hostname != groups["dbserver"][0]
+    tags:
+      - gridotherrootsh
+      - gridrootsh
       - gridinstall
