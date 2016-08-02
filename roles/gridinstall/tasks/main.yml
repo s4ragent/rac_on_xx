@@ -21,6 +21,7 @@
       - gridinstall
 
   - debug: var=runinstallergrid.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - runinstallergrid
       - gridinstall
