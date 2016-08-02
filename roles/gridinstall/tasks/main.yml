@@ -106,8 +106,7 @@
       - asmca
       - gridinstall
 
-  - debug:
-var=crsctl_result.stdout_lines
+  - debug: var=crsctl_result.stdout_lines
     tags:
       - crsctl
       - asmca
