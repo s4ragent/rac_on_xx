@@ -3,6 +3,15 @@
     become: yes
     become_user: grid
     shell : "{{ GRID_ORACLE_HOME }}/bin/asmca -silent -createDiskGroup  -diskGroupName {{ item.name }} -disk {{ item.path }} -redundancy EXTERNAL -au_size 1"
+    when: inventory_hostname == groups["dbserver"][0]
+    register: createdg_result
     with_items:
       - { name: "{{ DATA_DISKGROUP_NAME }}", path: "{{ DATA_DEV }}" }
       - { name: "{{ FRA_DISKGROUP_NAME }}", path: "{{ FRA_DEV }}" }
+    tags:
+      - createdg
+
+  - debug: var=createdg_result
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - createdg
