@@ -50,9 +50,7 @@
       - gridinstall
 
   - debug: var=grid1strootsh_result.stdout_lines
-    when: inventory_hostname != groups["dbserver"][0]
-    async: 180
-    poll: 180
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - grid1strootsh
       - gridrootsh
