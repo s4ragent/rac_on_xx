@@ -11,7 +11,7 @@
     tags:
       - createdg
 
-  - debug: var=createdg_result
+  - debug: var=createdg_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - createdg
