@@ -10,8 +10,3 @@
       - { name: "{{ FRA_DISKGROUP_NAME }}", path: "{{ FRA_DEV }}" }
     tags:
       - createdg
-
-  - debug: var=createdg_result.stdout_lines
-    when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - createdg
