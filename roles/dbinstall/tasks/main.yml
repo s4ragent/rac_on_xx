@@ -1,7 +1,7 @@
 ---
   - name: "create db.rsp"
     become: yes
-    template: src=db.rsp.j2 dest=/home/grid/db.rsp owner=oracle group=oinstall mode=0644
+    template: src=db.rsp.j2 dest=/home/oracle/db.rsp owner=oracle group=oinstall mode=0644
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - createdbrsp
