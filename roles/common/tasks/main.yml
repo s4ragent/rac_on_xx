@@ -37,6 +37,7 @@
       - oracle
       - grid
     tags:
+      - profile
       - createuser
 
   - name: "copy .bash_profile"
@@ -46,6 +47,7 @@
       - oracle
       - grid
     tags:
+      - profile
       - createuser
       
   - name: "create ssh key"
