@@ -15,4 +15,4 @@ fi
 #this is for oracle/grid install#
 if [ -t 0 ]; then
    stty intr ^C
-if
+fi
