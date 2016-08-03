@@ -7,11 +7,31 @@
       - createdbrsp
       - dbinstall
 
-  - name: "runInstaller(grid)"
+  - name: "runInstaller(db)"
     become: yes
     become_user: oracle
-    shell: /media/database/runInstaller -silent -responseFile /home/oracle/db.rsp {{ INSTALL_OPS }}
+    shell: /media/database/runInstaller -silent -responseFile /home/oracle/db.rsp -waitforcompletion {{ INSTALL_OPS }}
+    when: inventory_hostname == groups["dbserver"][0]
+    register: runinstallerdb_result
+    tags:
+      - runinstallerdb
+      - dbinstall
+
+  - debug: var=runinstallerdb_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - runinstallerdb
+      - dbinstall
+
+  - name: "db root.sh"
+    become: yes
+    shell: "{{ ORA_ORACLE_HOME }}/root.sh -silent"
+    register: dbrootsh_result
+    tags:
+      - dbrootsh
+      - dbinstall
+
+  - debug: var=dbrootsh_result.stdout_lines
+    tags:
+      - dbrootsh
       - dbinstall
