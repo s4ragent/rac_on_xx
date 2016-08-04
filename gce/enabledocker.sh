@@ -6,7 +6,7 @@ if [ ! -e  /root/rac_on_xx ]; then
    elif [ -e /etc/redhat-release ]; then
       sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf
       yum clean all
-      yum -y install git screen qemu-img
+      yum -y install git screen qemu-img epel-release
    fi
    git clone https://github.com/s4ragent/rac_on_xx /root/rac_on_xx
 fi
