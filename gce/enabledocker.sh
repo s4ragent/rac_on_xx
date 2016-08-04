@@ -10,13 +10,6 @@ if [ ! -e  /root/rac_on_xx ]; then
    fi
    git clone https://github.com/s4ragent/rac_on_xx /root/rac_on_xx
 fi
-cd /root/rac_on_xx
-source ./common.sh
-
-HasSwap=`free | grep Swap | awk '{print $2}'`
-if [ "$HasSwap" = "0" ]; then
-  bash ./createswap.sh
-fi
 
 curl -sSL https://get.docker.com/ | sh                                                                                                 
 systemctl enable docker                                                                                                                
