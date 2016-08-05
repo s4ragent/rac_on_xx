@@ -1,7 +1,7 @@
 ---
   - name: "test"
-    debug: msg={{ item }}
-    with_items: "{{ groups['dbserver'] }}"
+    debug: msg={{ hostvars[item]['NODENAME'] }}
+    with_items: "{{ play_hosts }}"
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - dbca
