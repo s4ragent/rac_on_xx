@@ -1,6 +1,6 @@
 ---
   - name: "test"
-    debug: msg={{ hostvars[item]['NODENAME'] }}
+    debug: msg={{ hostvars[item]['vxlan0_IP'] }}
     with_items: "{{ play_hosts }}"
     when: inventory_hostname == groups["dbserver"][0]
     tags:
