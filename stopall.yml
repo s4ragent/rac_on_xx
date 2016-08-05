@@ -7,11 +7,11 @@
        ignore_errors: yes
 
  - hosts: nfs
-    tasks:
-      - name: "stop nfs-server"
-        become: yes
-        service: name=nfs-server.service state=stopped
-        ignore_errors: yes
+   tasks:
+     - name: "stop nfs-server"
+       become: yes
+       service: name=nfs-server.service state=stopped
+       ignore_errors: yes
 
  - hosts: nfs
    connection: local
