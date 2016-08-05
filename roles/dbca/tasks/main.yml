@@ -2,7 +2,7 @@
   - name: "test"
     debug: msg={{ hostvars[item.1]['NODENAME'] }}
     with_indexed_items: "{{ play_hosts }}"
-    when: inventory_hostname == groups["dbserver"][0]
+    when: inventory_hostname == groups["dbserver"][0] and item.0 !=0
     tags:
       - dbca
 
