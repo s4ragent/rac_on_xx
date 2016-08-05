@@ -1,6 +1,14 @@
 ---
   - name: "test"
+    debug: msg={{ hostvars[item.1]['NODENAME'] }}
+    with_indexed_items: "{{ play_hosts }}"
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - dbca
+
+  - name: "test2"
     debug: msg={% for host in play_hosts %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - dbca
+
