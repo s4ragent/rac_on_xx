@@ -30,12 +30,6 @@
     tags:
       - nfsserver
 
-  - name: "nfs-lock start"
-    become: yes
-    service: name=nfs-server.service state=started
-    tags:
-      - nfsserver
-
   - name: "nfs-idmap start"
     become: yes
     service: name=nfs-idmap.service state=started
