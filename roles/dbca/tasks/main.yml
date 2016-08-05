@@ -1,1 +1,4 @@
-#
+---
+  - name: "test"
+    debug: msg={{ item }}
+    with_items: "{{ play_hosts }}"
