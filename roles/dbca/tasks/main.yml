@@ -1,7 +1,6 @@
 ---
   - name: "test"
-    debug: msg={{ hostvars[item]['vxlan0_IP'] }}
-    with_items: "{{ play_hosts }}"
+    debug: msg={% for host in play_hosts %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - dbca
