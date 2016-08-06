@@ -13,6 +13,8 @@
     shell: /media/database/runInstaller -silent -responseFile /home/oracle/db.rsp -waitforcompletion {{ INSTALL_OPS }}
     when: inventory_hostname == groups["dbserver"][0]
     register: runinstallerdb_result
+    async: {{ ASYNC }}
+    poll: {{ POLL }}
     tags:
       - runinstallerdb
       - dbinstall
