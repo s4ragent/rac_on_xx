@@ -61,6 +61,7 @@ run(){
 	docker exec $NODENAME systemctl enable sshd
 	docker exec $NODENAME systemctl start NetworkManager
 	docker exec $NODENAME systemctl enable NetworkManager
+   ansible-playbook -i $VIRT_TYPE site.yml
 }
 
 #### VIRT_TYPE specific processing  (must define)###
