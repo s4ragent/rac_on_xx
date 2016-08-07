@@ -61,7 +61,6 @@ run(){
 	docker exec $NODENAME systemctl enable sshd
 	docker exec $NODENAME systemctl start NetworkManager
 	docker exec $NODENAME systemctl enable NetworkManager
-   ansible-playbook -i $VIRT_TYPE site.yml
 }
 
 #### VIRT_TYPE specific processing  (must define)###
@@ -102,7 +101,7 @@ runall(){
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
 #	CLIENTIP="${SEGMENT}$NUM"	
 #	run "client01" $CLIENTIP $CLIENTNUM "client"
-	
+	ansible-playbook -i $VIRT_TYPE rac.yml
 }
 
 deleteandrun(){
