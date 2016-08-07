@@ -14,11 +14,11 @@ INSTALL_LANG: ja
 #####
 ##### device size = base_size + multi_size * node count
 VOTE_DEV: /u01/oradata/vote.img
-VOTE_BASE_SIZE: 4096
+VOTE_BASE_SIZE: 5120
 VOTE_MULTI_SIZE: 1024
 VOTE_DISKGROUP_NAME: VOTE
 DATA_DEV: /u01/oradata/data.img
-DATA_BASE_SIZE: 4096
+DATA_BASE_SIZE: 5120
 DATA_MULTI_SIZE: 1024
 DATA_DISKGROUP_NAME: DATA
 FRA_DEV: /u01/oradata/fra.img
@@ -44,7 +44,6 @@ ORA_ORACLE_HOME: /u01/app/oracle/product/12.1.0/dbhome_1
 GRID_ORACLE_HOME: /u01/app/12.1.0/grid
 ORAINVENTORY: /u01/app/oraInventory
 PreInstallRPM: oracle-rdbms-server-12cR1-preinstall
-LimitsConf: oracle-rdbms-server-12cR1-preinstall
 DB_MEDIA1: linuxamd64_12102_database_1of2.zip
 DB_MEDIA2: linuxamd64_12102_database_2of2.zip
 GRID_MEDIA1: linuxamd64_12102_grid_1of2.zip
@@ -53,6 +52,5 @@ GRID_MEDIA2: linuxamd64_12102_grid_2of2.zip
 ################
 ASYNC: 86400
 POLL: 180
-
 ######DOWNLOAD
 GOOGLESTORAGE: gs://s4ragent2016720/
