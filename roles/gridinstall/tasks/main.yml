@@ -14,6 +14,8 @@
     become: yes
     become_user: grid
     shell: /media/grid/runInstaller -silent -responseFile /home/grid/grid.rsp -waitforcompletion {{ INSTALL_OPS }}
+#    async: "{{ ASYNC }}"
+#    poll: "{{ POLL }}"
     when: inventory_hostname == groups["dbserver"][0]
     register: runinstallergrid_result
     tags:
@@ -45,8 +47,8 @@
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     register: grid1strootsh_result
     when: inventory_hostname == groups["dbserver"][0]
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
+#    async: "{{ ASYNC }}"
+#    poll: "{{ POLL }}"
     tags:
       - grid1strootsh
       - gridrootsh
@@ -64,8 +66,8 @@
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     register: gridotherrootsh_result
     when: inventory_hostname != groups["dbserver"][0]
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
+#    async: "{{ ASYNC }}"
+#    poll: "{{ POLL }}"
     tags:
       - gridotherrootsh
       - gridrootsh
@@ -82,8 +84,8 @@
     become: yes
     become_user: grid
     shell: "{{ GRID_ORACLE_HOME }}/cfgtoollogs/configToolAllCommands RESPONSE_FILE=/home/grid/asm.rsp"
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
+#    async: "{{ ASYNC }}"
+#    poll: "{{ POLL }}"
     register: asmca_result
     when: inventory_hostname == groups["dbserver"][0]
     tags:
