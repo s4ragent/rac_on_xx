@@ -101,7 +101,7 @@ runall(){
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
 #	CLIENTIP="${SEGMENT}$NUM"	
 #	run "client01" $CLIENTIP $CLIENTNUM "client"
-	ansible-playbook -i $VIRT_TYPE rac.yml
+	ansible-playbook -T 30 -i $VIRT_TYPE rac.yml
 }
 
 deleteandrun(){
