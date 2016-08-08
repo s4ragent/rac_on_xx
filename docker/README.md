@@ -31,18 +31,18 @@ download/unzip Oracle 12c Release 1 (12.1) Clusterware and Database software
     drwxr-xr-x 7 root root 4096 Jul  7  2014 database
     drwxr-xr-x 7 root root 4096 Jul  7  2014 grid
     
-execute create_racbase.sh  
+execute dockeruntil.sh  
 
     #cd rac_on_xx/docker
     #bash dockeruntil.sh runall
 
 if you want to stop first node
 
-    #bash create_racbase.sh stopnode 1
+    #bash create_racbase.sh stop 1
 
 and restart first node
 
-    #bash dockeruntil.sh startnode 1
+    #bash dockeruntil.sh start 1
     
 if you reboot host
 
