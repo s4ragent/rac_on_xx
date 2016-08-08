@@ -36,11 +36,11 @@ common_stop(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   ansible-playbook -i $VIRT_TYPE stopall.yml --limit $NODENAME
+   ansible-playbook -T 30 -i $VIRT_TYPE stopall.yml --limit $NODENAME
 }
 
 common_stopall(){
-   ansible-playbook -i $VIRT_TYPE stopall.yml
+   ansible-playbook -T 30 -i $VIRT_TYPE stopall.yml
 }
 
 common_start(){ 
