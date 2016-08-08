@@ -41,44 +41,61 @@
       - orainstrootsh
       - gridinstall
 
-
-  - name: "grid 1st root.sh"
+  - name: "grid root.sh"
     become: yes
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
-    register: grid1strootsh_result
-    when: inventory_hostname == groups["dbserver"][0]
+    run_once: true
+    delegate_to: "{{ item.1 }}"
+    with_indexed_items: play_hosts
+    register: gridrootsh_result
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
     tags:
-      - grid1strootsh
       - gridrootsh
       - gridinstall
 
-  - debug: var=grid1strootsh_result.stdout_lines
-    when: inventory_hostname == groups["dbserver"][0]
+  - debug: var=gridrootsh_result.stdout_lines
     tags:
-      - grid1strootsh
       - gridrootsh
       - gridinstall
 
-  - name: "grid other root.sh"
-    become: yes
-    shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
-    register: gridotherrootsh_result
-    when: inventory_hostname != groups["dbserver"][0]
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
-    tags:
-      - gridotherrootsh
-      - gridrootsh
-      - gridinstall
-
-  - debug: var=gridotherrootsh_result.stdout_lines
-    when: inventory_hostname != groups["dbserver"][0]
-    tags:
-      - gridotherrootsh
-      - gridrootsh
-      - gridinstall
+#  - name: "grid 1st root.sh"
+#    become: yes
+#    shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
+#    register: grid1strootsh_result
+#    when: inventory_hostname == groups["dbserver"][0]
+#    async: "{{ ASYNC }}"
+#    poll: "{{ POLL }}"
+#    tags:
+#      - grid1strootsh
+#      - gridrootsh
+#      - gridinstall
+#
+#  - debug: var=grid1strootsh_result.stdout_lines
+#    when: inventory_hostname == groups["dbserver"][0]
+#    tags:
+#      - grid1strootsh
+#      - gridrootsh
+#      - gridinstall
+#
+#  - name: "grid other root.sh"
+#    become: yes
+#    shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
+#    register: gridotherrootsh_result
+#    when: inventory_hostname != groups["dbserver"][0]
+#    async: "{{ ASYNC }}"
+#    poll: "{{ POLL }}"
+#    tags:
+#      - gridotherrootsh
+#      - gridrootsh
+#      - gridinstall
+#
+#  - debug: var=gridotherrootsh_result.stdout_lines
+#    when: inventory_hostname != groups["dbserver"][0]
+#    tags:
+#      - gridotherrootsh
+#      - gridrootsh
+#      - gridinstall
 
   - name: "asmca"
     become: yes
