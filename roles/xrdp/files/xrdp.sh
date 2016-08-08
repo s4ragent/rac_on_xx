@@ -17,4 +17,3 @@ systemctl start xrdp
 #exec xfce4-session
 #EOF
 #chmod +x /etc/skel/.Xclients
-touch /root/xrdpdone
