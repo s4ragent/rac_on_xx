@@ -46,10 +46,3 @@
     service: name=remote-fs.target enabled=yes
     tags:
       - nfsclient
-
-  - name: "sleep 300s"
-    become: yes
-    shell: sleep 300s
-    when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - nfsclient
