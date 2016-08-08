@@ -46,5 +46,3 @@
     service: name=remote-fs.target enabled=yes
     tags:
       - nfsclient
-
- 
