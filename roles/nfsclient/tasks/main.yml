@@ -47,9 +47,9 @@
     tags:
       - nfsclient
 
-  - name: "sleep 180s"
+  - name: "sleep 300s"
     become: yes
-    shell: sleep 180s
+    shell: sleep 300s
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - nfsclient
