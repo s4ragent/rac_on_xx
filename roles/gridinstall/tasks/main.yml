@@ -46,7 +46,7 @@
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     run_once: true
     delegate_to: "{{ item.1 }}"
-    with_indexed_items: play_hosts
+    with_indexed_items: "{{ play_hosts }}"
     register: gridrootsh_result
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
