@@ -151,6 +151,17 @@ EOF
 	systemctl start docker
 }
 
+heatrun(){
+LOG="`date "+%Y%m%d-%H%M%S"`.log"
+bash dockerutil.sh runall silent >$LOG  2>&1
+for i in `seq 1 $1`
+do
+    LOG="`date "+%Y%m%d-%H%M%S"`.log"
+    deleteall >$LOG  2>&1
+    runall >$LOG  2>&1
+done
+}
+
 case "$1" in
   "deleteandrun" ) shift;deleteandrun $*;;
   "runall" ) shift;runall $*;;
@@ -162,5 +173,6 @@ case "$1" in
   "stop" ) shift;stop $*;;
   "stopall" ) shift;stopall $*;;
   "buildimage") shift;buildimage $*;;
-  "dm_resize") shift;dm_resize $*;;  
+  "dm_resize") shift;dm_resize $*;;
+  "heatrun") shift;heatrun $*;;
 esac
