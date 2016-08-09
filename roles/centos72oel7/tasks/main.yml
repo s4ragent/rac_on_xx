@@ -1,1 +1,6 @@
-#
+---
+  - name: "centos2oel"
+    become: yes
+    shell: mv /etc/ntp.conf /etc/ntp.conf.original
+    tags:
+      - ntp
