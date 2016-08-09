@@ -22,3 +22,15 @@
     tags:
       - dbcaother
       - dbca
+
+  - name: "crsctl"
+    become: yes
+    become_user: grid
+    shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
+    register: dbca_crsctl_result
+    tags:
+      - dbca
+
+  - debug: var=dbca_crsctl_result.stdout_lines
+    tags:
+      - dbca
