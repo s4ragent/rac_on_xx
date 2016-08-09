@@ -99,6 +99,7 @@
       - ntp
 
   - name: "mv ntpd.conf"
+    become: yes
     shell: mv /etc/ntp.conf /etc/ntp.conf.original
     args:
       creates: /etc/ntp.conf.original
@@ -107,6 +108,7 @@
       - ntp
 
   - name: "rm  ntpd.pid"
+    become: yes
     file: path=/var/run/ntpd.pid state=absent
     ignore_errors: yes
     tags:
