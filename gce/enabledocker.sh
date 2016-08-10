@@ -11,6 +11,14 @@ if [ ! -e  /root/rac_on_xx ]; then
    git clone https://github.com/s4ragent/rac_on_xx /root/rac_on_xx
 fi
 
+HasSwap=`free | grep Swap | awk '{print $2}'`
+if [ "$HasSwap" = "0" ]; then
+	dd if=/dev/zero of=/var/tmp/swap.img bs=1M count=8192
+	mkswap /var/tmp/swap.img
+	sh -c 'echo "/var/tmp/swap.img swap swap defaults 0 0" >> /etc/fstab'
+	swapon -a
+fi
+
 curl -sSL https://get.docker.com/ | sh                                                                                                 
 systemctl enable docker                                                                                                                
 systemctl start docker                                                                                                                 
