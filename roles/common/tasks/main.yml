@@ -153,7 +153,7 @@
       - ddswap
       - swap
  
-   - name: "create swap"
+  - name: "create swap"
     become: yes
     shell: swapon -a
     when: ansible_swaptotal_mb < 1
