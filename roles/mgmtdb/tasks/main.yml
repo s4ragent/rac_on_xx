@@ -17,3 +17,16 @@
       - mgmtdb
       - gridinstall
 
+  - name: "crsctl"
+    become: yes
+    become_user: grid
+    shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
+    register: crsctl_result
+    tags:
+      - mgmtdb
+      - gridinstall
+
+  - debug: var=crsctl_result.stdout_lines
+    tags:
+      - mgmtdb
+      - gridinstall
