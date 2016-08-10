@@ -44,9 +44,9 @@
   - name: "grid root.sh"
     become: yes
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
-    run_once: true
+    when: inventory_hostname == groups["dbserver"][0]
     delegate_to: "{{ item.1 }}"
-    with_indexed_items: "{{ play_hosts }}"
+    with_indexed_items: "{{ groups['dbserver'] }}"
     register: gridrootsh_result
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
