@@ -7,6 +7,10 @@
       - vxlan
       - dns
       - nfsclient
+
+ - hosts: dbserver
+   serial: 1
+   roles:
       - gridinstall
       - createdg
       - dbinstall
