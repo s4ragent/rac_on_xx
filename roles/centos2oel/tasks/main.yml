@@ -10,27 +10,27 @@
   - name: "centos2oel"
     become: yes
     shell: curl -O https://linux.oracle.com/switch/centos2ol.sh && sh centos2ol.sh
-    when: centos2oel_rerult.rc == 0
+    when: centos2oel_rerult.rc != 0
     tags:
       - centos2oel
  
   - name: reboot
     become: yes
     shell: sleep 2s && /sbin/reboot
-    when: centos2oel_rerult.rc == 0
+    when: centos2oel_rerult.rc != 0
     tags:
       - centos2oel
 
   - name: wait for the server to go down (reboot)
     become: yes
     local_action: wait_for host= {{ ansible_ssh_host }} port=22 state=stopped
-    when: centos2oel_rerult.rc == 0
+    when: centos2oel_rerult.rc != 0
     tags:
       - centos2oel
       
   - name: wait for the server to come up
     become: yes
     local_action: wait_for host= {{ ansible_ssh_host }} port=22 delay=60
-    when: centos2oel_rerult.rc == 0
+    when: centos2oel_rerult.rc != 0
     tags:
       - centos2oel
