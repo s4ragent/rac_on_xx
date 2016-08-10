@@ -152,11 +152,19 @@
     tags:
       - ddswap
       - swap
+ 
+   - name: "create swap"
+    become: yes
+    shell: swapon -a
+    when: ansible_swaptotal_mb < 1
+    tags:
+      - swapon
+      - swap
       
   - name: "mount swap"
     become: yes
-    mount: name=swap src=/swap fstype=swap opts=sw state=mounted
+    mount: name=none src=/swap fstype=swap opts=sw state=present
     when: ansible_swaptotal_mb < 1
     tags:
-      - mountswap
+      - fstabswap
       - swap
