@@ -45,7 +45,7 @@
     become: yes
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     when: inventory_hostname == groups["dbserver"][0]
-    delegate_to: "{{ item.1 }}"
+    delegate_to: "{{ hostvars[item.1]['ansible_eth0']['ipv4']['address'] }}"
     with_indexed_items: "{{ groups['dbserver'] }}"
     register: gridrootsh_result
     async: "{{ ASYNC }}"
