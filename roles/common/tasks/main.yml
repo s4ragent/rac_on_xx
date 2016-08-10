@@ -163,7 +163,7 @@
       
   - name: "mount swap"
     become: yes
-    mount: name=none src=/swap fstype=swap opts=sw state=present
+    mount: name=swap src=/swap fstype=swap opts=defaults passno=0 dump=0 state=present
     when: ansible_swaptotal_mb < 1
     tags:
       - fstabswap
