@@ -150,6 +150,7 @@
     shell: dd if=/dev/zero of=/swap bs=1M count={{ ansible_memtotal_mb }} && mkswap /swap
     when: ansible_swaptotal_mb < 1
     tags:
+      - ddswap
       - swap
       
   - name: "mount swap"
@@ -157,4 +158,5 @@
     mount: name=swap src=/swap fstype=swap opts=defaults state=mounted
     when: ansible_swaptotal_mb < 1
     tags:
+      - mountswap
       - swap
