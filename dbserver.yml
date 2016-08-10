@@ -9,9 +9,13 @@
       - nfsclient
 
  - hosts: dbserver
-   serial: 1
+   serial: "{{ SERIAL }}"
    roles:
       - gridinstall
+
+ - hosts: dbserver
+   roles:
+      - mgmtdb
       - createdg
       - dbinstall
       - dbcaserial
