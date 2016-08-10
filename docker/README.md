@@ -36,17 +36,21 @@ execute dockeruntil.sh
     #cd rac_on_xx/docker
     #bash dockeruntil.sh runall
 
-if you want to stop first node
+if you want to stop first container
 
-    #bash create_racbase.sh stop 1
+    #bash dockeruntil.sh stop 1
 
-and restart first node
+and restart first container
 
     #bash dockeruntil.sh start 1
     
-if you reboot host
+if you reboot container
 
     #bash dockeruntil.sh startall
+
+if you want to delete all container
+
+    #bash dockeruntil.sh deleteall
 
 
 ## Author
