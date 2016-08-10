@@ -1,9 +1,16 @@
 ---
+  - name: "check oracle-release"
+    become: yes
+    shell: cat /etc/oracle-release
+    ignore_errors: true
+    register: centos2oel_rerult
+    tags:
+      - centos2oel
+
   - name: "centos2oel"
     become: yes
     shell: curl -O https://linux.oracle.com/switch/centos2ol.sh && sh centos2ol.sh
-    ignore_errors: true
-    register: centos2oel_rerult
+    when: centos2oel_rerult.rc == 0
     tags:
       - centos2oel
  
