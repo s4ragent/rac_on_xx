@@ -1,32 +1,9 @@
 ---
-  - name: "dbca serial first node"
-    become: yes
-    become_user: oracle
-    shell: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -createDatabase -templateName {{ TEMPLATENAME }} -gdbName {{ DBNAME }} -sid {{ SIDNAME }} -SysPassword {{ SYSPASSWORD }} -SystemPassword {{ SYSTEMPASSWORD }} -emConfiguration NONE -redoLogFileSize {{ REDOFILESIZE }} -recoveryAreaDestination {{ FRA_DISKGROUP_NAME }} -storageType ASM -asmSysPassword {{ ASMSYSPASSWORD }} -diskGroupName {{ DATA_DISKGROUP_NAME }} -characterSet {{ CHARSET }} -nationalCharacterSet {{ NCHAR }} -totalMemory {{ MEMORYTARGET }} -databaseType {{ DATABASETYPE }} -nodelist {{ NODENAME }}"
-    when: inventory_hostname == groups["dbserver"][0] and SERIAL == 1
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
-    tags:
-      - dbca1st
-      - dbca
-
-  - name: "dbca serial othernode"
-    become: yes
-    become_user: oracle
-    shell: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -addInstance -gdbName {{ DBNAME }} -nodelist {{ hostvars[item.1]['NODENAME'] }}"
-    with_indexed_items: "{{ groups['dbserver'] }}"
-    when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and SERIAL == 1
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
-    tags:
-      - dbcaother
-      - dbca
-
   - name: "dbca"
     become: yes
     become_user: oracle
     shell: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -createDatabase -templateName {{ TEMPLATENAME }} -gdbName {{ DBNAME }} -sid {{ SIDNAME }} -SysPassword {{ SYSPASSWORD }} -SystemPassword {{ SYSTEMPASSWORD }} -emConfiguration NONE -redoLogFileSize {{ REDOFILESIZE }} -recoveryAreaDestination {{ FRA_DISKGROUP_NAME }} -storageType ASM -asmSysPassword {{ ASMSYSPASSWORD }} -diskGroupName {{ DATA_DISKGROUP_NAME }} -characterSet {{ CHARSET }} -nationalCharacterSet {{ NCHAR }} -totalMemory {{ MEMORYTARGET }} -databaseType {{ DATABASETYPE }} -nodelist {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
-    when: inventory_hostname == groups["dbserver"][0] and SERIAL != 1
+    when: inventory_hostname == groups["dbserver"][0]
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
     tags:
