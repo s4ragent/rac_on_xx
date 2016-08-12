@@ -52,6 +52,5 @@ GRID_MEDIA2: linuxamd64_12102_grid_2of2.zip
 ################
 ASYNC: 86400
 POLL: 180
-SERIAL: 1
 ######DOWNLOAD
 GOOGLESTORAGE: gs://s4ragent2016720/
