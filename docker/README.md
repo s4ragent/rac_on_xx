@@ -4,15 +4,18 @@ rac_on_xx/docker
  Oracle RAC on docker
 
 ## Description
-|-|eth0|vxlan0|vxlan1|vxlan2|
+Storage=>NFS
+Network=>vxlan
+
+|hostname/containername/scan|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
 |nfs|10.153.0.50|-|-|-|
-||||||
-||||||
-||||||
-||||||
-||||||
-||||||
+|node001|||||
+|node002|||||
+|node003|||||
+|scan1|||||
+|scan2|||||
+|scan3|||||
 ||||||
 ||||||
 ||||||
@@ -26,7 +29,7 @@ rac_on_xx/docker
 - docker 1.12
 - ansible 2.0 or lateor
 - Oracle 12c Release 1 (12.1) Clusterware and Database software 
-
+- 1core CPU per container and  4GB Memory per container
 ## Install
 >git clone https://github.com/s4ragent/rac_on_xx
 
@@ -46,14 +49,23 @@ download/unzip Oracle 12c Release 1 (12.1) Clusterware and Database software on 
     drwxr-xr-x 7 root root 4096 Jul  7  2014 database
     drwxr-xr-x 7 root root 4096 Jul  7  2014 grid
     
-execute dockeruntil.sh  
+    
+execute dockeruntil.sh  . no option is default (3 container)
 
     #cd rac_on_xx/docker
     #bash dockeruntil.sh runall
 
+if you want to build 5 containers
+
+    #bash dockeruntil.sh runall 5
+
 if you want to stop first container
 
     #bash dockeruntil.sh stop 1
+
+if you want to stop nfs container
+
+    #bash dockeruntil.sh stop nfs
 
 and restart first container
 
