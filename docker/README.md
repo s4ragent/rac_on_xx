@@ -30,6 +30,7 @@ Network=>vxlan
 - ansible 2.0 or lateor
 - Oracle 12c Release 1 (12.1) Clusterware and Database software 
 - 1core CPU per container and  4GB Memory per container
+
 ## Install
 >git clone https://github.com/s4ragent/rac_on_xx
 
