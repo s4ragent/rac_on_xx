@@ -4,12 +4,13 @@ rac_on_xx/docker
  Oracle RAC on docker
 
 ## Description
+|hostname||
 
 ## Demo
 
 ## Requirement
 - Linux Kernel 3.18 or CentOS/RHEL/OEL 7.2 
-- docker 1.11
+- docker 1.12
 - Oracle 12c Release 1 (12.1) Clusterware and Database software 
 
 ## Install
