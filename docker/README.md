@@ -4,21 +4,22 @@ rac_on_xx/docker
  Oracle RAC on docker
 
 ## Description
-|role|eth0|vxlan0|vxlan1|vxlan2|
+|-|eth0|vxlan0|vxlan1|vxlan2|
 |--------|--------|-------|-------|-------|
-
+|nfs|10.153.0.50|-|-|-|
 ## Demo
 
 ## Requirement
 - Linux Kernel 3.18 or CentOS/RHEL/OEL 7.2 
 - docker 1.12
+- ansible 2.0 or lateor
 - Oracle 12c Release 1 (12.1) Clusterware and Database software 
 
 ## Install
 >git clone https://github.com/s4ragent/rac_on_xx
 
 ## Usage
-download/unzip Oracle 12c Release 1 (12.1) Clusterware and Database software
+download/unzip Oracle 12c Release 1 (12.1) Clusterware and Database software on docker host
 
     #mkdir -p /media
     #unzip linuxamd64_12102_database_1of2.zip -d /media
