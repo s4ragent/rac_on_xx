@@ -15,7 +15,7 @@ rac_on_xx/docker
 
 - Network infomation (ex. 3-containers)
 
-|hostname/container name|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
+|hostname/container name/network name|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
 |nfs|10.153.0.50|-|-|-|
 |node001|10.153.0.51|192.168.0.51|192.168.100.51|192.168.200.51|
