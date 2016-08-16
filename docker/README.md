@@ -31,11 +31,11 @@ rac_on_xx/docker
 
 - Storage infomation 
 
-|Diskgroup name|asm device path|redundancy|size|size(ex. 3-nodes RAC)|
-|--------|--------|-------|-------|-------|
-|VOTE|||||
-|DATA|||||
-|FRA|||||
+|Diskgroup name|use|asm device path|redundancy|size|size(ex. 3-nodes RAC)|
+|--------|--------|-------|-------|-------|-------|
+|VOTE||||||
+|DATA||||||
+|FRA||||||
 
 ## Demo (8-nodes RAC)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_01.png)
