@@ -34,9 +34,9 @@ rac_on_xx/docker
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_02.png)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_03.png)
 ## Requirement
-- Linux Kernel 3.18 or CentOS/RHEL/OEL 7.2 
+- ubuntu/debian(Kernel 3.18 or later), CentOS/RHEL/OEL 7.2 
 - docker 1.12
-- ansible 2.0 or lateor
+- ansible 2.0 or later
 - Oracle 12c Release 1 (12.1) Clusterware and Database software 
 - 1core CPU per container and  4GB Memory per container
 
@@ -89,6 +89,7 @@ if you want to delete all container
 
     #bash dockeruntil.sh deleteall
 
+## Licence
 
 ## Author
 @s4r_agent
