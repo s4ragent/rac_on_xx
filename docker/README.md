@@ -98,6 +98,7 @@ if you want to delete all containers
     #bash dockeruntil.sh deleteall
 
 ## Licence
+[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
 
 ## Author
 @s4r_agent
