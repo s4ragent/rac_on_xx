@@ -4,8 +4,8 @@ rac_on_xx/docker
  Oracle RAC on docker
 
 ## Description
-Storage=>NFS
-Network=>vxlan
+-Storage=>NFS with Flex ASM
+-Network=>vxlan
 
 |hostname/containername/scan|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
@@ -17,11 +17,9 @@ Network=>vxlan
 |node002.vip|-|192.168.0.152|-|-|
 |node003.vip|-|192.168.0.152|-|-|
 |scan1.vip|-|192.168.0.31|-|-|
-|scan2.vip|-||||
-|scan3.vip|-||||
-||||||
-||||||
-||||||
+|scan2.vip|-|192.168.0.32|-|-|
+|scan3.vip|-|192.168.0.33|-|-|
+
 
 ## Demo
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_01.png)
