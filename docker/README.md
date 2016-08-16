@@ -31,10 +31,10 @@ rac_on_xx/docker
 
 - Storage infomation 
 
-|Diskgroup name|use|asm device path|redundancy|size|size(ex. 3-nodes RAC)|
+|Diskgroup name|use|asm device path|redundancy|size(GB)|size(ex. 3-nodes RAC)|
 |--------|--------|-------|-------|-------|-------|
-|VOTE|ocr and voting disk|/u01/oradata/vote.img|external| 5120 + num_of_nodes * 1024 |8192|
-|DATA|Database files|/u01/oradata/data.img|external| 5120 + num_of_nodes * 1024 |8192|
+|VOTE|ocr and voting disk|/u01/oradata/vote.img|external| 5120 + ( num_of_nodes * 1024 )|8192|
+|DATA|Database files|/u01/oradata/data.img|external| 5120 + ( num_of_nodes * 1024 ) |8192|
 |FRA|flash recovery area|/u01/oradata/fra.img|external|5120|5120|
 
 ## Demo (8-nodes RAC)
