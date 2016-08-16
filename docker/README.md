@@ -29,6 +29,14 @@ rac_on_xx/docker
 |scan3.vip|-|192.168.0.33|-|-|
 
 
+- Storage infomation 
+
+|Diskgroup name|asm device path|redundancy|size|size(ex. 3-nodes RAC)|
+|--------|--------|-------|-------|-------|
+||||||
+||||||
+||||||
+
 ## Demo (8-nodes RAC)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_01.png)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_02.png)
