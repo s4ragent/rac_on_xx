@@ -4,9 +4,11 @@ rac_on_xx/docker
  Oracle RAC on docker
 
 ## Description
--Storage=>NFS with Flex ASM
--Network=>vxlan
+- 
+- Storage=>NFS with Flex ASM
+- Network=>vxlan
 
+- Network infomation (3containers)
 |hostname/containername/scan|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
 |nfs|10.153.0.50|-|-|-|
