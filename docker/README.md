@@ -33,9 +33,9 @@ rac_on_xx/docker
 
 |Diskgroup name|use|asm device path|redundancy|size|size(ex. 3-nodes RAC)|
 |--------|--------|-------|-------|-------|-------|
-|VOTE||||||
-|DATA||||||
-|FRA||||||
+|VOTE|ocr and voting disk|||||
+|DATA|Database|||||
+|FRA|flash recovery|||||
 
 ## Demo (8-nodes RAC)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_01.png)
