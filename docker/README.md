@@ -13,7 +13,7 @@ rac_on_xx/docker
 |L2 Network emulation|vxlan|
 |DNS|dnsmasq on each container|
 
-- Network infomation (3containers)
+- Network infomation (ex. 3-containers)
 
 |hostname/containername/scan|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
