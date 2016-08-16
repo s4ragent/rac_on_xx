@@ -85,10 +85,6 @@ if you want to execute oracle commands on node001 (ex. crsctl status res -t)
 
     #docker exec -ti node001 /u01/app/12.1.0/grid/bin/crsctl status res -t
 
-if you want to execute oracle commands on node001 (ex. crsctl status res -t)
-
-    #docker exec -ti node001 /u01/app/12.1.0/grid/bin/crsctl status res -t
-
 if you want to stop first container
 
     #bash dockeruntil.sh stop 1
