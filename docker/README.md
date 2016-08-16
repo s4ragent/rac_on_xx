@@ -108,5 +108,13 @@ if you want to delete all containers
 ## Licence
 [MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
 
+## Attention
+Each containers run with privileged flag. So 
+
+
+## Todo
+- remove --privileged flags
+
+
 ## Author
 @s4r_agent
