@@ -13,7 +13,7 @@ rac_on_xx/docker
 |L2 Network emulation|vxlan|
 |DNS|dnsmasq on each container|
 
-- Network infomation (ex. 3-containers)
+- Network infomation (ex. 3-nodes RAC)
 
 |hostname/container name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
@@ -29,7 +29,7 @@ rac_on_xx/docker
 |scan3.vip|-|192.168.0.33|-|-|
 
 
-## Demo
+## Demo (8-nodes RAC)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_01.png)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_02.png)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_03.png)
