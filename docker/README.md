@@ -81,11 +81,11 @@ and restart first container
 
     #bash dockeruntil.sh start 1
     
-if you reboot container
+if you want to start all containers
 
     #bash dockeruntil.sh startall
 
-if you want to delete all container
+if you want to delete all containers
 
     #bash dockeruntil.sh deleteall
 
