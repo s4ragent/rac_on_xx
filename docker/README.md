@@ -17,8 +17,8 @@ Network=>vxlan
 |node002.vip|||||
 |node003.vip|||||
 |scan1.vip|||||
-|scan2|||||
-|scan3|||||
+|scan2.vip|||||
+|scan3.vip|||||
 ||||||
 ||||||
 ||||||
