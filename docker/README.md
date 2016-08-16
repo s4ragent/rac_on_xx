@@ -68,14 +68,26 @@ download/unzip Oracle 12c Release 1 (12.1) Clusterware and Database software on 
     drwxr-xr-x 7 root root 4096 Jul  7  2014 grid
     
     
-execute dockeruntil.sh  . no option is default (3 container)
+execute dockeruntil.sh   (no option create 3-nodes RAC)
 
     #cd rac_on_xx/docker
     #bash dockeruntil.sh runall
 
-if you want to build 5 containers
+if you want to build 5-nodes RAC
 
     #bash dockeruntil.sh runall 5
+
+if you want to log in node001
+
+    #docker exec -ti node001 /bin/bash
+
+if you want to execute oracle commands on node001 (ex. crsctl status res -t)
+
+    #docker exec -ti node001 /u01/app/12.1.0/grid/bin/crsctl status res -t
+
+if you want to execute oracle commands on node001 (ex. crsctl status res -t)
+
+    #docker exec -ti node001 /u01/app/12.1.0/grid/bin/crsctl status res -t
 
 if you want to stop first container
 
