@@ -10,10 +10,13 @@ Network=>vxlan
 |hostname/containername/scan|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
 |nfs|10.153.0.50|-|-|-|
-|node001|||||
-|node002|||||
-|node003|||||
-|scan1|||||
+|node001|10.153.0.51||||
+|node002|10.153.0.52||||
+|node003|10.153.0.53||||
+|node001.vip|||||
+|node002.vip|||||
+|node003.vip|||||
+|scan1.vip|||||
 |scan2|||||
 |scan3|||||
 ||||||
