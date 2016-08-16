@@ -9,7 +9,7 @@ rac_on_xx/docker
 |||
 |-----|-----|
 |OS|Oracle Linux 7.x|
-|Storage|NFS with Flex ASM|
+|Storage|NFS4 with Flex ASM|
 |L2 Network emulation|vxlan|
 |DNS|dnsmasq on each container|
 
