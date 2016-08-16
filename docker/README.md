@@ -6,7 +6,7 @@ rac_on_xx/docker
 ## Description
 - basic infomation
 
-|######|######|
+|||
 |-----|-----|
 |OS|Oracle Linux 7.x|
 |Storage|NFS with Flex ASM|
