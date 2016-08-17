@@ -1,4 +1,12 @@
 ---
+  - name: "check vxlan installed"
+    become: yes
+    shell: cat /etc/vxlan/all.ip
+    ignore_errors: true
+    register: isvxlan_rerult
+    tags:
+      - vxlan_conf
+
   - name: "create /etc/vxlan"
     become: yes
     file: path=/etc/vxlan state=directory owner=root group=root mode=0755
@@ -34,21 +42,27 @@
     copy: src=vxlan.init dest=/etc/NetworkManager/dispatcher.d/10_vxlan owner=root group=root mode=0700
     tags:
       - vxlan_init
+      - vxlan_conf
       
   - name: "start vxlan (nm)"
     become: yes
     shell: bash /etc/NetworkManager/dispatcher.d/10_vxlan eth0 up
+    when: isvxlan_rerult.rc != 0
     tags:
       - vxlan_init
+      - vxlan_conf
       
   - name: "start_enable nm_dispacher"
     become: yes
     service: name=NetworkManager-dispatcher.service state=started enabled=yes
     tags:
       - vxlan_init
-
+      - vxlan_conf
+      
   - name: "reload vxlan(nm)"
     become: yes
     shell: bash /etc/NetworkManager/dispatcher.d/10_vxlan reload
     tags:
       - vxlan_reload
+      - vxlan_conf
+      
