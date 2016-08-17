@@ -13,7 +13,7 @@ rac_on_xx/docker
 |L2 Network emulation|vxlan|
 |DNS|dnsmasq on each container|
 
-- Network infomation (ex. 3-nodes RAC)
+- Network infomation (e.g. 3-nodes RAC)
 
 |hostname/container name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
@@ -31,7 +31,7 @@ rac_on_xx/docker
 
 - Storage infomation 
 
-|Diskgroup name|use|asm device path|redundancy|size(GB)|size(GB)(ex. 3-nodes RAC)|
+|Diskgroup name|use|asm device path|redundancy|size(GB)|size(GB)(e.g. 3-nodes RAC)|
 |--------|--------|-------|-------|-------|-------|
 |VOTE|ocr and voting disk|/u01/oradata/vote.img|external| 5120 + ( num_of_nodes * 1024 )|8192|
 |DATA|Database files|/u01/oradata/data.img|external| 5120 + ( num_of_nodes * 1024 ) |8192|
@@ -41,12 +41,17 @@ rac_on_xx/docker
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_01.png)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_02.png)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/rac_on_docker_03.png)
+
 ## Requirement
 - ubuntu/debian(Kernel 3.18 or later), CentOS/RHEL/OEL 7.2 
 - docker 1.12
 - ansible 2.0 or later
 - Oracle 12c Release 1 (12.1) Clusterware and Database software 
 - 1core CPU per container and  4GB Memory per container
+
+## Attention
+Each container run with privileged flag (Each container enables to access to all devices on the Docker host ). 
+It may be dangerous.
 
 ## Install
 >git clone https://github.com/s4ragent/rac_on_xx
@@ -107,10 +112,6 @@ if you want to delete all containers
 
 ## Licence
 [MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
-
-## Attention
-Each containers run with privileged flag. So 
-
 
 ## Todo
 - remove --privileged flags
