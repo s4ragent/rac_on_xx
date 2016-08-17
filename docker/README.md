@@ -115,8 +115,7 @@ if you want to delete all containers
 [MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
 
 ## Todo
-- remove --privileged flags
-
+- Docker container run without privileged flags
 
 ## Author
 @s4r_agent
