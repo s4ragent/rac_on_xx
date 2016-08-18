@@ -1,2 +1,21 @@
 - include: nfsserver.yml
-- include: dbserver.yml
+ - hosts: dbserver
+   roles:
+      - centos2oel
+      - security
+      - common
+      - vxlan
+      - dns
+      - nfsclient
+
+ - hosts: dbserver
+   serial: 1
+   roles:
+      - gridinstall
+
+ - hosts: dbserver
+   roles:
+      - mgmtdb
+      - createdg
+      - dbinstall
+      - dbcaserial
