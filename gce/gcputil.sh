@@ -65,7 +65,7 @@ run(){
 
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodecount                                  #####
-runall(){
+runonly(){
 	if [ "$1" = "" ]; then
 		nodecount=3
 	else
@@ -101,6 +101,11 @@ runall(){
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
 #	CLIENTIP="${SEGMENT}$NUM"	
 #	run "client01" $CLIENTIP $CLIENTNUM "client"
+	
+}
+
+runall(){
+	runonly $*
 	ansible-playbook -f 64 -T 240 -i $VIRT_TYPE rac.yml
 }
 
@@ -165,6 +170,7 @@ done
 
 case "$1" in
   "deleteandrun" ) shift;deleteandrun $*;;
+  "runonly" ) shift;runonly $*;;
   "runall" ) shift;runall $*;;
   "run" ) shift;run $*;;
   "startall" ) shift;startall $*;;
