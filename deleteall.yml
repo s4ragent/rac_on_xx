@@ -1,4 +1,11 @@
 ---
+ - hosts: dbclient
+   connection: local
+   tasks:
+     - name: delete container dbservers
+       shell: "{{ DELETE_CMD }} {{ INSTANCE_ID }}"
+       ignore_errors: yes
+
  - hosts: dbserver
    connection: local
    tasks:
