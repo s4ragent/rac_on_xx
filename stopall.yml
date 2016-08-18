@@ -2,10 +2,9 @@
  - hosts: all:!nfs
    connection: local
    tasks:
-     - name: stop container dbservers
+     - name: stop container without nfs
        shell: "{{ STOP_CMD }} {{ INSTANCE_ID }}" 
        ignore_errors: yes
-
 
  - hosts: nfs
    tasks:
