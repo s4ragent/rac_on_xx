@@ -1,4 +1,11 @@
-- include: nfsserver.yml
+---
+ - hosts: nfs
+   roles:
+      - security
+      - vxlan
+      - dns
+      - nfsserver
+
  - hosts: dbserver
    roles:
       - centos2oel
