@@ -1,4 +1,6 @@
  - hosts: nfs
    roles:
       - security
+      - vxlan
+      - dns
       - nfsserver
