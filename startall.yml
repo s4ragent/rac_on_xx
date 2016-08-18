@@ -12,3 +12,10 @@
      - name: start container dbservers
        shell: "{{ START_CMD }} {{ INSTANCE_ID }}" 
        ignore_errors: yes
+
+ - hosts: dbclient
+   connection: local
+   tasks:
+     - name: start container dbservers
+       shell: "{{ START_CMD }} {{ INSTANCE_ID }}" 
+       ignore_errors: yes
