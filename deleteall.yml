@@ -2,6 +2,6 @@
  - hosts: all
    connection: local
    tasks:
-     - name: delete container dbservers
+     - name: delete all container
        shell: "{{ DELETE_CMD }} {{ INSTANCE_ID }}"
        ignore_errors: yes
