@@ -1,4 +1,11 @@
 ---
+ - hosts: dbclient
+   connection: local
+   tasks:
+     - name: stop container dbservers
+       shell: "{{ STOP_CMD }} {{ INSTANCE_ID }}" 
+       ignore_errors: yes
+
  - hosts: dbserver
    connection: local
    tasks:
