@@ -106,11 +106,11 @@ runonly(){
 
 runall(){
 	runonly $*
-	ansible-playbook -f 64 -T 240 -i $VIRT_TYPE rac.yml
+	execansible rac.yml
 }
 
-deleteandrun(){
-	deleteall && runall $1
+execansible(){
+   ansible-playbook -f 64 -T 240 -i $VIRT_TYPE $*
 }
 
 deleteall(){
@@ -169,7 +169,7 @@ done
 }
 
 case "$1" in
-  "deleteandrun" ) shift;deleteandrun $*;;
+  "execansible" ) shift;execansible $*;;
   "runonly" ) shift;runonly $*;;
   "runall" ) shift;runall $*;;
   "run" ) shift;run $*;;
