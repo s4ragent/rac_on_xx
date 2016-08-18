@@ -1,18 +1,18 @@
 ---
- - hosts: nfs
+ - hosts: all
    roles:
+      - centos2oel
       - security
       - vxlan
       - dns
+
+ - hosts: nfs
+   roles:
       - nfsserver
 
  - hosts: dbserver
    roles:
-      - centos2oel
-      - security
       - common
-      - vxlan
-      - dns
       - nfsclient
 
  - hosts: dbserver
