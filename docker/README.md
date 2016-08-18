@@ -75,12 +75,12 @@ download/unzip Oracle 12c Release 1 (12.1) Clusterware and Database software on 
     
     
 execute dockeruntil.sh   (no option create 3-nodes RAC)
-    ##create 3-nodes RAC
+    #create 3-nodes RAC##
     #cd rac_on_xx/docker
     #bash dockeruntil.sh runall
 
 if you want to build 5-nodes RAC
-    ##create 5-nodes RAC
+    #create 5-nodes RAC##
     #cd rac_on_xx/docker
     #bash dockeruntil.sh runall 5
 
