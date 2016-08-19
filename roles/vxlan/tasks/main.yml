@@ -60,7 +60,7 @@
       
   - name: "reload vxlan(nm)"
     become: yes
-    shell: bash /etc/NetworkManager/dispatcher.d/10_vxlan reload
+    shell: bash /usr/local/bin/vxlan.init reload
     tags:
       - vxlan_reload
       - vxlan_conf
