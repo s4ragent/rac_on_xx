@@ -110,7 +110,7 @@ runall(){
 }
 
 execansible(){
-   ansible-playbook -f 64 -T 240 -i $VIRT_TYPE $*
+   ansible-playbook -f 64 -T 600 -i $VIRT_TYPE $*
 }
 
 deleteall(){
