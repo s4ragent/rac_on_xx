@@ -37,7 +37,7 @@ rac_on_xx/docker
 |DATA|Database files|/u01/oradata/data.img|external| 5120 + ( num_of_nodes * 1024 ) |8192|
 |FRA|flash recovery area|/u01/oradata/fra.img|external|5120|5120|
 
-## Demo (8-nodes RAC)
+## Demo (12-nodes RAC on ubuntu docker)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker01.png)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker02.png)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker03.png)
