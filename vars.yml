@@ -5,7 +5,7 @@ BASE_IP: 50
 NODEPREFIX: node
 DOMAIN_NAME: public
 SCAN_NAME: scan
-NFS_ROOT: /nfs
+NFS_ROOT: /u01
 ORA_DATA: /u01/oradata
 MOUNT_PATH: /u01
 ORA_ORACLE_BASE: /u01/app/oracle
