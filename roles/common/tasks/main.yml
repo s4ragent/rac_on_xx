@@ -89,8 +89,6 @@
   - name: "delete ssh key"
     local_action: shell rm -rf id_rsa*
     run_once: true
-    args:
-      creates: id_rsa
     tags:
       - sshkey
 
