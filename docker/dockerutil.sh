@@ -7,8 +7,9 @@ sudokey="raconxx"
 #### docker user specific value  ###################
 DOCKERSUBNET="10.153.0.0/16"
 BRNAME="raconxx"
-DeviceMapper_BaseSize="--storage-opt size=100G"
-#DOCKER_VOLUME_PATH="/rac_on_docker"
+#DeviceMapper_BaseSize="--storage-opt size=100G"
+
+DOCKER_VOLUME_PATH="/rac_on_docker"
 ####################################################
 ####common VIRT_TYPE specific value ################
 VIRT_TYPE="docker"
@@ -40,12 +41,15 @@ run(){
 	IsDeviceMapper=`docker info | grep devicemapper | grep -v grep | wc -l`
 
 	if [ "$IsDeviceMapper" != "0" ]; then
-     DeviceMapper_BaseSize=$DeviceMapper_BaseSize
+		mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
+		StorageOps="-v $DOCKER_VOLUME_PATH/$NODENAME:/u01:rw"
+     #DeviceMapper_BaseSize=$DeviceMapper_BaseSize
 	else
-      DeviceMapper_BaseSize=""
+      #DeviceMapper_BaseSize=""
 	fi
    
-    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
+#    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
+    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
@@ -119,6 +123,7 @@ deleteall(){
    
 	#### VIRT_TYPE specific processing ###
 	rm -rf ${sudokey}*
+	rm -rf $DOCKER_VOLUME_PATH
 	docker network rm $BRNAME
    
 }
