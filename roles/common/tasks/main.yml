@@ -85,6 +85,16 @@
     tags:
       - sshkey
 
+
+  - name: "delete ssh key"
+    local_action: shell rm -rf id_rsa*
+    run_once: true
+    args:
+      creates: id_rsa
+    tags:
+      - sshkey
+
+
   - name: "copy limits.nonf"
     become: yes
     copy: src=limits.conf dest=/etc/security/limits.conf mode=644 owner=root group=root
