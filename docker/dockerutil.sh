@@ -46,6 +46,7 @@ run(){
      #DeviceMapper_BaseSize=$DeviceMapper_BaseSize
 	else
       #DeviceMapper_BaseSize=""
+      		StorageOps=""
 	fi
    
 #    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
