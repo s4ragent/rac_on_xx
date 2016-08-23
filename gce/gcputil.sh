@@ -12,8 +12,8 @@ BRNAME="raconxx"
 DOCKER_VOLUME_PATH="/rac_on_docker"
 ####################################################
 ####common VIRT_TYPE specific value ################
-VIRT_TYPE="docker"
-DELETE_CMD="docker rm -f"
+VIRT_TYPE="gce"
+DELETE_CMD="gcloud compute instances "
 START_CMD="docker start"
 STOP_CMD="docker stop"
 INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
