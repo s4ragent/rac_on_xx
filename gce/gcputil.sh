@@ -5,7 +5,7 @@ sudoer="opc"
 sudokey="raconxx"
 ####################################################
 #### docker user specific value  ###################
-DOCKERSUBNET="10.153.0.0/16"
+MACHINE_TYPE="10.153.0.0/16"
 BRNAME="raconxx"
 #DeviceMapper_BaseSize="--storage-opt size=100G"
 
