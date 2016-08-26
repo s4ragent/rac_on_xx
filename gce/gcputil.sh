@@ -19,7 +19,7 @@ STOP_CMD="gcloud compute instances stop"
 INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
 ####################################################
 ####google cloud  system  specific value ##################
-IMAGE="s4ragent/rac_on_xx:OEL7"
+IMAGE="centos-7"
 #CAP_OPS="--cap-add=NET_ADMIN"
 DOCKER_CAPS="--privileged=true --security-opt seccomp=unconfined"
 #DOCKER_CAPS="--cap-add=ALL --security-opt=seccomp=unconfined"
@@ -38,19 +38,7 @@ run(){
 	NODENUMBER=$3
 	HOSTGROUP=$4
 	
-	IsDeviceMapper=`docker info | grep devicemapper | grep -v grep | wc -l`
-
-	if [ "$IsDeviceMapper" != "0" ]; then
-		mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
-		StorageOps="-v $DOCKER_VOLUME_PATH/$NODENAME:/u01:rw"
-     #DeviceMapper_BaseSize=$DeviceMapper_BaseSize
-	else
-      #DeviceMapper_BaseSize=""
-      		StorageOps=""
-	fi
-   
-#    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
-    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
+    INSTANCE_ID=$(gcloud compute instances create $NODENAME --machine-type $MACHINE_TYPE --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size $3)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
