@@ -13,12 +13,12 @@ DOCKER_VOLUME_PATH="/rac_on_docker"
 ####################################################
 ####common VIRT_TYPE specific value ################
 VIRT_TYPE="gce"
-DELETE_CMD="gcloud compute instances "
-START_CMD="docker start"
-STOP_CMD="docker stop"
+DELETE_CMD="gcloud compute instances delete"
+START_CMD="gcloud compute instances start"
+STOP_CMD="gcloud compute instances stop"
 INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
 ####################################################
-####docker system  specific value ##################
+####google cloud  system  specific value ##################
 IMAGE="s4ragent/rac_on_xx:OEL7"
 #CAP_OPS="--cap-add=NET_ADMIN"
 DOCKER_CAPS="--privileged=true --security-opt seccomp=unconfined"
