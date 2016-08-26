@@ -6,10 +6,8 @@ sudokey="raconxx"
 ####################################################
 #### docker user specific value  ###################
 MACHINE_TYPE="10.153.0.0/16"
-BRNAME="raconxx"
-#DeviceMapper_BaseSize="--storage-opt size=100G"
-
-DOCKER_VOLUME_PATH="/rac_on_docker"
+NODE_DISK_SIZE="30GB"
+STORAGE_DISK_SIZE="200GB"
 ####################################################
 ####common VIRT_TYPE specific value ################
 VIRT_TYPE="gce"
