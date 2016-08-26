@@ -41,19 +41,8 @@ run(){
     INSTANCE_ID=$(gcloud compute instances create $NODENAME --machine-type $MACHINE_TYPE --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image centos-7 --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size $3)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
-	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
+#	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
-	docker exec $NODENAME useradd $sudoer                                                                                                          
-	docker exec $NODENAME bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
-	docker exec $NODENAME bash -c "mkdir /home/$sudoer/.ssh"
-	docker cp ${sudokey}.pub $NODENAME:/home/$sudoer/.ssh/authorized_keys
-	docker exec $NODENAME bash -c "chown -R ${sudoer} /home/$sudoer/.ssh && chmod 700 /home/$sudoer/.ssh && chmod 600 /home/$sudoer/.ssh/*"
-
-	sleep 10
-	docker exec $NODENAME systemctl start sshd
-	docker exec $NODENAME systemctl enable sshd
-	docker exec $NODENAME systemctl start NetworkManager
-	docker exec $NODENAME systemctl enable NetworkManager
 }
 
 #### VIRT_TYPE specific processing  (must define)###
