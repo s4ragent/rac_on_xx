@@ -5,8 +5,8 @@ sudoer="opc"
 sudokey="raconxx"
 ####################################################
 #### docker user specific value  ###################
-#REGION="us-west1-b"
-REGION="asia-east1-c"
+#ZONE="us-west1-b"
+ZONE="asia-east1-c"
 #MACHINE_TYPE="n1-highmem-2"
 MACHINE_TYPE="n1-standard-1"
 NODE_DISK_SIZE="30GB"
@@ -34,7 +34,7 @@ run(){
 	NODENUMBER=$3
 	HOSTGROUP=$4
 	
-    INSTANCE_ID=$(gcloud compute instances create $NODENAME --machine-type $MACHINE_TYPE --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image $IMAGE --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size $DISKSIZE)
+    CREATE_RESULT=$(gcloud compute instances create $NODENAME --machine-type $MACHINE_TYPE --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image $IMAGE --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size $DISKSIZE --zone $ZONE)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 #	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
