@@ -6,6 +6,7 @@ sudokey="raconxx"
 ####################################################
 #### docker user specific value  ###################
 MACHINE_TYPE="n1-standard-1"
+#MACHINE_TYPE="n1-highmem-2"
 NODE_DISK_SIZE="30GB"
 STORAGE_DISK_SIZE="200GB"
 ####################################################
