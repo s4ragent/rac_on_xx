@@ -5,7 +5,7 @@ sudoer="opc"
 sudokey="raconxx"
 ####################################################
 #### docker user specific value  ###################
-MACHINE_TYPE="10.153.0.0/16"
+MACHINE_TYPE="n1-standard-1"
 NODE_DISK_SIZE="30GB"
 STORAGE_DISK_SIZE="200GB"
 ####################################################
