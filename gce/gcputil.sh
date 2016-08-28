@@ -27,14 +27,14 @@ cd ..
 source ./commonutil.sh
 
 #### VIRT_TYPE specific processing  (must define)###
-#$1 nodename $2 ip $3 nodenumber $4 hostgroup#####
+#$1 nodename $2 disksize $3 nodenumber $4 hostgroup#####
 run(){
 	NODENAME=$1
-	IP=$2
+	DISKSIZE=$2
 	NODENUMBER=$3
 	HOSTGROUP=$4
 	
-    INSTANCE_ID=$(gcloud compute instances create $NODENAME --machine-type $MACHINE_TYPE --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image $IMAGE --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size $3)
+    INSTANCE_ID=$(gcloud compute instances create $NODENAME --machine-type $MACHINE_TYPE --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image $IMAGE --boot-disk-type "pd-ssd" --boot-disk-device-name $name --boot-disk-size $DISKSIZE)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 #	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
