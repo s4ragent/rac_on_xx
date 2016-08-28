@@ -39,6 +39,8 @@ run(){
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 #	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
+cat $CREATE_RESULT
+
 }
 
 #### VIRT_TYPE specific processing  (must define)###
