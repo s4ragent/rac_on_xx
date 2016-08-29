@@ -45,6 +45,12 @@ run(){
 	common_update_all_yml
 	common_update_ansible_inventory $NODENAME $External_IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	
+	gcloud compute instances add-metadata $INSTANCE_ID --metadata-from-file ssh-keys=${sudokey}.pub
+	
+	
+	
+	
+	
 	echo $Internal_IP
 
 }
@@ -59,7 +65,7 @@ runonly(){
 	fi
 	
 	if [  ! -e $sudokey ] ; then
-		ssh-keygen -t rsa -P "" -f $sudokey
+		ssh-keygen -t rsa -P "" -f $sudokey -C $sudoer
 		chmod 600 ${sudokey}*
 	fi
    
