@@ -15,8 +15,11 @@ STORAGE_DISK_SIZE="200GB"
 ####common VIRT_TYPE specific value ################
 VIRT_TYPE="gce"
 DELETE_CMD="gcloud compute instances delete"
+DELETE_CMD_OPS="--zone $ZONE -q"
 START_CMD="gcloud compute instances start"
+START_CMD_OPS="--zone $ZONE -q"
 STOP_CMD="gcloud compute instances stop"
+STOP_CMD_OPS="--zone $ZONE -q"
 INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
 ####################################################
 ####google cloud  system  specific value ##################
