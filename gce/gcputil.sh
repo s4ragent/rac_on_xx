@@ -115,8 +115,9 @@ startall(){
 }
 
 replaceinventory(){
-	for INSTANCE_NAME in $VIRT_TYPE/host_vars/*
+	for FILE in $VIRT_TYPE/host_vars/*
 	do
+		INSTANCE_NAME=`echo $FILE | awk -F '/' '{print $2}'`
 		echo $INSTANCE_NAME
 	done
 }
