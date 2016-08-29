@@ -114,6 +114,12 @@ startall(){
 	common_startall $*
 }
 
+replaceinventory(){
+	for INSTANCE_NAME $VIRT_TYPE/host_vars/*
+	do
+		echo $INSTANCE_NAME
+	done
+}
 
 heatrun(){
 for i in `seq 1 $2`
@@ -129,6 +135,7 @@ done
 
 case "$1" in
   "execansible" ) shift;execansible $*;;
+  "replaceinventory" ) shift;replaceinventory $*;;
   "runonly" ) shift;runonly $*;;
   "runall" ) shift;runall $*;;
   "run" ) shift;run $*;;
