@@ -96,9 +96,6 @@ deleteall(){
    
 	#### VIRT_TYPE specific processing ###
 	rm -rf ${sudokey}*
-	rm -rf $DOCKER_VOLUME_PATH
-	docker network rm $BRNAME
-   
 }
 
 stop(){ 
@@ -117,22 +114,6 @@ startall(){
 	common_startall $*
 }
 
-buildimage(){
-	docker build -t $IMAGE --no-cache=true ./images/OEL7
-}
-
-dm_resize(){
-	systemctl stop docker
-	rm -rf /var/lib/docker
-	mkdir -p /etc/systemd/system/docker.service.d
-	cat > /etc/systemd/system/docker.service.d/storage.conf <<'EOF'
-[Service]
-ExecStart=
-ExecStart=/usr/bin/dockerd --storage-opt dm.basesize=100G --storage-opt dm.loopdatasize=1024G --storage-opt dm.loopmetadatasize=4G --storage-opt dm.fs=xfs --storage-opt dm.blocksize=512K
-EOF
-	systemctl daemon-reload
-	systemctl start docker
-}
 
 heatrun(){
 for i in `seq 1 $2`
@@ -157,7 +138,5 @@ case "$1" in
   "deleteall" ) shift;deleteall $*;;
   "stop" ) shift;stop $*;;
   "stopall" ) shift;stopall $*;;
-  "buildimage") shift;buildimage $*;;
-  "dm_resize") shift;dm_resize $*;;
   "heatrun") shift;heatrun $*;;
 esac
