@@ -41,6 +41,7 @@ run(){
 	IP=`echo $CREATE_RESULT | awk '{print $5}'`
 	
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
+	common_update_all_yml
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	
 	echo $IP
