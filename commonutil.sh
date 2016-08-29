@@ -119,3 +119,9 @@ if [ "$1" != "" ]; then
 fi
 
 }
+
+
+#$1 instance_name $2 external_IP
+common_replaceinventory(){
+	sed -i -e "s/$1 ansible_ssh_host=.*\$/$1 ansible_ssh_host=$2/g" *.txt
+}
