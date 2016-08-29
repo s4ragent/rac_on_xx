@@ -115,7 +115,7 @@ startall(){
 }
 
 replaceinventory(){
-	for INSTANCE_NAME $VIRT_TYPE/host_vars/*
+	for INSTANCE_NAME in $VIRT_TYPE/host_vars/*
 	do
 		echo $INSTANCE_NAME
 	done
