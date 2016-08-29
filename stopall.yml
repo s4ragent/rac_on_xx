@@ -7,7 +7,6 @@
        ignore_errors: yes
 
  - hosts: nfs
-   max_fail_percentage: 150
    tasks:
      - name: "stop nfs-server.service"
        become: yes
