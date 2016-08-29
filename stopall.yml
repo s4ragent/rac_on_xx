@@ -3,7 +3,7 @@
    connection: local
    tasks:
      - name: stop container without nfs
-       shell: "{{ STOP_CMD }} {{ INSTANCE_ID }}" 
+       shell: "{{ STOP_CMD }} {{ INSTANCE_ID }} {{ STOP_CMD_OPS }}" 
        ignore_errors: yes
 
  - hosts: nfs
@@ -17,5 +17,5 @@
    connection: local
    tasks:
      - name: stop container nfs
-       shell: "{{ STOP_CMD }} {{ INSTANCE_ID }}" 
+       shell: "{{ STOP_CMD }} {{ INSTANCE_ID }} {{ STOP_CMD_OPS }}" 
        ignore_errors: yes
