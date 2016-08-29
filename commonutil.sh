@@ -114,6 +114,8 @@ EOF
 
 fi
 
-echo "$1" >> $VIRT_TYPE/group_vars/all.yml
+if [ "$1" != "" ]; then
+	echo "$1" >> $VIRT_TYPE/group_vars/all.yml
+fi
 
 }
