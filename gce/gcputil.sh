@@ -45,7 +45,7 @@ run(){
 	common_update_all_yml
 	common_update_ansible_inventory $NODENAME $External_IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	
-	gcloud compute instances add-metadata $INSTANCE_ID --metadata-from-file ssh-keys=${sudokey}.pub
+	gcloud compute instances add-metadata $INSTANCE_ID --metadata-from-file ssh-keys=${sudokey}.pub --zone $ZONE
 	
 	
 	
