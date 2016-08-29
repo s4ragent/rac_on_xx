@@ -18,6 +18,7 @@
     become: yes
     shell: sleep 2s && /sbin/reboot
     when: centos2oel_rerult.rc != 0
+    ignore_errors: true
     tags:
       - centos2oel
 
