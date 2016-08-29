@@ -118,7 +118,7 @@ replaceinventory(){
 	for FILE in $VIRT_TYPE/host_vars/*
 	do
 		INSTANCE_NAME=`echo $FILE | awk -F '/' '{print $3}'`
-		LIST_RESULT=$(gcloud compute instances list  $INSTANCE_NAME --zones $ZONE)
+		LIST_RESULT=$(gcloud compute instances list  $INSTANCE_NAME --zones $ZONE | tail -n 1)
 		Internal_IP=`echo $LIST_RESULT | awk '{print $4}'`
 		echo $Internal_IP
 	done
