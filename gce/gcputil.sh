@@ -38,14 +38,14 @@ run(){
 	HOSTGROUP=$4
 	INSTANCE_ID=$NODENAME
 	CREATE_RESULT=$(gcloud compute instances create $NODENAME --machine-type $MACHINE_TYPE --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image $IMAGE --boot-disk-type "pd-ssd" --boot-disk-device-name $NODENAME --boot-disk-size $DISKSIZE --zone $ZONE | tail -n 1)
-	IP=`echo $CREATE_RESULT | awk '{print $5}'`
+	External_IP=`echo $CREATE_RESULT | awk '{print $5}'`
+	Internal_IP=`echo $CREATE_RESULT | awk '{print $4}'`
 	
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_all_yml
-	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
+	common_update_ansible_inventory $NODENAME $External_IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	
-	echo $IP
-
+	echo $Internal_IP
 
 }
 
