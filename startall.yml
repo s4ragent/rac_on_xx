@@ -3,12 +3,12 @@
    connection: local
    tasks:
      - name: start container nfs
-       shell: "{{ START_CMD }} {{ INSTANCE_ID }}" 
+       shell: "{{ START_CMD }} {{ INSTANCE_ID }} {{ START_CMD_OPS }}" 
        ignore_errors: yes
 
  - hosts: all:!nfs
    connection: local
    tasks:
      - name: start container without nfs
-       shell: "{{ START_CMD }} {{ INSTANCE_ID }}" 
+       shell: "{{ START_CMD }} {{ INSTANCE_ID }} {{ START_CMD_OPS }}" 
        ignore_errors: yes
