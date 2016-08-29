@@ -14,8 +14,11 @@ DOCKER_VOLUME_PATH="/rac_on_docker"
 ####common VIRT_TYPE specific value ################
 VIRT_TYPE="docker"
 DELETE_CMD="docker rm -f"
+DELETE_CMD_OPS=""
 START_CMD="docker start"
+START_CMD_OPS=""
 STOP_CMD="docker stop"
+STOP_CMD_OPS=""
 INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
 ####################################################
 ####docker system  specific value ##################
