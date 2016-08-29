@@ -42,6 +42,8 @@ run(){
 	
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
+	
+	echo $IP
 
 
 }
@@ -55,29 +57,20 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	HasNework=`docker network ls | grep racbr | wc -l`
-	if [ "$HasNework" = "0" ]; then
-		docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
-	fi
-	
 	if [  ! -e $sudokey ] ; then
 		ssh-keygen -t rsa -P "" -f $sudokey
 		chmod 600 ${sudokey}*
 	fi
    
-	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 
-	NFSIP="${SEGMENT}$BASE_IP"
-	run "nfs" $NFSIP 0 "nfs"
+	NFSIP=`run nfs $STORAGE_DISK_SIZE 0 nfs`
 	
 	common_update_all_yml "NFS_SERVER: $NFSIP"
 	
 	for i in `seq 1 $nodecount`;
 	do
-		NUM=`expr $BASE_IP + $i`
-		NODEIP="${SEGMENT}$NUM"
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		run $NODENAME $NODEIP $i "dbserver"
+		run $NODENAME $NODE_DISK_SIZE $i "dbserver"
 	done
 	
 #	CLIENTNUM=70
