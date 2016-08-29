@@ -93,7 +93,7 @@ runonly(){
 
 runall(){
 	runonly $*
-	execansible rac.yml
+	execansible rac.yml -vvv
 }
 
 execansible(){
