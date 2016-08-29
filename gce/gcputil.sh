@@ -68,8 +68,9 @@ runonly(){
 		#ssh-keygen -t rsa -P "" -f $sudokey -C $sudoer
 		ssh-keygen -t rsa -P "" -f tempkey -C $sudoer
 		echo "$sudoer:"`cat tempkey.pub` > ${sudokey}.pub
-		chmod 600 ${sudokey}*
-		rm -rf tempkey*
+		rm -f tempkey.pub
+      mv -f tempkey ${sudokey}
+      chmod 600 ${sudokey}*
 	fi
    
 
