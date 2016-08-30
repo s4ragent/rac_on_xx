@@ -1,4 +1,10 @@
 ---
+  - name: "disable fastestmirror"
+    become: yes
+    shell: sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf
+    tags:
+      - centos2oel
+
   - name: "check oracle-release"
     become: yes
     shell: cat /etc/oracle-release
