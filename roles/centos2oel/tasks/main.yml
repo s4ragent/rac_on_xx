@@ -32,7 +32,7 @@
     become: yes
     shell: sleep 2 && shutdown -r now
     when: centos2oel_rerult.rc != 0
-    async: 1
+    async: 0
     poll: 0
     ignore_errors: true
     tags:
