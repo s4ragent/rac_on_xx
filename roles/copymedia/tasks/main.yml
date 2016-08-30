@@ -1,1 +1,18 @@
-#
+---
+  - name: "check grid_install_media"
+    become: yes
+    shell: cat /media/grid/response/grid_install.rsp
+    ignore_errors: true
+    register: gridmedia_rerult
+    tags:
+      - gridmedia
+      - copymedia
+
+  - name: "check db_install_media"
+    become: yes
+    shell: cat /media/database/response/db_install.rsp
+    ignore_errors: true
+    register: dbmedia_rerult
+    tags:
+      - dbmedia
+      - copymedia
