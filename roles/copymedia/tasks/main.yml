@@ -12,7 +12,7 @@
   - name: "copy gridmedia"
     become: yes
     unarchive: src="/media/{{ item }}" dest=/media/grid
-    with_items
+    with_items:
       - {{ GRID_MEDIA1 }}
       - {{ GRID_MEDIA2 }}
     when: inventory_hostname == groups["dbserver"][0] and gridmedia_rerult.rc != 0
@@ -34,7 +34,7 @@
   - name: "copy dbmedia"
     become: yes
     unarchive: src="/media/{{ item }}" dest=/media/database
-    with_items
+    with_items:
       - {{ DB_MEDIA1 }}
       - {{ DB_MEDIA2 }}
     when: inventory_hostname == groups["dbserver"][0] and dbmedia_rerult.rc != 0
