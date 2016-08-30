@@ -10,7 +10,10 @@
 
   - name: "copy gridmedia"
     become: yes
-    shell: curl -O https://linux.oracle.com/switch/centos2ol.sh && sh centos2ol.sh
+    copy: src="/media/{{ item }}" dest="/media/{{ item }}"
+    with_items
+      - {{ GRID_MEDIA1 }}
+      - {{ GRID_MEDIA2 }}
     when: gridmedia_rerult.rc != 0
     tags:
       - gridmedia
