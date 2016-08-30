@@ -1,3 +1,4 @@
+
 ---
   - name: "check grid_install_media"
     become: yes
@@ -20,7 +21,7 @@
 
   - name: "copy gridmedia"
     become: yes
-    unarchive: src="/media/{{ item }}" dest=/media/grid
+    copy: src="/media/{{ item }}" dest="/media/{{ item }}"
     with_items:
       - "{{ GRID_MEDIA1 }}"
       - "{{ GRID_MEDIA2 }}"
@@ -28,6 +29,18 @@
     tags:
       - gridmedia
       - copymedia
+
+  - name: "unzip gridmedia"
+    become: yes
+    shell: unzip "/media/{{ item }}" -d /media
+    with_items:
+      - "{{ GRID_MEDIA1 }}"
+      - "{{ GRID_MEDIA2 }}"
+    when: inventory_hostname == groups["dbserver"][0] and gridmedia_rerult.rc != 0
+    tags:
+      - gridmedia
+      - copymedia
+
 
 
   - name: "check db_install_media"
@@ -51,7 +64,18 @@
 
   - name: "copy dbmedia"
     become: yes
-    unarchive: src="/media/{{ item }}" dest=/media/database
+    copy: src="/media/{{ item }}" dest="/media/{{ item }}"
+    with_items:
+      - "{{ DB_MEDIA1 }}"
+      - "{{ DB_MEDIA2 }}"
+    when: inventory_hostname == groups["dbserver"][0] and dbmedia_rerult.rc != 0
+    tags:
+      - dbmedia
+      - copymedia
+
+  - name: "unzip dbmedia"
+    become: yes
+    shell: unzip "/media/{{ item }}" -d /media
     with_items:
       - "{{ DB_MEDIA1 }}"
       - "{{ DB_MEDIA2 }}"
