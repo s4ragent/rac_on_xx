@@ -14,6 +14,7 @@
    roles:
       - common
       - nfsclient
+      - copymedia
 
  - hosts: dbserver
    serial: 1
