@@ -8,11 +8,28 @@
       - gridmedia
       - copymedia
 
+  - name: "copy gridmedia"
+    become: yes
+    shell: curl -O https://linux.oracle.com/switch/centos2ol.sh && sh centos2ol.sh
+    when: gridmedia_rerult.rc != 0
+    tags:
+      - gridmedia
+      - copymedia
+
+
   - name: "check db_install_media"
     become: yes
     shell: cat /media/database/response/db_install.rsp
     ignore_errors: true
     register: dbmedia_rerult
+    tags:
+      - dbmedia
+      - copymedia
+
+  - name: "copy dbmedia"
+    become: yes
+    shell: curl -O https://linux.oracle.com/switch/centos2ol.sh && sh centos2ol.sh
+    when: dbmedia_rerult.rc != 0
     tags:
       - dbmedia
       - copymedia
