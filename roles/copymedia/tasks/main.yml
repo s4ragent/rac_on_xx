@@ -1,5 +1,12 @@
 
 ---
+  - name: "crete directory"
+    become: yes
+    file: path=/media state=directory
+    when: inventory_hostname == groups["dbserver"][0] and gridmedia_rerult.rc != 0
+    tags:
+      - copymedia
+
   - name: "check grid_install_media"
     become: yes
     shell: cat /media/grid/response/grid_install.rsp
@@ -9,15 +16,6 @@
     tags:
       - gridmedia
       - copymedia
-
-  - name: "crete directory"
-    become: yes
-    file: path=/media/grid state=directory
-    when: inventory_hostname == groups["dbserver"][0] and gridmedia_rerult.rc != 0
-    tags:
-      - gridmedia
-      - copymedia
-
 
   - name: "copy gridmedia"
     become: yes
@@ -49,15 +47,6 @@
     ignore_errors: true
     when: inventory_hostname == groups["dbserver"][0]
     register: dbmedia_rerult
-    tags:
-      - dbmedia
-      - copymedia
-
-
-  - name: "crete directory"
-    become: yes
-    file: path=/media/database state=directory
-    when: inventory_hostname == groups["dbserver"][0] and dbmedia_rerult.rc != 0
     tags:
       - dbmedia
       - copymedia
