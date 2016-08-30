@@ -17,9 +17,10 @@
     tags:
       - dnsmasq
 
-  - name: "copy resolv.dnsmasq.conf"
+  - name: "copy resolv.dnsmasq.conf from /etc/resolv.conf"
     become: yes
-    copy: src=resolv.dnsmasq.conf dest=/etc/resolv.dnsmasq.conf owner=root group=root mode=0644
+    #copy: src=resolv.dnsmasq.conf dest=/etc/resolv.dnsmasq.conf owner=root group=root mode=0644
+    file: src=/etc/resolv.conf dest=/etc/resolv.dnsmasq.conf owner=root group=root mode=0644
     tags:
       - dnsmasq
       
