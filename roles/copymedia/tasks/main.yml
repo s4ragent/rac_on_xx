@@ -13,8 +13,8 @@
     become: yes
     unarchive: src="/media/{{ item }}" dest=/media/grid
     with_items:
-      - {{ GRID_MEDIA1 }}
-      - {{ GRID_MEDIA2 }}
+      - "{{ GRID_MEDIA1 }}"
+      - "{{ GRID_MEDIA2 }}"
     when: inventory_hostname == groups["dbserver"][0] and gridmedia_rerult.rc != 0
     tags:
       - gridmedia
@@ -35,8 +35,8 @@
     become: yes
     unarchive: src="/media/{{ item }}" dest=/media/database
     with_items:
-      - {{ DB_MEDIA1 }}
-      - {{ DB_MEDIA2 }}
+      - "{{ DB_MEDIA1 }}"
+      - "{{ DB_MEDIA2 }}"
     when: inventory_hostname == groups["dbserver"][0] and dbmedia_rerult.rc != 0
     tags:
       - dbmedia
