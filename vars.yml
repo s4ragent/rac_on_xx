@@ -11,6 +11,7 @@ MOUNT_PATH: /u01
 ORA_ORACLE_BASE: /u01/app/oracle
 GRID_ORACLE_BASE: /u01/app/grid
 INSTALL_LANG: ja
+SWAP_SIZE: 8192
 #####
 ##### device size = base_size + multi_size * node count
 VOTE_DEV: /u01/oradata/vote.img
