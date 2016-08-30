@@ -31,7 +31,10 @@
 
   - name: "copy dbmedia"
     become: yes
-    shell: curl -O https://linux.oracle.com/switch/centos2ol.sh && sh centos2ol.sh
+    copy: src="/media/{{ item }}" dest="/media/{{ item }}"
+    with_items
+      - {{ DB_MEDIA1 }}
+      - {{ DB_MEDIA2 }}
     when: dbmedia_rerult.rc != 0
     tags:
       - dbmedia
