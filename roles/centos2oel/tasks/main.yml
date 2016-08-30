@@ -59,3 +59,11 @@
     when: centos2oel_rerult.rc != 0
     tags:
       - centos2oel
+
+  - name: "dummy yum command (GPGKEY INSTALL)"
+    become: yes
+    shell: yum -y search nfs-utils
+    ignore_errors: true
+    tags:
+      - centos2oel
+
