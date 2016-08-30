@@ -3,6 +3,7 @@
     become: yes
     shell: cat /media/grid/response/grid_install.rsp
     ignore_errors: true
+    when: inventory_hostname == groups["dbserver"][0]
     register: gridmedia_rerult
     tags:
       - gridmedia
@@ -14,7 +15,7 @@
     with_items
       - {{ GRID_MEDIA1 }}
       - {{ GRID_MEDIA2 }}
-    when: gridmedia_rerult.rc != 0
+    when: inventory_hostname == groups["dbserver"][0] and gridmedia_rerult.rc != 0
     tags:
       - gridmedia
       - copymedia
@@ -24,6 +25,7 @@
     become: yes
     shell: cat /media/database/response/db_install.rsp
     ignore_errors: true
+    when: inventory_hostname == groups["dbserver"][0]
     register: dbmedia_rerult
     tags:
       - dbmedia
@@ -35,7 +37,7 @@
     with_items
       - {{ DB_MEDIA1 }}
       - {{ DB_MEDIA2 }}
-    when: dbmedia_rerult.rc != 0
+    when: inventory_hostname == groups["dbserver"][0] and dbmedia_rerult.rc != 0
     tags:
       - dbmedia
       - copymedia
