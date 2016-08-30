@@ -1,7 +1,15 @@
 ---
   - name: "disable fastestmirror"
     become: yes
-    shell: sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf
+    shell: sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf 
+    ignore_errors: true
+    tags:
+      - centos2oel
+
+  - name: "yum clean all"
+    become: yes
+    shell: yum -y clean all
+    ignore_errors: true
     tags:
       - centos2oel
 
