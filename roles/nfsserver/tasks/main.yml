@@ -1,10 +1,4 @@
 ---
-  - name: "disable fastestmirror"
-    become: yes
-    shell: sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf
-    tags:
-      - nfsserver
-
   - name: "install nfs packages"
     become: yes
     yum: name=nfs-utils state=present
