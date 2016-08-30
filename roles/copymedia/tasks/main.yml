@@ -3,7 +3,7 @@
   - name: "crete directory"
     become: yes
     file: path=/media state=directory
-    when: inventory_hostname == groups["dbserver"][0] and gridmedia_rerult.rc != 0
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - copymedia
 
