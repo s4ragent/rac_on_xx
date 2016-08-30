@@ -9,7 +9,7 @@ sudokey="raconxx"
 ZONE="asia-east1-c"
 #MACHINE_TYPE="n1-highmem-2"
 MACHINE_TYPE="n1-standard-1"
-NODE_DISK_SIZE="40GB"
+NODE_DISK_SIZE="50GB"
 STORAGE_DISK_SIZE="200GB"
 ####################################################
 ####common VIRT_TYPE specific value ################
