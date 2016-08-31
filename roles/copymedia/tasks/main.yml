@@ -18,7 +18,7 @@
       - copymedia
 
   - name: "copy gridmedia"
-    become: yes
+    become: no
     copy: src="/media/{{ item }}" dest="/media/{{ item }}"
     with_items:
       - "{{ GRID_MEDIA1 }}"
@@ -52,7 +52,7 @@
       - copymedia
 
   - name: "copy dbmedia"
-    become: yes
+    become: no
     copy: src="/media/{{ item }}" dest="/media/{{ item }}"
     with_items:
       - "{{ DB_MEDIA1 }}"
