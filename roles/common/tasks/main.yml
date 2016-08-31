@@ -165,7 +165,7 @@
  
   - name: "create swap"
     become: yes
-    shell: swapon -a
+    shell: swapon /swap
     when: ansible_swaptotal_mb < 1
     tags:
       - swapon
