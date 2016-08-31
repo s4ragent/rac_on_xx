@@ -153,7 +153,7 @@
     tags:
       - preinstallpackages
 
-  - name: "create swap"
+  - name: "create swap(dd)"
     become: yes
     shell: dd if=/dev/zero of=/swap bs=1M count={{ SWAP_SIZE }} && mkswap /swap
     async: "{{ ASYNC }}"
@@ -163,7 +163,7 @@
       - ddswap
       - swap
  
-  - name: "create swap"
+  - name: "create swap(swapon)"
     become: yes
     shell: swapon /swap
     when: ansible_swaptotal_mb < 1
@@ -171,7 +171,7 @@
       - swapon
       - swap
       
-  - name: "mount swap"
+  - name: "mount swap(fstab)"
     become: yes
     mount: name=swap src=/swap fstype=swap opts=defaults passno=0 dump=0 state=present
     when: ansible_swaptotal_mb < 1
