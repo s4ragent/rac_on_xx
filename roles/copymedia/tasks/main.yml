@@ -2,8 +2,8 @@
 ---
   - name: "crete directory"
     become: yes
-    file: path=/media state=directory
-    when: inventory_hostname == groups["dbserver"][0]
+    file: path=/media state=directory mode=0755
+    when: inventory_hostname == groups["dbserver"][0] 
     tags:
       - copymedia
 
