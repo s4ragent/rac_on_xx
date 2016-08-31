@@ -2,7 +2,7 @@
 ---
   - name: "crete directory"
     become: yes
-    file: path=/media state=directory mode=0755
+    file: path=/media state=directory mode=0777
     when: inventory_hostname == groups["dbserver"][0] 
     tags:
       - copymedia
