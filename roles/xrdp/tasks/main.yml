@@ -51,4 +51,5 @@
     become: yes
     user: name="xrdpuser" shell="/bin/bash" password="{{ xrdpuser_pass |password_hash('sha512') }}"
     tags:
+      - xrdpusercreate
       - xrdp
