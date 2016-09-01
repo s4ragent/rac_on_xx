@@ -22,8 +22,26 @@
     tags:
       - xrdp
 
+  - name: "enable xrdp"
+    become: yes
+    service: name=xrdp enabled=yes
+    tags:
+      - xrdp
 
-systemctl enable xrdp
-chcon -t bin_t /usr/sbin/xrdp /usr/sbin/xrdp-sesman
-sed -i -e 's/max_bpp=32/max_bpp=24/g' /etc/xrdp/xrdp.ini
-systemctl start xrdp
+  - name: "dummy yum command (GPGKEY INSTALL)"
+    become: yes
+    shell: chcon -t bin_t /usr/sbin/xrdp /usr/sbin/xrdp-sesman
+    tags:
+      - xrdp
+
+  - name: "dummy yum command (GPGKEY INSTALL)"
+    become: yes
+    shell: sed -i -e 's/max_bpp=32/max_bpp=24/g' /etc/xrdp/xrdp.ini
+    tags:
+      - xrdp
+
+  - name: "enable xrdp"
+    become: yes
+    service: name=xrdp state=started
+    tags:
+      - xrdp
