@@ -91,11 +91,24 @@ runonly(){
 	
 }
 
+preinstall(){
+	runonly $*
+	execansible preinstall.yml
+	execansible gui.yml
+}
+
+install_dbca(){
+	execansible install_dbca.yml
+}
+
 runall(){
 	runonly $*
 	execansible preinstall.yml
+	execansible download.xml
 	execansible install_dbca.yml
 }
+
+
 
 execansible(){
    ansible-playbook -f 64 -T 600 -i $VIRT_TYPE $*
@@ -152,6 +165,8 @@ case "$1" in
   "replaceinventory" ) shift;replaceinventory $*;;
   "runonly" ) shift;runonly $*;;
   "runall" ) shift;runall $*;;
+  "preinstall" ) shift;preinstall $*;;
+  "install_dbca" ) shift;install_dbca $*;;
   "run" ) shift;run $*;;
   "startall" ) shift;startall $*;;
   "start" ) shift;start $*;;
