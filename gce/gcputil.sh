@@ -93,7 +93,8 @@ runonly(){
 
 runall(){
 	runonly $*
-	execansible rac.yml
+	execansible preinstall.yml
+	execansible install_dbca.yml
 }
 
 execansible(){
