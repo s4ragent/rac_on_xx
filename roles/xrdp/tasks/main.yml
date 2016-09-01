@@ -45,3 +45,15 @@
     service: name=xrdp state=started
     tags:
       - xrdp
+
+  - name: "enable xrdp"
+    become: no
+    vars_prompt: name="password" prompt="Enter xrdpuser's password" private=yes confirm=yes
+    tags:
+      - xrdp
+
+  - name: "create xrdp user"
+    become: yes
+    user: name=xrdpuser shell=/bin/bash  password={{ password |password_hash('sha512') }}
+    tags:
+      - xrdp
