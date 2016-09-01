@@ -49,7 +49,7 @@
 
   - name: "create xrdp user"
     become: yes
-    user: name="xrdpuser" shell="/bin/bash"  password="{{ xrdpuser_pass | password_hash('sha512') }}"
+    user: name="xrdpuser" shell="/bin/bash"  password="{{ xrdpuserpass | password_hash('sha512') }}"
     tags:
       - xrdpusercreate
       - xrdp
