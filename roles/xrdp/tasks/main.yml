@@ -1,1 +1,29 @@
-#
+---
+  - name: "install epel"
+    become: yes
+    yum: name=https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm state=present
+    tags:
+      - xrdp
+
+  - name: "dummy yum command (GPGKEY INSTALL)"
+    become: yes
+    shell: yum -y search nfs-utils
+    ignore_errors: true
+    tags:
+      - xrdp
+      
+  - name: "install GNOME,xrdp"
+    become: yes
+    yum: name={{ item }} state=present
+    with_items:
+      - "@Server With GUI
+      - vnc-server
+      - xrdp
+    tags:
+      - xrdp
+
+
+systemctl enable xrdp
+chcon -t bin_t /usr/sbin/xrdp /usr/sbin/xrdp-sesman
+sed -i -e 's/max_bpp=32/max_bpp=24/g' /etc/xrdp/xrdp.ini
+systemctl start xrdp
