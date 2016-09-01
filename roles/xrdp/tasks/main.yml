@@ -29,7 +29,7 @@
     tags:
       - xrdp
 
-  - name: "dummy yum command (GPGKEY INSTALL)"
+  - name: "chcon"
     become: yes
     shell: chcon -t bin_t /usr/sbin/xrdp /usr/sbin/xrdp-sesman
     tags:
