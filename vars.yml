@@ -1,4 +1,4 @@
-xrdpuser_pass: "Xrdp123!"
+xrdpuser_pass: Xrdp123!
 vxlan0_NETWORK: 192.168.0.0
 vxlan1_NETWORK: 192.168.100.0
 vxlan2_NETWORK: 192.168.200.0
