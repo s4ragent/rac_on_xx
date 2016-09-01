@@ -19,6 +19,7 @@
       - "@Server With GUI
       - vnc-server
       - xrdp
+      - firefox
     tags:
       - xrdp
 
