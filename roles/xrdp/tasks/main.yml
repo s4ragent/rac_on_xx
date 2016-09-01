@@ -14,7 +14,7 @@
       
   - name: "install GNOME,xrdp"
     become: yes
-    yum: name={{ item }} state=present
+    yum: name="{{ item }}" state=present
     with_items:
       - "@Server With GUI"
       - vnc-server
