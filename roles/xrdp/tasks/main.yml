@@ -16,7 +16,7 @@
     become: yes
     yum: name={{ item }} state=present
     with_items:
-      - "@Server With GUI
+      - "@Server With GUI"
       - vnc-server
       - xrdp
       - firefox
@@ -35,7 +35,7 @@
     tags:
       - xrdp
 
-  - name: "dummy yum command (GPGKEY INSTALL)"
+  - name: "edit xrdp.ini"
     become: yes
     shell: sed -i -e 's/max_bpp=32/max_bpp=24/g' /etc/xrdp/xrdp.ini
     tags:
@@ -44,12 +44,6 @@
   - name: "enable xrdp"
     become: yes
     service: name=xrdp state=started
-    tags:
-      - xrdp
-
-  - name: "enable xrdp"
-    become: no
-    vars_prompt: name="password" prompt="Enter xrdpuser's password" private=yes confirm=yes
     tags:
       - xrdp
 
