@@ -14,16 +14,3 @@
    roles:
       - common
       - nfsclient
-      - copymedia
-
- - hosts: dbserver
-   serial: 1
-   roles:
-      - gridinstall
-
- - hosts: dbserver
-   roles:
-      - mgmtdb
-      - createdg
-      - dbinstall
-      - dbcaserial
