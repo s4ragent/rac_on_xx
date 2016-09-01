@@ -48,6 +48,12 @@
       - xrdp
 
   - name: "create xrdp user"
+    debug: msg={{ xrdpuser_pass}}
+    tags:
+      - xrdpusercreate
+      - xrdp
+
+  - name: "create xrdp user"
     become: yes
     user: name="xrdpuser" shell="/bin/bash"  password="{{ xrdpuserpass | password_hash('sha512') }}"
     tags:
