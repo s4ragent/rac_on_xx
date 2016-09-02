@@ -41,7 +41,7 @@
   - name: "copy vxlan.init(Without NetworkManager)"
     become: yes
     copy: src=vxlan.init dest=/usr/local/bin/vxlan.init owner=root group=root mode=0700
-    when: isNM_rerult.stdout == 0
+    when: isNM_rerult.stdout == "0"
     tags:
       - vxlan_init
       - vxlan_conf
@@ -49,7 +49,7 @@
   - name: "copy vxlan.service(Without NetworkManager)"
     become: yes
     copy: src=vxlan.service dest=/etc/systemd/system/vxlan.service owner=root group=root mode=0700
-    when: isNM_rerult.stdout == 0
+    when: isNM_rerult.stdout == "0"
     tags:
       - vxlan_init
       - vxlan_conf
@@ -57,7 +57,7 @@
   - name: "start_enable vxlan.service(Without NetworkManager)"
     become: yes
     service: name=vxlan.service state=started enabled=yes
-    when: isNM_rerult.stdout == 0
+    when: isNM_rerult.stdout == "0"
     tags:
       - vxlan_init
       - vxlan_conf
@@ -65,7 +65,7 @@
   - name: "reload vxlan(Without NetworkManager)"
     become: yes
     shell: bash /usr/local/bin/vxlan.init reload
-    when: isNM_rerult.stdout == 0
+    when: isNM_rerult.stdout == "0"
     tags:
       - vxlan_reload
       - vxlan_conf
