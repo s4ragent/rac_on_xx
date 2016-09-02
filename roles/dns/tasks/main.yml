@@ -26,8 +26,8 @@
 
   - name: "copy resolv.dnsmasq.conf from /etc/resolv.conf"
     become: yes
-    #copy: src=resolv.dnsmasq.conf dest=/etc/resolv.dnsmasq.conf owner=root group=root mode=0644
-    shell: cp /etc/resolv.conf /etc/resolv.dnsmasq.conf
+    copy: src=resolv.dnsmasq.conf dest=/etc/resolv.dnsmasq.conf owner=root group=root mode=0644
+    #shell: cp /etc/resolv.conf /etc/resolv.dnsmasq.conf
       creates=/etc/resolv.dnsmasq.conf
     when: isNM_rerult.stdout == "0"
     tags:
