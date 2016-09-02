@@ -39,10 +39,11 @@
 
   - name: "check NetworkManager enabled"
     become: yes
-    shell: ps -elf | grep 
+    shell: ps -elf | grep NetworkManager | grep -v grep | wc -l
     ignore_errors: true
-    register: isvxlan_rerult
+    register: isNM_rerult
     tags:
+      - vxlan_init
       - vxlan_conf
 
   - name: "copy vxlan.init(Without NetworkManager)"
