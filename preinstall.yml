@@ -1,10 +1,10 @@
 ---
  - hosts: all
    roles:
+      - dns
       - centos2oel
       - security
       - vxlan
-      - dns
 
  - hosts: nfs
    roles:
