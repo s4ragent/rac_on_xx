@@ -69,6 +69,8 @@ run(){
 	docker exec $NODENAME bash -c "chown -R ${sudoer} /home/$sudoer/.ssh && chmod 700 /home/$sudoer/.ssh && chmod 600 /home/$sudoer/.ssh/*"
 
 	sleep 10
+   
+   docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
 	docker exec $NODENAME systemctl start sshd
 	docker exec $NODENAME systemctl enable sshd
 #	docker exec $NODENAME systemctl start NetworkManager
