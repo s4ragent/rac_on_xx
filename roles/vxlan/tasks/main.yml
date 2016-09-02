@@ -37,6 +37,14 @@
     tags:
       - vxlan_conf
 
+  - name: "check NetworkManager enabled"
+    become: yes
+    shell: ps -elf | grep 
+    ignore_errors: true
+    register: isvxlan_rerult
+    tags:
+      - vxlan_conf
+
   - name: "copy vxlan.init(Without NetworkManager)"
     become: yes
     copy: src=vxlan.init dest=/usr/local/bin/vxlan.init owner=root group=root mode=0700
