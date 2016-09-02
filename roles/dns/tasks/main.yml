@@ -11,6 +11,12 @@
     tags:
       - dnsmasq
 
+  - name: "check NetworkManager enabled"
+    become: yes
+    shell: ps -elf | grep NetworkManager | grep -v grep | wc -l
+    ignore_errors: true
+    register: isNM_rerult
+
   - name: "copy dnsmasq.conf"
     become: yes
     copy: src=dnsmasq.conf dest=/etc/dnsmasq.conf owner=root group=root mode=0644
