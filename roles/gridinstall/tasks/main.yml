@@ -10,6 +10,23 @@
       - creategridrsp
       - gridinstall
 
+
+  - name: "runInstaller(grid)"
+    become: yes
+    become_user: grid
+    shell: env
+    when: inventory_hostname == groups["dbserver"][0]
+    register: env_result
+    tags:
+      - runinstallergrid
+      - gridinstall
+
+  - debug: var=env_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - runinstallergrid
+      - gridinstall
+
   - name: "runInstaller(grid)"
     become: yes
     become_user: grid
