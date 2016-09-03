@@ -14,7 +14,7 @@
   - name: "runInstaller(grid)"
     become: yes
     become_user: grid
-    shell: env
+    shell: source /home/grid/.bash_profile && env
     when: inventory_hostname == groups["dbserver"][0]
     register: env_result
     tags:
@@ -30,7 +30,7 @@
   - name: "runInstaller(grid)"
     become: yes
     become_user: grid
-    shell: /media/grid/runInstaller -silent -responseFile /home/grid/grid.rsp -waitforcompletion {{ INSTALL_OPS }}
+    shell: source /home/grid/.bash_profile && /media/grid/runInstaller -silent -responseFile /home/grid/grid.rsp -waitforcompletion {{ INSTALL_OPS }}
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
     when: inventory_hostname == groups["dbserver"][0]
