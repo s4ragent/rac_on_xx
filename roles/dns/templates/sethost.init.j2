@@ -5,6 +5,6 @@ set_hostname()
 }
 
 case "$1" in
-  vxlan0)
+  *)
     shift;set_hostname $*;;
 esac
