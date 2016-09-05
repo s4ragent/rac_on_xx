@@ -63,7 +63,7 @@ run(){
 	docker exec ${NODENAME} useradd $sudoer                                                                                                          
 	docker exec ${NODENAME} bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
 	docker exec ${NODENAME} bash -c "mkdir /home/$sudoer/.ssh"
-	docker cp ${sudokey}.pub ${NODENAME}r:/home/$sudoer/.ssh/authorized_keys
+	docker cp ${sudokey}.pub ${NODENAME}:/home/$sudoer/.ssh/authorized_keys
 	docker exec ${NODENAME} bash -c "chown -R ${sudoer} /home/$sudoer/.ssh && chmod 700 /home/$sudoer/.ssh && chmod 600 /home/$sudoer/.ssh/*"
 
 	sleep 10
