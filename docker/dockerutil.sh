@@ -55,26 +55,24 @@ run(){
 #    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
 
 
-#    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
-
-    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}r --dns=$2 --dns-search=${DOMAIN_NAME} --add-host dockerhost:`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`1 --name ${NODENAME}r --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
+    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
-	docker exec ${NODENAME}r useradd $sudoer                                                                                                          
-	docker exec ${NODENAME}r bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
-	docker exec ${NODENAME}r bash -c "mkdir /home/$sudoer/.ssh"
+	docker exec ${NODENAME} useradd $sudoer                                                                                                          
+	docker exec ${NODENAME} bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
+	docker exec ${NODENAME} bash -c "mkdir /home/$sudoer/.ssh"
 	docker cp ${sudokey}.pub ${NODENAME}r:/home/$sudoer/.ssh/authorized_keys
-	docker exec ${NODENAME}r bash -c "chown -R ${sudoer} /home/$sudoer/.ssh && chmod 700 /home/$sudoer/.ssh && chmod 600 /home/$sudoer/.ssh/*"
+	docker exec ${NODENAME} bash -c "chown -R ${sudoer} /home/$sudoer/.ssh && chmod 700 /home/$sudoer/.ssh && chmod 600 /home/$sudoer/.ssh/*"
 
 	sleep 10
    
 #   docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
-	docker exec ${NODENAME}r systemctl start sshd
-	docker exec ${NODENAME}r systemctl enable sshd
-#	docker exec $NODENAME systemctl start NetworkManager
-#	docker exec $NODENAME systemctl enable NetworkManager
+	docker exec ${NODENAME} systemctl start sshd
+	docker exec ${NODENAME} systemctl enable sshd
+	docker exec $NODENAME systemctl start NetworkManager
+	docker exec $NODENAME systemctl enable NetworkManager
 }
 
 #### VIRT_TYPE specific processing  (must define)###
