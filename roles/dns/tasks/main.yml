@@ -1,41 +1,55 @@
 ---
-  - name: "install dnsmasq packages"
-    become: yes
-    yum: name=dnsmasq state=present
-    tags:
-      - dnsmasq
-
   - name: "create addn-hosts"
     become: yes
     template: src=addn-hosts.j2 dest=/etc/addn-hosts owner=root group=root mode=0644
     tags:
       - dnsmasq
 
-  - name: "check NetworkManager enabled"
+  - name: "copy dns.conf"
     become: yes
-    shell: ps -elf | grep NetworkManager | grep -v grep | wc -l
-    ignore_errors: true
-    register: isNM_rerult
-
-  - name: "copy dnsmasq.conf"
-    become: yes
-    template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.conf owner=root group=root mode=0644
-    when: isNM_rerult.stdout == "0"
+    copy: src=dns.conf dest=/etc/NetworkManager/conf.d/dns.conf owner=root group=root mode=0644
     tags:
       - dnsmasq
 
-  - name: "copy resolv.dnsmasq.conf from /etc/resolv.conf"
+  - name: "copy hosts"
     become: yes
-    copy: src=resolv.dnsmasq.conf dest=/etc/resolv.dnsmasq.conf owner=root group=root mode=0644
-#    shell: cp /etc/resolv.conf /etc/resolv.dnsmasq.conf
-#      creates=/etc/resolv.dnsmasq.conf
-    when: isNM_rerult.stdout == "0"
+    copy: src=hosts dest=/etc/NetworkManager/dnsmasq.d/hosts owner=root group=root mode=0644
     tags:
       - dnsmasq
       
-  - name: "start enable dnsmasq"
+  - name: "restart networkManager"
     become: yes
-    service: name=dnsmasq.service state=restarted enabled=yes
-    when: isNM_rerult.stdout == "0"
+    service: name=NetworkManager.service state=restarted
     tags:
       - dnsmasq
+
+  - name: "create sethosts"
+    become: yes
+    template: src=30_hostname.j2 dest=/etc/NetworkManager/dispatcher.d/30_hostname owner=root group=root mode=0700
+    tags:
+      - hostname
+
+  - name: "change hostname"
+    become: yes
+    shell: bash /etc/NetworkManager/dispatcher.d/30_hostname vxlan0 up
+    tags:
+      - hostname
+
+  - name: "create setresolvconf"
+    become: yes
+    template: src=31_resolvconf.j2 dest=/etc/NetworkManager/dispatcher.d/31_resolvconf owner=root group=root mode=0700
+    tags:
+      - resolvconf
+
+  - name: "change resolvconf"
+    become: yes
+    shell: bash /etc/NetworkManager/dispatcher.d/31_resolvconf vxlan0 up
+    tags:
+      - resolvconf
+
+  - name: "start_enable nm_dispacher"
+    become: yes
+    service: name=NetworkManager-dispatcher.service state=started enabled=yes
+    tags:
+      - hostname
+      - resolvconf
