@@ -2,7 +2,7 @@
 Description=setresolvconf auto start
 Requires=network.target
 After=network.target
-Before=sshd.service
+Before=remote-fs.target
 
 [Service]
 Type=oneshot
