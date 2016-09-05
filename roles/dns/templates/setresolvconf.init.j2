@@ -8,6 +8,6 @@ set_resolvconf()
 }
 
 case "$1" in
-  vxlan0)
+  *)
     shift;set_resolvconf $*;
 esac
