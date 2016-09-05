@@ -48,12 +48,6 @@
     service: name=sethost.service state=started enabled=yes
     tags:
       - sethost
-      
-  - name: "reload sethost(Without NetworkManager)"
-    become: yes
-    shell: bash /usr/local/bin/sethost.init reload
-    tags:
-      - sethost
 
   - name: "copy setresolvconf.init(Without NetworkManager)"
     become: yes
@@ -70,11 +64,5 @@
   - name: "start_enable setresolvconf.service(Without NetworkManager)"
     become: yes
     service: name=setresolvconf.service state=started enabled=yes
-    tags:
-      - setresolvconf
-      
-  - name: "reload setresolvconf(Without NetworkManager)"
-    become: yes
-    shell: bash /usr/local/bin/setresolvconf.init reload
     tags:
       - setresolvconf
