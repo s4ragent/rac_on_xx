@@ -1,5 +1,6 @@
 conf-dir=/etc/dnsmasq.d
-listen-address= {{ ansible_eth0.ipv4.address }},127.0.0.1
+#listen-address= {{ ansible_eth0.ipv4.address }},127.0.0.1
+listen-address=127.0.0.1
 resolv-file=/etc/resolv.dnsmasq.conf
 user=root
 addn-hosts=/etc/addn-hosts
