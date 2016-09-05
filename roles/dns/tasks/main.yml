@@ -1,27 +1,38 @@
 ---
+---
+  - name: "install dnsmasq packages"
+    become: yes
+    yum: name=dnsmasq state=present
+    tags:
+      - dnsmasq
+
   - name: "create addn-hosts"
     become: yes
     template: src=addn-hosts.j2 dest=/etc/addn-hosts owner=root group=root mode=0644
     tags:
       - dnsmasq
 
-  - name: "copy dns.conf"
+  - name: "copy dnsmasq.conf"
     become: yes
-    copy: src=dns.conf dest=/etc/NetworkManager/conf.d/dns.conf owner=root group=root mode=0644
+    template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.conf owner=root group=root mode=0644
     tags:
       - dnsmasq
 
-  - name: "copy hosts"
+  - name: "copy resolv.dnsmasq.conf from /etc/resolv.conf"
     become: yes
-    copy: src=hosts dest=/etc/NetworkManager/dnsmasq.d/hosts owner=root group=root mode=0644
+#    copy: src=resolv.dnsmasq.conf dest=/etc/resolv.dnsmasq.conf owner=root group=root mode=0644
+    shell: cp /etc/resolv.conf /etc/resolv.dnsmasq.conf
+      creates=/etc/resolv.dnsmasq.conf
     tags:
       - dnsmasq
       
-  - name: "restart networkManager"
+  - name: "start enable dnsmasq"
     become: yes
-    service: name=NetworkManager.service state=restarted
+    service: name=dnsmasq.service state=restarted enabled=yes
     tags:
       - dnsmasq
+
+
 
   - name: "create sethosts"
     become: yes
