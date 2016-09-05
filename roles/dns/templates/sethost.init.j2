@@ -1,10 +1,2 @@
 #!/bin/bash
-set_hostname()
-{
-  hostnamectl set-hostname {{ NODENAME }}.{{ DOMAIN_NAME }}
-}
-
-case "$1" in
-  *)
-    shift;set_hostname $*;;
-esac
+hostnamectl set-hostname {{ NODENAME }}.{{ DOMAIN_NAME }}
