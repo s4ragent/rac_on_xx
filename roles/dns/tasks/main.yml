@@ -32,7 +32,6 @@
     tags:
       - dnsmasq
 
-
  - name: "copy sethost.init(Without NetworkManager)"
     become: yes
     template: src=sethost.init.j2 dest=/usr/local/bin/sethost.init owner=root group=root mode=0700
@@ -51,43 +50,32 @@
     tags:
       - sethost
       
-  - name: "reload vxlan(Without NetworkManager)"
+  - name: "reload sethost(Without NetworkManager)"
     become: yes
     shell: bash /usr/local/bin/sethost.init reload
     tags:
       - sethost
 
-
-
-
-
-  - name: "create sethosts"
+ - name: "copy setresolvconf.init(Without NetworkManager)"
     become: yes
-    template: src=30_hostname.j2 dest=/etc/NetworkManager/dispatcher.d/30_hostname owner=root group=root mode=0700
+    template: src=setresolvconf.init.j2 dest=/usr/local/bin/sethost.init owner=root group=root mode=0700
     tags:
-      - hostname
+      - setresolvconf
 
-  - name: "change hostname"
+  - name: "copy setresolvconf.service(Without NetworkManager)"
     become: yes
-    shell: bash /etc/NetworkManager/dispatcher.d/30_hostname vxlan0 up
+    copy: src=sethost.service dest=/etc/systemd/system/setresolvconf.service owner=root group=root mode=0700
     tags:
-      - hostname
+      - setresolvconf
 
-  - name: "create setresolvconf"
+  - name: "start_enable setresolvconf.service(Without NetworkManager)"
     become: yes
-    template: src=31_resolvconf.j2 dest=/etc/NetworkManager/dispatcher.d/31_resolvconf owner=root group=root mode=0700
+    service: name=setresolvconf.service state=started enabled=yes
     tags:
-      - resolvconf
-
-  - name: "change resolvconf"
+      - setresolvconf
+      
+  - name: "reload setresolvconf(Without NetworkManager)"
     become: yes
-    shell: bash /etc/NetworkManager/dispatcher.d/31_resolvconf vxlan0 up
+    shell: bash /usr/local/bin/setresolvconf.init reload
     tags:
-      - resolvconf
-
-  - name: "start_enable nm_dispacher"
-    become: yes
-    service: name=NetworkManager-dispatcher.service state=started enabled=yes
-    tags:
-      - hostname
-      - resolvconf
+      - setresolvconf
