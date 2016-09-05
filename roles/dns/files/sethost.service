@@ -1,0 +1,17 @@
+[Unit]
+Description=sethost auto start
+Requires=network.target
+After=network.target
+Before=sshd.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/sethost.init start
+ExecReload=/usr/local/bin/sethost.init reload
+ExecStop=/usr/local/bin/sethost.init stop
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
