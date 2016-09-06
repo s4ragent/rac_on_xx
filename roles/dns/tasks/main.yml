@@ -93,7 +93,7 @@
       - sethost
 
 
-##### at last restart dnsmasq.service
+##### at last restart dnsmasq.service & network.service
   - name: "start enable dnsmasq.service"
     become: yes
     service: name=dnsmasq.service state=restarted enabled=yes
@@ -102,7 +102,6 @@
       - sethost    
       - dnsmasq
 
-##### at last restart network.service
   - name: "restart network.service"
     become: yes
     service: name=network.service state=restarted
