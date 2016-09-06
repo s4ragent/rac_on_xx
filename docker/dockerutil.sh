@@ -72,8 +72,8 @@ run(){
 #   docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
 	docker exec ${NODENAME} systemctl start sshd
 	docker exec ${NODENAME} systemctl enable sshd
-	docker exec $NODENAME systemctl start NetworkManager
-	docker exec $NODENAME systemctl enable NetworkManager
+#	docker exec $NODENAME systemctl start NetworkManager
+#	docker exec $NODENAME systemctl enable NetworkManager
 }
 
 #### VIRT_TYPE specific processing  (must define)###
