@@ -1,0 +1,10 @@
+---
+ - hosts: dbserver
+   tasks:
+     - name: "download media"
+       shell: "{{ DOWNLOAD_CMD }} {{ DOWNLOAD_URL }} {{ item }} /media"
+       with_items
+         - "{{ DB_MEDIA1 }}"
+         - "{{ DB_MEDIA1 }}"
+         - "{{ GRID_MEDIA1 }}"
+         - "{{ GRID_MEDIA2 }}"
