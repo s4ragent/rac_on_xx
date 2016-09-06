@@ -1,5 +1,6 @@
 ---
   - name: Update the /etc/ssh/sshd_config file
+    become: yes
     lineinfile:
       dest: /etc/ssh/sshd_config
       regexp: "^UseDNS"
@@ -9,6 +10,7 @@
     register: ssh_config
   
   - name: Restart ssh
+    become: yes
     service:
       name: ssh
       state: restarted
