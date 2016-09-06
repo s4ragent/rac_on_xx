@@ -14,7 +14,7 @@
 
   - name: "install GUI"
     become: yes
-    yum: name="@Server With GUI" state=latest
+    yum: name="@Desktop" state=latest
     tags:
       - xrdp
 
