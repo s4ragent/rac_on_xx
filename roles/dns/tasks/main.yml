@@ -96,7 +96,7 @@
 
 
 ##### at last restart dnsmasq.service & network.service
-  - name: "start enable dnsmasq.service"
+  - name: "restart and  enable dnsmasq.service"
     become: yes
     service: name=dnsmasq.service state=restarted enabled=yes
     tags:
