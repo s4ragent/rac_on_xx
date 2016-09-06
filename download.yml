@@ -3,6 +3,7 @@
    tasks:
      - name: "download media"
        shell: "{{ DOWNLOAD_CMD }} {{ DOWNLOAD_URL }} {{ item }} /media"
+       when: inventory_hostname == groups["dbserver"][0]
        with_items
          - "{{ DB_MEDIA1 }}"
          - "{{ DB_MEDIA1 }}"
