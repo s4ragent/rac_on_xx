@@ -100,6 +100,10 @@ install_dbca(){
 	execansible install_dbca.yml
 }
 
+download(){
+	execansible download.yml
+}
+
 runall(){
 	runonly $*
 	execansible preinstall.yml
@@ -173,5 +177,6 @@ case "$1" in
   "deleteall" ) shift;deleteall $*;;
   "stop" ) shift;stop $*;;
   "stopall" ) shift;stopall $*;;
+  "download") shift;download $*;;
   "heatrun") shift;heatrun $*;;
 esac
