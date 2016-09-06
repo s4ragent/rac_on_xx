@@ -53,3 +53,10 @@
     tags:
       - xrdpusercreate
       - xrdp
+
+  - name: "crete directory"
+    become: yes
+    file: path=/media state=directory mode=0777
+    tags:
+      - xrdpusercreate
+      - xrdp
