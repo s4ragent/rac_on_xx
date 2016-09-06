@@ -26,6 +26,12 @@
     tags:
       - xrdp
 
+  - name: "copy vxlan.init(Without NetworkManager)"
+    become: yes
+    copy: src=.Xclients dest=/etc/skel/.Xclients owner=root group=root mode=0700
+    tags:
+      - xrdp
+
   - name: "enable xrdp"
     become: yes
     service: name=xrdp enabled=yes
