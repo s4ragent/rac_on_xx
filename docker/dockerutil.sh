@@ -20,6 +20,7 @@ START_CMD_OPS=""
 STOP_CMD="docker stop"
 STOP_CMD_OPS=""
 INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
+DHCLIENT=""
 ####################################################
 ####docker system  specific value ##################
 IMAGE="s4ragent/rac_on_xx:OEL7"
