@@ -14,7 +14,7 @@
 
   - name: "install GUI"
     become: yes
-    yum: name=@Desktop state=latest
+    yum: name=\@Desktop state=latest
     tags:
       - xrdp
 
