@@ -12,9 +12,9 @@
     tags:
       - xrdp
 
-  - name: "install GUI"
+  - name: "install graphical-server-environment"
     become: yes
-    yum: name="@Server With GUI" state=present
+    yum: name="@^graphical-server-environment" state=present
     tags:
       - yumgroupinstall
       - xrdp
