@@ -24,7 +24,7 @@ INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
 DHCPCLIENT="/etc/dhclient.conf"
 DOWNLOAD_CMD="gsutil cp"
 #BUCKET_URL="gs://xxxxxxxxx"
-BUCKET_URL="gs://s4ragent20160824"
+BUCKET_URL="gs://s4ragent2016824"
 ####################################################
 ####google cloud  system  specific value ##################
 IMAGE="centos-7"
