@@ -50,7 +50,7 @@
     tags:
       - sethost
 
-###### for dhclient disable environment (e.g. docker)
+###### set resolvconf
 
   - name: "copy setresolvconf.init"
     become: yes
@@ -70,7 +70,7 @@
     tags:
       - setresolvconf
 
-###### for dhclient disable environment (e.g. gce/ec2)
+###### for dhclient enable environment (e.g. gce/ec2)
   - name: "check dhclient"
     become: yes
     shell: ps -elf | grep dhclient | grep -v grep | wc -l
