@@ -71,7 +71,7 @@
 
   - name: "copy setresolvconf.service(Without NetworkManager)"
     become: yes
-    copy: src=sethost.service dest=/etc/systemd/system/setresolvconf.service owner=root group=root mode=0700
+    copy: src=setresolvconf.service dest=/etc/systemd/system/setresolvconf.service owner=root group=root mode=0700
     when: dhclient_rerult.stdout == "0"
     tags:
       - setresolvconf
