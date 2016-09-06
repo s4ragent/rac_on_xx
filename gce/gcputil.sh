@@ -74,7 +74,6 @@ runonly(){
 	NFSIP=`run nfs $STORAGE_DISK_SIZE 0 nfs`
 	
 	common_update_all_yml "NFS_SERVER: $NFSIP"
-	common_update_all_yml "DHCPCLIENT: $DHCPCLIENT"
 	
 	for i in `seq 1 $nodecount`;
 	do
