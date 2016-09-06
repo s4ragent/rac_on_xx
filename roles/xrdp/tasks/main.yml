@@ -12,17 +12,13 @@
     tags:
       - xrdp
 
-  - name: "install graphical-server-environment"
-    become: yes
-    yum: name="@^graphical-server-environment" state=present
-    tags:
-      - yumgroupinstall
-      - xrdp
 
+#environment groups must "@^"
   - name: "install vnc,xrdp,firefox"
     become: yes
     yum: name="{{ item }}" state=present
     with_items:
+      - "@^graphical-server-environment"
       - vnc-server
       - xrdp
       - firefox
