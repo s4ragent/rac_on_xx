@@ -5,7 +5,7 @@
        became: yes
        shell: "{{ DOWNLOAD_CMD }} {{ BUCKET_URL }}/{{ item }} /media"
        when: inventory_hostname == groups["dbserver"][0]
-       with_items
+       with_items:
          - "{{ DB_MEDIA1 }}"
          - "{{ DB_MEDIA1 }}"
          - "{{ GRID_MEDIA1 }}"
@@ -15,7 +15,7 @@
        shell: "unzip /media/{{ item }} -d /media"
        became: yes
        when: inventory_hostname == groups["dbserver"][0]
-       with_items
+       with_items:
          - "{{ DB_MEDIA1 }}"
          - "{{ DB_MEDIA1 }}"
          - "{{ GRID_MEDIA1 }}"
