@@ -21,6 +21,7 @@ START_CMD_OPS="--zone $ZONE -q"
 STOP_CMD="gcloud compute instances stop"
 STOP_CMD_OPS="--zone $ZONE -q"
 INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
+DHCPCLIENT="/etc/dhcp/dhclient.conf"
 ####################################################
 ####google cloud  system  specific value ##################
 IMAGE="centos-7"
@@ -46,11 +47,7 @@ run(){
 	common_update_ansible_inventory $NODENAME $External_IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	
 	gcloud compute instances add-metadata $INSTANCE_ID --metadata-from-file ssh-keys=${sudokey}.pub --zone $ZONE
-	
-	
-	
-	
-	
+
 	echo $Internal_IP
 
 }
@@ -69,14 +66,15 @@ runonly(){
 		ssh-keygen -t rsa -P "" -f tempkey -C $sudoer
 		echo "$sudoer:"`cat tempkey.pub` > ${sudokey}.pub
 		rm -f tempkey.pub
-      mv -f tempkey ${sudokey}
-      chmod 600 ${sudokey}*
+      		mv -f tempkey ${sudokey}
+      		chmod 600 ${sudokey}*
 	fi
    
 
 	NFSIP=`run nfs $STORAGE_DISK_SIZE 0 nfs`
 	
 	common_update_all_yml "NFS_SERVER: $NFSIP"
+	common_update_all_yml "DHCPCLIENT: $DHCPCLIENT"
 	
 	for i in `seq 1 $nodecount`;
 	do
