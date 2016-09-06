@@ -14,6 +14,7 @@
 
 
 #environment groups must "@^"
+#packages group must"@"
   - name: "install vnc,xrdp,firefox"
     become: yes
     yum: name="{{ item }}" state=present
@@ -26,7 +27,7 @@
     tags:
       - xrdp
 
-  - name: "copy vxlan.init(Without NetworkManager)"
+  - name: "copy .Xclients"
     become: yes
     copy: src=.Xclients dest=/etc/skel/.Xclients owner=root group=root mode=0700
     tags:
