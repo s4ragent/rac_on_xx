@@ -2,3 +2,4 @@
  - hosts: dbserver
    roles:
     - xrdp
+    - guacamole
