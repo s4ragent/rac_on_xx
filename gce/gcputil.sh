@@ -21,7 +21,7 @@ START_CMD_OPS="--zone $ZONE -q"
 STOP_CMD="gcloud compute instances stop"
 STOP_CMD_OPS="--zone $ZONE -q"
 INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
-DHCPCLIENT="/etc/dhcp/dhclient.conf"
+DHCPCLIENT="/etc/dhclient.conf"
 ####################################################
 ####google cloud  system  specific value ##################
 IMAGE="centos-7"
