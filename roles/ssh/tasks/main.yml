@@ -12,6 +12,6 @@
   - name: Restart ssh
     become: yes
     service:
-      name: ssh
+      name: sshd
       state: restarted
     when: ssh_config.changed
