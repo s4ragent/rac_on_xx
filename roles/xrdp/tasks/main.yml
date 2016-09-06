@@ -11,12 +11,17 @@
     ignore_errors: true
     tags:
       - xrdp
-      
-  - name: "install GNOME,xrdp"
+
+  - name: "install GUI"
+    become: yes
+    yum: name="@Server With GUI" state=present
+    tags:
+      - xrdp
+
+  - name: "install vnc,xrdp,firefox"
     become: yes
     yum: name="{{ item }}" state=present
     with_items:
-      - @graphical-server-environment
       - vnc-server
       - xrdp
       - firefox
