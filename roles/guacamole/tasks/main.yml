@@ -4,3 +4,30 @@
     yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
     tags:
       - guacamole
+
+  - name: "install vnc,xrdp,firefox"
+    become: yes
+    yum: name="{{ item }}" state=present
+    with_items:
+      - guacd
+      - libguac-client-rdp
+      - libguac-client-vnc
+      - libguac-client-ssh
+      - guacamole
+    tags:
+      - guacamole
+
+  - name: "copy user-mappiing.xml"
+    become: yes
+    template: src=user-mapping.xml dest=/etc/guacamole/user-mapping.xml owner=root group=root mode=0755
+    tags:
+      - guacamole
+
+  - name: "enable xrdp"
+    become: yes
+    service: name={{ item }} enabled=yes state=started
+    with_items:
+      - guacd
+      - tomcat
+    tags:
+      - guacamole
