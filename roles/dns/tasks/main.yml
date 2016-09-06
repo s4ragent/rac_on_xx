@@ -1,36 +1,4 @@
 ---
-  - name: "install dnsmasq packages"
-    become: yes
-    yum: name=dnsmasq state=present
-    tags:
-      - dnsmasq
-
-  - name: "create addn-hosts"
-    become: yes
-    template: src=addn-hosts.j2 dest=/etc/addn-hosts owner=root group=root mode=0644
-    tags:
-      - dnsmasq
-
-  - name: "copy dnsmasq.conf"
-    become: yes
-    template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.conf owner=root group=root mode=0644
-    tags:
-      - dnsmasq
-
-  - name: "copy resolv.dnsmasq.conf from /etc/resolv.conf"
-    become: yes
-#    copy: src=resolv.dnsmasq.conf dest=/etc/resolv.dnsmasq.conf owner=root group=root mode=0644
-    shell: cp /etc/resolv.conf /etc/resolv.dnsmasq.conf
-      creates=/etc/resolv.dnsmasq.conf
-    tags:
-      - dnsmasq
-      
-  - name: "start enable dnsmasq.service"
-    become: yes
-    service: name=dnsmasq.service state=restarted enabled=yes
-    tags:
-      - dnsmasq
-
   - name: "copy sethost.init(Without NetworkManager)"
     become: yes
     template: src=sethost.init.j2 dest=/usr/local/bin/sethost.init owner=root group=root mode=0700
@@ -66,3 +34,35 @@
     service: name=setresolvconf.service state=started enabled=yes
     tags:
       - setresolvconf
+
+  - name: "install dnsmasq packages"
+    become: yes
+    yum: name=dnsmasq state=present
+    tags:
+      - dnsmasq
+
+  - name: "create addn-hosts"
+    become: yes
+    template: src=addn-hosts.j2 dest=/etc/addn-hosts owner=root group=root mode=0644
+    tags:
+      - dnsmasq
+
+  - name: "copy dnsmasq.conf"
+    become: yes
+    template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.conf owner=root group=root mode=0644
+    tags:
+      - dnsmasq
+
+  - name: "copy resolv.dnsmasq.conf from /etc/resolv.conf"
+    become: yes
+#    copy: src=resolv.dnsmasq.conf dest=/etc/resolv.dnsmasq.conf owner=root group=root mode=0644
+    shell: cp /etc/resolv.conf /etc/resolv.dnsmasq.conf
+      creates=/etc/resolv.dnsmasq.conf
+    tags:
+      - dnsmasq
+      
+  - name: "start enable dnsmasq.service"
+    become: yes
+    service: name=dnsmasq.service state=restarted enabled=yes
+    tags:
+      - dnsmasq
