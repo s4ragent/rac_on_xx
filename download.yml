@@ -1,8 +1,8 @@
 ---
  - hosts: dbserver
-   became: yes
    tasks:
      - name: "download media"
+       become: yes
        shell: "{{ DOWNLOAD_CMD }} {{ BUCKET_URL }}/{{ item }} /media"
        when: inventory_hostname == groups["dbserver"][0]
        with_items:
@@ -12,6 +12,7 @@
          - "{{ GRID_MEDIA2 }}"
 
      - name: "unzip media"
+       become: yes
        shell: "unzip /media/{{ item }} -d /media"
        when: inventory_hostname == groups["dbserver"][0]
        with_items:
