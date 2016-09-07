@@ -108,7 +108,7 @@ download(){
 runall(){
 	runonly $*
 	execansible preinstall.yml
-	execansible download.xml
+	execansible download.yml
 	execansible install_dbca.yml
 }
 
