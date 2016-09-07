@@ -94,6 +94,7 @@ runonly(){
 
 preinstall(){
 	runonly $*
+	execansible centos2oel.yml   
 	execansible preinstall.yml
 	execansible gui.yml
 }
