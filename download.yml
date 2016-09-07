@@ -11,6 +11,11 @@
          - "{{ GRID_MEDIA1 }}"
          - "{{ GRID_MEDIA2 }}"
 
+     - name: "install unzip"
+       become: yes
+       yum: name=unzip state=present
+       when: inventory_hostname == groups["dbserver"][0]
+
      - name: "unzip media"
        become: yes
        shell: "unzip /media/{{ item }} -d /media"
