@@ -95,26 +95,9 @@ scan1_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN1"
 scan2_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN2"	
 	
 if [ ! -e $VIRT_TYPE/group_vars/all.yml ]; then
-   mkdir -p $VIRT_TYPE/group_vars
-	cp vars.yml $VIRT_TYPE/group_vars/all.yml
-	cat >> $VIRT_TYPE/group_vars/all.yml <<EOF
-ansible_ssh_user: $sudoer
-ansible_ssh_private_key_file: $sudokey
-scan0_IP: $scan0_IP
-scan1_IP: $scan1_IP
-scan2_IP: $scan2_IP
-INSTALL_OPS: "$INSTALL_OPS"
-DELETE_CMD: $DELETE_CMD
-DELETE_CMD_OPS: $DELETE_CMD_OPS
-START_CMD: $START_CMD
-START_CMD_OPS: $START_CMD_OPS
-STOP_CMD: $STOP_CMD
-STOP_CMD_OPS: $STOP_CMD_OPS
-DHCPCLIENT: $DHCPCLIENT
-DOWNLOAD_CMD: $DOWNLOAD_CMD
-BUCKET_URL: $BUCKET_URL
-EOF
-
+	mkdir -p $VIRT_TYPE/group_vars
+	cp common_vars.yml $VIRT_TYPE/group_vars/all.yml
+	cat $VIRT_TYPE/vars.yml >> $VIRT_TYPE/group_vars/all.yml
 fi
 
 if [ "$1" != "" ]; then
