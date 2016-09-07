@@ -1,35 +1,5 @@
 #!/bin/bash
 
-##common user specific value #######################
-sudoer="opc"
-sudokey="raconxx"
-####################################################
-#### docker user specific value  ###################
-DOCKERSUBNET="10.153.0.0/16"
-BRNAME="raconxx"
-#DeviceMapper_BaseSize="--storage-opt size=100G"
-
-DOCKER_VOLUME_PATH="/rac_on_docker"
-####################################################
-####common VIRT_TYPE specific value ################
-VIRT_TYPE="docker"
-DELETE_CMD="docker rm -f"
-DELETE_CMD_OPS=""
-START_CMD="docker start"
-START_CMD_OPS=""
-STOP_CMD="docker stop"
-STOP_CMD_OPS=""
-INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
-DHCPCLIENT=""
-####################################################
-####docker system  specific value ##################
-IMAGE="s4ragent/rac_on_xx:OEL7"
-#CAP_OPS="--cap-add=NET_ADMIN"
-DOCKER_CAPS="--privileged=true --security-opt seccomp=unconfined"
-#DOCKER_CAPS="--cap-add=ALL --security-opt=seccomp=unconfined"
-DOCKER_START_OPS="--restart=always"
-TMPFS_OPS="--shm-size=1200m"
-####################################################
 
 cd ..
 source ./commonutil.sh
