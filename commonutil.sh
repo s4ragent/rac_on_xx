@@ -19,7 +19,7 @@ parse_yaml(){
    }'
 }
 
-eval $(parse_yaml vars.yml)
+eval $(parse_yaml common_vars.yml)
 
 common_deleteall(){
    ansible-playbook -i $VIRT_TYPE deleteall.yml
