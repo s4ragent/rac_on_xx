@@ -1,1 +1,5 @@
-#
+---
+ - hosts: all
+   roles:
+      - ssh
+      - centos2oel
