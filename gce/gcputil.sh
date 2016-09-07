@@ -4,11 +4,12 @@
 sudoer="opc"
 sudokey="raconxx"
 ####################################################
-#### docker user specific value  ###################
+#### gce user specific value  ###################
 #ZONE="us-west1-b"
 ZONE="asia-east1-c"
-#MACHINE_TYPE="n1-highmem-2"
-MACHINE_TYPE="n1-standard-1"
+#INSTANCE_SIZE_OPS="--machine-type n1-highmem-2"
+#INSTANCE_SIZE_OPS="--machine-type n1-standard-1"
+INSTANCE_SIZE_OPS="--custom-cpu 1 --custom--memory 6.5"
 NODE_DISK_SIZE="50GB"
 STORAGE_DISK_SIZE="200GB"
 ####################################################
@@ -41,7 +42,7 @@ run(){
 	NODENUMBER=$3
 	HOSTGROUP=$4
 	INSTANCE_ID=$NODENAME
-	CREATE_RESULT=$(gcloud compute instances create $NODENAME --machine-type $MACHINE_TYPE --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image $IMAGE --boot-disk-type "pd-ssd" --boot-disk-device-name $NODENAME --boot-disk-size $DISKSIZE --zone $ZONE | tail -n 1)
+	CREATE_RESULT=$(gcloud compute instances create $NODENAME $INSTANCE_SIZE_OPS --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image $IMAGE --boot-disk-type "pd-ssd" --boot-disk-device-name $NODENAME --boot-disk-size $DISKSIZE --zone $ZONE | tail -n 1)
 	External_IP=`echo $CREATE_RESULT | awk '{print $5}'`
 	Internal_IP=`echo $CREATE_RESULT | awk '{print $4}'`
 	
