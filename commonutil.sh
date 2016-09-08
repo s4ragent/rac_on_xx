@@ -136,6 +136,13 @@ if [ ! -e $VIRT_TYPE/group_vars/all.yml ]; then
 	mkdir -p $VIRT_TYPE/group_vars
 	cp common_vars.yml $VIRT_TYPE/group_vars/all.yml
 	cat $VIRT_TYPE/vars.yml >> $VIRT_TYPE/group_vars/all.yml
+	
+		cat >> $VIRT_TYPE/group_vars/all.yml <<EOF
+scan0_IP: $scan0_IP
+scan1_IP: $scan1_IP
+scan2_IP: $scan2_IP
+EOF
+	
 fi
 
 if [ "$1" != "" ]; then
