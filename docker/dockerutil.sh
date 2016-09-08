@@ -105,5 +105,6 @@ buildimage(){
 	docker build -t $IMAGE --no-cache=true ./images/OEL7
 }
 
+source ./common_menu.sh
 
 
