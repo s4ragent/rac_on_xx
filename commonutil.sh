@@ -28,9 +28,9 @@ common_execansible(){
 
 common_runall(){
 	runonly $*
+   common_execansible centos2oel.yml
    common_execansible preinstall.yml
 	common_execansible install_dbca.yml
-   common_execansible download.yml
 }
 
 common_preinstall(){
@@ -44,9 +44,6 @@ common_install_dbca(){
 	common_execansible install_dbca.yml
 }
 
-common_download(){
-	common_execansible download.yml
-}
 
 common_heatrun(){
 for i in `seq 1 $2`
