@@ -1,18 +1,19 @@
 #!/bin/bash
 case "$1" in
-  "execansible" ) shift;execansible $*;;
+  "execansible" ) shift;common_execansible $*;;
+  "preinstall" ) shift;common_preinstall $*;;
+  "install_dbca" ) shift;common_install_dbca $*;;
+  "run" ) shift;common_run $*;;
+  "startall" ) shift;common_startall $*;;
+  "start" ) shift;common_start $*;;
+  "stop" ) shift;common_stop $*;;
+  "stopall" ) shift;common_stopall $*;;
+  "download") shift;common_download $*;;
+  "heatrun") shift;common_heatrun $*;;
   "replaceinventory" ) shift;replaceinventory $*;;
   "runonly" ) shift;runonly $*;;
   "runall" ) shift;runall $*;;
-  "preinstall" ) shift;preinstall $*;;
-  "install_dbca" ) shift;install_dbca $*;;
-  "run" ) shift;run $*;;
-  "startall" ) shift;startall $*;;
-  "start" ) shift;start $*;;
   "delete" ) shift;delete $*;;
   "deleteall" ) shift;deleteall $*;;
-  "stop" ) shift;stop $*;;
-  "stopall" ) shift;stopall $*;;
-  "download") shift;download $*;;
-  "heatrun") shift;heatrun $*;;
+  "buildimage" ) shift;buildimage $*;;
 esac
