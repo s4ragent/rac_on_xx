@@ -79,6 +79,7 @@ common_stop(){
 
 common_stopall(){
    common_execansible stopall.yml
+   replaceinventory
 }
 
 common_start(){ 
