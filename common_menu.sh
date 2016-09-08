@@ -9,10 +9,10 @@ case "$1" in
   "stopall" ) shift;common_stopall $*;;
   "download") shift;common_download $*;;
   "heatrun") shift;common_heatrun $*;;
+  "runall" ) shift;common_runall $*;;
   "replaceinventory" ) shift;replaceinventory $*;;
   "run" ) shift;run $*;;
   "runonly" ) shift;runonly $*;;
-  "runall" ) shift;runall $*;;
   "delete" ) shift;delete $*;;
   "deleteall" ) shift;deleteall $*;;
   "buildimage" ) shift;buildimage $*;;
