@@ -1,35 +1,7 @@
 #!/bin/bash
 
-##common user specific value #######################
-sudoer="opc"
-sudokey="raconxx"
-####################################################
-#### gce user specific value  ###################
-#ZONE="us-west1-b"
-ZONE="asia-east1-c"
-#INSTANCE_SIZE_OPS="--machine-type n1-highmem-2"
-#INSTANCE_SIZE_OPS="--machine-type n1-standard-1"
-INSTANCE_TYPE_OPS="--custom-cpu 1 --custom--memory 6.5"
-NODE_DISK_SIZE="50GB"
-STORAGE_DISK_SIZE="200GB"
-####################################################
 ####common VIRT_TYPE specific value ################
 VIRT_TYPE="gce"
-DELETE_CMD="gcloud compute instances delete"
-DELETE_CMD_OPS="--zone $ZONE -q"
-START_CMD="gcloud compute instances start"
-START_CMD_OPS="--zone $ZONE -q"
-STOP_CMD="gcloud compute instances stop"
-STOP_CMD_OPS="--zone $ZONE -q"
-INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
-DHCPCLIENT="/etc/dhclient.conf"
-DOWNLOAD_CMD="gsutil cp"
-#BUCKET_URL="gs://xxxxxxxxx"
-BUCKET_URL="gs://s4ragent2016824"
-####################################################
-####google cloud  system  specific value ##################
-IMAGE="centos-7"
-####################################################
 
 cd ..
 source ./commonutil.sh
