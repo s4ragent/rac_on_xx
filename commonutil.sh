@@ -53,7 +53,7 @@ do
     LOG="`date "+%Y%m%d-%H%M%S"`.log"
     deleteall >$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
-    runall $1 >>$LOG  2>&1
+    common_runall $1 >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
