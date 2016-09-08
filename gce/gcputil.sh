@@ -15,9 +15,9 @@ run(){
 	HOSTGROUP=$4
 	INSTANCE_ID=$NODENAME
 	CREATE_RESULT=$(gcloud compute instances create $NODENAME $INSTANCE_TYPE_OPS --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image $IMAGE --boot-disk-type "pd-ssd" --boot-disk-device-name $NODENAME --boot-disk-size $DISKSIZE --zone $ZONE | tail -n 1)
-
+	MACHINE_TYPE=`echo $CREATE_RESULT | awk '{print $3}'`
 	if [ "$MACHINE_TYPE" = "custom" ]; then
-		External_IP=`echo $LIST_RESULT | awk '{print $9}'`
+		External_IP=`echo $CREATE_RESULT | awk '{print $9}'`
 		Internal_IP=`echo $CREATE_RESULT | awk '{print $8}'`
 	else
 		External_IP=`echo $CREATE_RESULT | awk '{print $5}'`
