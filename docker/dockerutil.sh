@@ -3,13 +3,18 @@
 VIRT_TYPE="docker"
 
 cd ..
+
+
+
 source ./commonutil.sh
+
+
+sudokey=$ansible_ssh_private_key
 
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 ip $3 nodenumber $4 hostgroup#####
 run(){
-	sudoer=$ansible_ssh_user
-	sudokey=$ansible_ssh_private_key
+
 	NODENAME=$1
 	IP=$2
 	NODENUMBER=$3
@@ -35,11 +40,11 @@ run(){
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
-	docker exec ${NODENAME} useradd $sudoer                                                                                                          
-	docker exec ${NODENAME} bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
-	docker exec ${NODENAME} bash -c "mkdir /home/$sudoer/.ssh"
-	docker cp ${sudokey}.pub ${NODENAME}:/home/$sudoer/.ssh/authorized_keys
-	docker exec ${NODENAME} bash -c "chown -R ${sudoer} /home/$sudoer/.ssh && chmod 700 /home/$sudoer/.ssh && chmod 600 /home/$sudoer/.ssh/*"
+	docker exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
+	docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
+	docker exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
+	docker cp ${ansible_ssh_private_key}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
+	docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
 
 	sleep 10
    
@@ -64,9 +69,9 @@ runonly(){
 		docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
 	fi
 	
-	if [  ! -e $sudokey ] ; then
-		ssh-keygen -t rsa -P "" -f $sudokey
-		chmod 600 ${sudokey}*
+	if [  ! -e $ansible_ssh_private_key ] ; then
+		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key
+		chmod 600 ${ansible_ssh_private_key}*
 	fi
    
 	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
@@ -95,8 +100,14 @@ deleteall(){
 	common_stopall $*
    	common_deleteall $*
 	#### VIRT_TYPE specific processing ###
-	rm -rf ${sudokey}*
-	rm -rf $DOCKER_VOLUME_PATH
+	if [ -n "$ansible_ssh_private_key" ]; then
+   		rm -rf ${ansible_ssh_private_key}*
+	fi
+
+	if [ -n "$DOCKER_VOLUME_PATH" ]; then
+   		rm -rf $DOCKER_VOLUME_PATH
+	fi	
+
 	docker network rm $BRNAME
    
 }
