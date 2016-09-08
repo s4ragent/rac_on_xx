@@ -19,10 +19,48 @@ parse_yaml(){
    }'
 }
 
-eval $(parse_yaml vars.yml)
+eval $(parse_yaml common_vars.yml)
+eval $(parse_yaml $VIRT_TYPE/vars.yml)
+
+common_execansible(){
+   ansible-playbook -f 64 -T 600 -i $VIRT_TYPE $*
+}
+
+common_runall(){
+	runonly $*
+	common_execansible preinstall.yml
+	common_execansible install_dbca.yml
+}
+
+common_preinstall(){
+	runonly $*
+	common_execansible centos2oel.yml   
+	common_execansible preinstall.yml
+	common_execansible gui.yml
+}
+
+common_install_dbca(){
+	common_execansible install_dbca.yml
+}
+
+common_download(){
+	common_execansible download.yml
+}
+
+common_heatrun(){
+for i in `seq 1 $2`
+do
+    LOG="`date "+%Y%m%d-%H%M%S"`.log"
+    deleteall >$LOG  2>&1
+    STARTTIME=`date "+%Y%m%d-%H%M%S"`
+    runall $1 >>$LOG  2>&1
+    echo "START $STARTTIME" >>$LOG
+    echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
+done
+}
 
 common_deleteall(){
-   ansible-playbook -i $VIRT_TYPE deleteall.yml
+   common_execansible deleteall.yml
    
    rm -rf $VIRT_TYPE/*.inventory
    rm -rf $VIRT_TYPE/group_vars
@@ -36,11 +74,11 @@ common_stop(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   ansible-playbook -T 30 -i $VIRT_TYPE stopall.yml --limit $NODENAME
+   common_execansible stopall.yml --limit $NODENAME
 }
 
 common_stopall(){
-   ansible-playbook -T 30 -i $VIRT_TYPE stopall.yml
+   common_execansible stopall.yml
 }
 
 common_start(){ 
@@ -49,11 +87,11 @@ common_start(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   ansible-playbook -i $VIRT_TYPE startall.yml --limit $NODENAME
+   common_execansible startall.yml --limit $NODENAME
 }
 
 common_startall(){
-   ansible-playbook -i $VIRT_TYPE startall.yml
+   common_execansible startall.yml
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
@@ -95,26 +133,16 @@ scan1_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN1"
 scan2_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN2"	
 	
 if [ ! -e $VIRT_TYPE/group_vars/all.yml ]; then
-   mkdir -p $VIRT_TYPE/group_vars
-	cp vars.yml $VIRT_TYPE/group_vars/all.yml
-	cat >> $VIRT_TYPE/group_vars/all.yml <<EOF
-ansible_ssh_user: $sudoer
-ansible_ssh_private_key_file: $sudokey
+	mkdir -p $VIRT_TYPE/group_vars
+	cp common_vars.yml $VIRT_TYPE/group_vars/all.yml
+	cat $VIRT_TYPE/vars.yml >> $VIRT_TYPE/group_vars/all.yml
+	
+		cat >> $VIRT_TYPE/group_vars/all.yml <<EOF
 scan0_IP: $scan0_IP
 scan1_IP: $scan1_IP
 scan2_IP: $scan2_IP
-INSTALL_OPS: "$INSTALL_OPS"
-DELETE_CMD: $DELETE_CMD
-DELETE_CMD_OPS: $DELETE_CMD_OPS
-START_CMD: $START_CMD
-START_CMD_OPS: $START_CMD_OPS
-STOP_CMD: $STOP_CMD
-STOP_CMD_OPS: $STOP_CMD_OPS
-DHCPCLIENT: $DHCPCLIENT
-DOWNLOAD_CMD: $DOWNLOAD_CMD
-BUCKET_URL: $BUCKET_URL
 EOF
-
+	
 fi
 
 if [ "$1" != "" ]; then
@@ -128,3 +156,4 @@ fi
 common_replaceinventory(){
 	sed -i -e "s/$1 ansible_ssh_host=.*\$/$1 ansible_ssh_host=${2}a/g" $VIRT_TYPE/*.inventory
 }
+

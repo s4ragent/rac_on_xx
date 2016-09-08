@@ -33,12 +33,6 @@
     tags:
       - xrdp
 
-  - name: "enable xrdp"
-    become: yes
-    service: name=xrdp enabled=yes
-    tags:
-      - xrdp
-
   - name: "chcon"
     become: yes
     shell: chcon -t bin_t /usr/sbin/xrdp /usr/sbin/xrdp-sesman
@@ -51,9 +45,9 @@
     tags:
       - xrdp
 
-  - name: "enable xrdp"
+  - name: "start and enable xrdp"
     become: yes
-    service: name=xrdp state=started
+    service: name=xrdp state=started enabled=yes
     tags:
       - xrdp
 
@@ -66,7 +60,7 @@
 
   - name: "crete directory"
     become: yes
-    file: path=/media state=directory mode=0777
+    file: path={{ MEDIA_PATH }} state=directory mode=0755 group=xrdpuser owner=xrdpuser
     tags:
       - xrdpusercreate
       - xrdp

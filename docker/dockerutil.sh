@@ -1,42 +1,15 @@
 #!/bin/bash
 
-##common user specific value #######################
-sudoer="opc"
-sudokey="raconxx"
-####################################################
-#### docker user specific value  ###################
-DOCKERSUBNET="10.153.0.0/16"
-BRNAME="raconxx"
-#DeviceMapper_BaseSize="--storage-opt size=100G"
-
-DOCKER_VOLUME_PATH="/rac_on_docker"
-####################################################
-####common VIRT_TYPE specific value ################
 VIRT_TYPE="docker"
-DELETE_CMD="docker rm -f"
-DELETE_CMD_OPS=""
-START_CMD="docker start"
-START_CMD_OPS=""
-STOP_CMD="docker stop"
-STOP_CMD_OPS=""
-INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
-DHCPCLIENT=""
-####################################################
-####docker system  specific value ##################
-IMAGE="s4ragent/rac_on_xx:OEL7"
-#CAP_OPS="--cap-add=NET_ADMIN"
-DOCKER_CAPS="--privileged=true --security-opt seccomp=unconfined"
-#DOCKER_CAPS="--cap-add=ALL --security-opt=seccomp=unconfined"
-DOCKER_START_OPS="--restart=always"
-TMPFS_OPS="--shm-size=1200m"
-####################################################
 
 cd ..
 source ./commonutil.sh
 
+
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 ip $3 nodenumber $4 hostgroup#####
 run(){
+
 	NODENAME=$1
 	IP=$2
 	NODENUMBER=$3
@@ -57,16 +30,16 @@ run(){
 	mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
 	StorageOps="-v $DOCKER_VOLUME_PATH/$NODENAME:/u01:rw"
 
-    	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
+    	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/$MEDIA_PATH:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
-	docker exec ${NODENAME} useradd $sudoer                                                                                                          
-	docker exec ${NODENAME} bash -c "echo \"$sudoer ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
-	docker exec ${NODENAME} bash -c "mkdir /home/$sudoer/.ssh"
-	docker cp ${sudokey}.pub ${NODENAME}:/home/$sudoer/.ssh/authorized_keys
-	docker exec ${NODENAME} bash -c "chown -R ${sudoer} /home/$sudoer/.ssh && chmod 700 /home/$sudoer/.ssh && chmod 600 /home/$sudoer/.ssh/*"
+	docker exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
+	docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
+	docker exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
+	docker cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
+	docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
 
 	sleep 10
    
@@ -91,9 +64,9 @@ runonly(){
 		docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
 	fi
 	
-	if [  ! -e $sudokey ] ; then
-		ssh-keygen -t rsa -P "" -f $sudokey
-		chmod 600 ${sudokey}*
+	if [  ! -e $ansible_ssh_private_key_file ] ; then
+		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
+		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
    
 	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
@@ -118,84 +91,26 @@ runonly(){
 	
 }
 
-runall(){
-	runonly $*
-	execansible preinstall.yml
-	execansible install_dbca.yml
-}
-
-execansible(){
-   ansible-playbook -f 64 -T 600 -i $VIRT_TYPE $*
-}
-
 deleteall(){
 	common_stopall $*
    	common_deleteall $*
-   
 	#### VIRT_TYPE specific processing ###
-	rm -rf ${sudokey}*
-	rm -rf $DOCKER_VOLUME_PATH
+	if [ -n "$ansible_ssh_private_key_file" ]; then
+   		rm -rf ${ansible_ssh_private_key_file}*
+	fi
+
+	if [ -n "$DOCKER_VOLUME_PATH" ]; then
+   		rm -rf $DOCKER_VOLUME_PATH
+	fi	
+
 	docker network rm $BRNAME
    
-}
-
-stop(){ 
-	common_stop $*
-}
-
-stopall(){
-	common_stopall $*
-}
-
-start(){ 
-	common_start $*
-}
-
-startall(){
-	common_startall $*
 }
 
 buildimage(){
 	docker build -t $IMAGE --no-cache=true ./images/OEL7
 }
 
-dm_resize(){
-	systemctl stop docker
-	rm -rf /var/lib/docker
-	mkdir -p /etc/systemd/system/docker.service.d
-	cat > /etc/systemd/system/docker.service.d/storage.conf <<'EOF'
-[Service]
-ExecStart=
-ExecStart=/usr/bin/dockerd --storage-opt dm.basesize=100G --storage-opt dm.loopdatasize=1024G --storage-opt dm.loopmetadatasize=4G --storage-opt dm.fs=xfs --storage-opt dm.blocksize=512K
-EOF
-	systemctl daemon-reload
-	systemctl start docker
-}
+source ./common_menu.sh
 
-heatrun(){
-for i in `seq 1 $2`
-do
-    LOG="`date "+%Y%m%d-%H%M%S"`.log"
-    deleteall >$LOG  2>&1
-    STARTTIME=`date "+%Y%m%d-%H%M%S"`
-    runall $1 >>$LOG  2>&1
-    echo "START $STARTTIME" >>$LOG
-    echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
-done
-}
 
-case "$1" in
-  "execansible" ) shift;execansible $*;;
-  "runonly" ) shift;runonly $*;;
-  "runall" ) shift;runall $*;;
-  "run" ) shift;run $*;;
-  "startall" ) shift;startall $*;;
-  "start" ) shift;start $*;;
-  "delete" ) shift;delete $*;;
-  "deleteall" ) shift;deleteall $*;;
-  "stop" ) shift;stop $*;;
-  "stopall" ) shift;stopall $*;;
-  "buildimage") shift;buildimage $*;;
-  "dm_resize") shift;dm_resize $*;;
-  "heatrun") shift;heatrun $*;;
-esac
