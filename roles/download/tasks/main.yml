@@ -1,1 +1,25 @@
-#
+---
+  - name: "download media"
+    become: yes
+    shell: "{{ DOWNLOAD_CMD }} {{ BUCKET_URL }}/{{ item }} /media"
+    when: inventory_hostname == groups["dbserver"][0]
+    with_items:
+      - "{{ DB_MEDIA1 }}"
+      - "{{ DB_MEDIA2 }}"
+      - "{{ GRID_MEDIA1 }}"
+      - "{{ GRID_MEDIA2 }}"
+
+  - name: "install unzip"
+    become: yes
+    yum: name=unzip state=present
+    when: inventory_hostname == groups["dbserver"][0]
+
+  - name: "unzip media"
+    become: yes
+    shell: "unzip /media/{{ item }} -d /media"
+    when: inventory_hostname == groups["dbserver"][0]
+    with_items:
+      - "{{ DB_MEDIA1 }}"
+      - "{{ DB_MEDIA2 }}"
+      - "{{ GRID_MEDIA1 }}"
+      - "{{ GRID_MEDIA2 }}"
