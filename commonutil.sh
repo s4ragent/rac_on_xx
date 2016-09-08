@@ -23,7 +23,7 @@ eval $(parse_yaml common_vars.yml)
 eval $(parse_yaml $VIRT_TYPE/vars.yml)
 
 common_deleteall(){
-   ansible-playbook -i $VIRT_TYPE deleteall.yml
+   common_execansible deleteall.yml
    
    rm -rf $VIRT_TYPE/*.inventory
    rm -rf $VIRT_TYPE/group_vars
@@ -37,11 +37,11 @@ common_stop(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   ansible-playbook -T 30 -i $VIRT_TYPE stopall.yml --limit $NODENAME
+   common_execansible stopall.yml --limit $NODENAME
 }
 
 common_stopall(){
-   ansible-playbook -T 30 -i $VIRT_TYPE stopall.yml
+   common_execansible stopall.yml
 }
 
 common_start(){ 
@@ -50,11 +50,11 @@ common_start(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   ansible-playbook -i $VIRT_TYPE startall.yml --limit $NODENAME
+   common_execansible startall.yml --limit $NODENAME
 }
 
 common_startall(){
-   ansible-playbook -i $VIRT_TYPE startall.yml
+   common_execansible startall.yml
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
@@ -111,4 +111,8 @@ fi
 #$1 instance_name $2 external_IP
 common_replaceinventory(){
 	sed -i -e "s/$1 ansible_ssh_host=.*\$/$1 ansible_ssh_host=${2}a/g" $VIRT_TYPE/*.inventory
+}
+
+common_execansible(){
+   ansible-playbook -f 64 -T 600 -i $VIRT_TYPE $*
 }
