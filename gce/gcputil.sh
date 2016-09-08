@@ -79,7 +79,12 @@ replaceinventory(){
 	do
 		INSTANCE_NAME=`echo $FILE | awk -F '/' '{print $3}'`
 		LIST_RESULT=$(gcloud compute instances list  $INSTANCE_NAME --zones $ZONE | tail -n 1)
-		External_IP=`echo $LIST_RESULT | awk '{print $5}'`
+		MACHINE_TYPE=`echo $LIST_RESULT | awk '{print $3}'`
+		if [ "$MACHINE_TYPE" = "custom" ]; then
+			External_IP=`echo $LIST_RESULT | awk '{print $9}'`
+		else
+			External_IP=`echo $LIST_RESULT | awk '{print $5}'`
+		fi
 		common_replaceinventory $INSTANCE_NAME $External_IP
 	done
 }
