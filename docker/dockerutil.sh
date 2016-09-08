@@ -3,13 +3,8 @@
 VIRT_TYPE="docker"
 
 cd ..
-
-
-
 source ./commonutil.sh
 
-
-sudokey=$ansible_ssh_private_key
 
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 ip $3 nodenumber $4 hostgroup#####
