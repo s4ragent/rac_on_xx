@@ -88,17 +88,9 @@ runonly(){
 	
 }
 
-runall(){
-	runonly $*
-	execansible preinstall.yml
-	execansible install_dbca.yml
-}
-
-
 deleteall(){
 	common_stopall $*
    	common_deleteall $*
-   
 	#### VIRT_TYPE specific processing ###
 	rm -rf ${sudokey}*
 	rm -rf $DOCKER_VOLUME_PATH
@@ -106,49 +98,9 @@ deleteall(){
    
 }
 
-stop(){ 
-	common_stop $*
-}
-
-stopall(){
-	common_stopall $*
-}
-
-start(){ 
-	common_start $*
-}
-
-startall(){
-	common_startall $*
-}
-
 buildimage(){
 	docker build -t $IMAGE --no-cache=true ./images/OEL7
 }
 
-dm_resize(){
-	systemctl stop docker
-	rm -rf /var/lib/docker
-	mkdir -p /etc/systemd/system/docker.service.d
-	cat > /etc/systemd/system/docker.service.d/storage.conf <<'EOF'
-[Service]
-ExecStart=
-ExecStart=/usr/bin/dockerd --storage-opt dm.basesize=100G --storage-opt dm.loopdatasize=1024G --storage-opt dm.loopmetadatasize=4G --storage-opt dm.fs=xfs --storage-opt dm.blocksize=512K
-EOF
-	systemctl daemon-reload
-	systemctl start docker
-}
-
-heatrun(){
-for i in `seq 1 $2`
-do
-    LOG="`date "+%Y%m%d-%H%M%S"`.log"
-    deleteall >$LOG  2>&1
-    STARTTIME=`date "+%Y%m%d-%H%M%S"`
-    runall $1 >>$LOG  2>&1
-    echo "START $STARTTIME" >>$LOG
-    echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
-done
-}
 
 
