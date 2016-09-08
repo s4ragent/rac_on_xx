@@ -134,7 +134,7 @@ scan2_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$SCAN2"
 	
 if [ ! -e $VIRT_TYPE/group_vars/all.yml ]; then
 	mkdir -p $VIRT_TYPE/group_vars
-	cp vars.yml $VIRT_TYPE/group_vars/all.yml
+	cp common_vars.yml $VIRT_TYPE/group_vars/all.yml
 	cat $VIRT_TYPE/vars.yml >> $VIRT_TYPE/group_vars/all.yml
 fi
 
