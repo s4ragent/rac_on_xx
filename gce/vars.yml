@@ -4,7 +4,7 @@
 ZONE: "asia-east1-c"
 #INSTANCE_SIZE_OPS: "--machine-type n1-highmem-2"
 #INSTANCE_SIZE_OPS: "--machine-type n1-standard-1"
-INSTANCE_TYPE_OPS: "--custom-cpu 1 --custom--memory 6.5"
+INSTANCE_TYPE_OPS: "--custom-cpu 1 --custom-memory 6.5"
 NODE_DISK_SIZE: "50GB"
 STORAGE_DISK_SIZE: "100GB"
 ####################################################
