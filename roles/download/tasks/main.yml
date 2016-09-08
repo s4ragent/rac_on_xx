@@ -1,42 +1,36 @@
 ---
-  - name: "check downloadmedia"
-    become: yes
-    shell: "ls {{ MEDIA_PATH }}/database"
-    ignore_errors: true
-    register: ls_rerult
-
   - name: "disable fastestmirror"
     become: yes
     shell: sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf
-    when: inventory_hostname == groups["dbserver"][0] and ls_rerult.rc != 0
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_PATH is defined and MEDIA_PATH !=""
     ignore_errors: true
 
   - name: "yum clean all"
     become: yes
     shell: yum -y clean all
-    when: inventory_hostname == groups["dbserver"][0] and ls_rerult.rc != 0
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_PATH is defined and MEDIA_PATH !=""
     ignore_errors: true
 
   - name: "dummy yum command (GPGKEY INSTALL)"
     become: yes
     shell: yum -y search nfs-utils
-    when: inventory_hostname == groups["dbserver"][0] and ls_rerult.rc != 0
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_PATH is defined and MEDIA_PATH !=""
     ignore_errors: true
 
   - name: "install unzip"
     become: yes
     yum: name=unzip state=present
-    when: inventory_hostname == groups["dbserver"][0] and ls_rerult.rc != 0
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_PATH is defined and MEDIA_PATH !=""
 
   - name: "crete directory"
     become: yes
     file: path={{ MEDIA_PATH }} state=directory mode=0755 group=root owner=root
-    when: inventory_hostname == groups["dbserver"][0] and ls_rerult.rc != 0
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_PATH is defined and MEDIA_PATH !=""
 
   - name: "download media"
     become: yes
     shell: "{{ DOWNLOAD_CMD }} {{ BUCKET_URL }}/{{ item }} {{ MEDIA_PATH }} "
-    when: inventory_hostname == groups["dbserver"][0] and ls_rerult.rc != 0
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_PATH is defined and MEDIA_PATH !=""
     with_items:
       - "{{ DB_MEDIA1 }}"
       - "{{ DB_MEDIA2 }}"
@@ -46,7 +40,7 @@
   - name: "unzip media"
     become: yes
     shell: "unzip {{ MEDIA_PATH }}/{{ item }} -d {{ MEDIA_PATH }}"
-    when: inventory_hostname == groups["dbserver"][0] and ls_rerult.rc != 0
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_PATH is defined and MEDIA_PATH !=""
     with_items:
       - "{{ DB_MEDIA1 }}"
       - "{{ DB_MEDIA2 }}"
