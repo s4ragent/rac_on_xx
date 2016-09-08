@@ -9,6 +9,11 @@
     shell: yum -y clean all
     ignore_errors: true
 
+  - name: "dummy yum command (GPGKEY INSTALL)"
+    become: yes
+    shell: yum -y search nfs-utils
+    ignore_errors: true
+
   - name: "install unzip"
     become: yes
     yum: name=unzip state=present
@@ -16,7 +21,7 @@
 
   - name: "download media"
     become: yes
-    shell: "{{ DOWNLOAD_CMD }} {{ BUCKET_URL }}/{{ item }} /media"
+    shell: "{{ DOWNLOAD_CMD }} {{ BUCKET_URL }}/{{ item }} {{ MEDIA_PATH }} "
     when: inventory_hostname == groups["dbserver"][0]
     with_items:
       - "{{ DB_MEDIA1 }}"
@@ -26,7 +31,7 @@
 
   - name: "unzip media"
     become: yes
-    shell: "unzip /media/{{ item }} -d /media"
+    shell: "unzip {{ MEDIA_PATH }}/{{ item }} -d {{ MEDIA_PATH }}"
     when: inventory_hostname == groups["dbserver"][0]
     with_items:
       - "{{ DB_MEDIA1 }}"
@@ -34,7 +39,3 @@
       - "{{ GRID_MEDIA1 }}"
       - "{{ GRID_MEDIA2 }}"
 
-  - name: "dummy yum command (GPGKEY INSTALL)"
-    become: yes
-    shell: yum -y search nfs-utils
-    ignore_errors: true
