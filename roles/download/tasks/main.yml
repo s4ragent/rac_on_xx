@@ -1,7 +1,7 @@
 ---
-  - name: "check oracle-release"
+  - name: "check downloadmedia"
     become: yes
-    shell: "ls {{ MEDIA_PATH }}"
+    shell: "ls {{ MEDIA_PATH }}/database"
     ignore_errors: true
     register: ls_rerult
 
