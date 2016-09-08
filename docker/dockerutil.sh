@@ -8,6 +8,8 @@ source ./commonutil.sh
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 ip $3 nodenumber $4 hostgroup#####
 run(){
+	sudoer=$ansible_ssh_user
+	sudokey=$ansible_ssh_private_key
 	NODENAME=$1
 	IP=$2
 	NODENUMBER=$3
