@@ -1,5 +1,6 @@
 #!/bin/bash
 
+VIRT_TYPE="docker"
 
 cd ..
 source ./commonutil.sh
