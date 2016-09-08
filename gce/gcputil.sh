@@ -64,56 +64,14 @@ runonly(){
 	
 }
 
-preinstall(){
-	runonly $*
-	execansible centos2oel.yml   
-	execansible preinstall.yml
-	execansible gui.yml
-}
-
-install_dbca(){
-	execansible install_dbca.yml
-}
-
-download(){
-	execansible download.yml
-}
-
-runall(){
-	runonly $*
-	execansible download.yml
-	execansible preinstall.yml
-	execansible install_dbca.yml
-}
-
-
-
-execansible(){
-   ansible-playbook -f 64 -T 600 -i $VIRT_TYPE $*
-}
-
 deleteall(){
 	common_stopall $*
    	common_deleteall $*
-   
 	#### VIRT_TYPE specific processing ###
-	rm -rf ${sudokey}*
-}
-
-stop(){ 
-	common_stop $*
-}
-
-stopall(){
-	common_stopall $*
-}
-
-start(){ 
-	common_start $*
-}
-
-startall(){
-	common_startall $*
+	if [ -n "$ansible_ssh_private_key_file" ]; then
+   		rm -rf ${ansible_ssh_private_key_file}*
+	fi
+   
 }
 
 replaceinventory(){
@@ -126,32 +84,4 @@ replaceinventory(){
 	done
 }
 
-heatrun(){
-for i in `seq 1 $2`
-do
-    LOG="`date "+%Y%m%d-%H%M%S"`.log"
-    deleteall >$LOG  2>&1
-    STARTTIME=`date "+%Y%m%d-%H%M%S"`
-    runall $1 >>$LOG  2>&1
-    echo "START $STARTTIME" >>$LOG
-    echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
-done
-}
-
-case "$1" in
-  "execansible" ) shift;execansible $*;;
-  "replaceinventory" ) shift;replaceinventory $*;;
-  "runonly" ) shift;runonly $*;;
-  "runall" ) shift;runall $*;;
-  "preinstall" ) shift;preinstall $*;;
-  "install_dbca" ) shift;install_dbca $*;;
-  "run" ) shift;run $*;;
-  "startall" ) shift;startall $*;;
-  "start" ) shift;start $*;;
-  "delete" ) shift;delete $*;;
-  "deleteall" ) shift;deleteall $*;;
-  "stop" ) shift;stop $*;;
-  "stopall" ) shift;stopall $*;;
-  "download") shift;download $*;;
-  "heatrun") shift;heatrun $*;;
-esac
+source ./common_menu.sh
