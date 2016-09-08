@@ -1,17 +1,20 @@
 ---
   - name: "disable fastestmirror"
     become: yes
-    shell: sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf 
+    shell: sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf
+    when: inventory_hostname == groups["dbserver"][0]
     ignore_errors: true
 
   - name: "yum clean all"
     become: yes
     shell: yum -y clean all
+    when: inventory_hostname == groups["dbserver"][0]
     ignore_errors: true
 
   - name: "dummy yum command (GPGKEY INSTALL)"
     become: yes
     shell: yum -y search nfs-utils
+    when: inventory_hostname == groups["dbserver"][0]
     ignore_errors: true
 
   - name: "install unzip"
@@ -22,6 +25,7 @@
   - name: "crete directory"
     become: yes
     file: path={{ MEDIA_PATH }} state=directory mode=0755 group=root owner=root
+    when: inventory_hostname == groups["dbserver"][0]
 
   - name: "download media"
     become: yes
