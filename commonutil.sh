@@ -28,6 +28,7 @@ common_execansible(){
 
 common_runall(){
 	runonly $*
+   common_execansible download.yml
 	common_execansible preinstall.yml
 	common_execansible install_dbca.yml
 }
