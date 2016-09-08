@@ -13,7 +13,7 @@
   - name: "runInstaller(grid)"
     become: yes
     become_user: grid
-    shell: /media/grid/runInstaller -silent -responseFile /home/grid/grid.rsp -waitforcompletion {{ INSTALL_OPS }}
+    shell: "{{ MEDIA_PATH }}/grid/runInstaller -silent -responseFile /home/grid/grid.rsp -waitforcompletion {{ INSTALL_OPS }}"
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
     when: inventory_hostname == groups["dbserver"][0]
