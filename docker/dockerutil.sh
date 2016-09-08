@@ -38,7 +38,7 @@ run(){
 	docker exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
 	docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
 	docker exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
-	docker cp ${ansible_ssh_private_key}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
+	docker cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
 	docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
 
 	sleep 10
@@ -64,9 +64,9 @@ runonly(){
 		docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
 	fi
 	
-	if [  ! -e $ansible_ssh_private_key ] ; then
-		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key
-		chmod 600 ${ansible_ssh_private_key}*
+	if [  ! -e $ansible_ssh_private_key_file ] ; then
+		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
+		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
    
 	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
@@ -95,8 +95,8 @@ deleteall(){
 	common_stopall $*
    	common_deleteall $*
 	#### VIRT_TYPE specific processing ###
-	if [ -n "$ansible_ssh_private_key" ]; then
-   		rm -rf ${ansible_ssh_private_key}*
+	if [ -n "$ansible_ssh_private_key_file" ]; then
+   		rm -rf ${ansible_ssh_private_key_file}*
 	fi
 
 	if [ -n "$DOCKER_VOLUME_PATH" ]; then
