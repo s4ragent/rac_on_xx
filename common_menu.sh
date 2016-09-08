@@ -7,7 +7,6 @@ case "$1" in
   "start" ) shift;common_start $*;;
   "stop" ) shift;common_stop $*;;
   "stopall" ) shift;common_stopall $*;;
-  "download") shift;common_download $*;;
   "heatrun") shift;common_heatrun $*;;
   "runall" ) shift;common_runall $*;;
   "replaceinventory" ) shift;replaceinventory $*;;
