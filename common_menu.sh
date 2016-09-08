@@ -3,7 +3,6 @@ case "$1" in
   "execansible" ) shift;common_execansible $*;;
   "preinstall" ) shift;common_preinstall $*;;
   "install_dbca" ) shift;common_install_dbca $*;;
-  "run" ) shift;common_run $*;;
   "startall" ) shift;common_startall $*;;
   "start" ) shift;common_start $*;;
   "stop" ) shift;common_stop $*;;
@@ -11,6 +10,7 @@ case "$1" in
   "download") shift;common_download $*;;
   "heatrun") shift;common_heatrun $*;;
   "replaceinventory" ) shift;replaceinventory $*;;
+  "run" ) shift;run $*;;
   "runonly" ) shift;runonly $*;;
   "runall" ) shift;runall $*;;
   "delete" ) shift;delete $*;;
