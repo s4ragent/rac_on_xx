@@ -79,7 +79,6 @@ common_stop(){
 
 common_stopall(){
    common_execansible stopall.yml
-   replaceinventory
 }
 
 common_start(){ 
@@ -94,6 +93,7 @@ common_start(){
 
 common_startall(){
    common_execansible startall.yml
+   replaceinventory
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
