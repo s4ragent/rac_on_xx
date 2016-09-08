@@ -22,7 +22,7 @@ run(){
 	common_update_all_yml
 	common_update_ansible_inventory $NODENAME $External_IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	
-	gcloud compute instances add-metadata $INSTANCE_ID --metadata-from-file ssh-keys=${sudokey}.pub --zone $ZONE
+	gcloud compute instances add-metadata $INSTANCE_ID --metadata-from-file ssh-keys=${ansible_ssh_private_key_file}.pub --zone $ZONE
 
 	echo $Internal_IP
 
@@ -37,13 +37,13 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	if [  ! -e $sudokey ] ; then
+	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
 		#ssh-keygen -t rsa -P "" -f $sudokey -C $sudoer
 		ssh-keygen -t rsa -P "" -f tempkey -C $sudoer
-		echo "$sudoer:"`cat tempkey.pub` > ${sudokey}.pub
+		echo "$sudoer:"`cat tempkey.pub` > ${ansible_ssh_private_key_file}.pub
 		rm -f tempkey.pub
-      		mv -f tempkey ${sudokey}
-      		chmod 600 ${sudokey}*
+      		mv -f tempkey ${ansible_ssh_private_key_file}
+      		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
    
 
