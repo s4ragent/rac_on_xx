@@ -22,6 +22,43 @@ parse_yaml(){
 eval $(parse_yaml common_vars.yml)
 eval $(parse_yaml $VIRT_TYPE/vars.yml)
 
+common_execansible(){
+   ansible-playbook -f 64 -T 600 -i $VIRT_TYPE $*
+}
+
+common_runall(){
+	runonly $*
+	common_execansible preinstall.yml
+	common_execansible install_dbca.yml
+}
+
+common_preinstall(){
+	runonly $*
+	common_execansible centos2oel.yml   
+	common_execansible preinstall.yml
+	common_execansible gui.yml
+}
+
+common_install_dbca(){
+	common_execansible install_dbca.yml
+}
+
+common_download(){
+	common_execansible download.yml
+}
+
+common_heatrun(){
+for i in `seq 1 $2`
+do
+    LOG="`date "+%Y%m%d-%H%M%S"`.log"
+    deleteall >$LOG  2>&1
+    STARTTIME=`date "+%Y%m%d-%H%M%S"`
+    runall $1 >>$LOG  2>&1
+    echo "START $STARTTIME" >>$LOG
+    echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
+done
+}
+
 common_deleteall(){
    common_execansible deleteall.yml
    
@@ -113,6 +150,3 @@ common_replaceinventory(){
 	sed -i -e "s/$1 ansible_ssh_host=.*\$/$1 ansible_ssh_host=${2}a/g" $VIRT_TYPE/*.inventory
 }
 
-common_execansible(){
-   ansible-playbook -f 64 -T 600 -i $VIRT_TYPE $*
-}
