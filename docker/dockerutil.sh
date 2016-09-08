@@ -94,9 +94,6 @@ runall(){
 	execansible install_dbca.yml
 }
 
-execansible(){
-   ansible-playbook -f 64 -T 600 -i $VIRT_TYPE $*
-}
 
 deleteall(){
 	common_stopall $*
@@ -154,18 +151,4 @@ do
 done
 }
 
-case "$1" in
-  "execansible" ) shift;execansible $*;;
-  "runonly" ) shift;runonly $*;;
-  "runall" ) shift;runall $*;;
-  "run" ) shift;run $*;;
-  "startall" ) shift;startall $*;;
-  "start" ) shift;start $*;;
-  "delete" ) shift;delete $*;;
-  "deleteall" ) shift;deleteall $*;;
-  "stop" ) shift;stop $*;;
-  "stopall" ) shift;stopall $*;;
-  "buildimage") shift;buildimage $*;;
-  "dm_resize") shift;dm_resize $*;;
-  "heatrun") shift;heatrun $*;;
-esac
+
