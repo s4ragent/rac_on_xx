@@ -1,4 +1,14 @@
 ---
+  - name: "disable fastestmirror"
+    become: yes
+    shell: sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf 
+    ignore_errors: true
+
+  - name: "yum clean all"
+    become: yes
+    shell: yum -y clean all
+    ignore_errors: true
+
   - name: "install unzip"
     become: yes
     yum: name=unzip state=present
