@@ -33,3 +33,8 @@
       - "{{ DB_MEDIA2 }}"
       - "{{ GRID_MEDIA1 }}"
       - "{{ GRID_MEDIA2 }}"
+
+  - name: "dummy yum command (GPGKEY INSTALL)"
+    become: yes
+    shell: yum -y search nfs-utils
+    ignore_errors: true
