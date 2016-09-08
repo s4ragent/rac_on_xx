@@ -13,7 +13,6 @@ case "$1" in
   "replaceinventory" ) shift;replaceinventory $*;;
   "run" ) shift;run $*;;
   "runonly" ) shift;runonly $*;;
-  "delete" ) shift;delete $*;;
   "deleteall" ) shift;deleteall $*;;
   "buildimage" ) shift;buildimage $*;;
 esac
