@@ -88,6 +88,7 @@ common_start(){
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
    common_execansible startall.yml --limit $NODENAME
+   replaceinventory
 }
 
 common_startall(){
