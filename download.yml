@@ -1,5 +1,4 @@
 ---
- - hosts:
-    - dbserver
-   tasks:
-    - download
+ - hosts: dbserver
+   roless:
+
