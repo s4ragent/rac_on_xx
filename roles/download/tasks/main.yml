@@ -19,6 +19,10 @@
     yum: name=unzip state=present
     when: inventory_hostname == groups["dbserver"][0]
 
+  - name: "crete directory"
+    become: yes
+    file: path={{ MEDIA_PATH }} state=directory mode=0755 group=root owner=root
+
   - name: "download media"
     become: yes
     shell: "{{ DOWNLOAD_CMD }} {{ BUCKET_URL }}/{{ item }} {{ MEDIA_PATH }} "
