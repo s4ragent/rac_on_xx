@@ -28,15 +28,6 @@
     tags:
       - centos2oel
 
-  - name: reboot
-    become: yes
-    shell: sleep 2 && shutdown -r now
-    when: centos2oel_rerult.rc != 0
-    async: 1
-    poll: 0
-    ignore_errors: true
-    tags:
-      - centos2oel
 
   - name: "centos2oel distro-sync"
     become: yes
@@ -51,6 +42,17 @@
     ignore_errors: true
     tags:
       - centos2oel
+
+  - name: reboot
+    become: yes
+    shell: sleep 2 && shutdown -r now
+    when: centos2oel_rerult.rc != 0
+    async: 1
+    poll: 0
+    ignore_errors: true
+    tags:
+      - centos2oel
+
 
   - name: "sleep 360s"
     local_action: shell sleep 360s
