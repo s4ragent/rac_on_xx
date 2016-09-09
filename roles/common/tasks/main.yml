@@ -162,7 +162,7 @@
     tags:
       - swap
  
-  - debug: msg= filesystem_type_rerult.stdout
+  - debug: msg= {{ filesystem_type_rerult.stdout }}
     tags:
       - swap
 
