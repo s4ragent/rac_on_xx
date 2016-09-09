@@ -54,8 +54,8 @@
       - centos2oel
 
 
-  - name: "sleep 360s"
-    local_action: shell sleep 360s
+  - name: "sleep 180s"
+    local_action: shell sleep 180s
     run_once: true
     when: centos2oel_rerult.rc != 0
     tags:
