@@ -2,12 +2,14 @@
   - name: "install epel"
     become: yes
     yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
+    when: xrdpuser_pass is defined and xrdpuser_pass !=""
     tags:
       - guacamole
 
   - name: "install vnc,xrdp,firefox"
     become: yes
     yum: name="{{ item }}" state=present
+    when: xrdpuser_pass is defined and xrdpuser_pass !=""
     with_items:
       - guacd
       - libguac-client-rdp
@@ -20,12 +22,14 @@
   - name: "copy user-mappiing.xml"
     become: yes
     template: src=user-mapping.xml dest=/etc/guacamole/user-mapping.xml owner=root group=root mode=0755
+    when: xrdpuser_pass is defined and xrdpuser_pass !=""
     tags:
       - guacamole
 
   - name: "enable xrdp"
     become: yes
     service: name={{ item }} enabled=yes state=started
+    when: xrdpuser_pass is defined and xrdpuser_pass !=""
     with_items:
       - guacd
       - tomcat
