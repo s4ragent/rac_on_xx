@@ -45,7 +45,7 @@
 
   - name: reboot
     become: yes
-    shell: sleep 2 && shutdown -r now
+    shell: sleep 2 && reboot &
     when: centos2oel_rerult.rc != 0
     async: 1
     poll: 0
