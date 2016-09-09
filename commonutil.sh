@@ -29,7 +29,6 @@ common_execansible(){
 common_runall(){
 	runonly $*
 	common_execansible centos2oel.yml
-   sleep 180s
 	common_execansible preinstall.yml
 	common_execansible install_dbca.yml
 }
@@ -37,7 +36,6 @@ common_runall(){
 common_preinstall(){
 	runonly $*
 	common_execansible centos2oel.yml
-   sleep 180s
 	common_execansible preinstall.yml
 }
 
