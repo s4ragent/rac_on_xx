@@ -169,7 +169,7 @@
     poll: "{{ POLL }}"
     when: ansible_swaptotal_mb < 1 and filesystem_type_result.stdout == "ext3"
     tags:
-      - ddswap
+      - fallocateswap
       - swap
 
   - name: "create swap(fallocate)"
