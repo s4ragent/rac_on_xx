@@ -2,7 +2,8 @@
  - hosts: all
    roles:
       - download
-      - gui
+      - xrdp
+      - guacamole
       - security
       - vxlan
       - dns
