@@ -153,15 +153,15 @@
     tags:
       - preinstallpackages
 
-  - name: "check oracle-release"
+  - name: "check file systemtype"
     become: yes
     shell: "df -T / | tail -n 1 | awk '{print $2}'"
     ignore_errors: true
+    when: ansible_swaptotal_mb < 1
     register: filesystem_type_rerult
     tags:
       - swap
  
-
   - name: "create swap(dd)"
     become: yes
     shell: dd if=/dev/zero of=/swap bs=1M count={{ SWAP_SIZE }} && mkswap /swap
