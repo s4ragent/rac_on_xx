@@ -162,6 +162,10 @@
     tags:
       - swap
  
+  - debug: msg= filesystem_type_rerult.stdout
+    tags:
+      - swap
+
   - name: "create swap(dd)"
     become: yes
     shell: dd if=/dev/zero of=/swap bs=1M count={{ SWAP_SIZE }} && mkswap /swap
