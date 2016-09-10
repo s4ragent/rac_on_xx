@@ -82,12 +82,12 @@ common_start(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   start_stop_delete.yml --tags start --limit $NODENAME
+   common_execansible   start_stop_delete.yml --tags start --limit $NODENAME
    replaceinventory
 }
 
 common_startall(){
-   start_stop_delete.yml --tags start
+   common_execansible   start_stop_delete.yml --tags start
    replaceinventory
 }
 
