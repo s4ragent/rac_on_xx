@@ -1,1 +1,22 @@
-#
+---
+####  stop
+ - hosts: all:!nfs
+   connection: local
+   tasks:
+     - name: stop container/instance without nfs
+       shell: "{{ STOP_CMD }} {{ INSTANCE_ID }} {{ STOP_CMD_OPS }}" 
+       ignore_errors: yes
+
+ - hosts: nfs
+   tasks:
+     - name: "stop nfs-server.service"
+       become: yes
+       service: name=nfs-server.service state=stopped
+       ignore_errors: yes
+
+ - hosts: nfs
+   connection: local
+   tasks:
+     - name: stop container/instance nfs
+       shell: "{{ STOP_CMD }} {{ INSTANCE_ID }} {{ STOP_CMD_OPS }}" 
+       ignore_errors: yes
