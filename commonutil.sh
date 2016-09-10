@@ -57,6 +57,7 @@ done
 }
 
 common_deleteall(){
+   common_execansible start_stop_delete.yml --tags stop
    common_execansible start_stop_delete.yml --tags delete
    
    rm -rf $VIRT_TYPE/*.inventory
