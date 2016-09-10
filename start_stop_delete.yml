@@ -10,3 +10,13 @@
    roles:
      - stop
 
+#### delete
+ - hosts: all:!nfs
+   connection: local
+   roles:
+     - delete
+ 
+ - hosts: nfs
+   connection: local
+   roles:
+     - delete
