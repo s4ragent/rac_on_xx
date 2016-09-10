@@ -11,12 +11,7 @@
      - stop
 
 #### delete
- - hosts: all:!nfs
-   connection: local
-   roles:
-     - delete
- 
- - hosts: nfs
+ - hosts: all
    connection: local
    roles:
      - delete
