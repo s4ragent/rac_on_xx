@@ -1,7 +1,0 @@
----
- - hosts: all
-   connection: local
-   tasks:
-     - name: "delete all container/instance"
-       shell: "{{ DELETE_CMD }} {{ INSTANCE_ID }} {{ DELETE_CMD_OPS }}"
-       ignore_errors: yes
