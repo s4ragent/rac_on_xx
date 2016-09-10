@@ -8,6 +8,7 @@
     poll: "{{ POLL }}"
     tags:
       - dbca
+      - installdbca
 
   - name: "crsctl"
     become: yes
@@ -16,7 +17,9 @@
     register: dbca_crsctl_result
     tags:
       - dbca
+      - installdbca
 
   - debug: var=dbca_crsctl_result.stdout_lines
     tags:
       - dbca
+      - installdbca
