@@ -1,6 +1,8 @@
 ---
  - hosts: all
    roles:
+      - ssh
+      - centos2oel
       - download
       - xrdp
       - guacamole
