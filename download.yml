@@ -1,5 +1,0 @@
----
- - hosts:
-    - dbserver
-   tasks:
-    - download

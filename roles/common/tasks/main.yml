@@ -162,7 +162,7 @@
     tags:
       - ddswap
       - swap
- 
+
   - name: "create swap(swapon)"
     become: yes
     shell: swapon /swap

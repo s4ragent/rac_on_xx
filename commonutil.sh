@@ -28,24 +28,21 @@ common_execansible(){
 
 common_runall(){
 	runonly $*
+	common_execansible centos2oel.yml
 	common_execansible preinstall.yml
 	common_execansible install_dbca.yml
 }
 
 common_preinstall(){
 	runonly $*
-	common_execansible centos2oel.yml   
+	common_execansible centos2oel.yml
 	common_execansible preinstall.yml
-	common_execansible gui.yml
 }
 
 common_install_dbca(){
 	common_execansible install_dbca.yml
 }
 
-common_download(){
-	common_execansible download.yml
-}
 
 common_heatrun(){
 for i in `seq 1 $2`
@@ -53,7 +50,7 @@ do
     LOG="`date "+%Y%m%d-%H%M%S"`.log"
     deleteall >$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
-    runall $1 >>$LOG  2>&1
+    common_runall $1 >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
@@ -88,10 +85,12 @@ common_start(){
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
    common_execansible startall.yml --limit $NODENAME
+   replaceinventory
 }
 
 common_startall(){
    common_execansible startall.yml
+   replaceinventory
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
@@ -154,6 +153,6 @@ fi
 
 #$1 instance_name $2 external_IP
 common_replaceinventory(){
-	sed -i -e "s/$1 ansible_ssh_host=.*\$/$1 ansible_ssh_host=${2}a/g" $VIRT_TYPE/*.inventory
+	sed -i -e "s/$1 ansible_ssh_host=.*\$/$1 ansible_ssh_host=${2}/g" $VIRT_TYPE/*.inventory
 }
 

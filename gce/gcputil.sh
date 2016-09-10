@@ -1,35 +1,7 @@
 #!/bin/bash
 
-##common user specific value #######################
-sudoer="opc"
-sudokey="raconxx"
-####################################################
-#### gce user specific value  ###################
-#ZONE="us-west1-b"
-ZONE="asia-east1-c"
-#INSTANCE_SIZE_OPS="--machine-type n1-highmem-2"
-#INSTANCE_SIZE_OPS="--machine-type n1-standard-1"
-INSTANCE_TYPE_OPS="--custom-cpu 1 --custom--memory 6.5"
-NODE_DISK_SIZE="50GB"
-STORAGE_DISK_SIZE="200GB"
-####################################################
 ####common VIRT_TYPE specific value ################
 VIRT_TYPE="gce"
-DELETE_CMD="gcloud compute instances delete"
-DELETE_CMD_OPS="--zone $ZONE -q"
-START_CMD="gcloud compute instances start"
-START_CMD_OPS="--zone $ZONE -q"
-STOP_CMD="gcloud compute instances stop"
-STOP_CMD_OPS="--zone $ZONE -q"
-INSTALL_OPS="-ignoreSysprereqs -ignorePrereq"
-DHCPCLIENT="/etc/dhclient.conf"
-DOWNLOAD_CMD="gsutil cp"
-#BUCKET_URL="gs://xxxxxxxxx"
-BUCKET_URL="gs://s4ragent2016824"
-####################################################
-####google cloud  system  specific value ##################
-IMAGE="centos-7"
-####################################################
 
 cd ..
 source ./commonutil.sh
@@ -43,14 +15,20 @@ run(){
 	HOSTGROUP=$4
 	INSTANCE_ID=$NODENAME
 	CREATE_RESULT=$(gcloud compute instances create $NODENAME $INSTANCE_TYPE_OPS --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" --image $IMAGE --boot-disk-type "pd-ssd" --boot-disk-device-name $NODENAME --boot-disk-size $DISKSIZE --zone $ZONE | tail -n 1)
-	External_IP=`echo $CREATE_RESULT | awk '{print $5}'`
-	Internal_IP=`echo $CREATE_RESULT | awk '{print $4}'`
+	MACHINE_TYPE=`echo $CREATE_RESULT | awk '{print $3}'`
+	if [ "$MACHINE_TYPE" = "custom" ]; then
+		External_IP=`echo $CREATE_RESULT | awk '{print $9}'`
+		Internal_IP=`echo $CREATE_RESULT | awk '{print $8}'`
+	else
+		External_IP=`echo $CREATE_RESULT | awk '{print $5}'`
+		Internal_IP=`echo $CREATE_RESULT | awk '{print $4}'`
+	fi
 	
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_all_yml
 	common_update_ansible_inventory $NODENAME $External_IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	
-	gcloud compute instances add-metadata $INSTANCE_ID --metadata-from-file ssh-keys=${sudokey}.pub --zone $ZONE
+	gcloud compute instances add-metadata $INSTANCE_ID --metadata-from-file ssh-keys=${ansible_ssh_private_key_file}.pub --zone $ZONE
 
 	echo $Internal_IP
 
@@ -65,13 +43,13 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	if [  ! -e $sudokey ] ; then
+	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
 		#ssh-keygen -t rsa -P "" -f $sudokey -C $sudoer
-		ssh-keygen -t rsa -P "" -f tempkey -C $sudoer
-		echo "$sudoer:"`cat tempkey.pub` > ${sudokey}.pub
+		ssh-keygen -t rsa -P "" -f tempkey -C $ansible_ssh_user
+		echo "$ansible_ssh_user:"`cat tempkey.pub` > ${ansible_ssh_private_key_file}.pub
 		rm -f tempkey.pub
-      		mv -f tempkey ${sudokey}
-      		chmod 600 ${sudokey}*
+      		mv -f tempkey ${ansible_ssh_private_key_file}
+      		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
    
 
@@ -92,56 +70,14 @@ runonly(){
 	
 }
 
-preinstall(){
-	runonly $*
-	execansible centos2oel.yml   
-	execansible preinstall.yml
-	execansible gui.yml
-}
-
-install_dbca(){
-	execansible install_dbca.yml
-}
-
-download(){
-	execansible download.yml
-}
-
-runall(){
-	runonly $*
-	execansible download.yml
-	execansible preinstall.yml
-	execansible install_dbca.yml
-}
-
-
-
-execansible(){
-   ansible-playbook -f 64 -T 600 -i $VIRT_TYPE $*
-}
-
 deleteall(){
 	common_stopall $*
    	common_deleteall $*
-   
 	#### VIRT_TYPE specific processing ###
-	rm -rf ${sudokey}*
-}
-
-stop(){ 
-	common_stop $*
-}
-
-stopall(){
-	common_stopall $*
-}
-
-start(){ 
-	common_start $*
-}
-
-startall(){
-	common_startall $*
+	if [ -n "$ansible_ssh_private_key_file" ]; then
+   		rm -rf ${ansible_ssh_private_key_file}*
+	fi
+   
 }
 
 replaceinventory(){
@@ -149,37 +85,14 @@ replaceinventory(){
 	do
 		INSTANCE_NAME=`echo $FILE | awk -F '/' '{print $3}'`
 		LIST_RESULT=$(gcloud compute instances list  $INSTANCE_NAME --zones $ZONE | tail -n 1)
-		External_IP=`echo $LIST_RESULT | awk '{print $5}'`
+		MACHINE_TYPE=`echo $LIST_RESULT | awk '{print $3}'`
+		if [ "$MACHINE_TYPE" = "custom" ]; then
+			External_IP=`echo $LIST_RESULT | awk '{print $9}'`
+		else
+			External_IP=`echo $LIST_RESULT | awk '{print $5}'`
+		fi
 		common_replaceinventory $INSTANCE_NAME $External_IP
 	done
 }
 
-heatrun(){
-for i in `seq 1 $2`
-do
-    LOG="`date "+%Y%m%d-%H%M%S"`.log"
-    deleteall >$LOG  2>&1
-    STARTTIME=`date "+%Y%m%d-%H%M%S"`
-    runall $1 >>$LOG  2>&1
-    echo "START $STARTTIME" >>$LOG
-    echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
-done
-}
-
-case "$1" in
-  "execansible" ) shift;execansible $*;;
-  "replaceinventory" ) shift;replaceinventory $*;;
-  "runonly" ) shift;runonly $*;;
-  "runall" ) shift;runall $*;;
-  "preinstall" ) shift;preinstall $*;;
-  "install_dbca" ) shift;install_dbca $*;;
-  "run" ) shift;run $*;;
-  "startall" ) shift;startall $*;;
-  "start" ) shift;start $*;;
-  "delete" ) shift;delete $*;;
-  "deleteall" ) shift;deleteall $*;;
-  "stop" ) shift;stop $*;;
-  "stopall" ) shift;stopall $*;;
-  "download") shift;download $*;;
-  "heatrun") shift;heatrun $*;;
-esac
+source ./common_menu.sh

@@ -110,6 +110,9 @@ deleteall(){
 buildimage(){
 	docker build -t $IMAGE --no-cache=true ./images/OEL7
 }
+replaceinventory(){
+	echo ""
+}
 
 source ./common_menu.sh
 
