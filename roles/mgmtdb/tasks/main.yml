@@ -10,12 +10,14 @@
     tags:
       - mgmtdb
       - gridinstall
+      - installdbca
 
   - debug: var=asmca_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - mgmtdb
       - gridinstall
+      - installdbca
 
   - name: "crsctl"
     become: yes
@@ -25,8 +27,10 @@
     tags:
       - mgmtdb
       - gridinstall
+      - installdbca
 
   - debug: var=crsctl_result.stdout_lines
     tags:
       - mgmtdb
       - gridinstall
+      - installdbca
