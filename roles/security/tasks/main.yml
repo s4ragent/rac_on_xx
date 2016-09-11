@@ -1,8 +1,16 @@
 ---
+  - name: "install selinux,firewalld"
+    become: yes
+    yum: name="{{ item }}" state=present
+    with_items:
+      - selinux
+      - firewalld
+    tags:
+      - security
+
   - name: "disable selinux"
     become: yes
     replace: dest='/etc/selinux/config' regexp='SELINUX=enforcing' replace='SELINUX=disabled'
-    ignore_errors: yes
     tags:
       - security
 
@@ -16,4 +24,3 @@
   - name: "disable firewalld"
     become: yes
     service: name=firewalld.service state=stopped enabled=no
-    ignore_errors: yes
