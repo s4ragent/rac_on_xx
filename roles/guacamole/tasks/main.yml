@@ -6,7 +6,7 @@
     tags:
       - guacamole
 
-  - name: "install vnc,xrdp,firefox"
+  - name: "install guacamole"
     become: yes
     yum: name="{{ item }}" state=present
     when: xrdpuser_pass is defined and xrdpuser_pass !=""
