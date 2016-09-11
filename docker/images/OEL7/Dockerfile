@@ -16,7 +16,7 @@ ENV container docker
 RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 ##installpackages
 #RUN touch /var/lib/rpm/* && yum --enablerepo=ol7_addons -y install oracle-rdbms-server-12cR1-preinstall tar unzip dnsmasq nfs-utils vnc-server xrdp git
-RUN touch /var/lib/rpm/* && yum --enablerepo=ol7_addons -y install oracle-rdbms-server-12cR1-preinstall tar unzip dnsmasq nfs-utils
+RUN touch /var/lib/rpm/* && yum --enablerepo=ol7_addons -y install oracle-rdbms-server-12cR1-preinstall tar unzip dnsmasq nfs-utils sudo
 #RUN touch /var/lib/rpm/* && yum -y groupinstall "Server With GUI"
 RUN touch /var/lib/rpm/* && yum -y reinstall glibc-common
 RUN yum -y clean all
