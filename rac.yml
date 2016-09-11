@@ -1,6 +1,8 @@
 ---
  - hosts: all
    roles:
+      - ssh
+      - centos2oel
       - download
       - xrdp
       - guacamole
@@ -16,3 +18,15 @@
    roles:
       - common
       - nfsclient
+
+ - hosts: dbserver
+   serial: 1
+   roles:
+      - gridinstall
+
+ - hosts: dbserver
+   roles:
+      - mgmtdb
+      - createdg
+      - dbinstall
+      - dbcaserial

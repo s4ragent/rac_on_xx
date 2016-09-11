@@ -28,19 +28,16 @@ common_execansible(){
 
 common_runall(){
 	runonly $*
-	common_execansible centos2oel.yml
-	common_execansible preinstall.yml
-	common_execansible install_dbca.yml
+	common_execansible rac.yml
 }
 
 common_preinstall(){
-	runonly $*
-	common_execansible centos2oel.yml
-	common_execansible preinstall.yml
+	common_execansible rac.yml --skip-tags installdbca
+
 }
 
 common_install_dbca(){
-	common_execansible install_dbca.yml
+	common_execansible rac.yml --tags installdbca
 }
 
 
@@ -57,7 +54,8 @@ done
 }
 
 common_deleteall(){
-   common_execansible deleteall.yml
+   common_execansible start_stop_delete.yml --tags stop
+   common_execansible start_stop_delete.yml --tags delete
    
    rm -rf $VIRT_TYPE/*.inventory
    rm -rf $VIRT_TYPE/group_vars
@@ -71,11 +69,11 @@ common_stop(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   common_execansible stopall.yml --limit $NODENAME
+   common_execansible start_stop_delete.yml --tags stop --limit $NODENAME
 }
 
 common_stopall(){
-   common_execansible stopall.yml
+   common_execansible start_stop_delete.yml --tags stop
 }
 
 common_start(){ 
@@ -84,12 +82,12 @@ common_start(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   common_execansible startall.yml --limit $NODENAME
+   common_execansible   start_stop_delete.yml --tags start --limit $NODENAME
    replaceinventory
 }
 
 common_startall(){
-   common_execansible startall.yml
+   common_execansible   start_stop_delete.yml --tags start
    replaceinventory
 }
 

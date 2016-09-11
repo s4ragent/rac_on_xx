@@ -6,6 +6,7 @@
     tags:
       - createdbrsp
       - dbinstall
+      - installdbca
 
   - name: "runInstaller(db)"
     become: yes
@@ -18,12 +19,14 @@
     tags:
       - runinstallerdb
       - dbinstall
+      - installdbca
 
   - debug: var=runinstallerdb_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - runinstallerdb
       - dbinstall
+      - installdbca
 
   - name: "db root.sh"
     become: yes
@@ -32,8 +35,10 @@
     tags:
       - dbrootsh
       - dbinstall
+      - installdbca
 
   - debug: var=dbrootsh_result.stdout_lines
     tags:
       - dbrootsh
       - dbinstall
+      - installdbca

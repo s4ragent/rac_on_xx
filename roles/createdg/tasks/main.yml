@@ -10,3 +10,4 @@
       - { name: "{{ FRA_DISKGROUP_NAME }}", path: "{{ FRA_DEV }}" }
     tags:
       - createdg
+      - installdbca
