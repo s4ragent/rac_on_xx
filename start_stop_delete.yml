@@ -1,15 +1,4 @@
 ---
-####  stop
- - hosts: all:!nfs
-   connection: local
-   roles:
-     - stop
- 
- - hosts: nfs
-   connection: local
-   roles:
-     - stop
-
 #### delete
  - hosts: all
    connection: local
@@ -26,3 +15,12 @@
    connection: local
    roles:
      - start
+
+####  stop
+ - hosts: all:!nfs
+   roles:
+     - stop
+ 
+ - hosts: nfs
+   roles:
+     - stop
