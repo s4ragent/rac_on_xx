@@ -24,3 +24,5 @@
   - name: "disable firewalld"
     become: yes
     service: name=firewalld.service state=stopped enabled=no
+    tags:
+      - security
