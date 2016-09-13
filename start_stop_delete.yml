@@ -17,10 +17,16 @@
      - start
 
 ####  stop
+ - hosts: all
+   roles:
+     - stop-service
+
  - hosts: all:!nfs
+   connection: local
    roles:
      - stop
  
  - hosts: nfs
+   connection: local
    roles:
      - stop
