@@ -24,7 +24,7 @@
 
  - hosts: nfs
    roles:
-     - stop-service
+     - stop-nfs
  
  - hosts: nfs
    connection: local
