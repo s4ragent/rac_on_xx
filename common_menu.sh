@@ -8,6 +8,7 @@ case "$1" in
   "stop" ) shift;common_stop $*;;
   "stopall" ) shift;common_stopall $*;;
   "heatrun") shift;common_heatrun $*;;
+  "heatrun_full") shift;common_heatrun_full $*;;
   "runall" ) shift;common_runall $*;;
   "replaceinventory" ) shift;replaceinventory $*;;
   "run" ) shift;run $*;;
