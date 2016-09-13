@@ -19,7 +19,7 @@
       
   - name: stop container/instance
  #   local_action: shell "cat {{lookup('env', 'HOME')}}/.bash_profile && {{ STOP_CMD }} {{ INSTANCE_ID }} {{ STOP_CMD_OPS }}" 
-    local_action: shell "source {{lookup('env', 'HOME')}}/.bash_profile" 
+    local_action: shell "/bin/bash {{lookup('env', 'HOME')}}/.bash_profile" 
     ignore_errors: yes
     tags:
       - stop
