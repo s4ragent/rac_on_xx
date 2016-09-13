@@ -71,7 +71,6 @@ runonly(){
 }
 
 deleteall(){
-	common_stopall $*
    	common_deleteall $*
 	#### VIRT_TYPE specific processing ###
 	if [ -n "$ansible_ssh_private_key_file" ]; then
