@@ -7,7 +7,7 @@
       - stop
 
   - name: stop container/instance
-    local_action: shell "{{lookup('env', 'HOME')}}/.bash_profile && {{ STOP_CMD }} {{ INSTANCE_ID }} {{ STOP_CMD_OPS }}" 
+    local_action: shell "cat {{lookup('env', 'HOME')}}/.bash_profile && {{ STOP_CMD }} {{ INSTANCE_ID }} {{ STOP_CMD_OPS }}" 
     ignore_errors: yes
     tags:
       - stop
