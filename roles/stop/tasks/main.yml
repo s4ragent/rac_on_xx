@@ -7,19 +7,7 @@
       - stop
 
   - name: stop container/instance
-    local_action: shell hostname
-    register: hostname_result
-    ignore_errors: yes
-    tags:
-      - stop
-
-  - debug: msg={{ hostname_result.stdout }}
-    tags:
-      - stop
-      
-  - name: stop container/instance
- #   local_action: shell "cat {{lookup('env', 'HOME')}}/.bash_profile && {{ STOP_CMD }} {{ INSTANCE_ID }} {{ STOP_CMD_OPS }}" 
-    local_action: shell "/bin/bash {{lookup('env', 'HOME')}}/.bash_profile" 
+    local_action: shell "{{ STOP_CMD }} {{ INSTANCE_ID }} {{ STOP_CMD_OPS }}" 
     ignore_errors: yes
     tags:
       - stop
