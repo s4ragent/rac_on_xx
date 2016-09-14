@@ -44,7 +44,6 @@ rac_on_xx/gce
 - Google Cloud Platform Account
 - Google Cloud SDK
 - ansible 2.0 or later
-- Oracle 12c Release 1 (12.1) Clusterware and Database software 
 
 ## Install
 >git clone https://github.com/s4ragent/rac_on_xx
@@ -63,14 +62,12 @@ if you want to build 5-nodes RAC
     #cd rac_on_xx/gce
     #bash gceutil.sh preinstall 5
 
-and you via ssh port forwarding 8080
+and you via ssh port forwarding 3389
    ##
-   gcloud compute instances ssh 
+   gcloud compute ssh node001 --ssh-flag=-g '--ssh-flag=-L 3389:127.0.0.1:3389'
 
+and access 
 
-access http://localhost:8080/   on ansible host
-
-right click=> 
 
 
 
