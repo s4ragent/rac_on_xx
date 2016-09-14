@@ -189,3 +189,9 @@ common_replaceinventory(){
 	sed -i -e "s/$1 ansible_ssh_host=.*\$/$1 ansible_ssh_host=${2}/g" $VIRT_TYPE/*.inventory
 }
 
+common_ssh(){
+	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
+}
+
+
+
