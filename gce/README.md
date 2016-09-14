@@ -11,11 +11,11 @@ rac_on_xx/gce
 |OS|Oracle Linux 7.x|
 |Storage|NFS4 with Flex ASM|
 |L2 Network emulation|vxlan|
-|DNS|dnsmasq on each container|
+|DNS|dnsmasq on each instance|
 
 - Network infomation (e.g. 3-nodes RAC)
 
-|hostname/container name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
+|hostname/instance name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
 |nfs|10.xx.xx.xx|-|-|-|
 |node001|10.xx.xx.xx|192.168.0.51|192.168.100.51|192.168.200.51|
@@ -79,19 +79,19 @@ if you want to stop first instance
 
     #bash gceutil.sh stop 1
 
-if you want to stop nfs container
+if you want to stop nfs instance
 
     #bash gceutil.sh stop nfs
 
-and restart first container
+and restart first node
 
     #bash gceutil.sh start 1
     
-if you want to start all containers
+if you want to start all node
 
     #bash gceutil.sh startall
 
-if you want to delete all containers
+if you want to delete all node
 
     #bash gceutil.sh deleteall
 
