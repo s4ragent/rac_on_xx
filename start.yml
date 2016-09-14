@@ -1,1 +1,11 @@
-#
+---
+#### start
+ - hosts: nfs
+   connection: local
+   roles:
+     - start
+
+ - hosts: all:!nfs
+   connection: local
+   roles:
+     - start
