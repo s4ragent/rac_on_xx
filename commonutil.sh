@@ -60,14 +60,20 @@ do
     deleteall >$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
     common_runall $1 >>$LOG  2>&1
+    echo '#########STOP NODE 1################'
     common_stop 1 >>$LOG  2>&1
     common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
+    echo '#########START NODE 1################'
     common_start 1 >>$LOG  2>&1
     sleep 300s
     common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
+    echo '#########START ALL################'
     common_stopall >>$LOG  2>&1
+    echo '#########STOP NFS################'
     common_start nfs >>$LOG  2>&1
+    echo '#########START NFS################'
     common_stop nfs >>$LOG  2>&1
+    echo '#########START ALL################'
     common_startall >>$LOG  2>&1
     sleep 300s
     common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
