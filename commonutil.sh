@@ -28,11 +28,15 @@ common_execansible(){
 
 common_runall(){
 	runonly $*
+	common_execansible centos2oel.yml
+   sleep 180s
 	common_execansible rac.yml
 }
 
 common_preinstall(){
 	runonly $*
+	common_execansible centos2oel.yml
+   sleep 180s
 	common_execansible rac.yml --skip-tags installdbca
 
 }
