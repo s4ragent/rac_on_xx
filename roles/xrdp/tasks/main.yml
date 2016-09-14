@@ -26,6 +26,7 @@
       - vnc-server
       - xrdp
       - firefox
+      - unzip
     when: xrdpuser_pass is defined and xrdpuser_pass !=""
     tags:
       - xrdp
