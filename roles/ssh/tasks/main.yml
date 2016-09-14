@@ -18,11 +18,9 @@
       insertafter: EOF
       state: present
     register: ssh_config
-
   
   - name: Restart ssh
     become: yes
     service:
       name: sshd
       state: restarted
-    when: ssh_config.changed
