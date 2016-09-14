@@ -32,6 +32,7 @@ common_runall(){
 }
 
 common_preinstall(){
+	runonly $*
 	common_execansible rac.yml --skip-tags installdbca
 
 }
