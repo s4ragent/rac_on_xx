@@ -62,11 +62,12 @@ if you want to build 5-nodes RAC
     #cd rac_on_xx/gce
     #bash gceutil.sh preinstall 5
 
-and you via ssh port forwarding 3389
-   ##
-   gcloud compute ssh node001 --ssh-flag=-g '--ssh-flag=-L 3389:127.0.0.1:3389'
+and ssh port forwarding 3389
+    ##
+    gcloud compute ssh node001 --ssh-flag=-g '--ssh-flag=-L 1234:127.0.0.1:8080'
 
-and access 
+and access http://localhost:1234  on ansible host
+
 
 
 
