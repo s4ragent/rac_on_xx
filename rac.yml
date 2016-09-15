@@ -2,8 +2,6 @@
  - hosts: all
    roles:
       - download
-      - xrdp
-      - guacamole
       - security
       - vxlan
       - dns
@@ -15,6 +13,9 @@
  - hosts: dbserver
    roles:
       - common
+      - xrdp
+      - vnc
+      - guacamole
       - nfsclient
 
  - hosts: dbserver
