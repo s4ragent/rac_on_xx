@@ -2,14 +2,14 @@
   - name: "install epel"
     become: yes
     yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
-    when: xrdpuser_pass is defined and xrdpuser_pass !=""
+    when: xrdp_pass is defined and xrdp_pass !=""
     tags:
       - xrdp
 
   - name: "dummy yum command (GPGKEY INSTALL)"
     become: yes
     shell: yum -y search nfs-utils
-    when: xrdpuser_pass is defined and xrdpuser_pass !=""
+    when: xrdp_pass is defined and xrdp_pass !=""
     ignore_errors: true
     tags:
       - xrdp
@@ -27,47 +27,46 @@
       - xrdp
       - firefox
       - unzip
-    when: xrdpuser_pass is defined and xrdpuser_pass !=""
+    when: xrdp_pass is defined and xrdp_pass !=""
     tags:
       - xrdp
 
   - name: "copy .Xclients"
     become: yes
     copy: src=.Xclients dest=/etc/skel/.Xclients owner=root group=root mode=0700
-    when: xrdpuser_pass is defined and xrdpuser_pass !=""
+    when: xrdp_pass is defined and xrdp_pass !=""
     tags:
       - xrdp
 
   - name: "chcon"
     become: yes
     shell: chcon -t bin_t /usr/sbin/xrdp /usr/sbin/xrdp-sesman
-    when: xrdpuser_pass is defined and xrdpuser_pass !=""
+    when: xrdp_pass is defined and xrdp_pass !=""
     tags:
       - xrdp
 
   - name: "edit xrdp.ini"
     become: yes
     shell: sed -i -e 's/max_bpp=32/max_bpp=24/g' /etc/xrdp/xrdp.ini
-    when: xrdpuser_pass is defined and xrdpuser_pass !=""
+    when: xrdp_pass is defined and xrdp_pass !=""
     tags:
       - xrdp
 
   - name: "start and enable xrdp"
     become: yes
     service: name=xrdp state=started enabled=yes
-    when: xrdpuser_pass is defined and xrdpuser_pass !=""
+    when: xrdp_pass is defined and xrdp_pass !=""
     tags:
       - xrdp
 
   - name: "change oracle/grid password"
     become: yes
-    user: name={{ item }} password="{{ xrdpuser_pass | password_hash('sha512') }}"
+    user: name={{ item }} password="{{ xrdp_pass | password_hash('sha512') }}"
     with_items:
       - oracle
       - grid
-    when: xrdpuser_pass is defined and xrdpuser_pass !=""
+    when: xrdp_pass is defined and xrdp_pass !=""
     tags:
-      - xrdpusercreate
       - xrdp
 
   - name: "copy .Xclients"
@@ -76,14 +75,13 @@
     with_items:
       - oracle
       - grid
-    when: xrdpuser_pass is defined and xrdpuser_pass !=""
+    when: xrdp_pass is defined and xrdp_pass !=""
     tags:
       - xrdp
 
   - name: "crete directory"
     become: yes
     file: path={{ MEDIA_PATH }} state=directory mode=0777 group=oinstall owner=oracle
-    when: xrdpuser_pass is defined and xrdpuser_pass !=""
+    when: xrdp_pass is defined and xrdp_pass !=""
     tags:
-      - xrdpusercreate
       - xrdp
