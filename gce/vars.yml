@@ -1,6 +1,7 @@
 ####################################################
-xrdpuser_pass: Xrdp123!
-vncpass: Vnc123!
+xrdp_pass: Xrdp123!
+vnc_pass: Vnc123!
+guac_pass: Guac123!
 ####################################################
 #### gce user specific value  ###################
 #ZONE: "us-west1-b"
