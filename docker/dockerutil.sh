@@ -67,18 +67,15 @@ runonly(){
 		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
-   
-	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 
-	NFSIP="${SEGMENT}$BASE_IP"
+	NFSIP=`get_Internal_IP nfs`
 	run "nfs" $NFSIP 0 "nfs"
 	
 	common_update_all_yml "NFS_SERVER: $NFSIP"
 	
 	for i in `seq 1 $nodecount`;
 	do
-		NUM=`expr $BASE_IP + $i`
-		NODEIP="${SEGMENT}$NUM"
+		NODEIP=`get_Internal_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		run $NODENAME $NODEIP $i "dbserver"
 	done
@@ -117,16 +114,13 @@ get_External_IP(){
 }
 
 get_Internal_IP(){
-	expr "$1" + 1 >/dev/null 2>&1
-	if [ $? -lt 2 ]
-	then
-    		NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+	if [ "$1" = "nfs" ]; then
+		NUM=`expr $BASE_IP`
 	else
-    		NODENAME=$1
+		NUM=`expr $BASE_IP + $1`
 	fi
-	
 	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
-	
+	Internal_IP="${SEGMENT}$NUM"
 
 	echo $Internal_IP	
 }
