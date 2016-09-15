@@ -72,7 +72,7 @@
 
   - name: "copy .Xclients"
     become: yes
-    copy: src=.Xclients dest="/home/{{ item }}/.Xclients" owner={{ item }} group={{ item }} mode=0700
+    copy: src=.Xclients dest="/home/{{ item }}/.Xclients" owner={{ item }} group=oinstall mode=0700
     with_items:
       - oracle
       - grid
@@ -82,7 +82,7 @@
 
   - name: "crete directory"
     become: yes
-    file: path={{ MEDIA_PATH }} state=directory mode=0777 group=oracle owner=oracle
+    file: path={{ MEDIA_PATH }} state=directory mode=0777 group=oinstall owner=oracle
     when: xrdpuser_pass is defined and xrdpuser_pass !=""
     tags:
       - xrdpusercreate
