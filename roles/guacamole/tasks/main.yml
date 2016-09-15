@@ -2,7 +2,7 @@
   - name: "install epel"
     become: yes
     yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
-    when: xrdpuser_pass is defined and xrdpuser_pass !=""
+    when: guac_pass is defined and guac_pass !=""
     tags:
       - guacamole
 
