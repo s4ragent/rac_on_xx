@@ -106,7 +106,14 @@ get_ExternalIP(){
 }
 
 get_InternalIP(){
-	
+	LIST_RESULT=$(gcloud compute instances list  $1 --zones $ZONE | tail -n 1)
+	MACHINE_TYPE=`echo $LIST_RESULT | awk '{print $3}'`
+	if [ "$MACHINE_TYPE" = "custom" ]; then
+		Internal_IP=`echo $LIST_RESULT | awk '{print $8}'`
+	else
+		Internal_IP=`echo $LIST_RESULT | awk '{print $4}'`
+	fi
+	echo $Internal_IP	
 }
 
 source ./common_menu.sh
