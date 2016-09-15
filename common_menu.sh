@@ -10,9 +10,12 @@ case "$1" in
   "heatrun") shift;common_heatrun $*;;
   "heatrun_full") shift;common_heatrun_full $*;;
   "runall" ) shift;common_runall $*;;
+  "ssh" ) shift;common_ssh $*;;
   "replaceinventory" ) shift;replaceinventory $*;;
   "run" ) shift;run $*;;
   "runonly" ) shift;runonly $*;;
   "deleteall" ) shift;deleteall $*;;
   "buildimage" ) shift;buildimage $*;;
+  "get_ExternalIP" ) shift;get_ExternalIP $*;;
+  "get_InternalIP" ) shift;get_InternalIP $*;;
 esac
