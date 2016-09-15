@@ -2,7 +2,7 @@
   - name: "install epel"
     become: yes
     yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
-    when: vncpass is defined and vncpass !=""
+    when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
 
@@ -10,7 +10,7 @@
     become: yes
     shell: yum -y search nfs-utils
     ignore_errors: true
-    when: vncpass is defined and vncpass !=""
+    when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
       
@@ -25,7 +25,7 @@
       - tigervnc-server
       - firefox
       - unzip
-    when: vncpass is defined and vncpass !=""
+    when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
 
@@ -35,7 +35,7 @@
     with_indexed_items:
       - oracle
       - grid
-    when: vncpass is defined and vncpass !=""
+    when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
 
@@ -45,7 +45,7 @@
     with_indexed_items:
       - oracle
       - grid
-    when: vncpass is defined and vncpass !=""
+    when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
 
@@ -55,17 +55,17 @@
     with_items:
       - oracle
       - grid
-    when: vncpass is defined and vncpass !=""
+    when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
       
   - name: "crete vncpasswd"
     become: yes
-    shell: "echo {{ vncpass }} | vncpasswd -f > /home/{{ item }}/.vnc/passwd"
+    shell: "echo {{ vnc_pass }} | vncpasswd -f > /home/{{ item }}/.vnc/passwd"
     with_items:
       - oracle
       - grid
-    when: vncpass is defined and vncpass !=""
+    when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
       
@@ -75,14 +75,14 @@
     with_items:
       - oracle
       - grid
-    when: vncpass is defined and vncpass !=""
+    when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
 
   - name: "crete vncpasswd"
     become: yes
     shell: systemctl daemon-reload
-    when: vncpass is defined and vncpass !=""
+    when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
 
@@ -92,13 +92,13 @@
     with_indexed_items:
       - oracle
       - grid
-    when: vncpass is defined and vncpass !=""
+    when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
 
   - name: "crete directory"
     become: yes
     file: path={{ MEDIA_PATH }} state=directory mode=0777 group=oinstall owner=oracle
-    when: vncpass is defined and vncpass !=""
+    when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
