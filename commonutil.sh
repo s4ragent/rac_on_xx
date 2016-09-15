@@ -29,14 +29,14 @@ common_execansible(){
 common_runall(){
 	runonly $*
 	common_execansible centos2oel.yml
-   sleep 180s
+ 	sleep 180s
 	common_execansible rac.yml
 }
 
 common_preinstall(){
 	runonly $*
 	common_execansible centos2oel.yml
-   sleep 180s
+	sleep 180s
 	common_execansible rac.yml --skip-tags installdbca
 
 }
@@ -70,7 +70,7 @@ do
     common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
     echo '#########START NODE 1################'
     common_start 1 >>$LOG  2>&1
-    sleep 300s
+    sleep 480s
     common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
     echo '#########START ALL################'
     common_stopall >>$LOG  2>&1
@@ -80,7 +80,7 @@ do
     common_stop nfs >>$LOG  2>&1
     echo '#########START ALL################'
     common_startall >>$LOG  2>&1
-    sleep 300s
+    sleep 480s
     common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
