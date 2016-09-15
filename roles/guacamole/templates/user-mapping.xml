@@ -1,19 +1,19 @@
 <user-mapping>
     <authorize username="guacuser" password="{{ guac_pass | hash('md5') }}" encoding="md5">
-{% if xrdpuser_pass is defined %}       
+{% if xrdp_pass is defined %}       
       <connection name="RDP-orale">
         <protocol>rdp</protocol>
         <param name="hostname">localhost</param>
         <param name="port">3389</param>
         <param name="username">oracle</param>
-        <param name="password">{{ xrdpuser_pass }}</param>
+        <param name="password">{{ xrdp_pass }}</param>
       </connection>
       <connection name="RDP-grid">
         <protocol>rdp</protocol>
         <param name="hostname">localhost</param>
         <param name="port">3389</param>
         <param name="username">grid</param>
-        <param name="password">{{ xrdpuser_pass }}</param>
+        <param name="password">{{ xrdp_pass }}</param>
       </connection>
 {% endif %}
 {% if vnc_pass is defined %}
