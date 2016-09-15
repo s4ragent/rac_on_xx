@@ -112,6 +112,26 @@ replaceinventory(){
 	echo ""
 }
 
+get_External_IP(){
+	get_Internal_IP $*	
+}
+
+get_Internal_IP(){
+	expr "$1" + 1 >/dev/null 2>&1
+	if [ $? -lt 2 ]
+	then
+    		NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+	else
+    		NODENAME=$1
+	fi
+	
+	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+	
+
+	echo $Internal_IP	
+}
+
+
 source ./common_menu.sh
 
 
