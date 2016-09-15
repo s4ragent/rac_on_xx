@@ -95,7 +95,15 @@ replaceinventory(){
 }
 
 get_ExternalIP(){
-	LIST_RESULT=$(gcloud compute instances list  $1 --zones $ZONE | tail -n 1)
+	expr "$1" + 1 >/dev/null 2>&1
+	if [ $? -lt 2 ]
+	then
+    		NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+	else
+    		NODENAME=$1
+	fi
+
+	LIST_RESULT=$(gcloud compute instances list  $NODENAME --zones $ZONE | tail -n 1)
 	MACHINE_TYPE=`echo $LIST_RESULT | awk '{print $3}'`
 	if [ "$MACHINE_TYPE" = "custom" ]; then
 		External_IP=`echo $LIST_RESULT | awk '{print $9}'`
@@ -106,7 +114,15 @@ get_ExternalIP(){
 }
 
 get_InternalIP(){
-	LIST_RESULT=$(gcloud compute instances list  $1 --zones $ZONE | tail -n 1)
+	expr "$1" + 1 >/dev/null 2>&1
+	if [ $? -lt 2 ]
+	then
+    		NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+	else
+    		NODENAME=$1
+	fi
+	
+	LIST_RESULT=$(gcloud compute instances list  $NODENAME --zones $ZONE | tail -n 1)
 	MACHINE_TYPE=`echo $LIST_RESULT | awk '{print $3}'`
 	if [ "$MACHINE_TYPE" = "custom" ]; then
 		Internal_IP=`echo $LIST_RESULT | awk '{print $8}'`
