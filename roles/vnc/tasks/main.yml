@@ -51,7 +51,7 @@
 
   - name: "crete directory"
     become: yes
-    file: path=/home/{{ item }}/.vnc state=directory mode=0755 group={{ item }} owner={{ item }}
+    file: path="/home/{{ item }}/.vnc" state=directory mode=0755 group={{ item }} owner={{ item }}
     with_items:
       - oracle
       - grid
@@ -71,7 +71,7 @@
       
   - name: "chown directory"
     become: yes
-    file: path=/home/{{ item }}/.vnc state=directory mode=0755 group={{ item }} owner={{ item }} recurse=yes
+    file: path="/home/{{ item }}/.vnc" state=directory mode=0755 group={{ item }} owner={{ item }} recurse=yes
     with_items:
       - oracle
       - grid
