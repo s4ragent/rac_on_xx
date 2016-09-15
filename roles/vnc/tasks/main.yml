@@ -79,6 +79,23 @@
     tags:
       - vnc
 
+
+  - name: "copy xstartup"
+    become: yes
+    template: src=xstartup.j2 dest="/home/{{ item }}/.vnc/xstartup" mode=0755 owner={{ item }} group=oinstall
+    with_items:
+      - oracle
+      - grid
+    tags:
+      - vnc
+
+  - name: "copy .bash_profile"
+    become: yes
+    template: src=.bash_profile_{{ item }}.j2 dest=/home/{{ item }}/.bash_profile mode=0644 owner={{ item }} group=oinstall
+    with_items:
+      - oracle
+      - grid
+tags:
   - name: "crete vncpasswd"
     become: yes
     shell: systemctl daemon-reload
