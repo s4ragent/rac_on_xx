@@ -71,7 +71,7 @@
       
   - name: "chown directory"
     become: yes
-    file: path="/home/{{ item }}/.vnc" state=directory mode=0755 group=oinstall owner={{ item }} recurse=yes
+    file: path="/home/{{ item }}/.vnc/password" mode=0600 group=oinstall owner={{ item }}
     with_items:
       - oracle
       - grid
