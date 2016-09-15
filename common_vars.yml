@@ -56,3 +56,4 @@ ASYNC: 86400
 POLL: 60
 ####others ###
 MEDIA_PATH: /downloadmedia
+FOWARD_PORT: 1234
