@@ -69,9 +69,9 @@
     tags:
       - vnc
       
-  - name: "chown directory"
+  - name: "chown vncpasswd"
     become: yes
-    file: path="/home/{{ item }}/.vnc/password" mode=0600 group=oinstall owner={{ item }}
+    file: path="/home/{{ item }}/.vnc/passwd" mode=0600 group=oinstall owner={{ item }}
     with_items:
       - oracle
       - grid
@@ -86,17 +86,11 @@
     with_items:
       - oracle
       - grid
+    when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
 
-  - name: "copy .bash_profile"
-    become: yes
-    template: src=.bash_profile_{{ item }}.j2 dest=/home/{{ item }}/.bash_profile mode=0644 owner={{ item }} group=oinstall
-    with_items:
-      - oracle
-      - grid
-tags:
-  - name: "crete vncpasswd"
+  - name: "daemon-reload"
     become: yes
     shell: systemctl daemon-reload
     when: vnc_pass is defined and vnc_pass !=""
@@ -113,7 +107,7 @@ tags:
     tags:
       - vnc
 
-  - name: "crete directory"
+  - name: "crete download directory"
     become: yes
     file: path={{ MEDIA_PATH }} state=directory mode=0777 group=oinstall owner=oracle
     when: vnc_pass is defined and vnc_pass !=""
