@@ -1,1 +1,68 @@
-#
+---
+  - name: "install epel"
+    become: yes
+    yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
+    when: vncuser_pass is defined and vncuser_pass !=""
+    tags:
+      - vnc
+
+  - name: "dummy yum command (GPGKEY INSTALL)"
+    become: yes
+    shell: yum -y search nfs-utils
+    ignore_errors: true
+    when: vncuser_pass is defined and vncuser_pass !=""
+    tags:
+      - vnc
+
+
+#environment groups must "@^"
+#packages group must"@"
+  - name: "install vnc,Xfce,firefox"
+    become: yes
+    yum: name="{{ item }}" state=present
+    with_items:
+#      - "@^graphical-server-environment"
+      - "@xfce-desktop"
+      - vnc-server
+      - firefox
+      - unzip
+    when: vncuser_pass is defined and vncuser_pass !=""
+    tags:
+      - vnc
+
+  - name: "copy .Xclients"
+    become: yes
+    copy: src=.Xclients dest=/etc/skel/.Xclients owner=root group=root mode=0700
+    when: vncuser_pass is defined and vncuser_pass !=""
+    tags:
+      - vnc
+
+
+  - name: "edit xrdp.ini"
+    become: yes
+    shell: sed -i -e 's/max_bpp=32/max_bpp=24/g' /etc/xrdp/xrdp.ini
+    when: xrdpuser_pass is defined and xrdpuser_pass !=""
+    tags:
+      - xrdp
+
+  - name: "start and enable xrdp"
+    become: yes
+    service: name=xrdp state=started enabled=yes
+    when: vncuser_pass is defined and vncuser_pass !=""
+    tags:
+      - vnc
+
+  - name: "create xrdp user"
+    become: yes
+    user: name="xrdpuser" shell="/bin/bash"  password="{{ xrdpuser_pass | password_hash('sha512') }}"
+    when: vncuser_pass is defined and vncuser_pass !=""
+    tags:
+      - vnc
+
+  - name: "crete directory"
+    become: yes
+    file: path={{ MEDIA_PATH }} state=directory mode=0755 group=xrdpuser owner=xrdpuser
+    when: vncuser_pass is defined and vncuser_pass !=""
+    tags:
+      - vnc
+
