@@ -16,6 +16,6 @@ case "$1" in
   "runonly" ) shift;runonly $*;;
   "deleteall" ) shift;deleteall $*;;
   "buildimage" ) shift;buildimage $*;;
-  "get_ExternalIP" ) shift;get_ExternalIP $*;;
-  "get_InternalIP" ) shift;get_InternalIP $*;;
+  "get_External_IP" ) shift;get_External_IP $*;;
+  "get_Internal_IP" ) shift;get_Internal_IP $*;;
 esac
