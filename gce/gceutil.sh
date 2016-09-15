@@ -94,4 +94,19 @@ replaceinventory(){
 	done
 }
 
+get_ExternalIP(){
+	LIST_RESULT=$(gcloud compute instances list  $1 --zones $ZONE | tail -n 1)
+	MACHINE_TYPE=`echo $LIST_RESULT | awk '{print $3}'`
+	if [ "$MACHINE_TYPE" = "custom" ]; then
+		External_IP=`echo $LIST_RESULT | awk '{print $9}'`
+	else
+		External_IP=`echo $LIST_RESULT | awk '{print $5}'`
+	fi
+	echo $External_IP	
+}
+
+get_InternalIP(){
+	
+}
+
 source ./common_menu.sh
