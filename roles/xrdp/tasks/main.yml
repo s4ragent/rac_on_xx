@@ -73,6 +73,9 @@
   - name: "copy .Xclients"
     become: yes
     copy: src=.Xclients dest="/home/{{ item }}/.Xclients" owner={{ item }} group={{ item }} mode=0700
+    with_items:
+      - oracle
+      - grid
     when: xrdpuser_pass is defined and xrdpuser_pass !=""
     tags:
       - xrdp
