@@ -190,7 +190,7 @@ common_replaceinventory(){
 }
 
 common_ssh(){
-	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i $ansible_ssh_private_key_file $ansible_ssh_user@`get_ExternalIP $1`
+	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -g -L 1234:127.0.0.1:8080 -i $ansible_ssh_private_key_file $ansible_ssh_user@`get_ExternalIP $1`
 }
 
 
