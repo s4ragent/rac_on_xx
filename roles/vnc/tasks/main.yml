@@ -107,9 +107,20 @@
     tags:
       - vnc
 
+  - name: "check mediapath"
+    become: yes
+    shell: "ls {{ MEDIA_PATH }}"
+    ignore_errors: true
+    register: media_rerult
+    tags:
+      - vnc
+
   - name: "crete download directory"
     become: yes
     file: path={{ MEDIA_PATH }} state=directory mode=0777 group=oinstall owner=oracle
-    when: vnc_pass is defined and vnc_pass !=""
+    when: vnc_pass is defined and vnc_pass !="" and media_rerult.rc != 0
     tags:
       - vnc
+
+
+
