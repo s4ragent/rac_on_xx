@@ -13,7 +13,6 @@
  - hosts: dbserver
    roles:
       - common
-      - xrdp
       - vnc
       - guacamole
       - nfsclient
