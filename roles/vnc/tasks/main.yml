@@ -16,15 +16,12 @@
       
 #environment groups must "@^"
 #packages group must"@"
-  - name: "install vnc,Xfce,firefox"
+  - name: "install vnc,Gnome,firefox"
     become: yes
     yum: name="{{ item }}" state=present
     with_items:
-#      - "@^graphical-server-environment"
+      - "@^graphical-server-environment"
 #      - "@xfce-desktop"
-      - "@x11"
-      - motif
-      - xterm
       - tigervnc-server
       - firefox
       - unzip
