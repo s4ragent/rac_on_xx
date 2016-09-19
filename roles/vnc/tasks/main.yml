@@ -1,10 +1,10 @@
 ---
-  - name: "install epel"
-    become: yes
-    yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
-    when: vnc_pass is defined and vnc_pass !=""
-    tags:
-      - vnc
+#  - name: "install epel"
+#    become: yes
+#    yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
+#    when: vnc_pass is defined and vnc_pass !=""
+#    tags:
+#      - vnc
 
   - name: "dummy yum command (GPGKEY INSTALL)"
     become: yes
