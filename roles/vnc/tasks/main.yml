@@ -21,7 +21,10 @@
     yum: name="{{ item }}" state=present
     with_items:
 #      - "@^graphical-server-environment"
-      - "@xfce-desktop"
+#      - "@xfce-desktop"
+      - "@x11"
+      - motif
+      - xterm
       - tigervnc-server
       - firefox
       - unzip
