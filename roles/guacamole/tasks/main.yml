@@ -2,14 +2,14 @@
   - name: "install epel"
     become: yes
     yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
-    when: guac_pass is defined and guac_pass !=""
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guacamole
 
   - name: "install guacamole"
     become: yes
     yum: name="{{ item }}" state=present
-    when: guac_pass is defined and guac_pass !=""
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     with_items:
       - guacd
       - libguac-client-rdp
@@ -22,14 +22,14 @@
   - name: "copy user-mappiing.xml"
     become: yes
     template: src=user-mapping.xml dest=/etc/guacamole/user-mapping.xml owner=root group=root mode=0755
-    when: guac_pass is defined and guac_pass !=""
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guacamole
 
-  - name: "enable xrdp"
+  - name: "enable guacd"
     become: yes
     service: name={{ item }} enabled=yes state=started
-    when: guac_pass is defined and guac_pass !=""
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     with_items:
       - guacd
       - tomcat
