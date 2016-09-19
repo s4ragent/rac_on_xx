@@ -6,6 +6,14 @@
     tags:
       - guacamole
 
+  - name: "dummy yum command (GPGKEY INSTALL)"
+    become: yes
+    shell: yum -y search nfs-utils
+    ignore_errors: true
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
+    tags:
+      - guacamole
+
   - name: "install guacamole"
     become: yes
     yum: name="{{ item }}" state=present
