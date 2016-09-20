@@ -14,6 +14,12 @@
             <param name="port">5902</param>
             <param name="password">{{ vnc_pass }}</param>
         </connection>
+        <connection name="{{ hostvars[host]['ansible_hostname'] }}-sudoer">
+            <protocol>vnc</protocol>
+            <param name="hostname">{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}</param>
+            <param name="port">5903</param>
+            <param name="password">{{ vnc_pass }}</param>
+        </connection>
     {% endfor %}
 {% endif %}
     </authorize>
