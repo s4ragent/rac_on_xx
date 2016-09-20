@@ -3,4 +3,9 @@ unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRESS
 #exec /usr/bin/xfce4-session
 #mwm &
+{% if vnc_pass is defined %}
 exec gnome-session &
+{% endif %}
+{% if vnc_pass is defined %}
+exec /usr/bin/xfce4-session &
+{% endif %}
