@@ -55,6 +55,7 @@
     with_indexed_items:
       - oracle
       - grid
+      - "{{ ansible_ssh_user }}"
     when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
@@ -65,6 +66,7 @@
     with_indexed_items:
       - oracle
       - grid
+      - "{{ ansible_ssh_user }}"     
     when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
@@ -75,6 +77,7 @@
     with_items:
       - oracle
       - grid
+      - "{{ ansible_ssh_user }}"  
     when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
@@ -85,6 +88,7 @@
     with_items:
       - oracle
       - grid
+      - "{{ ansible_ssh_user }}"    
     when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
@@ -95,6 +99,7 @@
     with_items:
       - oracle
       - grid
+      - "{{ ansible_ssh_user }}"  
     when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
@@ -106,6 +111,7 @@
     with_items:
       - oracle
       - grid
+      - "{{ ansible_ssh_user }}"  
     when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
@@ -123,6 +129,7 @@
     with_indexed_items:
       - oracle
       - grid
+      - "{{ ansible_ssh_user }}"  
     when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
