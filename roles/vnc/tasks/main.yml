@@ -25,6 +25,8 @@
       - tigervnc-server
       - firefox
       - unzip
+    async: "{{ ASYNC }}"
+    poll: "{{ POLL }}"
     when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
