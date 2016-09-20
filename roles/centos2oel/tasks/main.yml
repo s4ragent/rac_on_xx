@@ -59,8 +59,8 @@
       - reboot
 
 
-  - name: "sleep 300s"
-    local_action: shell sleep 300s
+  - name: "sleep 180s"
+    local_action: shell sleep 180s
     run_once: true
     when: centos2oel_rerult.rc != 0
     tags:
