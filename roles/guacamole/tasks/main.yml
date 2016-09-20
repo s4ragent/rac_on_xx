@@ -42,6 +42,7 @@
       line: 'JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom"'
       insertafter: EOF
       state: present
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guacamole
 
