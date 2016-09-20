@@ -34,9 +34,20 @@
     tags:
       - guacamole
 
+  - name: "Update the /etc/tomcat/tomcat.conf /dev/random to /dev/urandom"
+    become: yes
+    lineinfile:
+      dest: /etc/tomcat/tomcat.conf
+      regexp: "^JAVA_OPTS"
+      line: 'JAVA_OPTS="-Djava.security.egd=file:/dev/./urandom"'
+      insertafter: EOF
+      state: present
+    tags:
+      - guacamole
+
   - name: "enable guacd"
     become: yes
-    service: name={{ item }} enabled=yes state=started
+    service: name={{ item }} enabled=yes state=restarted
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     with_items:
       - guacd
