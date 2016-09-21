@@ -121,7 +121,6 @@
       state: present
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
-    tags:
       - guactomcat
       - guacamole
 
