@@ -73,11 +73,16 @@
 
   - name: create symbolick link
     become: yes
-    shell: "ln -s /usr/local/lib/freerdp/*.so /usr/lib64/freerdp"
+    file: src="/usr/local/lib/freerdp/{ item }}" path="/usr/lib64/freerdp/{{ item }}" state=link
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
+    with_items:
+      - guacdr.so
+      - guacsnd.so
+      - guacsvc.so
     tags:
       - guacd
       - guacamole
+
 
   - name: download guacamole.war
     become: yes
