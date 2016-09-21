@@ -95,35 +95,21 @@
     file: path={{ item }} state=directory
     with_items:
       - /usr/share/tomcat/.guacamole/
-      - /etc/guacamole
+#      - /etc/guacamole
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guactomcat
       - guacamole
 
-  - name: "copy guacamole.properties"
-    become: yes
-    template: src=guacamole.properties.j2 dest=/etc/guacamole/guacamole.properties owner=root group=root mode=0755
-    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
-    tags:
-      - guactomcat
-      - guacamole
 
   - name: "copy user-mapping.xml"
     become: yes
-    template: src=user-mapping.xml.j2 dest=/etc/guacamole/user-mapping.xml owner=root group=root mode=0755
+    template: src=user-mapping.xml.j2 dest=/usr/share/tomcat/.guacamole/user-mapping.xml owner=root group=root mode=0755
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guactomcat
       - guacamole
- 
-  - name: create symlink /etc/guacamole/guacamole.properties
-    become: yes
-    file: src=/etc/guacamole/guacamole.properties path=/usr/share/tomcat/.guacamole/guacamole.properties state=link
-    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
-    tags:
-      - guactomcat
-      - guacamole
+
 
   - name: "Update the /etc/tomcat/tomcat.conf /dev/random to /dev/urandom"
     become: yes
