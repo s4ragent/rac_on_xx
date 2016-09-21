@@ -92,15 +92,11 @@
 
   - name: create directory
     become: yes
-    file: path={{ item }} state=directory
-    with_items:
-      - /usr/share/tomcat/.guacamole/
-#      - /etc/guacamole
+    file: path=/usr/share/tomcat/.guacamole/ state=directory
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guactomcat
       - guacamole
-
 
   - name: "copy user-mapping.xml"
     become: yes
