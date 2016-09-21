@@ -119,7 +119,7 @@
  
   - name: create symlink /etc/guacamole/guacamole.properties
     become: yes
-    file: src=/etc/guacamole/guacamole.properties path=/usr/share/tomcat/.guacamole/ state=link
+    file: src=/etc/guacamole/guacamole.properties path=/usr/share/tomcat/.guacamole/guacamole.properties state=link
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guactomcat
