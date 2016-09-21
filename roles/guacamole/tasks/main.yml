@@ -19,16 +19,16 @@
     yum: name="{{ item }}" state=present
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     with_items:
-      - cairo-devel            
-      - dejavu-sans-mono-fonts 
-      - freerdp-devel          
-      - freerdp-plugins        
-      - gcc                    
-      - ghostscript            
-      - libjpeg-turbo-devel    
-      - libssh2-devel          
-      - liberation-mono-fonts  
-      - libtelnet-devel        
+      - cairo-devel 
+      - dejavu-sans-mono-fonts
+      - freerdp-devel
+      - freerdp-plugins
+      - gcc           
+      - ghostscript
+      - libjpeg-turbo-devel
+      - libssh2-devel
+      - liberation-mono-fonts
+      - libtelnet-devel
       - libvorbis-devel        
       - libvncserver-devel     
       - libwebp-devel          
@@ -40,6 +40,7 @@
       - uuid-devel
       - curl
       - tomcat
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]  
     tags:
       - guacd
       - guacamole
