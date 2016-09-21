@@ -14,22 +14,91 @@
     tags:
       - guacamole
 
-  - name: "install guacamole"
+  - name: "install guacamole dependency library"
     become: yes
     yum: name="{{ item }}" state=present
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     with_items:
+      - cairo-devel            
+      - dejavu-sans-mono-fonts 
+      - freerdp-devel          
+      - freerdp-plugins        
+      - gcc                    
+      - ghostscript            
+      - libjpeg-turbo-devel    
+      - libssh2-devel          
+      - liberation-mono-fonts  
+      - libtelnet-devel        
+      - libvorbis-devel        
+      - libvncserver-devel     
+      - libwebp-devel          
+      - make                   
+      - pango-devel            
+      - pulseaudio-libs-devel  
+      - tar                    
+      - terminus-fonts         
+      - uuid-devel
+      - curl
+      - tomcat
+    tags:
       - guacd
-      - libguac-client-rdp
-      - libguac-client-vnc
-      - libguac-client-ssh
       - guacamole
+
+  - name: "unzip guacamole-server"
+    become: yes
+    shell: curl -L "http://sourceforge.net/projects/guacamole/files/current/source/guacamole-server-{{ GUAC_VERSION }}.tar.gz" | tar -xz -C /tmp
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
+    tags:
+      - guacd
+      - guacamole
+
+
+  - name: build guacd
+    become: yes
+    shell: "./configure --with-init-dir=/etc/init.d && make && make install && ldconfig"
+    args:
+      chdir: /tmp/guacamole-server-{{ GUAC_VERSION }}
+    tags:
+      - guacd
+      - guacamole
+
+  - name: create directory
+    become: yes
+    file: path="/usr/lib64/freerdp" state=directory
+    tags:
+      - guacd
+      - guacamole
+
+  - name: create symbolick link
+    become: yes
+    shell: "ln -s /usr/local/lib/freerdp/*.so /usr/lib64/freerdp"
+    tags:
+      - guacd
+      - guacamole
+
+  - name: build guacd
+    become: yes
+    shell: curl -L http://sourceforge.net/projects/guacamole/files/current/binary/guacamole-{{ GUAC_VERSION }}.war -o /var/lib/tomcat/guacamole.war
+    tags:
+      - guacd
+      - guacamole
+
+  - name: create directory
+    become: yes
+    file: path="/var/lib/tomcat/.guacamole" state=directory
     tags:
       - guacamole
 
   - name: "copy user-mappiing.xml"
     become: yes
-    template: src=user-mapping.xml dest=/etc/guacamole/user-mapping.xml owner=root group=root mode=0755
+    template: src=user-mapping.xml dest=/var/lib/tomcat/.guacamole/user-mapping.xml owner=root group=root mode=0755
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
+    tags:
+      - guacamole
+
+  - name: "copy guacamole.properties"
+    become: yes
+    template: src=guacamole.properties dest=/var/lib/tomcat/.guacamole/guacamole.properties owner=root group=root mode=0755
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guacamole
@@ -46,7 +115,7 @@
     tags:
       - guacamole
 
-  - name: "enable guacd"
+  - name: "enable guacd/tomcat"
     become: yes
     service: name={{ item }} enabled=yes state=restarted
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
