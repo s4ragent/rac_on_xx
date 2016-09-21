@@ -84,7 +84,7 @@
 
   - name: download guacamole.war
     become: yes
-    shell: curl -L http://sourceforge.net/projects/guacamole/files/current/binary/guacamole-{{ GUAC_VERSION }}.war -o /var/lib/tomcat/guacamole.war
+    shell: curl -L http://sourceforge.net/projects/guacamole/files/current/binary/guacamole-{{ GUAC_VERSION }}.war -o /var/lib/tomcat/webapps/guacamole.war
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guactomcat
