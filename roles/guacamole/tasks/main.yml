@@ -76,17 +76,19 @@
       - guacd
       - guacamole
 
-  - name: build guacd
+  - name: download guacamole.war
     become: yes
     shell: curl -L http://sourceforge.net/projects/guacamole/files/current/binary/guacamole-{{ GUAC_VERSION }}.war -o /var/lib/tomcat/guacamole.war
     tags:
-      - guacd
+    tags:
+      - guactomcat
       - guacamole
 
   - name: create directory
     become: yes
     file: path="/var/lib/tomcat/.guacamole" state=directory
     tags:
+      - guactomcat
       - guacamole
 
   - name: "copy user-mappiing.xml"
@@ -94,6 +96,7 @@
     template: src=user-mapping.xml dest=/var/lib/tomcat/.guacamole/user-mapping.xml owner=root group=root mode=0755
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
+      - guactomcat
       - guacamole
 
   - name: "copy guacamole.properties"
@@ -101,6 +104,7 @@
     template: src=guacamole.properties dest=/var/lib/tomcat/.guacamole/guacamole.properties owner=root group=root mode=0755
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
+      - guactomcat
       - guacamole
 
   - name: "Update the /etc/tomcat/tomcat.conf /dev/random to /dev/urandom"
@@ -113,6 +117,8 @@
       state: present
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
+    tags:
+      - guactomcat
       - guacamole
 
   - name: "enable guacd/tomcat"
@@ -123,4 +129,7 @@
       - guacd
       - tomcat
     tags:
+      - guacd
+      - guactomcat
       - guacamole
+
