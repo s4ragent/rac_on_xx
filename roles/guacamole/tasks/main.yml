@@ -17,13 +17,12 @@
   - name: "install guacamole dependency library"
     become: yes
     yum: name="{{ item }}" state=present
-    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     with_items:
       - cairo-devel 
       - dejavu-sans-mono-fonts
       - freerdp-devel
       - freerdp-plugins
-      - gcc           
+      - gcc
       - ghostscript
       - libjpeg-turbo-devel
       - libssh2-devel
@@ -32,11 +31,11 @@
       - libvorbis-devel        
       - libvncserver-devel     
       - libwebp-devel          
-      - make                   
-      - pango-devel            
-      - pulseaudio-libs-devel  
-      - tar                    
-      - terminus-fonts         
+      - make  
+      - pango-devel
+      - pulseaudio-libs-devel 
+      - tar
+      - terminus-fonts
       - uuid-devel
       - curl
       - tomcat
@@ -59,6 +58,7 @@
     shell: "./configure --with-init-dir=/etc/init.d && make && make install && ldconfig"
     args:
       chdir: /tmp/guacamole-server-{{ GUAC_VERSION }}
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guacd
       - guacamole
@@ -66,6 +66,7 @@
   - name: create directory
     become: yes
     file: path="/usr/lib64/freerdp" state=directory
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guacd
       - guacamole
@@ -73,6 +74,7 @@
   - name: create symbolick link
     become: yes
     shell: "ln -s /usr/local/lib/freerdp/*.so /usr/lib64/freerdp"
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guacd
       - guacamole
@@ -80,7 +82,7 @@
   - name: download guacamole.war
     become: yes
     shell: curl -L http://sourceforge.net/projects/guacamole/files/current/binary/guacamole-{{ GUAC_VERSION }}.war -o /var/lib/tomcat/guacamole.war
-    tags:
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guactomcat
       - guacamole
@@ -88,6 +90,7 @@
   - name: create directory
     become: yes
     file: path="/var/lib/tomcat/.guacamole" state=directory
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guactomcat
       - guacamole
