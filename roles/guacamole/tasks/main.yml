@@ -103,14 +103,6 @@
       - guactomcat
       - guacamole
 
-  - name: "copy guacamole.properties"
-    become: yes
-    template: src=guacamole.properties dest=/var/lib/tomcat/.guacamole/guacamole.properties owner=root group=root mode=0755
-    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
-    tags:
-      - guactomcat
-      - guacamole
-
   - name: "Update the /etc/tomcat/tomcat.conf /dev/random to /dev/urandom"
     become: yes
     lineinfile:
