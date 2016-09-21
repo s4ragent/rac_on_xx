@@ -98,15 +98,15 @@
       - guactomcat
       - guacamole
 
-  - name: "copy user-mappiing.xml"
+  - name: "copy guacamole.properties"
     become: yes
-    template: src=guacamole.properties.j2 dest=/etc/guacamole/user-mapping.xml owner=root group=root mode=0755
+    template: src=guacamole.properties.j2 dest=/etc/guacamole/guacamole.properties owner=root group=root mode=0755
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guactomcat
       - guacamole
 
-  - name: "copy user-mappiing.xml"
+  - name: "copy user-mapping.xml"
     become: yes
     template: src=user-mapping.xml.j2 dest=/etc/guacamole/user-mapping.xml owner=root group=root mode=0755
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
