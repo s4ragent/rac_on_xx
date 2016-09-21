@@ -92,7 +92,10 @@
 
   - name: create directory
     become: yes
-    file: path="/etc/guacamole" state=directory
+    file: path={{ item }} state=directory
+    with_items:
+      - /usr/share/tomcat/.guacamole/
+      - /etc/guacamole
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guactomcat
