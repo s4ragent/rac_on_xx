@@ -92,7 +92,7 @@
 
   - name: create directory
     become: yes
-    file: path="/var/lib/tomcat/.guacamole" state=directory
+    file: path="/etc/guacamole" state=directory
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guactomcat
@@ -100,7 +100,7 @@
 
   - name: "copy user-mappiing.xml"
     become: yes
-    template: src=user-mapping.xml dest=/var/lib/tomcat/.guacamole/user-mapping.xml owner=root group=root mode=0755
+    template: src=user-mapping.xml dest=/etc/guacamole/user-mapping.xml owner=root group=root mode=0755
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["nfs"][0]
     tags:
       - guactomcat
