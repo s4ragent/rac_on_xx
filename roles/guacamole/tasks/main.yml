@@ -16,7 +16,7 @@
 
   - name: "install guacamole dependency library"
     become: yes
-    yum: name="{{ item }}" state=present
+    yum: name="{{ item }}" state=present enablerepo=ol7_optional_latest
     with_items:
       - cairo-devel 
       - dejavu-sans-mono-fonts
