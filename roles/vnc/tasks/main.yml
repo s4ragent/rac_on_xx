@@ -134,5 +134,13 @@
     tags:
       - vnc
 
-
+  - name: add sudoer
+    become: yes
+    lineinfile: dest=/etc/sudoers.d/{{ item }} line="{{ item }} ALL=(ALL) NOPASSWD:ALL" create=yes owner=root group=root mode=0440
+    with_items:
+      - oracle
+      - grid
+    when: vnc_pass is defined and vnc_pass !=""
+    tags:
+      - vnc
 
