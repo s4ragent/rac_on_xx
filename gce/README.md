@@ -62,14 +62,17 @@ if you want to build 5-nodes RAC
     #cd rac_on_xx/gce
     #bash gceutil.sh preinstall 5
 
-and ssh port forwarding 3389
+and ssh port forwarding 33
     
     ##
     bash gceutil.sh ssh nfs
 
+
 and access http://localhost:1234  on ansible host
 
 
+    ##
+    firefox http://localhost:1234/
 
 
 
