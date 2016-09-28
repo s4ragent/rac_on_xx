@@ -72,11 +72,11 @@ do
     common_start 1 >>$LOG  2>&1
     sleep 480s
     common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
-    echo '#########START ALL################'
+    echo '#########STOP ALL################'
     common_stopall >>$LOG  2>&1
-    echo '#########STOP STORAGE################'
-    common_start storage >>$LOG  2>&1
     echo '#########START STORAGE################'
+    common_start storage >>$LOG  2>&1
+    echo '#########STOP STORAGE################'
     common_stop storage >>$LOG  2>&1
     echo '#########START ALL################'
     common_startall >>$LOG  2>&1
