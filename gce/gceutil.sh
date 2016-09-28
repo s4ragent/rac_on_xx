@@ -47,9 +47,9 @@ runonly(){
 	fi
    
 
-	NFSIP=`run nfs $STORAGE_DISK_SIZE 0 nfs`
+	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
 	
-	common_update_all_yml "NFS_SERVER: $NFSIP"
+	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
 	
 	for i in `seq 1 $nodecount`;
 	do
