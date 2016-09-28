@@ -20,7 +20,7 @@ Oracle RAC on Docker /GCE /EC2 (TBA) /Azure (TBA) etc...
 
 |hostname/instance name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
-|nfs|10.xx.xx.xx|-|-|-|
+|storage|10.xx.xx.xx|-|-|-|
 |node001|10.xx.xx.xx|192.168.0.51|192.168.100.51|192.168.200.51|
 |node002|10.xx.xx.xx|192.168.0.52|192.168.100.52|192.168.200.52|
 |node003|10.xx.xx.xx|192.168.0.53|192.168.100.53|192.168.200.53|
