@@ -5,7 +5,7 @@
    roles:
      - start
 
- - hosts: all:!nfs
+ - hosts: all:!storage
    connection: local
    roles:
      - start
