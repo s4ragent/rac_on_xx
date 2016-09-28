@@ -68,10 +68,10 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
-	NFSIP=`get_Internal_IP nfs`
-	run "nfs" $NFSIP 0 "nfs"
+	STORAGEIP=`get_Internal_IP storage`
+	run "storage" $STORAGEIP 0 "storage"
 	
-	common_update_all_yml "NFS_SERVER: $NFSIP"
+	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
 	
 	for i in `seq 1 $nodecount`;
 	do
@@ -114,7 +114,7 @@ get_External_IP(){
 }
 
 get_Internal_IP(){
-	if [ "$1" = "nfs" ]; then
+	if [ "$1" = "storage" ]; then
 		NUM=`expr $BASE_IP`
 	else
 		NUM=`expr $BASE_IP + $1`
