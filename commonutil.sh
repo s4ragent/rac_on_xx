@@ -74,10 +74,10 @@ do
     common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
     echo '#########START ALL################'
     common_stopall >>$LOG  2>&1
-    echo '#########STOP NFS################'
-    common_start nfs >>$LOG  2>&1
-    echo '#########START NFS################'
-    common_stop nfs >>$LOG  2>&1
+    echo '#########STOP STORAGE################'
+    common_start storage >>$LOG  2>&1
+    echo '#########START STORAGE################'
+    common_stop storage >>$LOG  2>&1
     echo '#########START ALL################'
     common_startall >>$LOG  2>&1
     sleep 480s
@@ -99,8 +99,8 @@ common_deleteall(){
 }
 
 common_stop(){ 
-   if [ "$1" = "nfs" ]; then
-      NODENAME=nfs
+   if [ "$1" = "storage" ]; then
+      NODENAME=storage
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
@@ -112,8 +112,8 @@ common_stopall(){
 }
 
 common_start(){ 
-   if [ "$1" = "nfs" ]; then
-      NODENAME=nfs
+   if [ "$1" = "storage" ]; then
+      NODENAME=storage
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
