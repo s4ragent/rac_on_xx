@@ -1,9 +1,9 @@
 ---
   - name: "install nfs packages"
     become: yes
-    yum: {{ item }} state=present
+    yum: name={{ item }} state=present
     with_items:
-      - name=nfs-utils
+      - nfs-utils
       - qemu-img
     when: storage_type == "nfs"
     tags:
