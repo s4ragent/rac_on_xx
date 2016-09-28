@@ -1,6 +1,6 @@
 ---
 #### start
- - hosts: nfs
+ - hosts: storage
    connection: local
    roles:
      - start
