@@ -1,7 +1,10 @@
 ---
   - name: "install nfs packages"
     become: yes
-    yum: name=nfs-utils state=present
+    yum: {{ item }} state=present
+    with_items:
+      - name=nfs-utils
+      - qemu-img
     when: storage_type == "nfs"
     tags:
       - nfsclient
@@ -22,7 +25,8 @@
 
   - name: "create asm device vote"
     become: yes
-    shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
+    #shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
+    shell: "qemu-img create -f raw -o size={{ item.size }}M {{ item.name }}"
     args:
       creates: "{{ item.name }}"
     when: inventory_hostname == groups["dbserver"][0] and storage_type == "nfs"
