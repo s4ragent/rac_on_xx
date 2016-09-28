@@ -29,13 +29,13 @@ run(){
 #    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
 
 
-    	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/$MEDIA_PATH:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
+    	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/$MEDIA_PATH:rw -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
 	docker exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
-	docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/opc"
+	docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
 	docker exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
 	docker cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
 	docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
@@ -67,18 +67,15 @@ runonly(){
 		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
-   
-	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 
-	NFSIP="${SEGMENT}$BASE_IP"
+	NFSIP=`get_Internal_IP nfs`
 	run "nfs" $NFSIP 0 "nfs"
 	
 	common_update_all_yml "NFS_SERVER: $NFSIP"
 	
 	for i in `seq 1 $nodecount`;
 	do
-		NUM=`expr $BASE_IP + $i`
-		NODEIP="${SEGMENT}$NUM"
+		NODEIP=`get_Internal_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		run $NODENAME $NODEIP $i "dbserver"
 	done
@@ -91,7 +88,6 @@ runonly(){
 }
 
 deleteall(){
-	common_stopall $*
    	common_deleteall $*
 	#### VIRT_TYPE specific processing ###
 	if [ -n "$ansible_ssh_private_key_file" ]; then
@@ -112,6 +108,23 @@ buildimage(){
 replaceinventory(){
 	echo ""
 }
+
+get_External_IP(){
+	get_Internal_IP $*	
+}
+
+get_Internal_IP(){
+	if [ "$1" = "nfs" ]; then
+		NUM=`expr $BASE_IP`
+	else
+		NUM=`expr $BASE_IP + $1`
+	fi
+	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+	Internal_IP="${SEGMENT}$NUM"
+
+	echo $Internal_IP	
+}
+
 
 source ./common_menu.sh
 

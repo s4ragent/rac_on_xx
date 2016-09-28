@@ -1,10 +1,20 @@
 ---
-  - name: Update the /etc/ssh/sshd_config file
+  - name: Update the /etc/ssh/sshd_config file usedns
     become: yes
     lineinfile:
       dest: /etc/ssh/sshd_config
       regexp: "^UseDNS"
       line: "UseDNS no"
+      insertafter: EOF
+      state: present
+    register: ssh_config
+
+  - name: Update the /etc/ssh/sshd_config file addressfamily
+    become: yes
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      regexp: "^AddressFamily"
+      line: "AddressFamily inet"
       insertafter: EOF
       state: present
     register: ssh_config
@@ -14,4 +24,3 @@
     service:
       name: sshd
       state: restarted
-    when: ssh_config.changed

@@ -1,0 +1,6 @@
+---
+#### delete
+ - hosts: all
+   connection: local
+   roles:
+     - delete

@@ -1,14 +1,11 @@
 ---
  - hosts: all
    roles:
-      - ssh
-      - centos2oel
       - download
-      - xrdp
-      - guacamole
       - security
       - vxlan
       - dns
+      - guacamole
 
  - hosts: nfs
    roles:
@@ -17,6 +14,7 @@
  - hosts: dbserver
    roles:
       - common
+      - vnc
       - nfsclient
 
  - hosts: dbserver

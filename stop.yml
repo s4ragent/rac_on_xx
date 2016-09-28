@@ -1,0 +1,15 @@
+---
+####  stop
+ - hosts: all:!nfs
+   connection: local
+   roles:
+     - stop
+
+ - hosts: nfs
+   roles:
+     - stop-nfs
+ 
+ - hosts: nfs
+   connection: local
+   roles:
+     - stop

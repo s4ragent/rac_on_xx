@@ -24,6 +24,8 @@
   - name: "centos2oel"
     become: yes
     shell: curl -O https://linux.oracle.com/switch/centos2ol.sh && sh centos2ol.sh
+    async: "{{ ASYNC }}"
+    poll: "{{ POLL }}"
     when: centos2oel_rerult.rc != 0
     tags:
       - centos2oel
@@ -32,6 +34,8 @@
   - name: "centos2oel distro-sync"
     become: yes
     shell: yum -y distro-sync
+    async: "{{ ASYNC }}"
+    poll: "{{ POLL }}"
     when: centos2oel_rerult.rc != 0
     tags:
       - centos2oel
@@ -55,8 +59,8 @@
       - reboot
 
 
-  - name: "sleep 300s"
-    local_action: shell sleep 300s
+  - name: "sleep 180s"
+    local_action: shell sleep 180s
     run_once: true
     when: centos2oel_rerult.rc != 0
     tags:

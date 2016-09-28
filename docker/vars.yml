@@ -1,4 +1,8 @@
 ####################################################
+guac_pass: Guac123!
+vnc_pass: Vnc123!
+####################################################
+####################################################
 #### docker user specific value  ###################
 DOCKERSUBNET: "10.153.0.0/16"
 BRNAME: "raconxx"
@@ -22,4 +26,4 @@ DOCKER_CAPS: "--privileged=true --security-opt seccomp=unconfined"
 DOCKER_START_OPS: "--restart=always"
 TMPFS_OPS: "--shm-size=1200m"
 ####################################################
-
+WindowManager: "xfce"

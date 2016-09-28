@@ -28,10 +28,15 @@ common_execansible(){
 
 common_runall(){
 	runonly $*
+	common_execansible centos2oel.yml
+ 	sleep 180s
 	common_execansible rac.yml
 }
 
 common_preinstall(){
+	runonly $*
+	common_execansible centos2oel.yml
+	sleep 180s
 	common_execansible rac.yml --skip-tags installdbca
 
 }
@@ -44,7 +49,7 @@ common_install_dbca(){
 common_heatrun(){
 for i in `seq 1 $2`
 do
-    LOG="`date "+%Y%m%d-%H%M%S"`.log"
+    LOG="`date "+%Y%m%d-%H%M%S"`_$VIRT_TYPE.log"
     deleteall >$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
     common_runall $1 >>$LOG  2>&1
@@ -53,9 +58,39 @@ do
 done
 }
 
+common_heatrun_full(){
+for i in `seq 1 $2`
+do
+    LOG="`date "+%Y%m%d-%H%M%S"`_$VIRT_TYPE.log"
+    deleteall >$LOG  2>&1
+    STARTTIME=`date "+%Y%m%d-%H%M%S"`
+    common_runall $1 >>$LOG  2>&1
+    echo '#########STOP NODE 1################'
+    common_stop 1 >>$LOG  2>&1
+    common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
+    echo '#########START NODE 1################'
+    common_start 1 >>$LOG  2>&1
+    sleep 480s
+    common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
+    echo '#########START ALL################'
+    common_stopall >>$LOG  2>&1
+    echo '#########STOP NFS################'
+    common_start nfs >>$LOG  2>&1
+    echo '#########START NFS################'
+    common_stop nfs >>$LOG  2>&1
+    echo '#########START ALL################'
+    common_startall >>$LOG  2>&1
+    sleep 480s
+    common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
+    echo "START $STARTTIME" >>$LOG
+    echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
+done
+}
+
+
 common_deleteall(){
-   common_execansible start_stop_delete.yml --tags stop
-   common_execansible start_stop_delete.yml --tags delete
+   common_execansible stop.yml
+   common_execansible delete.yml
    
    rm -rf $VIRT_TYPE/*.inventory
    rm -rf $VIRT_TYPE/group_vars
@@ -69,11 +104,11 @@ common_stop(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   common_execansible start_stop_delete.yml --tags stop --limit $NODENAME
+   common_execansible stop.yml --limit $NODENAME
 }
 
 common_stopall(){
-   common_execansible start_stop_delete.yml --tags stop
+   common_execansible stop.yml
 }
 
 common_start(){ 
@@ -82,12 +117,12 @@ common_start(){
    else
       NODENAME="$NODEPREFIX"`printf "%.3d" $1`
    fi
-   common_execansible   start_stop_delete.yml --tags start --limit $NODENAME
+   common_execansible start.yml --limit $NODENAME
    replaceinventory
 }
 
 common_startall(){
-   common_execansible   start_stop_delete.yml --tags start
+   common_execansible start.yml
    replaceinventory
 }
 
@@ -153,4 +188,10 @@ fi
 common_replaceinventory(){
 	sed -i -e "s/$1 ansible_ssh_host=.*\$/$1 ansible_ssh_host=${2}/g" $VIRT_TYPE/*.inventory
 }
+
+common_ssh(){
+	ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -g -L $FOWARD_PORT:127.0.0.1:8080 -i $ansible_ssh_private_key_file $ansible_ssh_user@`get_External_IP $1`
+}
+
+
 

@@ -1,11 +1,4 @@
 ---
-  - name: "stop nfs-server.service"
-    become: yes
-    service: name=nfs-server.service state=stopped
-    ignore_errors: yes
-    tags:
-      - stop
-
   - name: stop container/instance
     shell: "{{ STOP_CMD }} {{ INSTANCE_ID }} {{ STOP_CMD_OPS }}" 
     ignore_errors: yes
