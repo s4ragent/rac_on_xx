@@ -2,18 +2,21 @@
   - name: "install nfs packages"
     become: yes
     yum: name=nfs-utils state=present
+    when: storage_type =="nfs"
     tags:
       - nfsclient
 
   - name: "mount oradata"
     become: yes
     mount: name={{ ORA_DATA }} src="{{ NFS_SERVER }}:/" fstype=nfs opts=rw,bg,hard,nointr,tcp,vers=4,timeo=600,actimeo=0 state=mounted
+    when: storage_type =="nfs"
     tags:
       - nfsclient
 
   - name: "chown oradata"
     become: yes
     file: path={{ ORA_DATA }} state=directory owner=grid group=oinstall mode=0775
+    when: storage_type =="nfs"
     tags:
       - nfsclient
 
@@ -22,7 +25,7 @@
     shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
     args:
       creates: "{{ item.name }}"
-    when: inventory_hostname == groups["dbserver"][0]
+    when: inventory_hostname == groups["dbserver"][0] and storage_type =="nfs"
     with_items:
       - { name: "{{ VOTE_DEV }}", size: "{{ VOTE_BASE_SIZE + VOTE_MULTI_SIZE * groups['dbserver'] | length  }}" }
       - { name: "{{ DATA_DEV }}", size: "{{ DATA_BASE_SIZE + DATA_MULTI_SIZE * groups['dbserver'] | length }}" }
@@ -33,7 +36,7 @@
   - name: "chown oradata"
     become: yes
     file: path={{ item.name }} state=file owner=grid group=oinstall mode=0660
-    when: inventory_hostname == groups["dbserver"][0]
+    when: inventory_hostname == groups["dbserver"][0] and storage_type =="nfs"
     with_items:
       - { name: "{{ VOTE_DEV }}" }
       - { name: "{{ DATA_DEV }}" }
@@ -44,5 +47,6 @@
   - name: "enable remote-fs.target"
     become: yes
     service: name=remote-fs.target enabled=yes
+    when: storage_type =="nfs"
     tags:
       - nfsclient
