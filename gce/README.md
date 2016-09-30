@@ -39,8 +39,8 @@ rac_on_xx/gce
 
 ## Demo (6-nodes RAC on Google Compute Engine)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/01/image.png)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker02.png)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker03.png)
+![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/02/image.png)
+![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/03/image.png)
 
 
 ## Requirement
