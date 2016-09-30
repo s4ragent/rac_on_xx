@@ -22,7 +22,6 @@ DHCPCLIENT: "/etc/dhclient.conf"
 DOWNLOAD_CMD: "gsutil cp"
 INSTANCE_OPS: "--image-family=centos-7 --image-project=centos-cloud"
 #BUCKET_URL="gs://xxxxxxxxx"
-#BUCKET_URL: "gs://s4ragent2016824"
 #WindowManager: "gnome"
 #####for NFS option values
 ##### device size = base_size + multi_size * node count
