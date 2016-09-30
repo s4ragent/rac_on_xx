@@ -47,5 +47,8 @@ Oracle RAC on Docker /GCE /EC2 (TBA) /Azure (TBA) etc...
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker04.png)
 
 
+## Licence
+[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+
 ## Author
 @s4r_agent
