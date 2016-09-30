@@ -1,15 +1,15 @@
 ---
 ####  stop
- - hosts: all:!nfs
+ - hosts: all:!storage
    connection: local
    roles:
      - stop
 
- - hosts: nfs
+ - hosts: storage
    roles:
-     - stop-nfs
+     - stop-storage-service
  
- - hosts: nfs
+ - hosts: storage
    connection: local
    roles:
      - stop

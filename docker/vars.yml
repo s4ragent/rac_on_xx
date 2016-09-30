@@ -27,3 +27,4 @@ DOCKER_START_OPS: "--restart=always"
 TMPFS_OPS: "--shm-size=1200m"
 ####################################################
 WindowManager: "xfce"
+storage_type: "nfs"
