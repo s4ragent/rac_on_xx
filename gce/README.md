@@ -38,10 +38,9 @@ rac_on_xx/gce
 |FRA|flash recovery area|/u01/oradata/fra.img|external|5120|5120|
 
 ## Demo (6-nodes RAC on Google Compute Engine)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/01/image.png)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/02/image.png)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/03/image.png)
-<img src="https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/01/image.png" width="320px">
+<img src="https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/01/image.png" width="480px">
+<img src="https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/02/image.png" width="480px">
+<img src="https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/03/image.png" width="480px">
 
 ## Requirement
 - Google Cloud Platform Account
