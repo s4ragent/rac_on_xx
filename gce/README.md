@@ -41,7 +41,7 @@ rac_on_xx/gce
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/01/image.png)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/02/image.png)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/03/image.png)
-
+<img src="https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/01/image.png" width="320px">
 
 ## Requirement
 - Google Cloud Platform Account
