@@ -17,7 +17,7 @@ rac_on_xx/docker
 
 |hostname/container name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
-|nfs|10.153.0.50|-|-|-|
+|storage|10.153.0.50|-|-|-|
 |node001|10.153.0.51|192.168.0.51|192.168.100.51|192.168.200.51|
 |node002|10.153.0.52|192.168.0.52|192.168.100.52|192.168.200.52|
 |node003|10.153.0.53|192.168.0.53|192.168.100.53|192.168.200.53|
@@ -99,9 +99,9 @@ if you want to stop first container
 
     #bash dockeruntil.sh stop 1
 
-if you want to stop nfs container
+if you want to stop storage container
 
-    #bash dockeruntil.sh stop nfs
+    #bash dockeruntil.sh stop storage
 
 and restart first container
 
