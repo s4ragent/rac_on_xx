@@ -138,7 +138,6 @@
     become: yes
     file: path={{ item.path }} state=directory owner={{ item.name }} group=oinstall mode=0755
     with_items:
-      - { name: 'grid', path: "{{ ORA_DATA }}" }
       - { name: 'grid', path: "{{ ORAINVENTORY }}" }
       - { name: 'grid', path: "{{ GRID_ORACLE_BASE }}" }
       - { name: 'grid', path: "{{ GRID_ORACLE_HOME }}" }
