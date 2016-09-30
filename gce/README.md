@@ -77,11 +77,11 @@ After logging in, click on the node001-grid, open the desktop of the grid user,�
 Download the installation media of OracleDatabase.　　    
 Unzip to /downloadmedia.　　    
 
-    ##
-    firefox http://localhost:1234/
-    
-    
-    ##
+    ##access Guacamole
+    firefox http://localhost:1234/    
+
+
+    ##unzip Downloaded Media
     cd /home/grid/Download/
     unzip -d xxx /downloadmedia
 
