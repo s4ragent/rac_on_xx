@@ -17,7 +17,7 @@ rac_on_xx/gce
 
 |hostname/instance name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
-|nfs|10.xx.xx.xx|-|-|-|
+|storage|10.xx.xx.xx|-|-|-|
 |node001|10.xx.xx.xx|192.168.0.51|192.168.100.51|192.168.200.51|
 |node002|10.xx.xx.xx|192.168.0.52|192.168.100.52|192.168.200.52|
 |node003|10.xx.xx.xx|192.168.0.53|192.168.100.53|192.168.200.53|
@@ -49,6 +49,11 @@ rac_on_xx/gce
 >git clone https://github.com/s4ragent/rac_on_xx
 
 ## Usage
+edit gce/vars.yml 
+
+    ##create 3-nodes RAC#
+    ##cd rac_on_xx/gce
+    ##bash gceutil.sh preinstall
 
 execute gceuntil.sh   (no option create 3-nodes RAC)
 
@@ -62,14 +67,12 @@ if you want to build 5-nodes RAC
     #cd rac_on_xx/gce
     #bash gceutil.sh preinstall 5
 
-and ssh port forwarding 33
+Run the "bash gceutil.sh ssh storage"  to portforwarding 8080 ( guacamole (Remote Desktop Gateway))
     
     ##
-    bash gceutil.sh ssh nfs
-
+    bash gceutil.sh ssh storage
 
 and access http://localhost:1234  on ansible host
-
 
     ##
     firefox http://localhost:1234/
