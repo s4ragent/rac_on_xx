@@ -17,7 +17,7 @@ rac_on_xx/gce
 
 |hostname/instance name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
-|nfs|10.xx.xx.xx|-|-|-|
+|storage|10.xx.xx.xx|-|-|-|
 |node001|10.xx.xx.xx|192.168.0.51|192.168.100.51|192.168.200.51|
 |node002|10.xx.xx.xx|192.168.0.52|192.168.100.52|192.168.200.52|
 |node003|10.xx.xx.xx|192.168.0.53|192.168.100.53|192.168.200.53|
@@ -49,53 +49,66 @@ rac_on_xx/gce
 >git clone https://github.com/s4ragent/rac_on_xx
 
 ## Usage
+If you need, change edit gce/vars.yml to change GCP zone
 
-execute gceuntil.sh   (no option create 3-nodes RAC)
+    ZONE: "us-west1-b"
+    #ZONE: "asia-east1-c"
+
+Execute gceuntil.sh   (no option create 3-nodes RAC)
 
     ##create 3-nodes RAC#
     #cd rac_on_xx/gce
-    #bash gceutil.sh preinstall
+    $bash gceutil.sh preinstall
 
-if you want to build 5-nodes RAC
+If you want to build 5-nodes RAC
 
     ##create 5-nodes RAC#
-    #cd rac_on_xx/gce
-    #bash gceutil.sh preinstall 5
+    $cd rac_on_xx/gce
+    $bash gceutil.sh preinstall 5
 
-and ssh port forwarding 33
+Extecute the "bash gceutil.sh ssh storage"  to portforwarding 8080 ( guacamole (Remote Desktop Gateway))
     
     ##
-    bash gceutil.sh ssh nfs
+    $bash gceutil.sh ssh storage
 
 
-and access http://localhost:1234  on ansible host
+Access to http://localhost:1234. Then, log in guacuser to guacamole. (Default password Guac123!)　　  
+After logging in, click on the node001-grid, open the desktop of the grid user,　　   
+Download the installation media of OracleDatabase.　　    
+Unzip to /downloadmedia.　　    
 
+    ##access Guacamole
+    $firefox http://localhost:1234/    
+
+
+    ##unzip Downloaded Media
+    $cd /home/grid/Download/
+    $unzip -d xxx /downloadmedia
+
+And execute "bash gceutil.sh install_dbca"
 
     ##
-    firefox http://localhost:1234/
-
-
-
+    $bash gceutil.sh install_dbca
 
 if you want to stop first instance
 
-    #bash gceutil.sh stop 1
+    $bash gceutil.sh stop 1
 
 if you want to stop nfs instance
 
-    #bash gceutil.sh stop nfs
+    $bash gceutil.sh stop nfs
 
 and restart first node
 
-    #bash gceutil.sh start 1
+    $bash gceutil.sh start 1
     
 if you want to start all node
 
-    #bash gceutil.sh startall
+    $bash gceutil.sh startall
 
 if you want to delete all node
 
-    #bash gceutil.sh deleteall
+    $bash gceutil.sh deleteall
 
 ## Licence
 [MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
