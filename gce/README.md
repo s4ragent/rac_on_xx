@@ -72,10 +72,10 @@ Extecute the "bash gceutil.sh ssh storage"  to portforwarding 8080 ( guacamole (
     bash gceutil.sh ssh storage
 
 
-Access to http://localhost:1234. Then, log in guacuser to guacamole. (Default password Guac123!)
-After logging in, click on the node001-grid, open the desktop of the grid user,
-Download the installation media of OracleDatabase.
-Unzip to /downloadmedia.
+Access to http://localhost:1234. Then, log in guacuser to guacamole. (Default password Guac123!)　　
+After logging in, click on the node001-grid, open the desktop of the grid user,　　
+Download the installation media of OracleDatabase.　　
+Unzip to /downloadmedia.　　
 
     ##
     firefox http://localhost:1234/
