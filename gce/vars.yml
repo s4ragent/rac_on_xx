@@ -1,7 +1,3 @@
-####################################################
-vnc_pass: Vnc123!
-guac_pass: Guac123!
-####################################################
 #### gce user specific value  ###################
 #ZONE: "us-west1-b"
 ZONE: "asia-east1-c"
@@ -25,6 +21,8 @@ INSTANCE_OPS: "--image-family=centos-7 --image-project=centos-cloud"
 #BUCKET_URL="gs://xxxxxxxxx"
 #BUCKET_URL: "gs://s4ragent2016824"
 WindowManager: "xfce"
+vnc_pass: Vnc123!
+guac_pass: Guac123!
 #WindowManager: "gnome"
 #storage_type: "iscsi"
 storage_type: "nfs"
