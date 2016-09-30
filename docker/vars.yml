@@ -27,4 +27,20 @@ DOCKER_START_OPS: "--restart=always"
 TMPFS_OPS: "--shm-size=1200m"
 ####################################################
 WindowManager: "xfce"
+#####for NFS option values
+##### device size = base_size + multi_size * node count
 storage_type: "nfs"
+ORA_DATA: /u01/oradata
+VOTE_DEV: /u01/oradata/vote.img
+VOTE_BASE_SIZE: 5120
+VOTE_MULTI_SIZE: 1024
+VOTE_DISKGROUP_NAME: VOTE
+DATA_DEV: /u01/oradata/data.img
+DATA_BASE_SIZE: 5120
+DATA_MULTI_SIZE: 1024
+DATA_DISKGROUP_NAME: DATA
+FRA_DEV: /u01/oradata/fra.img
+FRA_BASE_SIZE: 5120
+FRA_MULTI_SIZE: 0
+FRA_DISKGROUP_NAME: FRA
+ASM_STRING: /u01/oradata/*
