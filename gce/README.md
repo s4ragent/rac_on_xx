@@ -51,8 +51,8 @@ rac_on_xx/gce
 ## Usage
 If you need, change edit gce/vars.yml to change GCP zone
 
-    ###ZONE: "us-west1-b"
-    ####ZONE: "asia-east1-c"
+    ZONE: "us-west1-b"
+    #ZONE: "asia-east1-c"
 
 Execute gceuntil.sh   (no option create 3-nodes RAC)
 
