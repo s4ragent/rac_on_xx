@@ -8,7 +8,7 @@
 
   - name: "create nfs root directory"
     become: yes
-    file: path={{ NFS_ROOT }} state=directory owner=root group=root mode=0755
+    file: path={{ STORAGE_ROOT }} state=directory owner=root group=root mode=0755
     when: storage_type == "nfs"
     tags:
       - nfsserver
