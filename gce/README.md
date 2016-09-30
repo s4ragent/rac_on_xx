@@ -49,36 +49,46 @@ rac_on_xx/gce
 >git clone https://github.com/s4ragent/rac_on_xx
 
 ## Usage
-edit gce/vars.yml 
+If you need, change edit gce/vars.yml to change GCP zone
 
-    ##create 3-nodes RAC#
-    ##cd rac_on_xx/gce
-    ##bash gceutil.sh preinstall
+    ###ZONE: "us-west1-b"
+    ####ZONE: "asia-east1-c"
 
-execute gceuntil.sh   (no option create 3-nodes RAC)
+Execute gceuntil.sh   (no option create 3-nodes RAC)
 
     ##create 3-nodes RAC#
     #cd rac_on_xx/gce
     #bash gceutil.sh preinstall
 
-if you want to build 5-nodes RAC
+If you want to build 5-nodes RAC
 
     ##create 5-nodes RAC#
     #cd rac_on_xx/gce
     #bash gceutil.sh preinstall 5
 
-Run the "bash gceutil.sh ssh storage"  to portforwarding 8080 ( guacamole (Remote Desktop Gateway))
+Extecute the "bash gceutil.sh ssh storage"  to portforwarding 8080 ( guacamole (Remote Desktop Gateway))
     
     ##
     bash gceutil.sh ssh storage
 
-and access http://localhost:1234  on ansible host
+
+Access to http://localhost:1234. Then, log in guacuser to guacamole. (Default password Guac123!)
+After logging in, click on the node001-grid, open the desktop of the grid user,
+Download the installation media of OracleDatabase.
+Unzip to /downloadmedia.
 
     ##
     firefox http://localhost:1234/
+    
+    
+    ##
+    cd /home/grid/Download/
+    unzip -d xxx /downloadmedia
 
+And execute "bash gceutil.sh install_dbca"
 
-
+    ##
+    bash gceutil.sh install_dbca
 
 if you want to stop first instance
 
