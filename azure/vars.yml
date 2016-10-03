@@ -1,0 +1,44 @@
+#### gce user specific value  ###################
+#ZONE: "us-west1-b"
+ZONE: "asia-east1-c"
+#INSTANCE_SIZE_OPS: "--machine-type n1-highmem-2"
+#INSTANCE_SIZE_OPS: "--machine-type n1-standard-1"
+INSTANCE_TYPE_OPS: "--custom-cpu 1 --custom-memory 6"
+NODE_DISK_SIZE: "50GB"
+STORAGE_DISK_SIZE: "100GB"
+######## common user specific value  ###############
+vnc_pass: Vnc123!
+guac_pass: Guac123!
+WindowManager: "xfce"
+####common VIRT_TYPE specific value ################
+DELETE_CMD: "~/google-cloud-sdk/bin/gcloud compute instances delete"
+DELETE_CMD_OPS: "--zone {{ ZONE }} -q"
+START_CMD: "~/google-cloud-sdk/bin/gcloud compute instances start"
+START_CMD_OPS: "--zone {{ ZONE }} -q"
+STOP_CMD: "~/google-cloud-sdk/bin/gcloud compute instances stop"
+STOP_CMD_OPS: "--zone {{ ZONE }} -q"
+INSTALL_OPS: "-ignoreSysprereqs -ignorePrereq"
+DHCPCLIENT: "/etc/dhclient.conf"
+DOWNLOAD_CMD: "gsutil cp"
+INSTANCE_OPS: "--image-family=centos-7 --image-project=centos-cloud"
+#BUCKET_URL="gs://xxxxxxxxx"
+#WindowManager: "gnome"
+#####for NFS option values
+##### device size = base_size + multi_size * node count
+storage_type: "nfs"
+ORA_DATA: /u01/oradata
+VOTE_DEV: /u01/oradata/vote.img
+VOTE_BASE_SIZE: 5120
+VOTE_MULTI_SIZE: 1024
+VOTE_DISKGROUP_NAME: VOTE
+DATA_DEV: /u01/oradata/data.img
+DATA_BASE_SIZE: 5120
+DATA_MULTI_SIZE: 1024
+DATA_DISKGROUP_NAME: DATA
+FRA_DEV: /u01/oradata/fra.img
+FRA_BASE_SIZE: 5120
+FRA_MULTI_SIZE: 0
+FRA_DISKGROUP_NAME: FRA
+ASM_STRING: /u01/oradata/*
+#####for ISCSI option values (TODO)
+#storage_type: "iscsi"
