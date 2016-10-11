@@ -37,6 +37,12 @@ runonly(){
 		nodecount=$1
 	fi
 	
+	HasRG=`azure group list | grep $RGNAME | wc -l`
+	if [ "$HasRG" = "0" ]; then
+		azure group create -n $RGNAME -l $REGION
+	fi
+
+
 	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
 		#ssh-keygen -t rsa -P "" -f $sudokey -C $sudoer
 		ssh-keygen -t rsa -P "" -f tempkey -C $ansible_ssh_user
