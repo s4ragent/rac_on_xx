@@ -2,6 +2,8 @@
 #ZONE: "westus2"
 ZONE: "japanwest"
 RGNAME: "raconxx"
+AZUREADDRSPACE: "10.153.0.0/16"
+AZURESUBNET: "10.153.0.0/24"
 #INSTANCE_SIZE_OPS: "--machine-type n1-highmem-2"
 #INSTANCE_SIZE_OPS: "--machine-type n1-standard-1"
 INSTANCE_TYPE_OPS: "--custom-cpu 1 --custom-memory 6"
