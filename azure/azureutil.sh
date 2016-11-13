@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ####common VIRT_TYPE specific value ################
-VIRT_TYPE="gce"
+VIRT_TYPE="azure"
 
 cd ..
 source ./commonutil.sh
