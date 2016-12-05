@@ -31,7 +31,7 @@ rac_on_xx/docker
 
 - Storage infomation 
 
-|Diskgroup name|use|asm device path|redundancy|size(GB)|size(GB)(e.g. 3-nodes RAC)|
+|Diskgroup name|use|asm device path|redundancy|size(MB)|size(MB)(e.g. 3-nodes RAC)|
 |--------|--------|-------|-------|-------|-------|
 |VOTE|ocr and voting disk|/u01/oradata/vote.img|external| 5120 + ( num_of_nodes * 1024 )|8192|
 |DATA|Database files|/u01/oradata/data.img|external| 5120 + ( num_of_nodes * 1024 ) |8192|
@@ -61,13 +61,13 @@ It may be dangerous.
 ## Usage
 download/unzip Oracle 12c Release 1 (12.1) Clusterware and Database software on docker host
 
-    #mkdir -p /media
+    #mkdir -p /downloadmedia
     #unzip linuxamd64_12102_database_1of2.zip -d /media
     #unzip linuxamd64_12102_database_2of2.zip -d /media
     #unzip linuxamd64_12102_grid_1of2.zip -d /media
     #unzip linuxamd64_12102_grid_2of2.zip -d /media
      
-    #ls -al /media
+    #ls -al /downloadmedia
     total 16
     drwxr-xr-x 4 root root 4096 May  1 21:56 .
     drwxr-xr-x 3 root root 4096 May  1 21:53 ..
@@ -79,13 +79,13 @@ execute dockeruntil.sh   (no option create 3-nodes RAC)
 
     ##create 3-nodes RAC#
     #cd rac_on_xx/docker
-    #bash dockeruntil.sh runall
+    #bash dockerunil.sh runall
 
 if you want to build 5-nodes RAC
 
     ##create 5-nodes RAC#
     #cd rac_on_xx/docker
-    #bash dockeruntil.sh runall 5
+    #bash dockerunil.sh runall 5
 
 if you want to log in node001
 
@@ -97,23 +97,23 @@ if you want to execute oracle commands on node001 (ex. crsctl status res -t)
 
 if you want to stop first container
 
-    #bash dockeruntil.sh stop 1
+    #bash dockerunil.sh stop 1
 
 if you want to stop storage container
 
-    #bash dockeruntil.sh stop storage
+    #bash dockerunil.sh stop storage
 
 and restart first container
 
-    #bash dockeruntil.sh start 1
+    #bash dockerunil.sh start 1
     
 if you want to start all containers
 
-    #bash dockeruntil.sh startall
+    #bash dockerunil.sh startall
 
 if you want to delete all containers
 
-    #bash dockeruntil.sh deleteall
+    #bash dockerunil.sh deleteall
 
 ## Licence
 [MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
