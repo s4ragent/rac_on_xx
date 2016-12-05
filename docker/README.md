@@ -61,13 +61,13 @@ It may be dangerous.
 ## Usage
 download/unzip Oracle 12c Release 1 (12.1) Clusterware and Database software on docker host
 
-    #mkdir -p /downloadmedia
+    #mkdir -p /media
     #unzip linuxamd64_12102_database_1of2.zip -d /media
     #unzip linuxamd64_12102_database_2of2.zip -d /media
     #unzip linuxamd64_12102_grid_1of2.zip -d /media
     #unzip linuxamd64_12102_grid_2of2.zip -d /media
      
-    #ls -al /downloadmedia
+    #ls -al /media
     total 16
     drwxr-xr-x 4 root root 4096 May  1 21:56 .
     drwxr-xr-x 3 root root 4096 May  1 21:53 ..
