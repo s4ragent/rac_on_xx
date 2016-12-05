@@ -17,14 +17,14 @@ run(){
 	
 	IsDeviceMapper=`docker info | grep devicemapper | grep -v grep | wc -l`
 
-	if [ "$IsDeviceMapper" != "0" ]; then
+#	if [ "$IsDeviceMapper" != "0" ]; then
 		mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
 		StorageOps="-v $DOCKER_VOLUME_PATH/$NODENAME:/u01:rw"
 #     		#DeviceMapper_BaseSize=$DeviceMapper_BaseSize
-	else
+#	else
       		#DeviceMapper_BaseSize=""
-      		StorageOps=""
-	fi
+#      		StorageOps=""
+#	fi
 #   
 #    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
 
