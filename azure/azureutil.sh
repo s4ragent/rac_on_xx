@@ -8,11 +8,11 @@ source ./commonutil.sh
 
 SUFFIX=`ip a show eth0 | grep ether | awk '{print $2}' | sed -e s/://g`
 
-RG_NAME=RG_${PREFIX}
-VNET_NAME=VNET_${PREFIX}
-SNET_NAME=SNET_${PREFIX}
-SA_NAME=SA_${PREFIX}${SUFFIX}
-NSG_NAME=NSG_${PREFIX}
+RG_NAME=rg_${PREFIX}
+VNET_NAME=vnet_${PREFIX}
+SNET_NAME=snet_${PREFIX}
+SA_NAME=sa_${PREFIX}${SUFFIX}
+NSG_NAME=nsg_${PREFIX}
 
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 disksize $3 nodenumber $4 hostgroup#####
@@ -49,6 +49,7 @@ runonly(){
 	HasRG=`azure group list | grep $RGNAME | wc -l`
 	if [ "$HasRG" = "0" ]; then
 		azure group create -n $RG_NAME -l $ZONE
+		azure storage account create ${SA_NAME} --sku-name LRS --kind Storage -g $RG_NAME -l $ZONE
 		azure network vnet create -g $RG_NAME -n $VNET_NAME -a $VNET_ADDR -l $ZONE
 		azure network vnet subnet create -g $RG_NAME --vnet-name $VNET_NAME -n $SNET_NAME -a $SNET_ADDR
 
