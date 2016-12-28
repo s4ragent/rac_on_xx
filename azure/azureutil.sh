@@ -6,6 +6,14 @@ VIRT_TYPE="azure"
 cd ..
 source ./commonutil.sh
 
+SUFFIX=`ip a show eth0 | grep ether | awk '{print $2}' | sed -e s/://g`
+
+RG_NAME=RG_${PREFIX}
+VNET_NAME=VNET_${PREFIX}
+SNET_NAME=SNET_${PREFIX}
+SA_NAME=SA_${PREFIX}${SUFFIX}
+NSG_NAME=NSG_${PREFIX}
+
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 disksize $3 nodenumber $4 hostgroup#####
 run(){
@@ -37,14 +45,22 @@ runonly(){
 		nodecount=$1
 	fi
 	
+
 	HasRG=`azure group list | grep $RGNAME | wc -l`
 	if [ "$HasRG" = "0" ]; then
-		azure group create -n $RGNAME -l $ZONE
+		azure group create -n $RG_NAME -l $ZONE
+		azure network vnet create -g $RG_NAME -n $VNET_NAME -a $VNET_ADDR -l $ZONE
+		azure network vnet subnet create -g $RG_NAME --vnet-name $VNET_NAME -n $SNET_NAME -a $SNET_ADDR
+
+		azure network nsg create -g $RG_NAME -l $ZONE -n $NSG_NAME
+		azure network nsg rule create -g $RG_NAME -a $NSG_NAME -n ssh-rule -c Allow -p Tcp -r Inbound -y 100 -f Internet -o '*' -e '*' -u 22
+		azure network vnet subnet set -g $RG_NAME -e $VNET_NAME -o $NSG_NAME -n $SNET_NAME
+			
+		
 	fi
 
-
 	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
-		ssh-keygen -t rsa -P "" -f $sudokey -C $sudoer
+		ssh-keygen -t rsa -P "" -f $sudokey
 	fi
    
 
