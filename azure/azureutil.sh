@@ -11,7 +11,7 @@ SUFFIX=`ip a show eth0 | grep ether | awk '{print $2}' | sed -e s/://g`
 RG_NAME=rg_${PREFIX}
 VNET_NAME=vnet_${PREFIX}
 SNET_NAME=snet_${PREFIX}
-SA_NAME=sa_${PREFIX}${SUFFIX}
+SA_NAME=${PREFIX}${SUFFIX}
 NSG_NAME=nsg_${PREFIX}
 
 #### VIRT_TYPE specific processing  (must define)###
@@ -22,6 +22,11 @@ run(){
 	NODENUMBER=$3
 	HOSTGROUP=$4
 	INSTANCE_ID=$NODENAME
+	
+	
+	azure network public-ip create -g $RG_NAME  -n ip_${NODENAME} --location $ZONE
+	
+	
 	CREATE_RESULT=$(gcloud compute instances create $NODENAME $INSTANCE_TYPE_OPS --network "default" --can-ip-forward --maintenance-policy "MIGRATE" --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" $INSTANCE_OPS --boot-disk-type "pd-ssd" --boot-disk-device-name $NODENAME --boot-disk-size $DISKSIZE --zone $ZONE | tail -n 1)
 
 	External_IP=`get_External_IP $INSTANCE_ID`
@@ -88,6 +93,7 @@ deleteall(){
 	#### VIRT_TYPE specific processing ###
 	if [ -n "$ansible_ssh_private_key_file" ]; then
    		rm -rf ${ansible_ssh_private_key_file}*
+		azure group delete -n $RG_NAME  -q
 	fi
    
 }
@@ -110,13 +116,8 @@ get_External_IP(){
     		NODENAME=$1
 	fi
 
-	LIST_RESULT=$(gcloud compute instances list  $NODENAME --zones $ZONE | tail -n 1)
-	MACHINE_TYPE=`echo $LIST_RESULT | awk '{print $3}'`
-	if [ "$MACHINE_TYPE" = "custom" ]; then
-		External_IP=`echo $LIST_RESULT | awk '{print $9}'`
-	else
-		External_IP=`echo $LIST_RESULT | awk '{print $5}'`
-	fi
+	ip_name=ip_${NODENAME}
+	External_IP=`azure network public-ip show -g $RG_NAME -n $ip_name | grep "IP Address" | awk '{print $5}'`
 	echo $External_IP	
 }
 
@@ -129,14 +130,10 @@ get_Internal_IP(){
     		NODENAME=$1
 	fi
 	
-	LIST_RESULT=$(gcloud compute instances list  $NODENAME --zones $ZONE | tail -n 1)
-	MACHINE_TYPE=`echo $LIST_RESULT | awk '{print $3}'`
-	if [ "$MACHINE_TYPE" = "custom" ]; then
-		Internal_IP=`echo $LIST_RESULT | awk '{print $8}'`
-	else
-		Internal_IP=`echo $LIST_RESULT | awk '{print $4}'`
-	fi
-	echo $Internal_IP	
+	nic_name=nic_${NODENAME}
+	Internal_IP=`azure network nic show -g $RG_NAME -n $nic_name | grep "Private IP Address" | awk '{print $5}'`
+
+	echo $Internal_IP
 }
 
 source ./common_menu.sh
