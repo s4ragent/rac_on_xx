@@ -48,7 +48,7 @@ runonly(){
 	fi
 	
 
-	HasRG=`azure group list | grep $RGNAME | wc -l`
+	HasRG=`azure group list | grep $RG_NAME | wc -l`
 	if [ "$HasRG" = "0" ]; then
 		azure group create -n $RG_NAME -l $ZONE
 		azure storage account create ${SA_NAME} --sku-name LRS --kind Storage -g $RG_NAME -l $ZONE
