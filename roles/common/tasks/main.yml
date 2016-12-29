@@ -134,6 +134,27 @@
     tags:
       - ntp
 
+  - name: "fdisk data_disk_dev"
+    become: yes
+    filesystem: fstype=xfs dev={{ data_disk_dev }}
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
+
+  - name: "create data_disk mountpoint"
+    become: yes
+    file: path={{ data_disk_mountpoint }} state=directory owner=grid group=oinstall mode=0755
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
+
+  - name: "mount data_disk_dev"
+    become: yes
+    mount: name={{ data_disk_mountpoint }} src={{ data_disk_dev }}1 fstype=xfs opts=defaults passno=0 dump=0 state=mounted
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
+
   - name: "create gridbase gridhome oradata orainventry"
     become: yes
     file: path={{ item.path }} state=directory owner={{ item.name }} group=oinstall mode=0755
