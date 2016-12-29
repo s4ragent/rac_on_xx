@@ -25,10 +25,12 @@ DOWNLOAD_CMD: ""
 INSTANCE_OPS: "--image-urn Oracle:Oracle-Linux:7.2:latest"
 #BUCKET_URL="gs://xxxxxxxxx"
 #WindowManager: "gnome"
-#####for NFS option values
-##### device size = base_size + multi_size * node count
+## for additional disk values
 data_disk_dev: "/dev/sdc"
+data_disk_mountpoint: "/u01"
+#####for NFS option values
 storage_type: "nfs"
+##### device size = base_size + multi_size * node count
 ORA_DATA: /u01/oradata
 VOTE_DEV: /u01/oradata/vote.img
 VOTE_BASE_SIZE: 5120
