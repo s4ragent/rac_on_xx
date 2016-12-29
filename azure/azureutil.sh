@@ -8,7 +8,6 @@ source ./commonutil.sh
 
 SUFFIX=`ip a show eth0 | grep ether | awk '{print $2}' | sed -e s/://g`
 
-RG_NAME=rg_${PREFIX}
 VNET_NAME=vnet_${PREFIX}
 SNET_NAME=snet_${PREFIX}
 SA_NAME=${PREFIX}${SUFFIX}
@@ -25,7 +24,7 @@ run(){
 	
 	
 	azure network public-ip create -g $RG_NAME  -n ip_${NODENAME} --location $ZONE
-	azure vm create -g $rg_name -n $name --nic-name nic_${name} -i ip_${name} -o ${sa_name} -x data-${name} -e $disksize --location $location --os-type Linux --image-urn $image_urn --admin-username $adminuser --vm-size $vmsize --ssh-publickey-file ./${prefix} --vnet-name $vnet_name --vnet-subnet-name $snet_name
+	azure vm create -g $RG_NAME -n $NODENAME --nic-name nic_${NODENAME} -i ip_${NODENAME} -o ${SA_NAME} -x data-${NODENAME} -e $DISKSIZE --location $ZONE --os-type Linux $INSTANCE_TYPE_OPS $INSTANCE_OPS --admin-username ${ansible_ssh_user}  --ssh-publickey-file ./${ansible_ssh_private_key_file} --vnet-name $VNET_NAME --vnet-subnet-name $SNET_NAME
 
 	External_IP=`get_External_IP $INSTANCE_ID`
 	Internal_IP=`get_Internal_IP $INSTANCE_ID`
@@ -64,7 +63,8 @@ runonly(){
 	fi
 
 	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
-		ssh-keygen -t rsa -P "" -f $sudokey
+		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
+		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
    
 
