@@ -138,16 +138,17 @@
   - name: "Partition additional disks"
     become: yes
     shell: |
-    if
-        [ -b {{ item.disk }} ]
-    then
-        [ -b {{ item.disk }}1 ] || parted --script "{{ item.disk }}" mklabel gpt mkpart primary 1MiB 100%
-    fi
-  args:
-    creates: '{{1'
-    executable: '/bin/bash'
-  with_items: '{{ disk_additional_disks }}'
-  tags: ['disk']
+      if
+        [ -b {{ data_disk_dev }} ]
+      then
+        [ -b {{ data_disk_dev }}1 ] || parted --script "{{ data_disk_dev }}" mklabel gpt mkpart primary 1MiB 100%
+      fi
+    args:
+      creates: '{{ data_disk_dev }}1'
+      executable: '/bin/bash'
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
 
   - name: "fdisk data_disk_dev"
     become: yes
