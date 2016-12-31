@@ -152,7 +152,7 @@
 
   - name: "fdisk data_disk_dev"
     become: yes
-    filesystem: fstype=xfs dev={{ data_disk_dev }}
+    filesystem: fstype=xfs dev={{ data_disk_dev }}1
     when: data_disk_dev is defined and data_disk_dev !=""
     tags:
       - oraclehome
