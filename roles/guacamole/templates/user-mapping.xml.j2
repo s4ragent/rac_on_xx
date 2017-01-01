@@ -16,5 +16,23 @@
         </connection>
     {% endfor %}
 {% endif %}
+{% if xrdp_pass is defined %}
+    {% for host in groups['dbserver'] %}
+        <connection name="{{ hostvars[host]['ansible_hostname'] }}-oracle">
+            <protocol>rdp</protocol>
+            <param name="hostname">{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}</param>
+            <param name="port">3389</param>
+            <param name="username">oracle</param>
+            <param name="password">{{ xrdp_pass }}</param>
+        </connection>
+        <connection name="{{ hostvars[host]['ansible_hostname'] }}-grid">
+            <protocol>rdp</protocol>
+            <param name="hostname">{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}</param>
+            <param name="port">3389</param>
+            <param name="username">grid</param>
+            <param name="password">{{ xrdp_pass }}</param>
+        </connection>
+    {% endfor %}
+{% endif %}
     </authorize>
 </user-mapping>
