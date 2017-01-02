@@ -129,7 +129,7 @@ get_Internal_IP(){
 	fi
 	
 	nic_name=nic_${NODENAME}
-	Internal_IP=`azure network nic show -g $RG_NAME -n $nic_name | grep "Private IP Address" | awk '{print $5}'`
+	Internal_IP=`azure network nic show -g $RG_NAME -n $nic_name | grep "Private IP address" | awk '{print $5}'`
 
 	echo $Internal_IP
 }
