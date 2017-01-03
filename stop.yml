@@ -1,6 +1,7 @@
 ---
 ####  stop
  - hosts: all:!storage
+   gather_facts: False
    connection: local
    roles:
      - stop
@@ -10,6 +11,7 @@
      - stop-storage-service
  
  - hosts: storage
+   gather_facts: False
    connection: local
    roles:
      - stop
