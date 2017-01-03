@@ -96,7 +96,7 @@
       - setresolvconf
       - sethost
 
-##### at last restart dnsmasq.service & network.service
+##### at last restart dnsmasq.service & network.service & setresolvconf.service
   - name: "restart and  enable dnsmasq.service"
     become: yes
     service: name=dnsmasq.service state=restarted enabled=yes
@@ -108,6 +108,14 @@
   - name: "restart network.service"
     become: yes
     service: name=network.service state=restarted
+    tags:
+      - setresolvconf
+      - sethost  
+      - dnsmasq
+
+  - name: "restart setresolvconf.service"
+    become: yes
+    service: name=setresolvconf.service state=restarted
     tags:
       - setresolvconf
       - sethost  
