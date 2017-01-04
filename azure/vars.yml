@@ -13,7 +13,8 @@ STORAGE_DISK_SIZE: "100"
 #xrdp_pass: Xrdp123!
 vnc_pass: Vnc123!
 guac_pass: Guac123!
-WindowManager: "xfce"
+#WindowManager: "xfce"
+WindowManager: "gnome"
 ####common VIRT_TYPE specific value ################
 DELETE_CMD: "azure vm delete -n"
 DELETE_CMD_OPS: "-g {{ RG_NAME }} -q"
