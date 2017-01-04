@@ -122,7 +122,7 @@
 
   - name: "enable guacd/tomcat"
     become: yes
-    service: name={{ item }} enabled=yes state=started
+    service: name={{ item }} enabled=yes state=restarted
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["storage"][0]
     with_items:
       - guacd
