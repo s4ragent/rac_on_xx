@@ -15,6 +15,7 @@
    roles:
       - common
       - vnc
+      - xrdp
       - nfsclient
 
  - hosts: dbserver
