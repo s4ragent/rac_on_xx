@@ -61,7 +61,7 @@
 
   - name: edit vnc service file
     become: yes
-    shell: "sed -i -e 's/<USER> -c "\/usr\/bin\/vncserver %i"/{{ item }} -c "\/usr\/bin\/vncserver -depth 16 -geometry 1280x800 %i"/g' /etc/systemd/system/vncserver@:{{item.0 + 1}}.service"
+    shell: "sed -i -e 's/<USER>/{{ item }}/g' /etc/systemd/system/vncserver@:{{item.0 + 1}}.service"
     with_indexed_items:
       - oracle
       - grid
@@ -71,14 +71,13 @@
 
   - name: edit vnc service file
     become: yes
-    shell: "sed -i -e 's/<USER>/{{ item }}/g' /etc/systemd/system/vncserver@:{{item.0 + 1}}.service"
+    shell: "sed -i -e 's/vncserver %i/vncserver -geometry 1024x768 -depth 16 %i/g' /etc/systemd/system/vncserver@:{{item.0 + 1}}.service"
     with_indexed_items:
       - oracle
       - grid
     when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
-
 
 
 
