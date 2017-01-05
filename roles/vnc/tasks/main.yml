@@ -59,7 +59,7 @@
     tags:
       - vnc
 
-- name: "crete directory"
+  - name: "crete directory"
     become: yes
     file: path="/home/{{ item }}/.vnc" state=directory mode=0755 group=oinstall owner={{ item }}
     with_items:
