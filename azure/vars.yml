@@ -10,11 +10,11 @@ INSTANCE_TYPE_OPS: "--vm-size Standard_A0"
 NODE_DISK_SIZE: "50"
 STORAGE_DISK_SIZE: "100"
 ######## common user specific value  ###############
-#xrdp_pass: Xrdp123!
-vnc_pass: Vnc123!
+xrdp_pass: Xrdp123!
+#vnc_pass: Vnc123!
 guac_pass: Guac123!
-#WindowManager: "xfce"
-WindowManager: "gnome"
+WindowManager: "xfce"
+#WindowManager: "gnome"
 ####common VIRT_TYPE specific value ################
 DELETE_CMD: "azure vm delete -n"
 DELETE_CMD_OPS: "-g {{ RG_NAME }} -q"
