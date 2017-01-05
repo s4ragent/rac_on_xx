@@ -61,7 +61,7 @@
 
   - name: edit vnc service file
     become: yes
-    shell: "sed -i -e 's/<USER>/{{ item }}/g' /etc/systemd/system/vncserver@:{{item.0 + 1}}.service"
+    shell: "sed -i -e 's/<USER>/{{ item.1 }}/g' /etc/systemd/system/vncserver@:{{item.0 + 1}}.service"
     with_indexed_items:
       - oracle
       - grid
