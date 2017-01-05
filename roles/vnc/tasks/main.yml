@@ -61,13 +61,26 @@
 
   - name: edit vnc service file
     become: yes
-    shell: "sed -i -e 's/<USER>/{{ item.1 }}/g' /etc/systemd/system/vncserver@:{{item.0 + 1}}.service"
+    shell: "sed -i -e 's/<USER> -c "\/usr\/bin\/vncserver %i"/{{ item }} -c "\/usr\/bin\/vncserver -depth 16 -geometry 1280x800 %i"/g' /etc/systemd/system/vncserver@:{{item.0 + 1}}.service"
     with_indexed_items:
       - oracle
       - grid
     when: vnc_pass is defined and vnc_pass !=""
     tags:
       - vnc
+
+  - name: edit vnc service file
+    become: yes
+    shell: "sed -i -e 's/<USER>/{{ item }}/g' /etc/systemd/system/vncserver@:{{item.0 + 1}}.service"
+    with_indexed_items:
+      - oracle
+      - grid
+    when: vnc_pass is defined and vnc_pass !=""
+    tags:
+      - vnc
+
+
+
 
   - name: "crete directory"
     become: yes
