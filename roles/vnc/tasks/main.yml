@@ -49,9 +49,19 @@
     tags:
       - vnc
 
-  - name: "copy vnc service file"
+  - name: Copy vnc service file
     become: yes
-    template: src=vnc.service.j2 dest="/etc/systemd/system/vncserver@:{{item.0 + 1}}.service"
+    shell: "cp /usr/lib/systemd/system/vncserver@.service /etc/systemd/system/vncserver@:{{item.0 + 1}}.service"
+    with_indexed_items:
+      - oracle
+      - grid
+    when: vnc_pass is defined and vnc_pass !=""
+    tags:
+      - vnc
+
+  - name: edit vnc service file
+    become: yes
+    shell: "sed -i -e 's/<USER>/{{ item.1 }}/g' /etc/systemd/system/vncserver@:{{item.0 + 1}}.service"
     with_indexed_items:
       - oracle
       - grid
