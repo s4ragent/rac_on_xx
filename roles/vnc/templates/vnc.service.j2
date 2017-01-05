@@ -6,8 +6,8 @@ After=syslog.target network.target
 Type=forking
 # Clean any existing files in /tmp/.X11-unix environment
 ExecStartPre=/bin/sh -c '/usr/bin/vncserver -kill %i > /dev/null 2>&1 || :'
-ExecStart=/usr/sbin/runuser -l {{ item }} -c "/usr/bin/vncserver %i"
-PIDFile=/home/{{ item }}/.vnc/%H%i.pid
+ExecStart=/usr/sbin/runuser -l {{ item.1 }} -c "/usr/bin/vncserver %i"
+PIDFile=/home/{{ item.1 }}/.vnc/%H%i.pid
 ExecStop=/bin/sh -c '/usr/bin/vncserver -kill %i > /dev/null 2>&1 || :'
 
 [Install]
