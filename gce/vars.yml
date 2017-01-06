@@ -7,9 +7,9 @@ INSTANCE_TYPE_OPS: "--custom-cpu 1 --custom-memory 6"
 NODE_DISK_SIZE: "50GB"
 STORAGE_DISK_SIZE: "100GB"
 ######## common user specific value  ###############
-vnc_pass: Vnc123!
+xrdp_pass: Xrdp123!
 guac_pass: Guac123!
-WindowManager: "xfce"
+#WindowManager: "xfce"
 ####common VIRT_TYPE specific value ################
 DELETE_CMD: "~/google-cloud-sdk/bin/gcloud compute instances delete"
 DELETE_CMD_OPS: "--zone {{ ZONE }} -q"
