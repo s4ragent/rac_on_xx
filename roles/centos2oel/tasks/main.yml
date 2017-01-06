@@ -13,6 +13,15 @@
     tags:
       - centos2oel
 
+
+  - name: "yum clean metadata"
+    become: yes
+    shell: yum -y clean metadata
+    ignore_errors: true
+    tags:
+      - centos2oel
+
+
   - name: "check oracle-release"
     become: yes
     shell: cat /etc/oracle-release
