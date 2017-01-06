@@ -120,9 +120,18 @@
       - guactomcat
       - guacamole
 
+  - name: "daemon-reload"
+    become: yes
+    shell: systemctl daemon-reload
+    when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["storage"][0]
+    tags:
+      - guacd
+      - guactomcat
+      - guacamole
+
   - name: "enable guacd/tomcat"
     become: yes
-    systemd: name={{ item }} enabled=yes state=restarted
+    service: name={{ item }} enabled=yes state=restarted
     when: guac_pass is defined and guac_pass !="" and inventory_hostname == groups["storage"][0]
     with_items:
       - guacd
