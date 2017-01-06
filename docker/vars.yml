@@ -1,6 +1,6 @@
 ####################################################
 #guac_pass: Guac123!
-#vnc_pass: Vnc123!
+#xrdp_pass: Xrdp123!
 ####################################################
 ####################################################
 #### docker user specific value  ###################
@@ -26,7 +26,7 @@ DOCKER_CAPS: "--privileged=true --security-opt seccomp=unconfined"
 DOCKER_START_OPS: "--restart=always"
 TMPFS_OPS: "--shm-size=1200m"
 ####################################################
-WindowManager: "xfce"
+#WindowManager: "xfce"
 #####for NFS option values
 ##### device size = base_size + multi_size * node count
 storage_type: "nfs"
