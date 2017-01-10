@@ -10,8 +10,8 @@ INSTANCE_TYPE_OPS: "--vm-size Standard_A2m_v2"
 NODE_DISK_SIZE: "50"
 STORAGE_DISK_SIZE: "100"
 ######## common user specific value  ###############
-xrdp_pass: Xrdp123!
-guac_pass: Guac123!
+#xrdp_pass: Xrdp123!
+#guac_pass: Guac123!
 #WindowManager: "xfce"
 #WindowManager: "gnome"
 ####common VIRT_TYPE specific value ################
@@ -23,8 +23,8 @@ STOP_CMD: "azure vm deallocate"
 STOP_CMD_OPS: "-g {{ RG_NAME }}"
 INSTALL_OPS: "-ignoreSysprereqs -ignorePrereq"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
-DOWNLOAD_CMD: ""
 INSTANCE_OPS: "--image-urn Oracle:Oracle-Linux:7.2:latest"
+MEDIA_COPY: "true"
 #BUCKET_URL="gs://xxxxxxxxx"
 #WindowManager: "gnome"
 ## for additional disk values
