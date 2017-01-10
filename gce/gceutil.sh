@@ -79,7 +79,7 @@ replaceinventory(){
 	do
 		INSTANCE_ID=`echo $FILE | awk -F '/' '{print $3}'`
 		External_IP=`get_External_IP $INSTANCE_ID`
-		common_replaceinventory $INSTANCE_NAME $External_IP
+		common_replaceinventory $INSTANCE_ID $External_IP
 	done
 }
 
