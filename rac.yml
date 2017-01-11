@@ -9,6 +9,7 @@
       - guacamole
 
  - hosts: storage
+   any_errors_fatal: true
    roles:
       - nfsserver
 
@@ -19,11 +20,13 @@
       - nfsclient
 
  - hosts: dbserver
+   any_errors_fatal: true
    serial: 1
    roles:
       - gridinstall
 
  - hosts: dbserver
+   any_errors_fatal: true
    roles:
       - mgmtdb
       - createdg
