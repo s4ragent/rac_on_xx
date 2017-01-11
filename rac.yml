@@ -13,9 +13,9 @@
       - nfsserver
 
  - hosts: dbserver
+   any_errors_fatal: true
    roles:
       - common
-      - xrdp
       - nfsclient
 
  - hosts: dbserver
