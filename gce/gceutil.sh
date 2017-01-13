@@ -44,8 +44,17 @@ runonly(){
 		rm -f tempkey.pub
       		mv -f tempkey ${ansible_ssh_private_key_file}
       		chmod 600 ${ansible_ssh_private_key_file}*
+		
 	fi
    
+	is_create_network=`gcloud compute networks list | grep default`
+	if [ $is_create_network -eq 0 ] ; then
+		gcloud compute networks create default
+		gcloud compute firewall-rules create default-allow-icmp --network default --allow icmp --source-ranges 0.0.0.0/0
+		gcloud compute firewall-rules create default-allow-ssh --network default --allow tcp:22 --source-ranges 0.0.0.0/0
+		gcloud compute firewall-rules create default-allow-internal --network default --allow tcp:0-65535,udp:0-65535,icmp --source-ranges 10.0.0.0/8
+	fi
+
 
 	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
 	
