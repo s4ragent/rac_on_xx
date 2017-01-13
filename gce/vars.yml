@@ -7,8 +7,9 @@ INSTANCE_TYPE_OPS: "--custom-cpu 1 --custom-memory 6"
 NODE_DISK_SIZE: "50GB"
 STORAGE_DISK_SIZE: "100GB"
 ######## common user specific value  ###############
-xrdp_pass: Xrdp123!
-guac_pass: Guac123!
+MEDIA_COPY: "true"
+#xrdp_pass: Xrdp123!
+#guac_pass: Guac123!
 #WindowManager: "xfce"
 ####common VIRT_TYPE specific value ################
 DELETE_CMD: "~/google-cloud-sdk/bin/gcloud compute instances delete"
@@ -19,7 +20,7 @@ STOP_CMD: "~/google-cloud-sdk/bin/gcloud compute instances stop"
 STOP_CMD_OPS: "--zone {{ ZONE }} -q"
 INSTALL_OPS: "-ignoreSysprereqs -ignorePrereq"
 DHCPCLIENT: "/etc/dhclient.conf"
-DOWNLOAD_CMD: "gsutil cp"
+#DOWNLOAD_CMD: "gsutil cp"
 INSTANCE_OPS: "--image-family=centos-7 --image-project=centos-cloud"
 #BUCKET_URL="gs://xxxxxxxxx"
 #WindowManager: "gnome"
