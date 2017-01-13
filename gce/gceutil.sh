@@ -47,7 +47,7 @@ runonly(){
 		
 	fi
    
-	is_create_network=`gcloud compute networks list | grep default`
+	is_create_network=`gcloud compute networks list | grep default | wc -l`
 	if [ $is_create_network -eq 0 ] ; then
 		gcloud compute networks create default
 		gcloud compute firewall-rules create default-allow-icmp --network default --allow icmp --source-ranges 0.0.0.0/0
