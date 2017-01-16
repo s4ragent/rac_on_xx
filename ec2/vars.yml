@@ -23,7 +23,10 @@ STOP_CMD: "azure vm deallocate"
 STOP_CMD_OPS: "-g {{ RG_NAME }}"
 INSTALL_OPS: "-ignoreSysprereqs -ignorePrereq"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
-INSTANCE_OPS: "--image-urn Oracle:Oracle-Linux:7.2:latest"
+#for oregon region
+#INSTANCE_OPS: "--image-urn ami-4a637f2b"
+#for tokyo region
+INSTANCE_OPS: "ami-65e0c80b"
 MEDIA_COPY: "true"
 #BUCKET_URL="gs://xxxxxxxxx"
 #WindowManager: "gnome"
