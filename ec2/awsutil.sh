@@ -55,20 +55,9 @@ runonly(){
 		nodecount=$1
 	fi
 	
+	vpcid=`aws ec2 describe-vpcs --region $region --filters "Name=is-default,Values=true" --query "Vpcs[].VpcId" --output text`
+       
 
-	HasRG=`azure group list | grep $RG_NAME | wc -l`
-	if [ "$HasRG" = "0" ]; then
-		azure group create -n $RG_NAME -l $ZONE
-		azure storage account create ${SA_NAME} --sku-name LRS --kind Storage -g $RG_NAME -l $ZONE
-		azure network vnet create -g $RG_NAME -n $VNET_NAME -a $VNET_ADDR -l $ZONE
-		azure network vnet subnet create -g $RG_NAME --vnet-name $VNET_NAME -n $SNET_NAME -a $SNET_ADDR
-
-		azure network nsg create -g $RG_NAME -l $ZONE -n $NSG_NAME
-		azure network nsg rule create -g $RG_NAME -a $NSG_NAME -n ssh-rule -c Allow -p Tcp -r Inbound -y 100 -f Internet -o '*' -e '*' -u 22
-		azure network vnet subnet set -g $RG_NAME -e $VNET_NAME -o $NSG_NAME -n $SNET_NAME
-			
-		
-	fi
 
 	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
 		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
