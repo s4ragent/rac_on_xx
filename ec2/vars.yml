@@ -1,19 +1,14 @@
 #### azure user specific value  ###################
 PREFIX: "raconxx"
-RG_NAME: "rg_raconxx"
-#ZONE: "westus2"
-ZONE: "japanwest"
+#REGION: "us-west-2"
+REGION: "ap-northeast-1"
 VNET_ADDR: "10.153.0.0/16"
 SNET_ADDR: "10.153.1.0/24"
 INSTANCE_TYPE_OPS: "--vm-size Standard_A2m_v2"
 #INSTANCE_TYPE_OPS: "--vm-size Standard_A0"
 NODE_DISK_SIZE: "50"
 STORAGE_DISK_SIZE: "100"
-######## common user specific value  ###############
-#xrdp_pass: Xrdp123!
-#guac_pass: Guac123!
-#WindowManager: "xfce"
-#WindowManager: "gnome"
+
 ####common VIRT_TYPE specific value ################
 DELETE_CMD: "azure vm delete -n"
 DELETE_CMD_OPS: "-g {{ RG_NAME }} -q"
