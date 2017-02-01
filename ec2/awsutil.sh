@@ -1,11 +1,4 @@
 #!/bin/bash
-KEY_NAME=rac_on_xx
-SSH_KEYFILE=$KEY_NAME
-
-
-
-
-#!/bin/bash
 
 ####common VIRT_TYPE specific value ################
 VIRT_TYPE="azure"
