@@ -2,8 +2,7 @@
 KEY_NAME=rac_on_xx
 SSH_KEYFILE=$KEY_NAME
 
-aws ec2 create-key-pair --key-name ${KEY_NAME}  --query 'KeyMaterial' --output text $SSH_KEYFILE
-chmod 400 $SSH_KEYFILE
+
 
 
 #!/bin/bash
@@ -56,11 +55,11 @@ runonly(){
 	fi
 	
 	vpcid=`aws ec2 describe-vpcs --region $region --filters "Name=is-default,Values=true" --query "Vpcs[].VpcId" --output text`
-       
+        aws ec2 create-security-group --group-name ${PREFIX} --description "Security group for SSH access" --vpc-id $vpcid
 
 
 	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
-		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
+	        aws ec2 create-key-pair --key-name ${KEY_NAME}  --query 'KeyMaterial' --output text $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
    
