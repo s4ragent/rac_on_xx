@@ -46,9 +46,12 @@ runonly(){
 	else
 		nodecount=$1
 	fi
-	
-	vpcid=`aws ec2 describe-vpcs --region $region --filters "Name=is-default,Values=true" --query "Vpcs[].VpcId" --output text`
-        aws ec2 create-security-group --group-name ${PREFIX} --description "Security group for SSH access" --vpc-id $vpcid
+
+        sgid=`aws ec2 describe-security-groups --region $REGION --group-names $PREFIX --query "SecurityGroups[].GroupId" --output text`
+
+
+	vpcid=`aws ec2 describe-vpcs --region $REGION --filters "Name=is-default,Values=true" --query "Vpcs[].VpcId" --output text`
+        aws ec2 create-security-group --region $REGION --group-name ${PREFIX} --description "Security group for SSH access" --vpc-id $vpcid
 
 
 	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
