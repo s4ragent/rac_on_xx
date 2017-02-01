@@ -21,9 +21,13 @@ run(){
 	NODENUMBER=$3
 	HOSTGROUP=$4
 	INSTANCE_ID=$NODENAME
+
+	vpcid=`aws ec2 describe-vpcs --region $REGION --filters "Name=is-default,Values=true" --query "Vpcs[].VpcId" --output text`
+        sgid=`aws ec2 describe-security-groups --region $REGION --group-names $PREFIX --query "SecurityGroups[].GroupId" --output text`
+	subnetid=`aws ec2 describe-subnets --region $REGION --filters "Name=vpc-id,Values=$vpcid" --filters "Name=availabilityZone,Values=${REGION}a" --output text --query "Subnets[].SubnetId"`
+        
+	DeviceJson="[{\"DeviceName\":\"/dev/xvdc\",\"Ebs\":{\"VolumeSize\":${2},\"DeleteOnTermination\":true,\"VolumeType\":\"gp2\"}}]"
 	
-	
-	result=$(azure network public-ip create -g $RG_NAME  -n ip_${NODENAME} --location $ZONE)
 	result=$(azure vm create -g $RG_NAME -n $NODENAME --nic-name nic_${NODENAME} -i ip_${NODENAME} -o ${SA_NAME} -x data-${NODENAME} -e $DISKSIZE --location $ZONE --os-type Linux $INSTANCE_TYPE_OPS $INSTANCE_OPS --admin-username ${ansible_ssh_user}  --ssh-publickey-file ./${ansible_ssh_private_key_file}.pub --vnet-name $VNET_NAME --vnet-subnet-name $SNET_NAME)
 
 	External_IP=`get_External_IP $INSTANCE_ID`
@@ -47,14 +51,16 @@ runonly(){
 		nodecount=$1
 	fi
 
-        sgid=`aws ec2 describe-security-groups --region $REGION --group-names $PREFIX --query "SecurityGroups[].GroupId" --output text`
-
-
 	vpcid=`aws ec2 describe-vpcs --region $REGION --filters "Name=is-default,Values=true" --query "Vpcs[].VpcId" --output text`
-        aws ec2 create-security-group --region $REGION --group-name ${PREFIX} --description "Security group for SSH access" --vpc-id $vpcid
-
-
-	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
+        sgid=`aws ec2 describe-security-groups --region $REGION --group-names $PREFIX --query "SecurityGroups[].GroupId" --output text`
+ 
+ 	if [  ! -n ${sgid} ] ; then
+	        sgid=`aws ec2 create-security-group --region $REGION --group-name ${PREFIX} --description "Security group for SSH access" --vpc-id $vpcid --query "GroupId" --output text`
+		aws ec2 authorize-security-group-ingress --region $REGION --group-name ${PREFIX} --protocol all --source-group $sgid
+		aws ec2 authorize-security-group-ingress --region $REGION --group-name ${PREFIX} --protocol tcp --port 22 --cidr 0.0.0.0/0
+	fi
+ 
+        if [  ! -e ${ansible_ssh_private_key_file} ] ; then
 	        aws ec2 create-key-pair --key-name ${KEY_NAME}  --query 'KeyMaterial' --output text $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
