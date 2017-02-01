@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ####common VIRT_TYPE specific value ################
-VIRT_TYPE="azure"
+VIRT_TYPE="ec2"
 
 cd ..
 source ./commonutil.sh
