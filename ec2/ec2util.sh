@@ -6,13 +6,6 @@ VIRT_TYPE="ec2"
 cd ..
 source ./commonutil.sh
 
-SUFFIX=`ip a show eth0 | grep ether | awk '{print $2}' | sed -e s/://g`
-
-VNET_NAME=vnet_${PREFIX}
-SNET_NAME=snet_${PREFIX}
-SA_NAME=${PREFIX}${SUFFIX}
-NSG_NAME=nsg_${PREFIX}
-
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 disksize $3 nodenumber $4 hostgroup#####
 run(){
@@ -28,8 +21,11 @@ run(){
         
 	DeviceJson="[{\"DeviceName\":\"/dev/xvdc\",\"Ebs\":{\"VolumeSize\":${2},\"DeleteOnTermination\":true,\"VolumeType\":\"gp2\"}}]"
 	
-	result=$(azure vm create -g $RG_NAME -n $NODENAME --nic-name nic_${NODENAME} -i ip_${NODENAME} -o ${SA_NAME} -x data-${NODENAME} -e $DISKSIZE --location $ZONE --os-type Linux $INSTANCE_TYPE_OPS $INSTANCE_OPS --admin-username ${ansible_ssh_user}  --ssh-publickey-file ./${ansible_ssh_private_key_file}.pub --vnet-name $VNET_NAME --vnet-subnet-name $SNET_NAME)
-
+	
+	
+	
+	InstanceId=$(aws ec2 run-instances --region $REGION $INSTANCE_OPS $INSTANCE_TYPE_OPS --key-name $PREFIX --subnet-id $subnetid --security-group-ids $sgid --block-device-mappings $DeviceJson --count 1 --query "Instances[].InstanceId" --output text)
+	aws ec2 create-tags --resources $InstanceId --tags Key=NODENAME,Value=$NODENAME
 	External_IP=`get_External_IP $INSTANCE_ID`
 	Internal_IP=`get_Internal_IP $INSTANCE_ID`
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
@@ -104,16 +100,27 @@ replaceinventory(){
 }
 
 get_External_IP(){
-	expr "$1" + 1 >/dev/null 2>&1
-	if [ $? -lt 2 ]
-	then
-    		NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+	if [[ $1 = i-*  ]]; then
+		INSTANCE_ID=$1
 	else
-    		NODENAME=$1
+		expr "$1" + 1 >/dev/null 2>&1
+		if [ $? -lt 2 ]
+		then
+    			NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+		else
+    			NODENAME=$1
+		fi
+		
+		
+		aws ec2 describe-tags --filters "Name=resource-type,Values=instance" "Name=key,Values=NODENAME" "Name=value,Values=$NODENAME"
 	fi
 
-	ip_name=ip_${NODENAME}
-	External_IP=`azure network public-ip show -g $RG_NAME -n $ip_name | grep "IP Address" | awk '{print $5}'`
+
+
+
+
+
+	External_IP=`aws ec2 describe-instances --instance-ids $INSTACE_ID `
 	echo $External_IP	
 }
 
