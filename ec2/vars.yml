@@ -2,9 +2,11 @@
 PREFIX: "raconxx"
 #REGION: "us-west-2"
 REGION: "ap-northeast-1"
-VNET_ADDR: "10.153.0.0/16"
-SNET_ADDR: "10.153.1.0/24"
-INSTANCE_TYPE_OPS: "--vm-size Standard_A2m_v2"
+#for tokyo region
+INSTANCE_OPS: "--image-id ami-65e0c80b"
+#for oregon region
+#INSTANCE_OPS: "--image-id ami-4a637f2b"
+INSTANCE_TYPE_OPS: "--instance-type t2.micro"
 #INSTANCE_TYPE_OPS: "--vm-size Standard_A0"
 NODE_DISK_SIZE: "50"
 STORAGE_DISK_SIZE: "100"
@@ -18,10 +20,9 @@ STOP_CMD: "azure vm deallocate"
 STOP_CMD_OPS: "-g {{ RG_NAME }}"
 INSTALL_OPS: "-ignoreSysprereqs -ignorePrereq"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
-#for oregon region
-#INSTANCE_OPS: "--image-urn ami-4a637f2b"
-#for tokyo region
-INSTANCE_OPS: "ami-65e0c80b"
+
+
+
 MEDIA_COPY: "true"
 #BUCKET_URL="gs://xxxxxxxxx"
 #WindowManager: "gnome"
