@@ -43,3 +43,6 @@ FRA_DISKGROUP_NAME: FRA
 ASM_STRING: /u01/oradata/*
 #####for ISCSI option values (TODO)
 #storage_type: "iscsi"
+####ansible specific
+ansible_ssh_user: opc
+ansible_ssh_private_key_file: raconxx
