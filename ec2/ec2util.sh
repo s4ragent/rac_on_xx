@@ -13,7 +13,6 @@ run(){
 	DISKSIZE=$2
 	NODENUMBER=$3
 	HOSTGROUP=$4
-	INSTANCE_ID=$NODENAME
 
 	vpcid=`aws ec2 describe-vpcs --region $REGION --filters "Name=is-default,Values=true" --query "Vpcs[].VpcId" --output text`
         sgid=`aws ec2 describe-security-groups --region $REGION --group-names $PREFIX --query "SecurityGroups[].GroupId" --output text`
@@ -21,18 +20,13 @@ run(){
         
 	DeviceJson="[{\"DeviceName\":\"${data_disk_dev}\",\"Ebs\":{\"VolumeSize\":${2},\"DeleteOnTermination\":true,\"VolumeType\":\"gp2\"}}]"
 	
-	
-	
-	
-	InstanceId=$(aws ec2 run-instances --region $REGION $INSTANCE_OPS $INSTANCE_TYPE_OPS --key-name $PREFIX --subnet-id $subnetid --security-group-ids $sgid --block-device-mappings $DeviceJson --count 1 --query "Instances[].InstanceId" --output text)
+	INSTANCE_ID=$(aws ec2 run-instances --region $REGION $INSTANCE_OPS $INSTANCE_TYPE_OPS --key-name $PREFIX --subnet-id $subnetid --security-group-ids $sgid --block-device-mappings $DeviceJson --count 1 --query "Instances[].InstanceId" --output text)
 	aws ec2 create-tags --region $REGION --resources $InstanceId --tags Key=NODENAME,Value=$NODENAME
 	External_IP=`get_External_IP $INSTANCE_ID`
 	Internal_IP=`get_Internal_IP $INSTANCE_ID`
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_all_yml
 	common_update_ansible_inventory $NODENAME $External_IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
-	
-
 
 	echo $Internal_IP
 
