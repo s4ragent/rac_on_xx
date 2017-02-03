@@ -25,7 +25,7 @@ run(){
 	
 	
 	InstanceId=$(aws ec2 run-instances --region $REGION $INSTANCE_OPS $INSTANCE_TYPE_OPS --key-name $PREFIX --subnet-id $subnetid --security-group-ids $sgid --block-device-mappings $DeviceJson --count 1 --query "Instances[].InstanceId" --output text)
-	aws ec2 create-tags --resources $InstanceId --tags Key=NODENAME,Value=$NODENAME
+	aws ec2 create-tags --region $REGION --resources $InstanceId --tags Key=NODENAME,Value=$NODENAME
 	External_IP=`get_External_IP $INSTANCE_ID`
 	Internal_IP=`get_Internal_IP $INSTANCE_ID`
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
@@ -57,7 +57,7 @@ runonly(){
 	fi
  
         if [  ! -e ${ansible_ssh_private_key_file} ] ; then
-	        aws ec2 create-key-pair --key-name $ansible_ssh_private_key_file  --query 'KeyMaterial' --output text > $ansible_ssh_private_key_file
+	        aws ec2 create-key-pair --region $REGION --key-name $ansible_ssh_private_key_file  --query 'KeyMaterial' --output text > $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
    
@@ -112,31 +112,32 @@ get_External_IP(){
 		fi
 		
 		
-		aws ec2 describe-tags --filters "Name=resource-type,Values=instance" "Name=key,Values=NODENAME" "Name=value,Values=$NODENAME"
+		INSTANCE_ID=`aws ec2 describe-tags --region $REGION --filters "Name=resource-type,Values=instance" "Name=key,Values=NODENAME" "Name=value,Values=$NODENAME" --query "Tags[].ResourceId" --output text`
 	fi
 
 
-
-
-
-
-	External_IP=`aws ec2 describe-instances --instance-ids $INSTACE_ID `
+	External_IP=`aws ec2 describe-instances --region $REGION --instance-ids $INSTANCE_ID --query "Reservations[].Instances[].PublicIpAddress" --output text`
 	echo $External_IP	
 }
 
 get_Internal_IP(){
-	expr "$1" + 1 >/dev/null 2>&1
-	if [ $? -lt 2 ]
-	then
-    		NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+	if [[ $1 = i-*  ]]; then
+		INSTANCE_ID=$1
 	else
-    		NODENAME=$1
+		expr "$1" + 1 >/dev/null 2>&1
+		if [ $? -lt 2 ]
+		then
+    			NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+		else
+    			NODENAME=$1
+		fi
+		
+		
+		INSTANCE_ID=`aws ec2 describe-tags --region $REGION --filters "Name=resource-type,Values=instance" "Name=key,Values=NODENAME" "Name=value,Values=$NODENAME" --query "Tags[].ResourceId" --output text`
 	fi
-	
-	nic_name=nic_${NODENAME}
-	Internal_IP=`azure network nic show -g $RG_NAME -n $nic_name | grep "Private IP address" | awk '{print $6}'`
 
-	echo $Internal_IP
+	Internal_IP=`aws ec2 describe-instances --region $REGION --instance-ids $INSTANCE_ID --query "Reservations[].Instances[].PrivateIpAddress" --output text`
+	echo $Internal_IP	
 }
 
 source ./common_menu.sh
