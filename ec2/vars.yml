@@ -20,9 +20,6 @@ STOP_CMD: "azure vm deallocate"
 STOP_CMD_OPS: "-g {{ RG_NAME }}"
 INSTALL_OPS: "-ignoreSysprereqs -ignorePrereq"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
-
-
-
 MEDIA_COPY: "true"
 #BUCKET_URL="gs://xxxxxxxxx"
 #WindowManager: "gnome"
