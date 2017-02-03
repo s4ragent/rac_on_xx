@@ -57,7 +57,7 @@ runonly(){
 	fi
  
         if [  ! -e ${ansible_ssh_private_key_file} ] ; then
-	        aws ec2 create-key-pair --key-name ${KEY_NAME}  --query 'KeyMaterial' --output text $ansible_ssh_private_key_file
+	        aws ec2 create-key-pair --key-name $ansible_ssh_private_key_file  --query 'KeyMaterial' --output text > $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
    
