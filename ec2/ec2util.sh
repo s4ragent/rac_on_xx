@@ -19,7 +19,7 @@ run(){
         sgid=`aws ec2 describe-security-groups --region $REGION --group-names $PREFIX --query "SecurityGroups[].GroupId" --output text`
 	subnetid=`aws ec2 describe-subnets --region $REGION --filters "Name=vpc-id,Values=$vpcid" --filters "Name=availabilityZone,Values=${REGION}a" --output text --query "Subnets[].SubnetId"`
         
-	DeviceJson="[{\"DeviceName\":\"/dev/xvdc\",\"Ebs\":{\"VolumeSize\":${2},\"DeleteOnTermination\":true,\"VolumeType\":\"gp2\"}}]"
+	DeviceJson="[{\"DeviceName\":\"${data_disk_dev}\",\"Ebs\":{\"VolumeSize\":${2},\"DeleteOnTermination\":true,\"VolumeType\":\"gp2\"}}]"
 	
 	
 	
