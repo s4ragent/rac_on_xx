@@ -24,7 +24,7 @@ MEDIA_COPY: "true"
 #BUCKET_URL="gs://xxxxxxxxx"
 #WindowManager: "gnome"
 ## for additional disk values
-data_disk_dev: "/dev/sdc"
+data_disk_dev: "/dev/xvdc"
 data_disk_mountpoint: "/u01"
 #####for NFS option values
 storage_type: "nfs"
