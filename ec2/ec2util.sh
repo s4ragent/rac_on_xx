@@ -44,7 +44,7 @@ runonly(){
 	vpcid=`aws ec2 describe-vpcs --region $REGION --filters "Name=is-default,Values=true" --query "Vpcs[].VpcId" --output text`
         sgid=`aws ec2 describe-security-groups --region $REGION --group-names $PREFIX --query "SecurityGroups[].GroupId" --output text`
  
- 	if [  ! -n ${sgid} ] ; then
+ 	if [ -z ${sgid} ] ; then
 	        sgid=`aws ec2 create-security-group --region $REGION --group-name ${PREFIX} --description "Security group for SSH access" --vpc-id $vpcid --query "GroupId" --output text`
 		aws ec2 authorize-security-group-ingress --region $REGION --group-name ${PREFIX} --protocol all --source-group $sgid
 		aws ec2 authorize-security-group-ingress --region $REGION --group-name ${PREFIX} --protocol tcp --port 22 --cidr 0.0.0.0/0
