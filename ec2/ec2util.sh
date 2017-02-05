@@ -21,7 +21,7 @@ run(){
 	DeviceJson="[{\"DeviceName\":\"${data_disk_dev}\",\"Ebs\":{\"VolumeSize\":${2},\"DeleteOnTermination\":true,\"VolumeType\":\"gp2\"}}]"
 	
 	INSTANCE_ID=$(aws ec2 run-instances --region $REGION $INSTANCE_OPS $INSTANCE_TYPE_OPS --key-name $PREFIX --subnet-id $subnetid --security-group-ids $sgid --block-device-mappings $DeviceJson --count 1 --query "Instances[].InstanceId" --output text)
-	aws ec2 create-tags --region $REGION --resources $InstanceId --tags Key=NODENAME,Value=$NODENAME
+	aws ec2 create-tags --region $REGION --resources $INSTANCE_ID --tags Key=NODENAME,Value=$NODENAME
 	External_IP=`get_External_IP $INSTANCE_ID`
 	Internal_IP=`get_Internal_IP $INSTANCE_ID`
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
@@ -79,7 +79,7 @@ deleteall(){
 	#### VIRT_TYPE specific processing ###
 	if [ -n "$ansible_ssh_private_key_file" ]; then
    		rm -rf ${ansible_ssh_private_key_file}*
-		azure group delete -n $RG_NAME  -q
+		aws ec2 delete-key-pair --region $REGION --key-name $ansible_ssh_private_key_file
 	fi
    
 }
