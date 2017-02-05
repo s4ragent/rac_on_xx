@@ -7,7 +7,7 @@ INSTANCE_OPS: "--image-id ami-65e0c80b"
 #for oregon region
 #INSTANCE_OPS: "--image-id ami-4a637f2b"
 INSTANCE_TYPE_OPS: "--instance-type t2.micro"
-#INSTANCE_TYPE_OPS: "--vm-size Standard_A0"
+#INSTANCE_TYPE_OPS: "--instance-type t2.large"
 NODE_DISK_SIZE: "50"
 STORAGE_DISK_SIZE: "100"
 
