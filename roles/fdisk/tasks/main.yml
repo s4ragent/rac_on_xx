@@ -13,6 +13,7 @@
     when: data_disk_dev is defined and data_disk_dev !=""
     tags:
       - oraclehome
+      - fdisk
 
   - name: "fdisk data_disk_dev"
     become: yes
@@ -20,6 +21,7 @@
     when: data_disk_dev is defined and data_disk_dev !=""
     tags:
       - oraclehome
+      - fdisk
 
   - name: "create data_disk mountpoint"
     become: yes
@@ -27,6 +29,7 @@
     when: data_disk_dev is defined and data_disk_dev !=""
     tags:
       - oraclehome
+      - fdisk
 
   - name: "mount data_disk_dev"
     become: yes
@@ -34,3 +37,4 @@
     when: data_disk_dev is defined and data_disk_dev !=""
     tags:
       - oraclehome
+      - fdisk
