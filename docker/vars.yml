@@ -7,6 +7,7 @@
 DOCKERSUBNET: "10.153.0.0/16"
 BRNAME: "raconxx"
 DOCKER_VOLUME_PATH: "/rac_on_docker"
+MEDIA_PATH: /downloadmedia
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: "-f"
