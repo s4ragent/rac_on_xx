@@ -36,6 +36,5 @@ GRID_MEDIA2: linuxamd64_12102_grid_2of2.zip
 ASYNC: 86400
 POLL: 60
 ####others ###
-MEDIA_PATH: /downloadmedia
 FOWARD_PORT: 1234
 GUAC_VERSION: 0.9.9
