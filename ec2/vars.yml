@@ -20,6 +20,7 @@ STOP_CMD_OPS: "--region {{ REGION }}"
 INSTALL_OPS: "-ignoreSysprereqs -ignorePrereq"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
 MEDIA_COPY: "true"
+MEDIA_PATH: /u01/downloadmedia
 #BUCKET_URL="gs://xxxxxxxxx"
 #WindowManager: "gnome"
 ## for additional disk values
