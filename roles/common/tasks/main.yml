@@ -186,6 +186,8 @@
   - name: "install preinstall packages"
     become: yes
     yum: name={{ PreInstallRPM }} state=present enablerepo=ol7_optional_latest
+    async: "{{ ASYNC }}"
+    poll: "{{ POLL }}"
     tags:
       - preinstallpackages
 
@@ -193,7 +195,7 @@
     become: yes
     shell: dd if=/dev/zero of=/swap bs=1M count={{ SWAP_SIZE }} && mkswap /swap
     async: "{{ ASYNC }}"
-    poll: "1"
+    poll: "{{ POLL }}"
     when: ansible_swaptotal_mb < 1
     tags:
       - ddswap
