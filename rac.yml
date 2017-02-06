@@ -2,7 +2,6 @@
  - hosts: all
    any_errors_fatal: true
    roles:
-      - download
       - security
       - vxlan
       - dns
@@ -17,6 +16,7 @@
    any_errors_fatal: true
    roles:
       - common
+      - download
       - nfsclient
 
  - hosts: dbserver
