@@ -25,6 +25,7 @@ INSTALL_OPS: "-ignoreSysprereqs -ignorePrereq"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
 INSTANCE_OPS: "--image-urn Oracle:Oracle-Linux:7.2:latest"
 MEDIA_COPY: "true"
+MEDIA_PATH: /downloadmedia
 #BUCKET_URL="gs://xxxxxxxxx"
 #WindowManager: "gnome"
 ## for additional disk values
