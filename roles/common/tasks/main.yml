@@ -134,6 +134,46 @@
     tags:
       - ntp
 
+  - name: "Partition additional disks"
+    become: yes
+    shell: |
+      if
+        [ -b {{ data_disk_dev }} ]
+      then
+        [ -b {{ data_disk_dev }}1 ] || parted --script "{{ data_disk_dev }}" mklabel gpt mkpart primary 1MiB 100%
+      fi
+    args:
+      creates: '{{ data_disk_dev }}1'
+      executable: '/bin/bash'
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
+      - fdisk
+
+  - name: "fdisk data_disk_dev"
+    become: yes
+    filesystem: fstype=xfs dev={{ data_disk_dev }}1
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
+      - fdisk
+
+  - name: "create data_disk mountpoint"
+    become: yes
+    file: path={{ data_disk_mountpoint }} state=directory owner=grid group=oinstall mode=0755
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
+      - fdisk
+
+  - name: "mount data_disk_dev"
+    become: yes
+    mount: name={{ data_disk_mountpoint }} src={{ data_disk_dev }}1 fstype=xfs opts=defaults passno=0 dump=0 state=mounted
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
+      - fdisk
+
   - name: "create gridbase gridhome oradata orainventry"
     become: yes
     file: path={{ item.path }} state=directory owner={{ item.name }} group=oinstall mode=0755
