@@ -1,10 +1,10 @@
 rac_on_xx
 ====
-Oracle RAC on Docker /GCE /EC2 (TBA) /Azure (TBA) etc...
+Oracle RAC on Docker  /Azure /EC2 /GCE 
 
-- [docker](https://github.com/s4ragent/rac_on_xx/tree/master/docker "RAC on Docker")  Oracle RAC on docker 
-- [Amazon EC2](https://github.com/s4ragent/rac_on_xx/tree/master/ec2 "RAC on EC2")  Oracle RAC on EC2
+- [docker](https://github.com/s4ragent/rac_on_xx/tree/master/docker "RAC on Docker")  Oracle RAC on docker
 - [Microsoft Azure](https://github.com/s4ragent/rac_on_xx/tree/master/azure "RAC on Azure")  Oracle RAC on Azure
+- [Amazon EC2](https://github.com/s4ragent/rac_on_xx/tree/master/ec2 "RAC on EC2")  Oracle RAC on EC2
 - [Google Compute Cloud](https://github.com/s4ragent/rac_on_xx/tree/master/gce "RAC on GCE")  Oracle RAC on GCE
 
 
