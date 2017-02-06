@@ -193,7 +193,7 @@
     become: yes
     shell: dd if=/dev/zero of=/swap bs=1M count={{ SWAP_SIZE }} && mkswap /swap
     async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
+    poll: "1"
     when: ansible_swaptotal_mb < 1
     tags:
       - ddswap
