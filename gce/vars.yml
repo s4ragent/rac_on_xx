@@ -9,6 +9,10 @@ STORAGE_DISK_SIZE: "100GB"
 ######## common user specific value  ###############
 MEDIA_COPY: "true"
 MEDIA_PATH: /downloadmedia
+DB_MEDIA1: linuxamd64_12102_database_1of2.zip
+DB_MEDIA2: linuxamd64_12102_database_2of2.zip
+GRID_MEDIA1: linuxamd64_12102_grid_1of2.zip
+GRID_MEDIA2: linuxamd64_12102_grid_2of2.zip
 #xrdp_pass: Xrdp123!
 #guac_pass: Guac123!
 #WindowManager: "xfce"
