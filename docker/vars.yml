@@ -8,6 +8,10 @@ DOCKERSUBNET: "10.153.0.0/16"
 BRNAME: "raconxx"
 DOCKER_VOLUME_PATH: "/rac_on_docker"
 MEDIA_PATH: /downloadmedia
+DB_MEDIA1: linuxamd64_12102_database_1of2.zip
+DB_MEDIA2: linuxamd64_12102_database_2of2.zip
+GRID_MEDIA1: linuxamd64_12102_grid_1of2.zip
+GRID_MEDIA2: linuxamd64_12102_grid_2of2.zip
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: "-f"
