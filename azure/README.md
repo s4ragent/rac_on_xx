@@ -1,7 +1,7 @@
-rac_on_xx/gce
+rac_on_xx/azure
 ====
 
- Oracle RAC on Google Compute Engine
+ Oracle RAC on Windows Azure
 
 ## Description
 - basic infomation
@@ -68,36 +68,36 @@ Execute gceuntil.sh   (no option create 3-nodes RAC)
 
     ##create 3-nodes RAC#
     #cd rac_on_xx/gce
-    $bash gceutil.sh runall
+    $bash azureutil.sh runall
 
 If you want to build 5-nodes RAC
 
     ##create 5-nodes RAC#
     $cd rac_on_xx/gce
-    $bash gceutil.sh runall 5
+    $bash azureutil.sh runall 5
 
 if you want to stop first instance
 
-    $bash gceutil.sh stop 1
+    $bash azureutil.sh stop 1
 
 if you want to stop nfs instance
 
-    $bash gceutil.sh stop storage
+    $bash azureutil.sh stop storage
 
 and restart first node
 
-    $bash gceutil.sh start 1
+    $bash azureutil.sh start 1
     
 if you want to start all node
 
-    $bash gceutil.sh startall
+    $bash azureutil.sh startall
 
 if you want to delete all node
 
-    $bash gceutil.sh deleteall
+    $bash azureutil.sh deleteall
 
 ## Licence
-[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+MIT
 
 
 ## Author
