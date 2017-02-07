@@ -72,13 +72,13 @@ If you need, change edit ec2/vars.yml to change region and image-id
 Execute ec2util.sh   (no option create 3-nodes RAC)
 
     ##create 3-nodes RAC#
-    #cd rac_on_xx/gce
+    #cd rac_on_xx/ec2
     $bash ec2util.sh runall
 
 If you want to build 5-nodes RAC
 
     ##create 5-nodes RAC#
-    $cd rac_on_xx/gce
+    $cd rac_on_xx/ec2
     $bash ec2util.sh runall 5
 
 if you want to stop first instance
@@ -91,7 +91,7 @@ if you want to stop nfs instance
 
 and restart first node
 
-    $bash aec2util.sh start 1
+    $bash ec2util.sh start 1
     
 if you want to start all node
 
