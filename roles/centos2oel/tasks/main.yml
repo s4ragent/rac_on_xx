@@ -56,10 +56,18 @@
     tags:
       - centos2oel
 
+  - name: "switch kernel"
+    become: yes
+    shell: "grub2-set-default {{ SWITCH_KERNEL }} && grub2-mkconfig -o /etc/grub2.cfg"
+    SWITCH_KERNEL is defined and SWITCH_KERNEL !=""
+    tags:
+      - centos2oel
+      - switchkernel
+
   - name: reboot
     become: yes
     shell: sleep 2 && reboot &
-    when: centos2oel_rerult.rc != 0
+    when: centos2oel_rerult.rc != 0 or ( SWITCH_KERNEL is defined and SWITCH_KERNEL !="" )
     async: 1
     poll: 0
     ignore_errors: true
