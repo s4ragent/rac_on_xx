@@ -60,21 +60,21 @@ download Oracle 12c Release 1 (12.1) Clusterware and Database software on ansibl
     -rw-r--r--.  1 root root  646972897 Jul 11  2014 V46096-01_2of2.zip
 
 
-If you need, change edit gce/vars.yml to change GCP zone
+If you need, change edit azure/vars.yml to change GCP zone
 
     ZONE: "westus2"
     #ZONE: "japanwest"
     
-Execute gceuntil.sh   (no option create 3-nodes RAC)
+Execute azureuntil.sh   (no option create 3-nodes RAC)
 
     ##create 3-nodes RAC#
-    #cd rac_on_xx/gce
+    #cd rac_on_xx/azure
     $bash azureutil.sh runall
 
 If you want to build 5-nodes RAC
 
     ##create 5-nodes RAC#
-    $cd rac_on_xx/gce
+    $cd rac_on_xx/azure
     $bash azureutil.sh runall 5
 
 if you want to stop first instance
