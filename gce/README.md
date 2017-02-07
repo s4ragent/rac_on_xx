@@ -87,7 +87,7 @@ if you want to stop first instance
 
 if you want to stop nfs instance
 
-    $bash gceutil.sh stop nfs
+    $bash gceutil.sh stop storage
 
 and restart first node
 
