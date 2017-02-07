@@ -43,6 +43,7 @@ rac_on_xx/gce
 <img src="https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/03/image.png" width="480px">
 
 ## Requirement
+- Oracle 12c Release 1 (12.1) Clusterware and Database software
 - Google Cloud Platform Account
 - Google Cloud SDK
 - ansible 2.2.1 or later
