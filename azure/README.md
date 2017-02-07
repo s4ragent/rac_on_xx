@@ -38,6 +38,7 @@ rac_on_xx/azure
 |FRA|flash recovery area|/u01/oradata/fra.img|external|5120|5120|
 
 ## Requirement
+- Oracle 12c Release 1 (12.1) Clusterware and Database software
 - Windows Azure Account
 - Windows Azure CLI
 - ansible 2.2.1 or later
