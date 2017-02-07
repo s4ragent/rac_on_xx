@@ -22,10 +22,10 @@ DHCPCLIENT: "/etc/dhclient-eth0.conf"
 SWITCH_KERNEL: "0"
 MEDIA_COPY: "true"
 MEDIA_PATH: /u01/downloadmedia
-DB_MEDIA1: linuxamd64_12102_database_1of2.zip
-DB_MEDIA2: linuxamd64_12102_database_2of2.zip
-GRID_MEDIA1: linuxamd64_12102_grid_1of2.zip
-GRID_MEDIA2: linuxamd64_12102_grid_2of2.zip
+DB_MEDIA1: V46095-01_1of2.zip
+DB_MEDIA2: V46095-01_2of2.zip
+GRID_MEDIA1: V46096-01_1of2.zip
+GRID_MEDIA2: V46096-01_2of2.zip
 #BUCKET_URL="gs://xxxxxxxxx"
 #WindowManager: "gnome"
 ## for additional disk values
