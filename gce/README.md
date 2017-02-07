@@ -45,12 +45,25 @@ rac_on_xx/gce
 ## Requirement
 - Google Cloud Platform Account
 - Google Cloud SDK
-- ansible 2.0 or later
+- ansible 2.2.1 or later
 
 ## Install
 >git clone https://github.com/s4ragent/rac_on_xx
 
 ## Usage
+download Oracle 12c Release 1 (12.1) Clusterware and Database software on ansible host
+
+    #mkdir -p /media
+    #download  Oracle 12c Release 1 (12.1) Clusterware and Database software
+    $ ls -al /media
+    drwxr-xr-x.  2 root root       4096 Feb  7 01:07 .
+    drwxr-xr-x. 18 root root       4096 Jan 10 07:35 ..
+    -rw-r--r--.  1 root root 1673544724 Jul 11  2014 V46095-01_1of2.zip
+    -rw-r--r--.  1 root root 1014530602 Jul 11  2014 V46095-01_2of2.zip
+    -rw-r--r--.  1 root root 1747043545 Jul 11  2014 V46096-01_1of2.zip
+    -rw-r--r--.  1 root root  646972897 Jul 11  2014 V46096-01_2of2.zip
+
+
 If you need, change edit gce/vars.yml to change GCP zone
 
     ZONE: "us-west1-b"
@@ -60,37 +73,13 @@ Execute gceuntil.sh   (no option create 3-nodes RAC)
 
     ##create 3-nodes RAC#
     #cd rac_on_xx/gce
-    $bash gceutil.sh preinstall
+    $bash gceutil.sh runall
 
 If you want to build 5-nodes RAC
 
     ##create 5-nodes RAC#
     $cd rac_on_xx/gce
-    $bash gceutil.sh preinstall 5
-
-Extecute the "bash gceutil.sh ssh storage"  to portforwarding 8080 ( guacamole (Remote Desktop Gateway))
-    
-    ##
-    $bash gceutil.sh ssh storage
-
-
-Access to http://localhost:1234. Then, log in guacuser to guacamole. (Default password Guac123!)　　  
-After logging in, click on the node001-grid, open the desktop of the grid user,　　   
-Download the installation media of OracleDatabase.　　    
-Unzip to /downloadmedia.　　    
-
-    ##access Guacamole
-    $firefox http://localhost:1234/    
-
-
-    ##unzip Downloaded Media
-    $cd /home/grid/Download/
-    $unzip -d xxx /downloadmedia
-
-And execute "bash gceutil.sh install_dbca"
-
-    ##
-    $bash gceutil.sh install_dbca
+    $bash gceutil.sh runall 5
 
 if you want to stop first instance
 
