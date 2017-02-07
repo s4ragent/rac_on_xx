@@ -1,7 +1,7 @@
-rac_on_xx/azure
+rac_on_xx/gce
 ====
 
- Oracle RAC on Microsoft Aazure
+ Oracle RAC on Google Compute Engine
 
 ## Description
 - basic infomation
@@ -37,60 +37,44 @@ rac_on_xx/azure
 |DATA|Database files|/u01/oradata/data.img|external| 5120 + ( num_of_nodes * 1024 ) |8192|
 |FRA|flash recovery area|/u01/oradata/fra.img|external|5120|5120|
 
-## Demo (6-nodes RAC on Google Compute Engine)
-<img src="https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/01/image.png" width="480px">
-<img src="https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/02/image.png" width="480px">
-<img src="https://github.com/s4ragent/misc/blob/master/rac_on_xx/gce/03/image.png" width="480px">
-
 ## Requirement
-- Google Cloud Platform Account
-- Google Cloud SDK
-- ansible 2.0 or later
+- Windows Azure Account
+- Windows Azure CLI
+- ansible 2.2.1 or later
 
 ## Install
 >git clone https://github.com/s4ragent/rac_on_xx
 
 ## Usage
+download Oracle 12c Release 1 (12.1) Clusterware and Database software on ansible host
+
+    #mkdir -p /media
+    #download  Oracle 12c Release 1 (12.1) Clusterware and Database software
+    $ ls -al /media
+    drwxr-xr-x.  2 root root       4096 Feb  7 01:07 .
+    drwxr-xr-x. 18 root root       4096 Jan 10 07:35 ..
+    -rw-r--r--.  1 root root 1673544724 Jul 11  2014 V46095-01_1of2.zip
+    -rw-r--r--.  1 root root 1014530602 Jul 11  2014 V46095-01_2of2.zip
+    -rw-r--r--.  1 root root 1747043545 Jul 11  2014 V46096-01_1of2.zip
+    -rw-r--r--.  1 root root  646972897 Jul 11  2014 V46096-01_2of2.zip
+
+
 If you need, change edit gce/vars.yml to change GCP zone
 
-    ZONE: "us-west1-b"
-    #ZONE: "asia-east1-c"
-
+    ZONE: "westus2"
+    #ZONE: "japanwest"
+    
 Execute gceuntil.sh   (no option create 3-nodes RAC)
 
     ##create 3-nodes RAC#
     #cd rac_on_xx/gce
-    $bash gceutil.sh preinstall
+    $bash gceutil.sh runall
 
 If you want to build 5-nodes RAC
 
     ##create 5-nodes RAC#
     $cd rac_on_xx/gce
-    $bash gceutil.sh preinstall 5
-
-Extecute the "bash gceutil.sh ssh storage"  to portforwarding 8080 ( guacamole (Remote Desktop Gateway))
-    
-    ##
-    $bash gceutil.sh ssh storage
-
-
-Access to http://localhost:1234. Then, log in guacuser to guacamole. (Default password Guac123!)　　  
-After logging in, click on the node001-grid, open the desktop of the grid user,　　   
-Download the installation media of OracleDatabase.　　    
-Unzip to /downloadmedia.　　    
-
-    ##access Guacamole
-    $firefox http://localhost:1234/    
-
-
-    ##unzip Downloaded Media
-    $cd /home/grid/Download/
-    $unzip -d xxx /downloadmedia
-
-And execute "bash gceutil.sh install_dbca"
-
-    ##
-    $bash gceutil.sh install_dbca
+    $bash gceutil.sh runall 5
 
 if you want to stop first instance
 
@@ -98,7 +82,7 @@ if you want to stop first instance
 
 if you want to stop nfs instance
 
-    $bash gceutil.sh stop nfs
+    $bash gceutil.sh stop storage
 
 and restart first node
 
