@@ -95,7 +95,7 @@ deleteall(){
 	fi
 
 	if [ -n "$DOCKER_VOLUME_PATH" ]; then
-   		rm -rf $DOCKER_VOLUME_PATH/*.*
+   		rm -rf $DOCKER_VOLUME_PATH/*
 	fi	
 
 	docker network rm $BRNAME
