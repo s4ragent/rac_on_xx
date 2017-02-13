@@ -1,4 +1,4 @@
-FROM oraclelinux:7
+FROM oraclelinux:7.2
 MAINTAINER @s4r_agent
 ##enable epel
 #RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
