@@ -1,4 +1,4 @@
-FROM oraclelinux:7.2
+FROM oraclelinux:7
 MAINTAINER @s4r_agent
 ##enable epel
 #RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
@@ -29,6 +29,7 @@ rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
 rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;\
 ln -s /usr/lib/systemd/system/systemd-user-sessions.service  /etc/systemd/system/multi-user.target.wants/systemd-user-sessions.service;\
+userdel -r oracle;\
 chmod u+s /usr/bin/ping;
 VOLUME [ "/sys/fs/cgroup" ]
 CMD ["/usr/sbin/init"]
