@@ -168,6 +168,14 @@
       - oraclehome
       - fdisk
 
+  - name: get blkid
+    shell: 'blkid {{ data_disk_dev }}1 | awk -F\" ''{ print $2 }'' '
+    register: uuid
+    tags:
+      - oraclehome
+      - fdisk
+
+
   - name: "create data_disk mountpoint"
     become: yes
     file: path={{ data_disk_mountpoint }} state=directory owner=grid group=oinstall mode=0755
@@ -178,7 +186,7 @@
 
   - name: "mount data_disk_dev"
     become: yes
-    mount: name={{ data_disk_mountpoint }} src={{ data_disk_dev }}1 fstype=xfs opts=defaults passno=0 dump=0 state=mounted
+    mount: name={{ data_disk_mountpoint }} src="UUID={{ uuid.stdout }}" fstype=xfs opts=defaults passno=0 dump=0 state=mounted
     when: data_disk_dev is defined and data_disk_dev !=""
     tags:
       - oraclehome
