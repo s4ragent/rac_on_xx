@@ -24,7 +24,8 @@ run(){
 	
 	
 	result=$(azure network public-ip create -g $RG_NAME  -n ip_${NODENAME} --location $ZONE)
-	result=$(azure vm create -g $RG_NAME -n $NODENAME --nic-name nic_${NODENAME} -i ip_${NODENAME} -o ${SA_NAME} -x data-${NODENAME} -e $DISKSIZE --location $ZONE --os-type Linux $INSTANCE_TYPE_OPS $INSTANCE_OPS --admin-username ${ansible_ssh_user}  --ssh-publickey-file ./${ansible_ssh_private_key_file}.pub --vnet-name $VNET_NAME --vnet-subnet-name $SNET_NAME)
+	#result=$(azure vm create -g $RG_NAME -n $NODENAME --nic-name nic_${NODENAME} -i ip_${NODENAME} -o ${SA_NAME} -x data-${NODENAME} -e $DISKSIZE --location $ZONE --os-type Linux $INSTANCE_TYPE_OPS $INSTANCE_OPS --admin-username ${ansible_ssh_user}  --ssh-publickey-file ./${ansible_ssh_private_key_file}.pub --vnet-name $VNET_NAME --vnet-subnet-name $SNET_NAME)
+	result=$(azure vm create -g $RG_NAME -n $NODENAME --nic-name nic_${NODENAME} -i ip_${NODENAME} -o ${SA_NAME} --location $ZONE --os-type Linux $INSTANCE_TYPE_OPS $INSTANCE_OPS --admin-username ${ansible_ssh_user}  --ssh-publickey-file ./${ansible_ssh_private_key_file}.pub --vnet-name $VNET_NAME --vnet-subnet-name $SNET_NAME)
 
 	External_IP=`get_External_IP $INSTANCE_ID`
 	Internal_IP=`get_Internal_IP $INSTANCE_ID`
@@ -32,7 +33,7 @@ run(){
 	common_update_all_yml
 	common_update_ansible_inventory $NODENAME $External_IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	
-
+	result=$(azure vm disk attach-new $RG_NAME $NODENAME $DISKSIZE --location $ZONE)
 
 	echo $Internal_IP
 
