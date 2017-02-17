@@ -174,9 +174,13 @@
     tags:
       - oraclehome
       - fdisk
+      - blkid
 
+  - debug: var=uuid.stdout
+    tags:
+      - blkid
 
-  - name: "create data_disk mountpoint"
+- name: "create data_disk mountpoint"
     become: yes
     file: path={{ data_disk_mountpoint }} state=directory owner=grid group=oinstall mode=0755
     when: data_disk_dev is defined and data_disk_dev !=""
