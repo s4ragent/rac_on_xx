@@ -33,7 +33,7 @@ run(){
 	common_update_all_yml
 	common_update_ansible_inventory $NODENAME $External_IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	
-	result=$(azure vm disk attach-new $RG_NAME $NODENAME $DISKSIZE --location $ZONE)
+	result=$(azure vm disk attach-new $RG_NAME $NODENAME $DISKSIZE)
 
 	echo $Internal_IP
 
