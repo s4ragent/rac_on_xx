@@ -169,7 +169,7 @@
       - fdisk
 
   - name: get blkid
-    shell: 'blkid {{ data_disk_dev }}1 | awk -F\" ''{ print $2 }'' '
+    shell: '/usr/sbin/blkid {{ data_disk_dev }}1 | awk -F\" ''{ print $2 }'' '
     register: uuid
     tags:
       - oraclehome
