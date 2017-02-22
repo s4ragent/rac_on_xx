@@ -24,7 +24,7 @@ STOP_CMD_OPS: "-g {{ RG_NAME }}"
 INSTALL_OPS: "-ignoreSysprereqs -ignorePrereq"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
 INSTANCE_OPS: "--image-urn Oracle:Oracle-Linux:7.2:latest"
-#MEDIA_COPY: "true"
+MEDIA_COPY: "true"
 MEDIA_PATH: /downloadmedia
 DB_MEDIA1: V46095-01_1of2.zip
 DB_MEDIA2: V46095-01_2of2.zip
