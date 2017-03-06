@@ -5,7 +5,7 @@
       - security
       - vxlan
       - dns
-      - guacamole
+      - xrdp
 
  - hosts: storage
    any_errors_fatal: true
