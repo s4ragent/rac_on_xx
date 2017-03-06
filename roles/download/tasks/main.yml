@@ -33,9 +33,7 @@
     when: inventory_hostname == groups["dbserver"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     with_items:
       - "{{ DB_MEDIA1 }}"
-      - "{{ DB_MEDIA2 }}"
       - "{{ GRID_MEDIA1 }}"
-      - "{{ GRID_MEDIA2 }}"
 
   - name: "unzip media & delete"
     become: yes
@@ -43,7 +41,5 @@
     when: inventory_hostname == groups["dbserver"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     with_items:
       - "{{ DB_MEDIA1 }}"
-      - "{{ DB_MEDIA2 }}"
       - "{{ GRID_MEDIA1 }}"
-      - "{{ GRID_MEDIA2 }}"
 
