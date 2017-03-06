@@ -22,10 +22,7 @@ run(){
 	HOSTGROUP=$4
 	INSTANCE_ID=$NODENAME
 	
-	
-	result=$(azure network public-ip create -g $RG_NAME  -n ip_${NODENAME} --location $ZONE)
-	#result=$(azure vm create -g $RG_NAME -n $NODENAME --nic-name nic_${NODENAME} -i ip_${NODENAME} -o ${SA_NAME} -x data-${NODENAME} -e $DISKSIZE --location $ZONE --os-type Linux $INSTANCE_TYPE_OPS $INSTANCE_OPS --admin-username ${ansible_ssh_user}  --ssh-publickey-file ./${ansible_ssh_private_key_file}.pub --vnet-name $VNET_NAME --vnet-subnet-name $SNET_NAME)
-	result=$(azure vm create -g $RG_NAME -n $NODENAME --nic-name nic_${NODENAME} -i ip_${NODENAME} -o ${SA_NAME} --location $ZONE --os-type Linux $INSTANCE_TYPE_OPS $INSTANCE_OPS --admin-username ${ansible_ssh_user}  --ssh-publickey-file ./${ansible_ssh_private_key_file}.pub --vnet-name $VNET_NAME --vnet-subnet-name $SNET_NAME)
+	result=$(az vm create --location $ZONE $INSTANCE_TYPE_OPS $INSTANCE_OPS --os-type Linux --resource-group $RG_NAME --name $NODENAME --image $image_urn --admin-username ${ansible_ssh_user}  --size $vmsize --data-disk-sizes-gb $disksize --ssh-key-value ./${ansible_ssh_private_key_file}.pub --public-ip-address ip_${NODENAME} --vnet-name $VNET_NAME --subnet $SNET_NAME --storage-sku Standard_LRS)
 
 	External_IP=`get_External_IP $INSTANCE_ID`
 	Internal_IP=`get_Internal_IP $INSTANCE_ID`
@@ -33,7 +30,7 @@ run(){
 	common_update_all_yml
 	common_update_ansible_inventory $NODENAME $External_IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	
-	result=$(azure vm disk attach-new $RG_NAME $NODENAME $DISKSIZE)
+	result=$(az vm disk attach --resource-group $RG_NAME --vm-name $NODENAME --size-gb $DISKSIZE --sku Standard_LRS)
 
 	echo $Internal_IP
 
@@ -49,18 +46,14 @@ runonly(){
 	fi
 	
 
-	HasRG=`azure group list | grep $RG_NAME | wc -l`
+	HasRG=`az group list | grep $RG_NAME | wc -l`
 	if [ "$HasRG" = "0" ]; then
-		azure group create -n $RG_NAME -l $ZONE
-		azure storage account create ${SA_NAME} --sku-name LRS --kind Storage -g $RG_NAME -l $ZONE
-		azure network vnet create -g $RG_NAME -n $VNET_NAME -a $VNET_ADDR -l $ZONE
-		azure network vnet subnet create -g $RG_NAME --vnet-name $VNET_NAME -n $SNET_NAME -a $SNET_ADDR
+		az group create -n $RG_NAME -l $ZONE
+		az network vnet create -g $RG_NAME -n $VNET_NAME --address-prefix $VNET_ADDR --subnet-name $SNET_NAME --subnet-prefix $SNET_ADDR
 
-		azure network nsg create -g $RG_NAME -l $ZONE -n $NSG_NAME
-		azure network nsg rule create -g $RG_NAME -a $NSG_NAME -n ssh-rule -c Allow -p Tcp -r Inbound -y 100 -f Internet -o '*' -e '*' -u 22
-		azure network vnet subnet set -g $RG_NAME -e $VNET_NAME -o $NSG_NAME -n $SNET_NAME
-			
-		
+		az network nsg create -g $RG_NAME -l $ZONE -n $NSG_NAME
+		az network nsg rule create --resource-group $RG_NAME --nsg-name $NSG_NAME --name RuleSSH --protocol tcp --direction inbound --priority 1000 --source-address-prefix '*' --source-port-range '*' --destination-address-prefix '*' --destination-port-range 22 --access allow
+		az network vnet subnet update --resource-group $RG_NAME --vnet-name $VNET_NAME --name $SNET_NAME --network-security-group $NSG_NAME
 	fi
 
 	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
@@ -92,7 +85,7 @@ deleteall(){
 	#### VIRT_TYPE specific processing ###
 	if [ -e "$ansible_ssh_private_key_file" ]; then
    		rm -rf ${ansible_ssh_private_key_file}*
-		azure group delete -n $RG_NAME  -q
+		az group delete -n $RG_NAME  -y
 	fi
    
 }
