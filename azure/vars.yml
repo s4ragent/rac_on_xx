@@ -5,8 +5,8 @@ RG_NAME: "rg_raconxx"
 ZONE: "japanwest"
 VNET_ADDR: "10.153.0.0/16"
 SNET_ADDR: "10.153.1.0/24"
-INSTANCE_TYPE_OPS: "--vm-size Standard_A2m_v2"
-#INSTANCE_TYPE_OPS: "--vm-size Standard_A0"
+#INSTANCE_TYPE_OPS: "--vm-size Standard_A2m_v2"
+INSTANCE_TYPE_OPS: "--vm-size Standard_A0"
 NODE_DISK_SIZE: "50"
 STORAGE_DISK_SIZE: "100"
 ######## common user specific value  ###############
@@ -15,23 +15,21 @@ STORAGE_DISK_SIZE: "100"
 #WindowManager: "xfce"
 #WindowManager: "gnome"
 ####common VIRT_TYPE specific value ################
-DELETE_CMD: "azure vm delete -n"
-DELETE_CMD_OPS: "-g {{ RG_NAME }} -q"
-START_CMD: "azure vm start"
+DELETE_CMD: "az vm delete -n"
+DELETE_CMD_OPS: "-g {{ RG_NAME }} -y"
+START_CMD: "az vm start"
 START_CMD_OPS: "-g {{ RG_NAME }}"
-STOP_CMD: "azure vm deallocate"
+STOP_CMD: "az vm deallocate"
 STOP_CMD_OPS: "-g {{ RG_NAME }}"
 INSTALL_OPS: "-ignoreSysprereqs -ignorePrereq"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
 INSTANCE_OPS: "--image-urn Oracle:Oracle-Linux:7.2:latest"
 MEDIA_COPY: "true"
 MEDIA_PATH: /downloadmedia
-DB_MEDIA1: V46095-01_1of2.zip
-DB_MEDIA2: V46095-01_2of2.zip
-GRID_MEDIA1: V46096-01_1of2.zip
-GRID_MEDIA2: V46096-01_2of2.zip
+DB_MEDIA1: V839960-01.zip
+GRID_MEDIA1: V840012-01.zip
 #BUCKET_URL="gs://xxxxxxxxx"
-#WindowManager: "gnome"
+WindowManager: "gnome"
 ## for additional disk values
 data_disk_dev: "/dev/sdc"
 data_disk_mountpoint: "/u01"
@@ -55,5 +53,5 @@ ASM_STRING: /u01/oradata/*
 #####for ISCSI option values (TODO)
 #storage_type: "iscsi"
 ####ansible specific
-ansible_ssh_user: opc
+ansible_ssh_user: azureuser
 ansible_ssh_private_key_file: raconxx
