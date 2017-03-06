@@ -29,7 +29,6 @@ MEDIA_PATH: /downloadmedia
 DB_MEDIA1: V839960-01.zip
 GRID_MEDIA1: V840012-01.zip
 #BUCKET_URL="gs://xxxxxxxxx"
-WindowManager: "gnome"
 ## for additional disk values
 data_disk_dev: "/dev/sdc"
 data_disk_mountpoint: "/u01"
