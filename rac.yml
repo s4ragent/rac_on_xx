@@ -5,7 +5,7 @@
       - security
       - vxlan
       - dns
-      - xrdp
+
 
  - hosts: storage
    any_errors_fatal: true
@@ -17,6 +17,7 @@
    roles:
       - common
       - download
+      - xrdp
       - nfsclient
 
  - hosts: dbserver
