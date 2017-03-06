@@ -22,7 +22,7 @@ run(){
 	HOSTGROUP=$4
 	INSTANCE_ID=$NODENAME
 	
-	result=$(az vm create --location $ZONE $INSTANCE_TYPE_OPS $INSTANCE_OPS --os-type Linux --resource-group $RG_NAME --name $NODENAME --image $image_urn --admin-username ${ansible_ssh_user}  --size $vmsize --data-disk-sizes-gb $disksize --ssh-key-value ./${ansible_ssh_private_key_file}.pub --public-ip-address ip_${NODENAME} --vnet-name $VNET_NAME --subnet $SNET_NAME --storage-sku Standard_LRS)
+	result=$(az vm create --location $ZONE $INSTANCE_TYPE_OPS $INSTANCE_OPS --os-type Linux --resource-group $RG_NAME --name $NODENAME --admin-username ${ansible_ssh_user}  --ssh-key-value ./${ansible_ssh_private_key_file}.pub --public-ip-address ip_${NODENAME} --vnet-name $VNET_NAME --subnet $SNET_NAME --storage-sku Standard_LRS)
 
 	External_IP=`get_External_IP $INSTANCE_ID`
 	Internal_IP=`get_Internal_IP $INSTANCE_ID`
