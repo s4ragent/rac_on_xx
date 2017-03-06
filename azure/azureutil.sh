@@ -30,7 +30,7 @@ run(){
 	common_update_all_yml
 	common_update_ansible_inventory $NODENAME $External_IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	
-	result=$(az vm disk attach --resource-group $RG_NAME --vm-name $NODENAME --size-gb $DISKSIZE --sku Standard_LRS --new)
+	result=$(az vm disk attach --resource-group $RG_NAME --vm-name $NODENAME --size-gb $DISKSIZE --sku Standard_LRS --disk disk_${NODENAME} --new)
 
 	echo $Internal_IP
 
