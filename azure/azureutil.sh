@@ -30,7 +30,7 @@ run(){
 	common_update_all_yml
 	common_update_ansible_inventory $NODENAME $External_IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	
-	result=$(az vm disk attach --resource-group $RG_NAME --vm-name $NODENAME --size-gb $DISKSIZE --sku Standard_LRS)
+	result=$(az vm disk attach --resource-group $RG_NAME --vm-name $NODENAME --size-gb $DISKSIZE --sku Standard_LRS --new)
 
 	echo $Internal_IP
 
@@ -109,7 +109,7 @@ get_External_IP(){
 	fi
 
 	ip_name=ip_${NODENAME}
-	External_IP=`azure network public-ip show -g $RG_NAME -n $ip_name | grep "IP Address" | awk '{print $5}'`
+	External_IP=`az vm show -g $RG_NAME -n $NODENAME -d | grep publicIps | awk -F '"' '{print $4}'`
 	echo $External_IP	
 }
 
@@ -123,7 +123,7 @@ get_Internal_IP(){
 	fi
 	
 	nic_name=nic_${NODENAME}
-	Internal_IP=`azure network nic show -g $RG_NAME -n $nic_name | grep "Private IP address" | awk '{print $6}'`
+	Internal_IP=`az vm show -g $RG_NAME -n $NODENAME -d | grep privateIps | awk -F '"' '{print $4}'`
 
 	echo $Internal_IP
 }
