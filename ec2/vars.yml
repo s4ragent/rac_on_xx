@@ -7,7 +7,7 @@ PREFIX: "raconxx"
 REGION: "ap-northeast-1"
 INSTANCE_OPS: "--image-id ami-65e0c80b"
 INSTANCE_TYPE_OPS: "--instance-type m4.large"
-NODE_DISK_SIZE: "50"
+NODE_DISK_SIZE: "60"
 STORAGE_DISK_SIZE: "100"
 ####common VIRT_TYPE specific value ################
 DELETE_CMD: "aws ec2 terminate-instances --instance-ids"
