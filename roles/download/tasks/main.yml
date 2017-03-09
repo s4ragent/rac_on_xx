@@ -42,10 +42,10 @@
     with_items:
       - "{{ DB_MEDIA1 }}"
 
-  - name: "unzip grid media & delete"
+  - name: "unzip grid media"
     become: yes
     become_user: grid
-    shell: "unzip {{ MEDIA_PATH }}/{{ item }} -d {{ GRID_ORACLE_HOME }} && rm -f {{ MEDIA_PATH }}/{{ item }}"
+    shell: "unzip {{ MEDIA_PATH }}/{{ item }} -d {{ GRID_ORACLE_HOME }}"
     when: inventory_hostname == groups["dbserver"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     with_items:
       - "{{ GRID_MEDIA1 }}"
