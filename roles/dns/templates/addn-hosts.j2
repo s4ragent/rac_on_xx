@@ -1,8 +1,8 @@
 #
-{{ scan0_IP }} {{ SCAN_NAME }}.{{ DOMAIN_NAME }} 
-{{ scan1_IP }} {{ SCAN_NAME }}.{{ DOMAIN_NAME }} 
-{{ scan2_IP }} {{ SCAN_NAME }}.{{ DOMAIN_NAME }} 
+{{ scan0_IP }} {{ SCAN_NAME }}.{{ DOMAIN_NAME }} {{ SCAN_NAME }}
+{{ scan1_IP }} {{ SCAN_NAME }}.{{ DOMAIN_NAME }} {{ SCAN_NAME }}
+{{ scan2_IP }} {{ SCAN_NAME }}.{{ DOMAIN_NAME }} {{ SCAN_NAME }}
 {% for host in play_hosts %}
-{{ hostvars[host]['public_IP'] }} {{ hostvars[host]['NODENAME'] }}.{{ DOMAIN_NAME }}
-{{ hostvars[host]['vip_IP'] }} {{ hostvars[host]['NODENAME'] }}-vip.{{ DOMAIN_NAME }}
+{{ hostvars[host]['public_IP'] }} {{ hostvars[host]['NODENAME'] }}.{{ DOMAIN_NAME }} {{ hostvars[host]['NODENAME'] }}
+{{ hostvars[host]['vip_IP'] }} {{ hostvars[host]['NODENAME'] }}-vip.{{ DOMAIN_NAME }} {{ hostvars[host]['NODENAME'] }}-vip
 {% endfor %}
