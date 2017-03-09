@@ -83,7 +83,8 @@
     become: yes
     lineinfile: state=present create=yes insertafter=EOF line="{{ item }}" dest="{{ DHCPCLIENT }}"
     with_items:
-      - "supersede domain-name-servers 127.0.0.1;" 
+      - "supersede search {{ DOMAIN_NAME }};"
+      - "supersede domain-name-servers 127.0.0.1;"
     when: dhclient_rerult.stdout != "0"
     tags:
       - setresolvconf
