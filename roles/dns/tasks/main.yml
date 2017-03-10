@@ -79,12 +79,20 @@
     tags:
       - setresolvconf
 
-  - name: "edit dhclient.conf"
+#  - name: "edit dhclient.conf"
+#    become: yes
+#    lineinfile: state=present create=yes insertafter=EOF line="{{ item }}" dest="{{ DHCPCLIENT }}"
+#    with_items:
+#      - "supersede search {{ DOMAIN_NAME }};"
+#      - "supersede domain-name-servers 127.0.0.1;"
+#    when: dhclient_rerult.stdout != "0"
+#    tags:
+#      - setresolvconf
+#      - sethost
+
+  - name: "disable dns via dhcp"
     become: yes
-    lineinfile: state=present create=yes insertafter=EOF line="{{ item }}" dest="{{ DHCPCLIENT }}"
-    with_items:
-      - "supersede search {{ DOMAIN_NAME }};"
-      - "supersede domain-name-servers 127.0.0.1;"
+    shell : "nmcli con mod eth0 ipv4.ignore-auto-dns yes"
     when: dhclient_rerult.stdout != "0"
     tags:
       - setresolvconf
