@@ -48,7 +48,7 @@
 
   - name: "chown oradata"
     become: yes
-    file: path={{ item.name }} state=file owner=grid group=oinstall mode=0660
+    file: path={{ item.name }} state=file owner=grid group=asmdba mode=0660
     when: inventory_hostname == groups["dbserver"][0] and storage_type == "nfs"
     with_items:
       - { name: "{{ VOTE_DEV }}" }
