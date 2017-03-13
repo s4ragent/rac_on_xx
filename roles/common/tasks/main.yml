@@ -242,3 +242,25 @@
     tags:
       - fstabswap
       - swap
+
+  - name: "unzip cvuqdisk"
+    local_action: shell "unzip {{ GRID_MEDIA1 }} {{ CVUQDISK }}"
+    args:
+      creates: {{ CVUQDISK }}
+    run_once: true
+    tags:
+      - preinstallpackages
+      
+  - name: "copy cvuqdisk"
+    become: yes
+    copy: src={{ CVUQDISK }} dest=/tmp/cvuqdisk.rpm
+    tags:
+      - preinstallpackages
+      
+  - name: "install cvuqdisk"
+    become: yes
+    yum: name=/tmp/cvuqdisk.rpm state=present
+    async: "{{ ASYNC }}"
+    poll: "{{ POLL }}"
+    tags:
+      - preinstallpackages
