@@ -49,11 +49,3 @@
     when: inventory_hostname == groups["dbserver"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     with_items:
       - "{{ GRID_MEDIA1 }}"
-
-  - name: "unzip cvuqdisk"
-    local_action: shell "unzip {{ GRID_MEDIA1 }} {{ CVUQDISK }}"
-    args:
-      creates: {{ CVUQDISK }}
-    run_once: true
-
-
