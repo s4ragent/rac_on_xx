@@ -50,3 +50,6 @@
     with_items:
       - "{{ GRID_MEDIA1 }}"
 
+  - name: "unzip cvuqdisk"
+    local_action: shell "unzip {{ GRID_MEDIA1 }} {{ CVUQDISK }}  "
+    run_once: true
