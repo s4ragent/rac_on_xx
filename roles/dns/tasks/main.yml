@@ -79,23 +79,34 @@
     tags:
       - setresolvconf
 
-  - name: "edit dhclient.conf"
+#  - name: "edit dhclient.conf"
+#    become: yes
+#    lineinfile: state=present create=yes insertafter=EOF line="{{ item }}" dest="{{ DHCPCLIENT }}"
+#    with_items:
+#      - "supersede domain-name-servers 127.0.0.1;"
+#    when: dhclient_rerult.stdout != "0"
+#    tags:
+#      - setresolvconf
+#      - sethost
+
+  - name: "disable dns via dhcp(nmcli)"
     become: yes
-    lineinfile: state=present create=yes insertafter=EOF line="{{ item }}" dest="{{ DHCPCLIENT }}"
-    with_items:
-      - "supersede domain-name-servers 127.0.0.1;"
+    shell : "nmcli con mod eth0 ipv4.ignore-auto-dns yes"
+    ignore_errors: true
+    register: nmcli_result
     when: dhclient_rerult.stdout != "0"
     tags:
       - setresolvconf
       - sethost
 
-#  - name: "disable dns via dhcp"
-#    become: yes
-#    shell : "nmcli con mod eth0 ipv4.ignore-auto-dns yes"
-#    when: dhclient_rerult.stdout != "0"
-#    tags:
-#      - setresolvconf
-#      - sethost
+
+  - name: "edit dhclient.conf"
+    become: yes
+    lineinfile: state=present create=yes insertafter=EOF line="PEERDNS=no" dest="/etc/sysconfig/network-scripts/ifcfg-eth0"
+    when: dhclient_rerult.stdout != "0" and nmcli_result != "0"
+    tags:
+      - setresolvconf
+      - sethost
 
   - name: "delete /etc/dhcp/dhclient.d/google_hostname.sh(for google)"
     become: yes
