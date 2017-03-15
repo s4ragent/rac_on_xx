@@ -254,7 +254,7 @@
       
   - name: "copy cvuqdisk"
     become: yes
-    copy: src="{{ CVUQDISK }}" dest=/tmp/cvuqdisk.rpm
+    copy: src="/tmp/{{ CVUQDISK }}" dest=/tmp/cvuqdisk.rpm
     tags:
       - preinstallpackages
       
