@@ -246,14 +246,14 @@
   - name: "unzip cvuqdisk"
     local_action: shell "unzip {{ GRID_MEDIA1 }} {{ CVUQDISK }}"
     args:
-      creates: {{ CVUQDISK }}
+      creates: "{{ CVUQDISK }}"
     run_once: true
     tags:
       - preinstallpackages
       
   - name: "copy cvuqdisk"
     become: yes
-    copy: src={{ CVUQDISK }} dest=/tmp/cvuqdisk.rpm
+    copy: src="{{ CVUQDISK }}" dest=/tmp/cvuqdisk.rpm
     tags:
       - preinstallpackages
       
