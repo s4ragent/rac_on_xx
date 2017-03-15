@@ -247,6 +247,7 @@
     local_action: command "{{ UNZIP }} /media/{{ GRID_MEDIA1 }} {{ CVUQDISK }}"
     args:
       creates: "{{ CVUQDISK }}"
+      executable: /bin/bash
     run_once: true
     tags:
       - preinstallpackages
