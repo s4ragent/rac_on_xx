@@ -244,9 +244,9 @@
       - swap
 
   - name: "unzip cvuqdisk"
-    local_action: command "{{ UNZIP }} /media/{{ GRID_MEDIA1 }} {{ CVUQDISK }}"
+    local_action: command "{{ UNZIP }} -d /tmp /media/{{ GRID_MEDIA1 }} {{ CVUQDISK }}"
     args:
-      creates: "{{ CVUQDISK }}"
+      creates: "/tmp/{{ CVUQDISK }}"
       executable: /bin/bash
     run_once: true
     tags:
