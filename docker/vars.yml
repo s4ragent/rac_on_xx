@@ -18,7 +18,7 @@ START_CMD: "docker start"
 START_CMD_OPS: ""
 STOP_CMD: "docker stop"
 STOP_CMD_OPS: ""
-INSTALL_OPS: "-ignoreSysprereqs -ignorePrereq"
+INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: ""
 ####################################################
 ####docker system  specific value ##################
