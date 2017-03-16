@@ -2,10 +2,9 @@
   - name: "mgmtdb"
     become: yes
     become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/gridSetup.sh -executeConfigTools -responseFile /home/grid/asm.rsp -silent"
+    shell: "export ORACLE_HOME={{ GRID_ORACLE_HOME }} && {[ GRID_ORACLE_HOME }]/gridSetup.sh -executeConfigTools -responseFile /home/grid/asm.rsp -silent"
     async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
-    register: asmca_result
+    poll: "{{ POLL }}"Do you want something    register: asmca_result
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - mgmtdb
