@@ -2,7 +2,7 @@
   - name: "mgmtdb"
     become: yes
     become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/gridSetup.sh -executeConfigTools -silent RESPONSE_FILE=/home/grid/asm.rsp -waitforcompletion"
+    shell: "{{ GRID_ORACLE_HOME }}/gridSetup.sh -executeConfigTools -silent RESPONSE_FILE=/home/grid/asm.rsp"
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
     register: asmca_result
