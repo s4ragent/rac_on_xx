@@ -244,10 +244,9 @@
       - swap
 
   - name: "unzip cvuqdisk"
-    local_action: shell "{{ UNZIP }} -v -d /tmp/{{ CVUQDISK }} /media/{{ GRID_MEDIA1 }} {{ CVUQDISK }}"
+    local_action: shell "{{ UNZIP }} -d /tmp/{{ CVUQDISK }} /media/{{ GRID_MEDIA1 }} {{ CVUQDISK }}"
     args:
       creates: "/tmp/{{ CVUQDISK }}"
-      executable: /bin/bash
     run_once: true
     tags:
       - preinstallpackages
