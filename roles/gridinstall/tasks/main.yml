@@ -19,7 +19,7 @@
     poll: "{{ POLL }}"
     when: inventory_hostname == groups["dbserver"][0]
     register: runinstallergrid_result
-    failed_when: runinstallergrid_result.rc !=0 and runinstallergrid_result.rc != 6 
+    ignore_errors: True
     tags:
       - runinstallergrid
       - gridinstall
@@ -27,6 +27,7 @@
 
   - debug: var=runinstallergrid_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
+    failed_when: runinstallergrid_result.rc !=0 and runinstallergrid_result.rc != 6
     tags:
       - runinstallergrid
       - gridinstall
