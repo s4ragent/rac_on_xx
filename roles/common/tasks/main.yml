@@ -248,7 +248,7 @@
     args:
       creates: "/tmp/{{ CVUQDISK }}"
       executable: /bin/bash
-    chdir: /tmp
+      chdir: /tmp
     run_once: true
     tags:
       - preinstallpackages
