@@ -27,7 +27,7 @@
 
   - debug: var=runinstallergrid_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
-    failed_when: runinstallergrid_result.rc !=0 and runinstallergrid_result.rc != 6
+    failed_when: runinstallergrid_result.rc !=0 and runinstallergrid_result.rc != 250
     tags:
       - runinstallergrid
       - gridinstall
