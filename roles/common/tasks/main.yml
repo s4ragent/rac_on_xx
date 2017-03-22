@@ -172,6 +172,7 @@
     become: yes
     shell: '/sbin/blkid {{ data_disk_dev }}1 | awk -F''"'' ''{ print $2 }'' '
     register: uuid
+    when: data_disk_dev is defined and data_disk_dev !=""
     tags:
       - oraclehome
       - fdisk
