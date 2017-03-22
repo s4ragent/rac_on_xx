@@ -14,7 +14,7 @@
   - name: "dbca serial othernode"
     become: yes
     become_user: oracle
-    shell: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -addInstance -gdbName {{ DBNAME }} -nodelist {{ hostvars[item.1]['NODENAME'] }}"
+    shell: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -addInstance -gdbName {{ DBNAME }} -nodeName {{ hostvars[item.1]['NODENAME'] }}"
     with_indexed_items: "{{ groups['dbserver'] }}"
     when: inventory_hostname == groups["dbserver"][0] and item.0 !=0
     async: "{{ ASYNC }}"
