@@ -45,9 +45,10 @@ rac_on_xx/docker
 
 ## Requirement
 - ubuntu/debian(Kernel 3.18 or later), CentOS/RHEL/OEL 7.2 
-- docker 1.12
-- ansible 2.0 or later
-- Oracle 12c Release 1 (12.1) Clusterware and Database software 
+- docker 1.12 or later
+- /boot/symvers-`uname -r`.gz on docker host
+- ansible 2.2.1 or later
+- Oracle 12c Release 2 (12.2) Clusterware and Database software 
 - 1core CPU per container and  4GB Memory per container
 
 ## Attention
@@ -59,13 +60,8 @@ It may be dangerous.
 >git clone https://github.com/s4ragent/rac_on_xx
 
 ## Usage
-download/unzip Oracle 12c Release 1 (12.1) Clusterware and Database software on docker host
+download/unzip Oracle 12c Release 1 (12.2) Clusterware and Database software on docker host
 
-    #mkdir -p /media
-    #unzip linuxamd64_12102_database_1of2.zip -d /media
-    #unzip linuxamd64_12102_database_2of2.zip -d /media
-    #unzip linuxamd64_12102_grid_1of2.zip -d /media
-    #unzip linuxamd64_12102_grid_2of2.zip -d /media
      
     #ls -al /media
     total 16
@@ -116,7 +112,7 @@ if you want to delete all containers
     #bash dockerunil.sh deleteall
 
 ## Licence
-[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+[MIT]
 
 ## Todo
 - Docker container run without privileged flags
