@@ -15,6 +15,7 @@
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
     when: inventory_hostname == groups["dbserver"][0]
+    ignore_errors: True
     register: runinstallerdb_result
     tags:
       - runinstallerdb
@@ -23,6 +24,7 @@
 
   - debug: var=runinstallerdb_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
+    failed_when: runinstallerdb_result.rc !=0 and runinstallergrid_result.rc != 250
     tags:
       - runinstallerdb
       - dbinstall
