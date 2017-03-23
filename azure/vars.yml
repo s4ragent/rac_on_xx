@@ -32,25 +32,6 @@ GRID_MEDIA1: V840012-01.zip
 ## for additional disk values
 data_disk_dev: "/dev/sdc"
 data_disk_mountpoint: "/u01"
-#####for NFS option values
-storage_type: "nfs"
-##### device size = base_size + multi_size * node count
-ORA_DATA: /u01/oradata
-VOTE_DEV: /u01/oradata/vote.img
-VOTE_BASE_SIZE: 40960
-VOTE_MULTI_SIZE: 2048
-VOTE_DISKGROUP_NAME: VOTE
-DATA_DEV: /u01/oradata/data.img
-DATA_BASE_SIZE: 5120
-DATA_MULTI_SIZE: 1024
-DATA_DISKGROUP_NAME: DATA
-FRA_DEV: /u01/oradata/fra.img
-FRA_BASE_SIZE: 25600
-FRA_MULTI_SIZE: 0
-FRA_DISKGROUP_NAME: FRA
-ASM_STRING: /u01/oradata/*
-#####for ISCSI option values (TODO)
-#storage_type: "iscsi"
 ####ansible specific
 ansible_ssh_user: azureuser
 ansible_ssh_private_key_file: raconxx
