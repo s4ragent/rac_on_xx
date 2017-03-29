@@ -65,7 +65,14 @@ It may be dangerous.
     #mkswap /swapfile
     #echo "/swapfile none swap sw 0 0" >> /etc/fstab
     #swapon -a
-
+### 2. install prerequisite packages
+    ##CentOS 7.3
+    #yum install -y epel-release
+    #yum install -y python-pip openssl-devel gcc python-devel git unzip --enablerepo=epel
+    
+    ##ubuntu 16.04 
+    #apt-get update
+    #apt-get install -y git python-dev python-pip libssl-dev unzip
 ## Usage
 download/unzip Oracle 12c Release 1 (12.2) Clusterware and Database software on docker host
 
