@@ -73,6 +73,18 @@ It may be dangerous.
     ##ubuntu 16.04 
     #apt-get update
     #apt-get install -y git python-dev python-pip libssl-dev unzip
+### 3. install ansible
+    #pip install pip --upgrade
+    #pip install ansible    
+### 3. install ansible
+    #pip install pip --upgrade
+    #pip install ansible
+### 4. install docker
+    #curl -fsSL https://get.docker.com/ | sh
+### 5. enable docker service
+    ### CentOS7 / ubuntu 16.04
+    #systemctl start docker 
+    #systemctl enable docker
 ## Usage
 download/unzip Oracle 12c Release 1 (12.2) Clusterware and Database software on docker host
 
