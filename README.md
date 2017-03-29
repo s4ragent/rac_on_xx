@@ -50,7 +50,7 @@ Oracle RAC on Docker  /Azure /EC2 /GCE
 
 
 ## Licence
-[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
+MIT
 
 ## Author
 @s4r_agent
