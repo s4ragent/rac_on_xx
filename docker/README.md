@@ -46,7 +46,7 @@ rac_on_xx/docker
 ## Requirement
 - ubuntu/debian(Kernel 3.18 or later), CentOS/RHEL/OEL 7.2
 - docker 1.12 or later
-- /boot/symvers-`uname -r`.gz on docker host
+- /boot/symvers-\`uname -r\`.gz on docker host
 - ansible 2.2.1 or later
 - Oracle 12c Release 2 (12.2) Clusterware and Database software 
 - 1core CPU per container and  4GB Memory per container
