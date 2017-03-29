@@ -82,18 +82,15 @@ It may be dangerous.
     ### CentOS7 / ubuntu 16.04
     #systemctl start docker 
     #systemctl enable docker
-## Usage
-download/unzip Oracle 12c Release 1 (12.2) Clusterware and Database software on docker host
+### 6. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate /media
+    # ls -al  /media
+    total 6297260
+    -rw-r--r-- 1 root root 3453696911 Mar 28 12:30 linuxx64_12201_database.zip
+    -rw-r--r-- 1 root root 2994687209 Mar 28 12:31 linuxx64_12201_grid_home.zip
+### 7. cloning an Repository
+    #git clone https://github.com/s4ragent/rac_on_xx
 
-     
-    #ls -al /media
-    total 16
-    drwxr-xr-x 4 root root 4096 May  1 21:56 .
-    drwxr-xr-x 3 root root 4096 May  1 21:53 ..
-    drwxr-xr-x 7 root root 4096 Jul  7  2014 database
-    drwxr-xr-x 7 root root 4096 Jul  7  2014 grid
-    
-    
+## Usage
 execute dockeruntil.sh   (no option create 3-nodes RAC)
 
     ##create 3-nodes RAC#
