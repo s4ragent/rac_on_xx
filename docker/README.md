@@ -76,9 +76,6 @@ It may be dangerous.
 ### 3. install ansible
     #pip install pip --upgrade
     #pip install ansible    
-### 3. install ansible
-    #pip install pip --upgrade
-    #pip install ansible
 ### 4. install docker
     #curl -fsSL https://get.docker.com/ | sh
 ### 5. enable docker service
