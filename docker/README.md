@@ -33,9 +33,9 @@ rac_on_xx/docker
 
 |Diskgroup name|use|asm device path|redundancy|size(MB)|size(MB)(e.g. 3-nodes RAC)|
 |--------|--------|-------|-------|-------|-------|
-|VOTE|ocr and voting disk|/u01/oradata/vote.img|external| 5120 + ( num_of_nodes * 1024 )|8192|
+|VOTE|ocr and voting disk|/u01/oradata/vote.img|external| 40960 + ( num_of_nodes * 2048 )|47104|
 |DATA|Database files|/u01/oradata/data.img|external| 5120 + ( num_of_nodes * 1024 ) |8192|
-|FRA|flash recovery area|/u01/oradata/fra.img|external|5120|5120|
+|FRA|flash recovery area|/u01/oradata/fra.img|external|25600|25600|
 
 ## Demo (12-nodes RAC on ubuntu docker)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker01.png)
@@ -44,19 +44,21 @@ rac_on_xx/docker
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker04.png)
 
 ## Requirement
-- ubuntu/debian(Kernel 3.18 or later), CentOS/RHEL/OEL 7.2 
+- ubuntu/debian(Kernel 3.18 or later), CentOS/RHEL/OEL 7.2
 - docker 1.12 or later
 - /boot/symvers-`uname -r`.gz on docker host
 - ansible 2.2.1 or later
 - Oracle 12c Release 2 (12.2) Clusterware and Database software 
 - 1core CPU per container and  4GB Memory per container
 
+
+
 ## Attention
 Each container run with privileged flag (Each container enables to access to all devices on the Docker host ). 
 
 It may be dangerous.
 
-## Install
+## Setup
 >git clone https://github.com/s4ragent/rac_on_xx
 
 ## Usage
