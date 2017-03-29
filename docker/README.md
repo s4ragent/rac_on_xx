@@ -82,7 +82,7 @@ It may be dangerous.
     ### CentOS7 / ubuntu 16.04
     #systemctl start docker 
     #systemctl enable docker
-### 6. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate /media
+### 6. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate these on /media
     # ls -al  /media
     total 6297260
     -rw-r--r-- 1 root root 3453696911 Mar 28 12:30 linuxx64_12201_database.zip
