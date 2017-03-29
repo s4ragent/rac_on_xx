@@ -60,7 +60,7 @@ It may be dangerous.
 
 
 ## Setup
-### 1. create swap
+### 1. create swap (unless your server has 4GB or more of memory )
     #dd if=/dev/zero of=/swapfile bs=4096 count=1M
     #mkswap /swapfile
     #echo "/swapfile none swap sw 0 0" >> /etc/fstab
