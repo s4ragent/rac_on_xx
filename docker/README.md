@@ -44,7 +44,7 @@ rac_on_xx/docker
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker04.png)
 
 ## Requirement
-- ubuntu/debian(Kernel 3.18 or later), CentOS/RHEL/OEL 7.2
+- ubuntu/debian(Kernel 3.18 or later), CentOS/RHEL/OEL 7.2 or later
 - docker 1.12 or later
 - /boot/symvers-\`uname -r\`.gz on docker host
 - ansible 2.2.1 or later
@@ -82,7 +82,7 @@ It may be dangerous.
     ### CentOS7 / ubuntu 16.04
     #systemctl start docker 
     #systemctl enable docker
-### 6. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate these on /media
+### 6. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate them on /media
     # ls -al  /media
     total 6297260
     -rw-r--r-- 1 root root 3453696911 Mar 28 12:30 linuxx64_12201_database.zip
@@ -91,7 +91,7 @@ It may be dangerous.
     #git clone https://github.com/s4ragent/rac_on_xx
 
 ## Usage
-execute dockeruntil.sh   (no option create 3-nodes RAC)
+execute dockerun.til.sh   (dockerutil.sh execute ansible-playbook and build RAC cluster. no option create 3-nodes RAC)
 
     ##create 3-nodes RAC#
     #cd rac_on_xx/docker
@@ -101,7 +101,7 @@ if you want to build 5-nodes RAC
 
     ##create 5-nodes RAC#
     #cd rac_on_xx/docker
-    #bash dockerunil.sh runall 5
+    #bash dockerutil.sh runall 5
 
 if you want to log in node001
 
@@ -113,11 +113,11 @@ if you want to execute oracle commands on node001 (ex. crsctl status res -t)
 
 if you want to stop first container
 
-    #bash dockerunil.sh stop 1
+    #bash dockerutil.sh stop 1
 
 if you want to stop storage container
 
-    #bash dockerunil.sh stop storage
+    #bash dockerutil.sh stop storage
 
 and restart first container
 
@@ -125,11 +125,11 @@ and restart first container
     
 if you want to start all containers
 
-    #bash dockerunil.sh startall
+    #bash dockerutil.sh startall
 
 if you want to delete all containers
 
-    #bash dockerunil.sh deleteall
+    #bash dockerutil.sh deleteall
 
 ## Licence
 [MIT]
