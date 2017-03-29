@@ -2,7 +2,7 @@ rac_on_xx
 ====
 Oracle RAC on Docker  /Azure /EC2 /GCE 
 
-- [docker](https://github.com/s4ragent/rac_on_xx/tree/master/docker "RAC on Docker")  Oracle RAC on docker
+- [docker](https://github.com/s4ragent/rac_on_xx/tree/master/docker "RAC on Docker")  Oracle RAC on docker 
 - [Microsoft Azure](https://github.com/s4ragent/rac_on_xx/tree/master/azure "RAC on Azure")  Oracle RAC on Azure
 - [Amazon EC2](https://github.com/s4ragent/rac_on_xx/tree/master/ec2 "RAC on EC2")  Oracle RAC on EC2
 - [Google Compute Cloud](https://github.com/s4ragent/rac_on_xx/tree/master/gce "RAC on GCE")  Oracle RAC on GCE
@@ -38,9 +38,9 @@ Oracle RAC on Docker  /Azure /EC2 /GCE
 
 |Diskgroup name|use|asm device path|redundancy|size(GB)|size(GB)(e.g. 3-nodes RAC)|
 |--------|--------|-------|-------|-------|-------|
-|VOTE|ocr and voting disk|/u01/oradata/vote.img|external| 5120 + ( num_of_nodes * 1024 )|8192|
+|VOTE|ocr and voting disk|/u01/oradata/vote.img|external| 40960 + ( num_of_nodes * 2048 )|47104|
 |DATA|Database files|/u01/oradata/data.img|external| 5120 + ( num_of_nodes * 1024 ) |8192|
-|FRA|flash recovery area|/u01/oradata/fra.img|external|5120|5120|
+|FRA|flash recovery area|/u01/oradata/fra.img|external|25600|25600|
 
 ## Demo (12-nodes RAC on ubuntu docker)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker01.png)
