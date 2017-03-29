@@ -58,8 +58,12 @@ Each container run with privileged flag (Each container enables to access to all
 
 It may be dangerous.
 
-## Setup
->git clone https://github.com/s4ragent/rac_on_xx
+##Setup
+###1. create swap
+>#dd if=/dev/zero of=/swapfile bs=4096 count=1M
+>#mkswap /swapfile
+>#echo "/swapfile none swap sw 0 0" >> /etc/fstab
+>#swapon -a
 
 ## Usage
 download/unzip Oracle 12c Release 1 (12.2) Clusterware and Database software on docker host
