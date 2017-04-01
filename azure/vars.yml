@@ -11,9 +11,9 @@ INSTANCE_OPS: "--image Oracle:Oracle-Linux:7.2:latest"
 NODE_DISK_SIZE: "60"
 STORAGE_DISK_SIZE: "100"
 ######## common user specific value  ###############
-xrdp_pass: Xrdp123!
+#xrdp_pass: Xrdp123!
 #guac_pass: Guac123!
-WindowManager: "xfce"
+#WindowManager: "xfce"
 #WindowManager: "gnome"
 ####common VIRT_TYPE specific value ################
 DELETE_CMD: "az vm delete -n"
