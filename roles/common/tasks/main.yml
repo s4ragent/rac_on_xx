@@ -263,7 +263,5 @@
   - name: "install cvuqdisk"
     become: yes
     yum: name=/tmp/cvuqdisk.rpm state=present
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
     tags:
       - preinstallpackages
