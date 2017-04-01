@@ -15,8 +15,6 @@
     become: yes
     become_user: grid
     shell: "{{ GRID_ORACLE_HOME }}/gridSetup.sh -silent -responseFile /home/grid/grid.rsp -waitforcompletion {{ INSTALL_OPS }}"
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
     when: inventory_hostname == groups["dbserver"][0]
     register: runinstallergrid_result
     ignore_errors: True
@@ -71,8 +69,6 @@
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     register: grid1strootsh_result
     when: inventory_hostname == groups["dbserver"][0]
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
     tags:
       - grid1strootsh
       - gridrootsh
@@ -92,8 +88,6 @@
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     register: gridotherrootsh_result
     when: inventory_hostname != groups["dbserver"][0]
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
     tags:
       - gridotherrootsh
       - gridrootsh
