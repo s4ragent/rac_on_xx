@@ -3,8 +3,6 @@
     become: yes
     become_user: grid
     shell: "{{ GRID_ORACLE_HOME }}/gridSetup.sh -executeConfigTools -responseFile /home/grid/grid.rsp -silent {{ INSTALL_OPS }}"
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
     register: asmca_result
     when: inventory_hostname == groups["dbserver"][0]
     tags:
