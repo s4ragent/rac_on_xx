@@ -33,8 +33,6 @@
   - name: "centos2oel"
     become: yes
     shell: curl -O https://linux.oracle.com/switch/centos2ol.sh && sh centos2ol.sh
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
     when: centos2oel_rerult.rc != 0
     tags:
       - centos2oel
@@ -43,8 +41,6 @@
   - name: "centos2oel distro-sync"
     become: yes
     shell: yum -y distro-sync
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
     when: centos2oel_rerult.rc != 0
     tags:
       - centos2oel
