@@ -54,9 +54,12 @@ rac_on_xx/azure
     #yum install -y epel-release
     #yum install -y python-pip openssl-devel gcc python-devel libffi-devel git unzip --enablerepo=epel
     
-    ##ubuntu 16.04 
+    ##ubuntu 16.04
+    
     apt-get update
+    
     apt-get install -y git python-dev libffi-dev python-pip libssl-dev build-essential unzip
+
 
 ### 3. install ansible
     #pip install pip --upgrade
