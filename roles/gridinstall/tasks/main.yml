@@ -69,7 +69,7 @@
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     register: grid1strootsh_result
     when: inventory_hostname == groups["dbserver"][0]
-    ignore_errors: True
+#    ignore_errors: True
     tags:
       - grid1strootsh
       - gridrootsh
@@ -78,7 +78,7 @@
 
   - debug: var=grid1strootsh_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
-    failed_when: grid1strootsh_result.rc !=0 and grid1strootsh_result.stdout.find('system reboot') != -1
+#    failed_when: grid1strootsh_result.rc !=0 and grid1strootsh_result.stdout.find('system reboot') != -1
     tags:
       - grid1strootsh
       - gridrootsh
@@ -90,7 +90,7 @@
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     register: gridotherrootsh_result
     when: inventory_hostname != groups["dbserver"][0]
-    ignore_errors: True
+#    ignore_errors: True
     tags:
       - gridotherrootsh
       - gridrootsh
@@ -99,7 +99,7 @@
 
   - debug: var=gridotherrootsh_result.stdout_lines
     when: inventory_hostname != groups["dbserver"][0]
-    failed_when: gridotherrootsh_result.rc !=0 and gridotherrootsh_result.stdout.find('system reboot') != -1
+#    failed_when: gridotherrootsh_result.rc !=0 and gridotherrootsh_result.stdout.find('system reboot') != -1
     tags:
       - gridotherrootsh
       - gridrootsh
