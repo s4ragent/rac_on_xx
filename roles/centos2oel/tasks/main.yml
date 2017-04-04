@@ -52,6 +52,15 @@
     tags:
       - centos2oel
 
+  - name: "install kernel"
+    become: yes
+    yum: name="kernel-3.10.0-327.36.3.el7" state=present
+    when: SWITCH_KERNEL is defined and SWITCH_KERNEL !=""
+    tags:
+      - centos2oel
+      - switchkernel
+
+
   - name: "switch kernel"
     become: yes
     shell: "grub2-set-default {{ SWITCH_KERNEL }} && grub2-mkconfig -o /etc/grub2.cfg"
