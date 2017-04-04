@@ -24,7 +24,7 @@
     lineinfile:
       dest: /etc/ssh/sshd_config
       regexp: "^ClientAliveCountMax"
-      line: "ClientAliveCountMax 10"
+      line: "ClientAliveCountMax 30"
       insertafter: EOF
       state: present
     register: ssh_config
