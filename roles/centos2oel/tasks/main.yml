@@ -54,7 +54,7 @@
 
   - name: "install kernel"
     become: yes
-    yum: name="kernel-3.10.0-327.36.3.el7" state=present
+    yum: name="kernel-3.10.0-327.36.3.el7" state=present enablerepo=ol7_UEKR4
     when: SWITCH_KERNEL is defined and SWITCH_KERNEL !=""
     tags:
       - centos2oel
