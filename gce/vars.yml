@@ -11,6 +11,7 @@ MEDIA_COPY: "true"
 MEDIA_PATH: /downloadmedia
 DB_MEDIA1: V839960-01.zip
 GRID_MEDIA1: V840012-01.zip
+SWITCH_KERNEL: "0"
 #xrdp_pass: Xrdp123!
 #guac_pass: Guac123!
 #WindowManager: "xfce"
