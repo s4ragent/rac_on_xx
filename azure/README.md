@@ -69,8 +69,8 @@ rac_on_xx/azure
 ### 6. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate them on /media
     # ls -al  /media
     total 6297260
-    -rw-r--r-- 1 root root 3453696911 Mar 28 12:30 linuxx64_12201_database.zip
-    -rw-r--r-- 1 root root 2994687209 Mar 28 12:31 linuxx64_12201_grid_home.zip
+    -rw-r--r-- 1 root root 3453696911 Mar 28 12:30 V839960-01.zip
+    -rw-r--r-- 1 root root 2994687209 Mar 28 12:31 V840012-01.zip
 ### 7. cloning an Repository
     #git clone https://github.com/s4ragent/rac_on_xx
 
