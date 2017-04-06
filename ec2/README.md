@@ -73,11 +73,15 @@ rac_on_xx/ec2
     -rw-r--r-- 1 root root 2994687209 Mar 28 12:31 V840012-01.zip
 ### 7. cloning an Repository
     #git clone https://github.com/s4ragent/rac_on_xx
-### 8. change ec2 zone (if you need)
+### 8. change ec2 region/AMI ID (if you need)
     #vi rac_on_xx/ec2/vars.yml
     ##################
-    ZONE: "westus2"
-    #ZONE: "japanwest"
+    #for oregon region
+    REGION: "us-west-2"
+    INSTANCE_OPS: "--image-id ami-4a637f2b"
+    #for tokyo region
+    #REGION: "ap-northeast-1"
+    #INSTANCE_OPS: "--image-id ami-65e0c80b"
 ## Usage
 execute ec2util.sh   (ec2util.sh execute ansible-playbook and build RAC cluster. no option create 3-nodes RAC)
 
