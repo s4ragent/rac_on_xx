@@ -73,7 +73,7 @@ rac_on_xx/azure
     -rw-r--r-- 1 root root 2994687209 Mar 28 12:31 V840012-01.zip
 ### 7. cloning an Repository
     #git clone https://github.com/s4ragent/rac_on_xx
-### 8. change azure Azone (if you need)
+### 8. change Azure zone (if you need)
     #vi rac_on_xx/azure/vars.yml
     ##################
     ZONE: "westus2"
