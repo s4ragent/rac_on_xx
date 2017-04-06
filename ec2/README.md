@@ -39,8 +39,8 @@ rac_on_xx/ec2
 
 
 ## Requirement
-- Microsoft ec2 Account
-- Microsoft ec2 CLI 2.0
+- AWS Account
+- AWS CLI
 - ansible 2.2.1 or later
 - Oracle 12c Release 2 (12.2) Clusterware and Database software 
 
@@ -73,7 +73,7 @@ rac_on_xx/ec2
     -rw-r--r-- 1 root root 2994687209 Mar 28 12:31 V840012-01.zip
 ### 7. cloning an Repository
     #git clone https://github.com/s4ragent/rac_on_xx
-### 8. change ec2 region/AMI ID (if you need)
+### 8. change ec2 region/AMI-ID (if you need)
     #vi rac_on_xx/ec2/vars.yml
     ##################
     #for oregon region
