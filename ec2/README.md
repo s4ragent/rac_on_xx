@@ -47,8 +47,8 @@ rac_on_xx/ec2
 
 
 ## Setup
-### 1. create Windows ec2 account
-    See https://ec2.microsoft.com/en-us/free/?b=17.09b
+### 1. create AWS account
+    Open https://aws.amazon.com/, and then choose Create an AWS Account. 
 ### 2. install prerequisite packages
     ##CentOS 7.3
     #yum install -y epel-release
@@ -62,10 +62,10 @@ rac_on_xx/ec2
 ### 3. install ansible
     #pip install pip --upgrade
     #pip install ansible    
-### 4. install ec2 CLI
-    #curl -L https://aka.ms/Installec2Cli | bash
-### 5. Log in with ec2 CLI 2.0
-    see https://docs.microsoft.com/en-us/cli/ec2/authenticate-ec2-cli
+### 4. install AWS CLI
+    #pip install awscli
+### 5. Configuring the AWS Command Line Interface
+    see http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
 ### 6. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate them on /media
     # ls -al  /media
     total 6297260
