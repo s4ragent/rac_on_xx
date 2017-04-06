@@ -39,17 +39,15 @@ rac_on_xx/gce
 
 
 ## Requirement
-- Microsoft gce Account
-- Microsoft gce CLI 2.0
+- Google Cloud Platform Account
+- Google Cloud SDK
 - ansible 2.2.1 or later
 - Oracle 12c Release 2 (12.2) Clusterware and Database software 
 
 
 
 ## Setup
-### 1. create Windows gce account
-    See https://gce.microsoft.com/en-us/free/?b=17.09b
-### 2. install prerequisite packages
+### 1. install prerequisite packages
     ##CentOS 7.3
     #yum install -y epel-release
     #yum install -y python-pip openssl-devel gcc python-devel libffi-devel git unzip --enablerepo=epel
@@ -57,23 +55,27 @@ rac_on_xx/gce
     ##ubuntu 16.04
     #apt-get update
     #apt-get install -y git python-dev libffi-dev python-pip libssl-dev build-essential unzip
-
+### 2. create project
+    see https://cloud.google.com/resource-manager/docs/creating-managing-projects
 
 ### 3. install ansible
     #pip install pip --upgrade
     #pip install ansible    
-### 4. install gce CLI
-    #curl -L https://aka.ms/InstallgceCli | bash
-### 5. Log in with gce CLI 2.0
-    see https://docs.microsoft.com/en-us/cli/gce/authenticate-gce-cli
-### 6. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate them on /media
+### 4. install Google Cloud SDK
+    #curl https://sdk.cloud.google.com | bash
+### 5. configure SDK
+    #exec -l $SHELL
+    #gcloud init
+### 6. enable Compute Engine API
+    see https://support.google.com/cloud/answer/6158841?hl=en
+### 7. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate them on /media
     # ls -al  /media
     total 6297260
     -rw-r--r-- 1 root root 3453696911 Mar 28 12:30 V839960-01.zip
     -rw-r--r-- 1 root root 2994687209 Mar 28 12:31 V840012-01.zip
-### 7. cloning an Repository
+### 8. cloning an Repository
     #git clone https://github.com/s4ragent/rac_on_xx
-### 8. change gce zone (if you need)
+### 9. change gce zone (if you need)
     #vi rac_on_xx/gce/vars.yml
     ##################
     ZONE: "us-west1-b"
