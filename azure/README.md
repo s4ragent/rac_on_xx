@@ -11,11 +11,11 @@ rac_on_xx/azure
 |OS|Oracle Linux 7.x|
 |Storage|NFS4 with Flex ASM|
 |L2 Network emulation|vxlan|
-|DNS|dnsmasq on each container|
+|DNS|dnsmasq on each vm|
 
 - Network infomation (e.g. 3-nodes RAC)
 
-|hostname/container name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
+|hostname/vm name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
 |storage|10.153.0.50|-|-|-|
 |node001|10.153.0.51|192.168.0.51|192.168.100.51|192.168.200.51|
@@ -99,23 +99,23 @@ if you want to execute oracle commands on node001 (ex. crsctl status res -t)
 
     #sudo /u01/app/12.2.0/grid/bin/crsctl status res -t
 
-if you want to stop first container
+if you want to stop first vm
 
     #bash azureutil.sh stop 1
 
-if you want to stop storage container
+if you want to stop storage_vm
 
     #bash azureutil.sh stop storage
 
-and restart first container
+and restart first vm
 
     #bash azureutil.sh start 1
     
-if you want to start all containers
+if you want to start all vms
 
     #bash azureutil.sh startall
 
-if you want to delete all containers
+if you want to delete all vms
 
     #bash azureutil.sh deleteall
 
