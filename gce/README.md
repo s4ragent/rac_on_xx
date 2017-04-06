@@ -76,8 +76,8 @@ rac_on_xx/gce
 ### 8. change gce zone (if you need)
     #vi rac_on_xx/gce/vars.yml
     ##################
-    ZONE: "westus2"
-    #ZONE: "japanwest"
+    ZONE: "us-west1-b"
+    #ZONE: "asia-east1-c"
 ## Usage
 execute gceutil.sh   (gceutil.sh execute ansible-playbook and build RAC cluster. no option create 3-nodes RAC)
 
