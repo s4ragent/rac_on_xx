@@ -3,8 +3,8 @@
 ZONE: "asia-east1-c"
 #INSTANCE_SIZE_OPS: "--machine-type n1-highmem-2"
 #INSTANCE_SIZE_OPS: "--machine-type n1-standard-1"
-INSTANCE_TYPE_OPS: "--custom-cpu 2 --custom-memory 8"
-#INSTANCE_TYPE_OPS: "--custom-cpu 2 --custom-memory 8 --preemptible"
+INSTANCE_TYPE_OPS: "--custom-cpu 2 --custom-memory 8 --maintenance-policy MIGRATE"
+#INSTANCE_TYPE_OPS: "--custom-cpu 2 --custom-memory 8 --preemptible --maintenance-policy TERMINATE"
 NODE_DISK_SIZE: "50GB"
 STORAGE_DISK_SIZE: "100GB"
 ######## common user specific value  ###############
