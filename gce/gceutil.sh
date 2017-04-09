@@ -66,7 +66,7 @@ runonly(){
 		run $NODENAME $NODE_DISK_SIZE $i "dbserver"
 	done
 	
-	sleep 60s
+	sleep 180s
 #	CLIENTNUM=70
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
 #	CLIENTIP="${SEGMENT}$NUM"	
