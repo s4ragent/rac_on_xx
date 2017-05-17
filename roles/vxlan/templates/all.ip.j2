@@ -1,3 +1,3 @@
 {% for host in play_hosts %}
-{{ hostvars[host][["ansible_" + VXLAN_DEV]]['ipv4']['address'] }} 
+{{ hostvars[host]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 
 {% endfor %}
