@@ -14,8 +14,6 @@ run(){
 	IP=$2
 	NODENUMBER=$3
 	HOSTGROUP=$4
-	
-	IsDeviceMapper=`docker info | grep devicemapper | grep -v grep | wc -l`
 
 #	if [ "$IsDeviceMapper" != "0" ]; then
 		mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
