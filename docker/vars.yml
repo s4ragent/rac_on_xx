@@ -5,6 +5,7 @@
 ####################################################
 #### docker user specific value  ###################
 DOCKERSUBNET: "10.153.0.0/16"
+VXLAN_DEV: "eth0"
 BRNAME: "raconxx"
 DOCKER_VOLUME_PATH: "/rac_on_docker"
 MEDIA_PATH: /downloadmedia
