@@ -26,6 +26,7 @@ run(){
 	cp /var/lib/machines/$INSTANCE_ID/usr/lib/systemd/system/sshd.service /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/sshd.service
 	
 	SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+	mkdir -p /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts
 	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts/ifcfg-host0
 DEVICE=host0
 TYPE=Ethernet
@@ -70,9 +71,10 @@ runonly(){
 	HasNework=`brctl show | grep $BRNAME | wc -l`
 	if [ "$HasNework" = "0" ]; then
 		brctl addbr $BRNAME
-		ip link set up dev $BRNAME
+		
 		SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 		ip addr add dev $BRNAME ${SEGMENT}1/24
+		ip link set up dev $BRNAME
 		
 		iptables -t nat -N $BRNAME
 		iptables -t nat -A PREROUTING -m addrtype --dst-type LOCAL -j $BRNAME
