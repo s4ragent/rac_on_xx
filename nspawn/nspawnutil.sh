@@ -14,7 +14,7 @@ run(){
 	IP=$2
 	NODENUMBER=$3
 	HOSTGROUP=$4
-	INSTANCE_ID=${NODENAME}.${DOMAIN_NAME}
+	INSTANCE_ID=${NODENAME}
 	
 	cp -R /var/lib/machines/rac_template /var/lib/machines/$INSTANCE_ID
 	mkdir -p /var/lib/machines/$INSTANCE_ID/root/.ssh
