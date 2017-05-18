@@ -14,9 +14,11 @@ run(){
 	IP=$2
 	NODENUMBER=$3
 	HOSTGROUP=$4
+	INSTANCE_ID=${NODENAME}.${DOMAIN_NAME}
+	
+	
 
-
-    	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
+ #   	(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
@@ -103,8 +105,13 @@ deleteall(){
 }
 
 buildimage(){
-	docker build -t $IMAGE --no-cache=true ./images/OEL7
+	INSTANCE_ID=rac_template
+	mkdir -p /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/
+	curl -L -o /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo http://yum.oracle.com/public-yum-ol7.repo
+	yum -c /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo -y --nogpg --installroot=/var/lib/machines/$INSTANCE_ID install systemd openssh openssh-server passwd yum sudo oraclelinux-release vim-minimal iproute initscripts
+	touch /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network
 }
+
 replaceinventory(){
 	echo ""
 }
