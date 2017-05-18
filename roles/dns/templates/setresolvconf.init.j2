@@ -2,5 +2,5 @@
 #echo "domain-name {{ DOMAIN_NAME }}" > /etc/resolv.conf
 echo "nameserver 127.0.0.1" > /etc/resolv.conf
 cp /etc/hosts /tmp/hosts
-sed -i "/{{ ansible_eth0.ipv4.address }}/d" /tmp/hosts
+sed -i "/{{ hostvars[host]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} /d" /tmp/hosts
 cat /tmp/hosts > /etc/hosts
