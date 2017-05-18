@@ -22,7 +22,7 @@ run(){
 	chmod 700 /var/lib/machines/$INSTANCE_ID/root/.ssh 
 	chmod 600 /var/lib/machines/$INSTANCE_ID/root/.ssh/*
 	
-	sed -i 's/^#PermitRootLogin/PermitRootLogin yes/' /var/lib/machines/$INSTANCE_ID/etc/ssh/sshd_config
+	sed -i 's/^#PermitRootLogin yes/PermitRootLogin yes/' /var/lib/machines/$INSTANCE_ID/etc/ssh/sshd_config
 	cp /var/lib/machines/$INSTANCE_ID/usr/lib/systemd/system/sshd.service /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/sshd.service
 	
 	SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
@@ -99,7 +99,7 @@ runonly(){
 			cat << EOF  > /etc/systemd/system/systemd-nspawn@.service.d/override.conf
 [Service]
 ExecStart=
-ExecStart=$nspawncmd --quiet --keep-unit --boot --link-journal=try-guest --machine=%I --network-bridge=$BRNAME
+ExecStart=$nspawncmd --quiet --keep-unit --boot --machine=%I --network-bridge=$BRNAME
 KillMode=
 KillMode=mixed                                                                    
 Type=
