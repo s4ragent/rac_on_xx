@@ -92,12 +92,13 @@ runonly(){
 	if [  ! -e /var/lib/machines/rac_template ] ; then
 		buildimage
 	fi
-
+	
+	systemd-nspawn-path=`which systemd-nspawn`
 	if [  ! -e /etc/systemd/system/systemd-nspawn@.service.d/override.conf ] ; then
 			cat << EOF  > /etc/systemd/system/systemd-nspawn@.service.d/override.conf
 [Service]
 ExecStart=
-ExecStart=/bin/systemd-nspawn --quiet --keep-unit --boot --link-journal=try-guest --machine=%I --network-bridge=$BRBANE
+ExecStart=$systemd-nspawn-path --quiet --keep-unit --boot --link-journal=try-guest --machine=%I --network-bridge=$BRBANE
 EOF
 
 	systemctl daemon-reload
