@@ -15,17 +15,6 @@ run(){
 	NODENUMBER=$3
 	HOSTGROUP=$4
 
-#	if [ "$IsDeviceMapper" != "0" ]; then
-		mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
-		StorageOps="-v $DOCKER_VOLUME_PATH/$NODENAME:/u01:rw"
-#     		#DeviceMapper_BaseSize=$DeviceMapper_BaseSize
-#	else
-      		#DeviceMapper_BaseSize=""
-#      		StorageOps=""
-#	fi
-#   
-#    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
-
 
     	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
@@ -59,7 +48,18 @@ runonly(){
 	HasNework=`brctl show | grep $BRNAME | wc -l`
 	if [ "$HasNework" = "0" ]; then
 		brctl addbr $BRNAME
-		docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
+		ip link set up dev $BRNAME
+		SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+		ip addr add dev $BRNAME ${SEGMENT}1/24
+		
+		iptables -t nat -N $BRNAME
+		iptables -t nat -A PREROUTING -m addrtype --dst-type LOCAL -j $BRNAME
+		iptables -t nat -A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j $BRNAME
+		iptables -t nat -A POSTROUTING -s ${SEGMENT}0/24 ! -o $BRNAME -j MASQUERADE
+		iptables -t nat -A $BRNAME -i $BRNAME -j RETURN
+		iptables -I FORWARD -i $BRNAME -o $BRNAME -j ACCEPT
+		iptables -I FORWARD -i $BRNAME ! -o $BRNAME -j ACCEPT
+		iptables -I FORWARD -o $BRNAME -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 	fi
 	
 	if [  ! -e $ansible_ssh_private_key_file ] ; then
