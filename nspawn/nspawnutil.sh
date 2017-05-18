@@ -56,8 +56,9 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	HasNework=`docker network ls | grep racbr | wc -l`
+	HasNework=`brctl show | grep $BRNAME | wc -l`
 	if [ "$HasNework" = "0" ]; then
+		brctl addbr $BRNAME
 		docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
 	fi
 	
