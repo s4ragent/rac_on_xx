@@ -16,24 +16,44 @@ run(){
 	HOSTGROUP=$4
 	INSTANCE_ID=${NODENAME}.${DOMAIN_NAME}
 	
+	cp -R /var/lib/machines/rac_template /var/lib/machines/$INSTANCE_ID
+	mkdir -p /var/lib/machines/$INSTANCE_ID/root/.ssh
+	cp ${ansible_ssh_private_key_file}.pub /var/lib/machines/$INSTANCE_ID/root/.ssh/authorized_keys
+	chmod 700 /var/lib/machines/$INSTANCE_ID/root/.ssh 
+	chmod 600 /var/lib/machines/$INSTANCE_ID/root/.ssh/*
 	
+	sed -i 's/^#PermitRootLogin/PermitRootLogin yes/' /var/lib/machines/$INSTANCE_ID/etc/ssh/sshd_config
+	cp /var/lib/machines/$INSTANCE_ID/usr/lib/systemd/system/sshd.service /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/sshd.service
+	
+	SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts/ifcfg-host0
+DEVICE=host0
+TYPE=Ethernet
+IPADDR=$IP
+GATEWAY=${SEGMENT}1
+NETMASK=255.255.255.0
+ONBOOT=yes
+BOOTPROTO=static
+NM_CONTROLLED=no
+DELAY=0
+EOF
 
  #   	(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
-	docker exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
-	docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
-	docker exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
-	docker cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
-	docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
+	#docker exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
+	#docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
+	#docker exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
+	#docker cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
+	#docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
 
-	sleep 10
+	
    
 #   docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
-	docker exec ${NODENAME} systemctl start sshd
-	docker exec ${NODENAME} systemctl enable sshd
+	#docker exec ${NODENAME} systemctl start sshd
+	#docker exec ${NODENAME} systemctl enable sshd
 #	docker exec $NODENAME systemctl start NetworkManager
 #	docker exec $NODENAME systemctl enable NetworkManager
 }
@@ -69,6 +89,26 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
+	if [  ! -e /var/lib/machines/rac_template ] ; then
+		buildimage
+	fi
+
+	if [  ! -e /etc/systemd/system/systemd-nspawn@.service.d/override.conf ] ; then
+			cat << EOF  > /etc/systemd/system/systemd-nspawn@.service.d/override.conf
+[Service]
+ExecStart=
+ExecStart=/bin/systemd-nspawn --quiet --keep-unit --boot --link-journal=try-guest --machine=%I --network-bridge=$BRBANE
+EOF
+
+	systemctl daemon-reload
+	fi
+
+
+	
+	
+	
+	
+	
 	STORAGEIP=`get_Internal_IP storage`
 	run "storage" $STORAGEIP 0 "storage"
 	
@@ -109,7 +149,7 @@ buildimage(){
 	mkdir -p /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/
 	curl -L -o /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo http://yum.oracle.com/public-yum-ol7.repo
 	yum -c /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo -y --nogpg --installroot=/var/lib/machines/$INSTANCE_ID install systemd openssh openssh-server passwd yum sudo oraclelinux-release vim-minimal iproute initscripts
-	touch /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network
+	touch /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network	
 }
 
 replaceinventory(){
