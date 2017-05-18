@@ -99,6 +99,18 @@ runonly(){
 [Service]
 ExecStart=
 ExecStart=$systemd-nspawn-path --quiet --keep-unit --boot --link-journal=try-guest --machine=%I --network-bridge=$BRBANE
+KillMode=
+KillMode=mixed                                                                    
+Type=
+Type=notify 
+RestartForceExitStatus=
+RestartForceExitStatus=133
+SuccessExitStatus=
+SuccessExitStatus=133  
+Slice=
+Slice=machine.slice
+Delegate=
+Delegate=yes
 EOF
 
 	systemctl daemon-reload
