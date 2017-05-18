@@ -39,6 +39,10 @@ NM_CONTROLLED=no
 DELAY=0
 EOF
 
+	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/resolv.conf
+nameserver 8.8.8.8
+EOF
+
  #   	(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
