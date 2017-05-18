@@ -49,7 +49,7 @@ EOF
 	#docker exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
 	#docker cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
 	#docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
-
+	systemd-machine-id-setup --root=/var/lib/machines/$INSTANCE_ID
 	machinectl start $INSTANCE_ID
    
 #   docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
