@@ -93,12 +93,13 @@ runonly(){
 		buildimage
 	fi
 	
-	systemd-nspawn-path=`which systemd-nspawn`
+	nspawncmd=`which systemd-nspawn`
+	mkdir -p /etc/systemd/system/systemd-nspawn@.service.d
 	if [  ! -e /etc/systemd/system/systemd-nspawn@.service.d/override.conf ] ; then
 			cat << EOF  > /etc/systemd/system/systemd-nspawn@.service.d/override.conf
 [Service]
 ExecStart=
-ExecStart=$systemd-nspawn-path --quiet --keep-unit --boot --link-journal=try-guest --machine=%I --network-bridge=$BRBANE
+ExecStart=$nspawncmd --quiet --keep-unit --boot --link-journal=try-guest --machine=%I --network-bridge=$BRNAME
 KillMode=
 KillMode=mixed                                                                    
 Type=
