@@ -150,12 +150,9 @@ deleteall(){
 	if [ -e "$ansible_ssh_private_key_file" ]; then
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
-
-	if [ -n "$DOCKER_VOLUME_PATH" ]; then
-   		rm -rf $DOCKER_VOLUME_PATH/*
-	fi	
-	
-	docker network rm $BRNAME
+	rm -rf /var/lib/machines/*
+	ip link set $BRNAME down
+	brctl delbr $BRNAME
   	
 	rm -rf /tmp/$CVUQDISK
 }
