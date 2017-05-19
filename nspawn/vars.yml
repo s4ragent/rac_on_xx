@@ -23,7 +23,8 @@ STOP_CMD_OPS: ""
 INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: ""
 ####################################################
-####docker system  specific value ##################
+####nspawn system  specific value ##################
+setcap: true
 IMAGE: "s4ragent/rac_on_xx:OEL7"
 #CAP_OPS: "--cap-add=NET_ADMIN"
 DOCKER_CAPS: "--privileged=true --security-opt seccomp=unconfined"
