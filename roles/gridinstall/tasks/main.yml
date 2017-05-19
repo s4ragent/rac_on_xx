@@ -39,6 +39,7 @@
       - orainstrootsh
       - gridinstall
       - installdbca
+      - ntpconf_create
 
   - name: "orainstrootsh"
     become: yes
