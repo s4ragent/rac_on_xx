@@ -166,8 +166,9 @@ buildimage(){
 	INSTANCE_ID=rac_template
 	mkdir -p /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/
 	curl -L -o /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo http://yum.oracle.com/public-yum-ol7.repo
-	yum -c /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo -y --nogpg --installroot=/var/lib/machines/$INSTANCE_ID install systemd openssh openssh-server passwd yum sudo oraclelinux-release vim-minimal iproute initscripts
-	touch /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network	
+	yum -c /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo -y --nogpg --installroot=/var/lib/machines/$INSTANCE_ID install systemd openssh openssh-server passwd yum sudo oraclelinux-release vim-minimal iproute initscripts iputils
+	touch /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network
+	setcap cap_net_raw,cap_net_admin+p /var/lib/machines/$INSTANCE_ID/usr/bin/ping
 }
 
 replaceinventory(){
