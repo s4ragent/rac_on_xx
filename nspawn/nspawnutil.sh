@@ -108,7 +108,7 @@ runonly(){
 			cat << EOF  > /etc/systemd/system/systemd-nspawn@.service.d/override.conf
 [Service]
 ExecStart=
-ExecStart=$nspawncmd --quiet --keep-unit --boot --link-journal=try-guest --machine=%I --network-bridge=$BRNAME --bind-ro=/boot
+ExecStart=$nspawncmd --quiet --keep-unit --boot --link-journal=try-guest --machine=%I --network-bridge=$BRNAME --bind-ro=/boot --capability=all
 KillMode=
 KillMode=mixed                                                                    
 Type=
