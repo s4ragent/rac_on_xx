@@ -79,15 +79,18 @@ runonly(){
 		SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 		ip addr add dev $BRNAME ${SEGMENT}1/24
 		ip link set up dev $BRNAME
-		
-		iptables -t nat -N $BRNAME
-		iptables -t nat -A PREROUTING -m addrtype --dst-type LOCAL -j $BRNAME
-		iptables -t nat -A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j $BRNAME
-		iptables -t nat -A POSTROUTING -s ${SEGMENT}0/24 ! -o $BRNAME -j MASQUERADE
-		iptables -t nat -A $BRNAME -i $BRNAME -j RETURN
-		iptables -I FORWARD -i $BRNAME -o $BRNAME -j ACCEPT
-		iptables -I FORWARD -i $BRNAME ! -o $BRNAME -j ACCEPT
-		iptables -I FORWARD -o $BRNAME -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+		HasIptables=`iptables-save | grep $BRNAME | wc -l`
+		if [ "$HasIptables" = "0" ]; then
+			iptables -t nat -N $BRNAME
+			iptables -t nat -A PREROUTING -m addrtype --dst-type LOCAL -j $BRNAME
+			iptables -t nat -A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j $BRNAME
+			iptables -t nat -A POSTROUTING -s ${SEGMENT}0/24 ! -o $BRNAME -j MASQUERADE
+			iptables -t nat -A $BRNAME -i $BRNAME -j RETURN
+			iptables -I FORWARD -i $BRNAME -o $BRNAME -j ACCEPT
+			iptables -I FORWARD -i $BRNAME ! -o $BRNAME -j ACCEPT
+			iptables -I FORWARD -o $BRNAME -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+		fi
 	fi
 	
 	if [  ! -e $ansible_ssh_private_key_file ] ; then
