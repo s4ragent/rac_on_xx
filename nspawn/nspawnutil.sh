@@ -156,12 +156,12 @@ deleteall(){
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
 	
-	machinectl stop storage
+	systemctl stop 'systemd-nspawn@storage.service'
 	ip link del vb-storage
 	for i in `seq 1 100`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		machinectl stop ${NODENAME}
+		systemctl stop 'systemd-nspawn@'${NODENAME}.service
 		ip link del vb-${NODENAME}
 	done
 	
