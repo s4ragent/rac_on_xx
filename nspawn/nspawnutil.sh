@@ -144,7 +144,7 @@ EOF
 		run $NODENAME $NODEIP $i "dbserver"
 	done
 	
-	sleep 10s
+	sleep 30s
 #	CLIENTNUM=70
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
 #	CLIENTIP="${SEGMENT}$NUM"	
