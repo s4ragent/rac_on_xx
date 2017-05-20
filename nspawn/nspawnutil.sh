@@ -90,6 +90,15 @@ runonly(){
 			iptables -I FORWARD -i $BRNAME -o $BRNAME -j ACCEPT
 			iptables -I FORWARD -i $BRNAME ! -o $BRNAME -j ACCEPT
 			iptables -I FORWARD -o $BRNAME -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+			sysctl -w net.core.rmem_default = 2621440
+			sysctl -w net.core.rmem_max = 41943040
+			sysctl -w net.core.wmem_default = 2621440
+			sysctl -w net.core.wmem_max = 10485760
+			sysctl -w fs.aio-max-nr = 10485760
+			sysctl -w fs.file-max = 68157440
+			sysctl -w net.ipv4.ip_local_port_range = 9000 65500
+			
 		fi
 	fi
 	
