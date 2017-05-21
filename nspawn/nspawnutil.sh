@@ -43,6 +43,22 @@ EOF
 nameserver 8.8.8.8
 EOF
 
+cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.target
+[Unit]
+Description=proc_remount
+Requires=network.target
+Before=network.target remote-fs.target
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/mount /proc/sys -o rw,remount,bind;/sbin/sysctl -p
+User=root
+Group=root
+[Install]
+WantedBy=multi-user.target
+EOF
+
+chmod 644 /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.target
  #   	(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
@@ -96,14 +112,6 @@ runonly(){
 		fi
 	fi
 	
-	sysctl -w net.core.rmem_default = 2621440
-	sysctl -w net.core.rmem_max = 41943040
-	sysctl -w net.core.wmem_default = 2621440
-	sysctl -w net.core.wmem_max = 10485760
-	sysctl -w fs.aio-max-nr = 10485760
-	sysctl -w fs.file-max = 68157440
-	sysctl -w net.ipv4.ip_local_port_range = 9000 65500
-	
 	if [  ! -e $ansible_ssh_private_key_file ] ; then
 		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
@@ -138,11 +146,6 @@ EOF
 	fi
 
 
-	
-	
-	
-	
-	
 	STORAGEIP=`get_Internal_IP storage`
 	run "storage" $STORAGEIP 0 "storage"
 	

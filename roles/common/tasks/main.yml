@@ -266,6 +266,13 @@
     tags:
       - preinstallpackages
 
+  - name: "sysctl"
+    become: yes
+    shell: /sbin/sysctl -p
+    ignore_errors: yes
+    tags:
+      - sysctl
+
   - name: "setcap ping"
     become: yes
     shell: setcap cap_net_raw,cap_net_admin+p /usr/bin/ping
