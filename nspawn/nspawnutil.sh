@@ -131,12 +131,14 @@ runonly(){
 	fi
 	
 	nspawncmd=`which systemd-nspawn`
+	ipcmd=`which ip`
 	mkdir -p /etc/systemd/system/systemd-nspawn@.service.d
 	if [  ! -e /etc/systemd/system/systemd-nspawn@.service.d/override.conf ] ; then
 			cat << EOF  > /etc/systemd/system/systemd-nspawn@.service.d/override.conf
 [Service]
 ExecStart=
 ExecStart=$nspawncmd --quiet --keep-unit --boot --link-journal=try-guest --machine=%I --network-bridge=$BRNAME --bind-ro=/boot --capability=all
+ExecStopPost=-${ipcmd} link del vb-%I
 KillMode=
 KillMode=mixed                                                                    
 Type=
@@ -196,6 +198,7 @@ deleteall(){
 	brctl delbr $BRNAME
   	
 	rm -rf /tmp/$CVUQDISK
+	rm -rf /etc/systemd/system/systemd-nspawn@.service.d/override.conf
 }
 
 buildimage(){
