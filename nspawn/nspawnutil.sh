@@ -43,7 +43,7 @@ EOF
 nameserver 8.8.8.8
 EOF
 
-cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.service
+	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.service
 [Unit]
 Description=proc_remount
 Requires=network.target
@@ -59,7 +59,10 @@ Group=root
 WantedBy=multi-user.target
 EOF
 
-chmod 644 /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.service
+	chmod 644 /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.service
+
+	rm -rf /var/lib/machines/$INSTANCE_ID/home/oracle
+	touch /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network
  #   	(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
@@ -200,7 +203,7 @@ buildimage(){
 	mkdir -p /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/
 	curl -L -o /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo http://yum.oracle.com/public-yum-ol7.repo
 	yum -c /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo -y --nogpg --installroot=/var/lib/machines/$INSTANCE_ID install systemd openssh openssh-server passwd yum sudo oraclelinux-release vim-minimal iproute initscripts iputils oracle-database-server-12cR2-preinstall tar unzip dnsmasq nfs-utils selinux-policy firewalld
-	touch /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network
+
 }
 
 replaceinventory(){
