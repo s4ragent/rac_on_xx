@@ -31,16 +31,6 @@
       - gridinstall
       - installdbca
 
-  - name: "touch /etc/ntp.conf"
-    become: yes
-    file: path=/etc/ntp.conf owner=root group=root state=touch
-    when: ntpconf_create is defined and ntpconf_create !=""
-    tags:
-      - orainstrootsh
-      - gridinstall
-      - installdbca
-      - ntpconf_create
-
   - name: "orainstrootsh"
     become: yes
     shell: "{{ ORAINVENTORY }}/orainstRoot.sh -silent"
