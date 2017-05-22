@@ -7,3 +7,8 @@
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - cvu
+      
+  - debug: var=cvu_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - cvu
