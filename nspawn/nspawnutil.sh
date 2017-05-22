@@ -43,7 +43,7 @@ EOF
 nameserver 8.8.8.8
 EOF
 
-cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.target
+cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.service
 [Unit]
 Description=proc_remount
 Requires=network.target
