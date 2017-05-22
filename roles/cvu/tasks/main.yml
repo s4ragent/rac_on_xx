@@ -28,4 +28,19 @@
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - cvu
+      
+  - name: "cvu_ora"
+    become: yes
+    become_user: oracle
+    shell: "{{ MEDIA_PATH }}/database/runcluvfy.sh stage -pre dbinst -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+    register: cvuora_result
+    ignore_errors: True
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - cvu
+      
+  - debug: var=cvuora_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - cvu
 
