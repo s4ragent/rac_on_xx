@@ -13,3 +13,19 @@
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - cvu
+
+  - name: "cvu_ssa"
+    become: yes
+    become_user: grid
+    shell: "{{ GRID_ORACLE_HOME }}/runcluvfy.sh comp ssa -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+    register: cvussa_result
+    ignore_errors: True
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - cvu
+      
+  - debug: var=cvussa_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - cvu
+
