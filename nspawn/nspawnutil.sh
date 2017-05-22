@@ -51,7 +51,8 @@ Before=network.target remote-fs.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/bin/mount /proc/sys -o rw,remount,bind;/sbin/sysctl -p
+ExecStart=/bin/mount /proc/sys -o rw,remount,bind
+ExecStartPost=/sbin/sysctl -p
 User=root
 Group=root
 [Install]
@@ -105,12 +106,17 @@ runonly(){
 			iptables -t nat -A $BRNAME -i $BRNAME -j RETURN
 			iptables -I FORWARD -i $BRNAME -o $BRNAME -j ACCEPT
 			iptables -I FORWARD -i $BRNAME ! -o $BRNAME -j ACCEPT
-			iptables -I FORWARD -o $BRNAME -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
-
-
-			
+			iptables -I FORWARD -o $BRNAME -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT	
 		fi
 	fi
+	
+	sysctl -w net.core.rmem_default = 2621440
+	sysctl -w net.core.rmem_max = 41943040
+	sysctl -w net.core.wmem_default = 2621440
+	sysctl -w net.core.wmem_max = 10485760
+	sysctl -w fs.aio-max-nr = 10485760
+	sysctl -w fs.file-max = 68157440
+	sysctl -w net.ipv4.ip_local_port_range = 9000 65500
 	
 	if [  ! -e $ansible_ssh_private_key_file ] ; then
 		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
