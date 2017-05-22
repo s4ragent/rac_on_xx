@@ -2,7 +2,7 @@
   - name: "cvu"
     become: yes
     become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/runcluvfy.sh -pre crsinst -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+    shell: "{{ GRID_ORACLE_HOME }}/runcluvfy.sh stage -pre crsinst -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
     register: cvu_result
     ignore_errors: True
     when: inventory_hostname == groups["dbserver"][0]
