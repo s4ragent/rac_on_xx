@@ -95,6 +95,9 @@ runonly(){
 	
 	if [  ! -e /etc/systemd/system/multi-user.target.wants/createbr.service ] ; then
 		SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+		ipcmd=`which ip`
+		brctlcmd=`which brctl`
+		iptablescmd=`which iptables`
 		cat << EOF > /etc/systemd/system/multi-user.target.wants/createbr.service
 [Unit]
 Description=createbr
@@ -103,8 +106,8 @@ Before=network.target remote-fs.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=- brctl addbr $BRNAME ; ip addr add dev $BRNAME ${SEGMENT}1/24 ; ip link set up dev $BRNAME
-ExecStartPost=- iptables -t nat -N $BRNAME ; iptables -t nat -A PREROUTING -m addrtype --dst-type LOCAL -j $BRNAME ; iptables -t nat -A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j $BRNAME ; iptables -t nat -A POSTROUTING -s ${SEGMENT}0/24 ! -o $BRNAME -j MASQUERADE ;	iptables -t nat -A $BRNAME -i $BRNAME -j RETURN ; iptables -I FORWARD -i $BRNAME -o $BRNAME -j ACCEPT ; iptables -I FORWARD -i $BRNAME ! -o $BRNAME -j ACCEPT ; iptables -I FORWARD -o $BRNAME -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+ExecStart=- $brctlcmd addbr $BRNAME ; $ipcmd addr add dev $BRNAME ${SEGMENT}1/24 ; $ipcmd link set up dev $BRNAME
+ExecStartPost=- $iptablescmd -t nat -N $BRNAME ; $iptablescmd -t nat -A PREROUTING -m addrtype --dst-type LOCAL -j $BRNAME ; $iptablescmd -t nat -A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j $BRNAME ; $iptablescmd -t nat -A POSTROUTING -s ${SEGMENT}0/24 ! -o $BRNAME -j MASQUERADE ;	$iptablescmd -t nat -A $BRNAME -i $BRNAME -j RETURN ; $iptablescmd -I FORWARD -i $BRNAME -o $BRNAME -j ACCEPT ; $iptablescmd -I FORWARD -i $BRNAME ! -o $BRNAME -j ACCEPT ; $iptablescmd -I FORWARD -o $BRNAME -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 User=root
 Group=root
 [Install]
