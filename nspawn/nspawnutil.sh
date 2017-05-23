@@ -200,6 +200,7 @@ deleteall(){
 	rm -rf /var/lib/machines/*
 	ip link set $BRNAME down
 	brctl delbr $BRNAME
+	systemctl start createbr.service
   	
 	rm -rf /tmp/$CVUQDISK
 	rm -rf /etc/systemd/system/systemd-nspawn@.service.d/override.conf
