@@ -110,6 +110,7 @@ Group=root
 [Install]
 WantedBy=multi-user.target
 EOF
+	systemctl daemon-reload
 	systemctl start createbr.service
 	fi
 	
@@ -199,6 +200,7 @@ deleteall(){
   	
 	rm -rf /tmp/$CVUQDISK
 	rm -rf /etc/systemd/system/systemd-nspawn@.service.d/override.conf
+	rm -rf /etc/systemd/system/multi-user.target.wants/createbr.service
 }
 
 buildimage(){
