@@ -30,7 +30,7 @@ common_runall(){
 	runonly $*
 	common_execansible centos2oel.yml
  	sleep 180s
-	common_execansible rac.yml --skip-tags cvu
+	common_execansible rac.yml
 }
 
 common_preinstall(){
@@ -38,7 +38,7 @@ common_preinstall(){
 	common_execansible centos2oel.yml
 	sleep 180s
 	common_execansible rac.yml --skip-tags installdbca
-
+	common_execansible cvu.yml --tags cvucrsinst
 }
 
 common_install_dbca(){
