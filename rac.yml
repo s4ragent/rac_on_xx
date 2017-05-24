@@ -18,7 +18,6 @@
       - download
       - xrdp
       - nfsclient
-      - cvu
 
  - hosts: dbserver
    any_errors_fatal: true
