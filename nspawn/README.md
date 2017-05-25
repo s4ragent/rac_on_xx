@@ -76,7 +76,7 @@ It may be dangerous.
     #pip install ansible    
 ### 4. disable audit　(add audit=0)
     #vi /etc/default/grub
-    GRUB_CMDLINE_LINUX=" crashkernel=auto rd.lvm.lv=ol/root rd.lvm.lv=ol/swap console=ttyS0,9600 audit=0"
+    GRUB_CMDLINE_LINUX="xxxxxxxxx audit=0"
     #
     #grub2-mkconfig -o /boot/grub2/grub.cfg
     #reboot 
@@ -107,7 +107,7 @@ if you want to log in node001
 
 if you want to stop first container
 
-    #bash nspawnutil.sh  stop 1
+    #bash nspawnutil.sh stop 1
 
 if you want to stop storage container
 
