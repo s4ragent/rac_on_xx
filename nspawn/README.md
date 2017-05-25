@@ -46,7 +46,7 @@ rac_on_xx/nspawn
 ## Requirement
 - ubuntu/debian(Kernel 3.18 or later), CentOS/RHEL/OEL 7.2 or later
 - bridge-utils
-- /boot/symvers-\`uname -r\`.gz on docker host
+- /boot/symvers-\`uname -r\`.gz on nspawn host
 - ansible 2.2.1 or later
 - Oracle 12c Release 2 (12.2) Clusterware and Database software 
 - 1core CPU per container and  4GB Memory per container
@@ -74,7 +74,7 @@ It may be dangerous.
 ### 3. install ansible
     #pip install pip --upgrade
     #pip install ansible    
-### 4. disable audit
+### 4. disable audit　(add audit=0)
     #vi /etc/default/grub
     GRUB_CMDLINE_LINUX=" crashkernel=auto rd.lvm.lv=ol/root rd.lvm.lv=ol/swap console=ttyS0,9600 audit=0"
     #
@@ -89,16 +89,16 @@ It may be dangerous.
     #git clone https://github.com/s4ragent/rac_on_xx
 
 ## Usage
-execute dockerun.til.sh   (dockerutil.sh execute ansible-playbook and build RAC cluster. no option create 3-nodes RAC)
+execute nspawnutil.sh   (nspawnutil.sh execute ansible-playbook and build RAC cluster. no option create 3-nodes RAC)
 
     ##create 3-nodes RAC#
     #cd rac_on_xx/nspawn
-    #bash dockerunil.sh runall
+    #bash nspawnunil.sh runall
 
 if you want to build 5-nodes RAC
 
     ##create 5-nodes RAC#
-    #cd rac_on_xx/docker
+    #cd rac_on_xx/nspawn
     #bash nspawnutil.sh runall 5
 
 if you want to log in node001
