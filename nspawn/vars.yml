@@ -4,7 +4,7 @@
 ####################################################
 ####################################################
 #### docker user specific value  ###################
-NSPAWNSUBNET: "172.64.0.0/24"
+NSPAWNSUBNET: "172.29.0.0/24"
 VXLAN_DEV: "host0"
 BRNAME: "raconxx"
 #DOCKER_VOLUME_PATH: "/rac_on_docker"
