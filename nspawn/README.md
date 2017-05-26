@@ -77,9 +77,12 @@ It may be dangerous.
 ### 4. disable audit　(add audit=0)
     #vi /etc/default/grub
     GRUB_CMDLINE_LINUX="xxxxxxxxx audit=0"
-    #
+    ## CentOS 7.3    
     #grub2-mkconfig -o /boot/grub2/grub.cfg
-    #reboot 
+    #reboot
+    ## ubuntu 16.04
+    #update-grub2
+    #reboot
 ### 5. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate them on /media
     # ls -al  /media
     total 6297260
