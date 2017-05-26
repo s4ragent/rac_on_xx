@@ -107,7 +107,7 @@ Before=network.target remote-fs.target
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=-$brctlcmd addbr $BRNAME ; $ipcmd addr add dev $BRNAME ${SEGMENT}1/24 ; $ipcmd link set up dev $BRNAME
-ExecStartPost=-$iptablescmd -t nat -N $BRNAME ; $iptablescmd -t nat -A PREROUTING -m addrtype --dst-type LOCAL -j $BRNAME ; $iptablescmd -t nat -A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j $BRNAME ; $iptablescmd -t nat -A POSTROUTING -s ${SEGMENT}0/24 ! -o $BRNAME -j MASQUERADE ;	$iptablescmd -t nat -A $BRNAME -i $BRNAME -j RETURN ; $iptablescmd -I FORWARD -i $BRNAME -o $BRNAME -j ACCEPT ; $iptablescmd -I FORWARD -i $BRNAME ! -o $BRNAME -j ACCEPT ; $iptablescmd -I FORWARD -o $BRNAME -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+ExecStartPost=-$iptablescmd -t nat -N $BRNAME ; $iptablescmd -t nat -A PREROUTING -m addrtype --dst-type LOCAL -j $BRNAME ; $iptablescmd -t nat -A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j $BRNAME ; $iptablescmd -t nat -A POSTROUTING -s ${SEGMENT}0/24 ! -o $BRNAME -j MASQUERADE ;	$iptablescmd -t nat -A $BRNAME -i $BRNAME -j RETURN ; $iptablescmd -I FORWARD -i $BRNAME -o $BRNAME -j ACCEPT ; $iptablescmd -I FORWARD -i $BRNAME ! -o $BRNAME -j ACCEPT ; $iptablescmd -I FORWARD -o $BRNAME -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT ; /sbin/sysctl -w net.ipv4.ip_forward=1
 User=root
 Group=root
 [Install]
