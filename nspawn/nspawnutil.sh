@@ -23,7 +23,7 @@ run(){
 	chmod 600 /var/lib/machines/$INSTANCE_ID/root/.ssh/*
 	
 	sed -i 's/^#PermitRootLogin yes/PermitRootLogin yes/' /var/lib/machines/$INSTANCE_ID/etc/ssh/sshd_config
-	cp -f /var/lib/machines/$INSTANCE_ID/usr/lib/systemd/system/sshd.service /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/sshd.service
+	cp --remove-destination /var/lib/machines/$INSTANCE_ID/usr/lib/systemd/system/sshd.service /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/sshd.service
 	
 	SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 	mkdir -p /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts
