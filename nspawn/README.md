@@ -70,7 +70,7 @@ It may be dangerous.
     
     ##ubuntu 16.04 
     #apt-get update
-    #apt-get install -y git python-dev python-pip libssl-dev unzip bridge-utils
+    #apt-get install -y git python-dev python-pip libssl-dev unzip bridge-utils yum
 ### 3. install ansible
     #pip install pip --upgrade
     #pip install ansible    
