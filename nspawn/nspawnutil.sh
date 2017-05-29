@@ -77,7 +77,7 @@ EOF
 	systemd-machine-id-setup --root=/var/lib/machines/$INSTANCE_ID
 	machinectl start $INSTANCE_ID
 	sleep 20s
-	/usr/bin/ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${ansible_ssh_private_key_file} root@$IP  "yum -y install selinux-policy firewalld filesystem; rpm --rebuilddb; yum -y clean metadata"
+	/usr/bin/ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${ansible_ssh_private_key_file} root@$IP  "yum -y install selinux-policy firewalld filesystem $PreInstallRPM"
    
 #   docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
 	#docker exec ${NODENAME} systemctl start sshd
@@ -213,7 +213,7 @@ buildimage(){
 	INSTANCE_ID=rac_template
 	mkdir -p /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/
 	curl -L -o /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo http://yum.oracle.com/public-yum-ol7.repo
-	yum -c /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo -y --nogpg --installroot=/var/lib/machines/$INSTANCE_ID install systemd openssh openssh-server passwd yum sudo oraclelinux-release vim-minimal iproute initscripts iputils oracle-database-server-12cR2-preinstall tar unzip dnsmasq nfs-utils selinux-policy firewalld
+	yum -c /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo -y --nogpg --installroot=/var/lib/machines/$INSTANCE_ID install systemd openssh openssh-server passwd yum sudo oraclelinux-release vim-minimal iproute initscripts iputils oracle-database-server-12cR2-preinstall tar unzip dnsmasq nfs-utils selinux-policy firewalld filesystem
 
 }
 
