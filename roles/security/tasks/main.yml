@@ -1,11 +1,4 @@
----
-  - name: "yum clean all"
-    become: yes
-    shell: yum -y clean all
-    ignore_errors: true
-    tags:
-      - security
-      
+---      
   - name: "install selinux,firewalld"
     become: yes
     yum: name="{{ item }}" state=present
