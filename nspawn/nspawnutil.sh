@@ -76,6 +76,8 @@ EOF
 	#docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
 	systemd-machine-id-setup --root=/var/lib/machines/$INSTANCE_ID
 	machinectl start $INSTANCE_ID
+	sleep 10s
+	/usr/bin/ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${ansible_ssh_private_key_file} root@$IP yum -y install selinux-policy firewalld
    
 #   docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
 	#docker exec ${NODENAME} systemctl start sshd
