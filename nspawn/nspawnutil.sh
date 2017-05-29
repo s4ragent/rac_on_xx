@@ -17,73 +17,14 @@ run(){
 	INSTANCE_ID=${NODENAME}
 	
 	cp -R /var/lib/machines/rac_template /var/lib/machines/$INSTANCE_ID
-	mkdir -p /var/lib/machines/$INSTANCE_ID/root/.ssh
-	cp ${ansible_ssh_private_key_file}.pub /var/lib/machines/$INSTANCE_ID/root/.ssh/authorized_keys
-	chmod 700 /var/lib/machines/$INSTANCE_ID/root/.ssh 
-	chmod 600 /var/lib/machines/$INSTANCE_ID/root/.ssh/*
-	
-	sed -i 's/^#PermitRootLogin yes/PermitRootLogin yes/' /var/lib/machines/$INSTANCE_ID/etc/ssh/sshd_config
-	cp --remove-destination /var/lib/machines/$INSTANCE_ID/usr/lib/systemd/system/sshd.service /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/sshd.service
-	
-	SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
-	mkdir -p /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts
-	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts/ifcfg-host0
-DEVICE=host0
-TYPE=Ethernet
-IPADDR=$IP
-GATEWAY=${SEGMENT}1
-NETMASK=255.255.255.0
-ONBOOT=yes
-BOOTPROTO=static
-NM_CONTROLLED=no
-DELAY=0
-EOF
-
-	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/resolv.conf
-nameserver 8.8.8.8
-EOF
-
-	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.service
-[Unit]
-Description=proc_remount
-Requires=network.target
-Before=network.target remote-fs.target
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=/bin/mount /proc/sys -o rw,remount,bind
-ExecStartPost=-/sbin/sysctl -p
-User=root
-Group=root
-[Install]
-WantedBy=multi-user.target
-EOF
-
-	chmod 644 /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.service
-
-	rm -rf /var/lib/machines/$INSTANCE_ID/home/oracle
-	rm -rf /var/lib/machines/$INSTANCE_ID/var/spool/mail/oracle
-	touch /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network
- #   	(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
-
-	#docker exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
-	#docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
-	#docker exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
-	#docker cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
-	#docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
+                                                  
 	systemd-machine-id-setup --root=/var/lib/machines/$INSTANCE_ID
 	machinectl start $INSTANCE_ID
 	sleep 20s
-	/usr/bin/ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${ansible_ssh_private_key_file} root@$IP  "yum -y install selinux-policy firewalld filesystem $PreInstallRPM"
-   
-#   docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
-	#docker exec ${NODENAME} systemctl start sshd
-	#docker exec ${NODENAME} systemctl enable sshd
-#	docker exec $NODENAME systemctl start NetworkManager
-#	docker exec $NODENAME systemctl enable NetworkManager
+
 }
 
 #### VIRT_TYPE specific processing  (must define)###
@@ -132,10 +73,6 @@ EOF
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
-	if [  ! -e /var/lib/machines/rac_template ] ; then
-		buildimage
-	fi
-	
 	nspawncmd=`which systemd-nspawn`
 	ipcmd=`which ip`
 	mkdir -p /etc/systemd/system/systemd-nspawn@.service.d
@@ -162,6 +99,9 @@ EOF
 	systemctl daemon-reload
 	fi
 
+	if [  ! -e /var/lib/machines/rac_template ] ; then
+		buildimage
+	fi
 
 	STORAGEIP=`get_Internal_IP storage`
 	run "storage" $STORAGEIP 0 "storage"
@@ -189,9 +129,14 @@ deleteall(){
 	if [ -e "$ansible_ssh_private_key_file" ]; then
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
-	
+
+	systemctl stop 'systemd-nspawn@rac_template.service'
+	ip link del vb-rac_template
+		
 	systemctl stop 'systemd-nspawn@storage.service'
 	ip link del vb-storage
+	
+	
 	for i in `seq 1 100`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
@@ -215,6 +160,67 @@ buildimage(){
 	curl -L -o /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo http://yum.oracle.com/public-yum-ol7.repo
 	yum -c /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo -y --nogpg --installroot=/var/lib/machines/$INSTANCE_ID install systemd openssh openssh-server passwd yum sudo oraclelinux-release vim-minimal iproute initscripts iputils
 
+	mkdir -p /var/lib/machines/$INSTANCE_ID/root/.ssh
+	cp ${ansible_ssh_private_key_file}.pub /var/lib/machines/$INSTANCE_ID/root/.ssh/authorized_keys
+	chmod 700 /var/lib/machines/$INSTANCE_ID/root/.ssh 
+	chmod 600 /var/lib/machines/$INSTANCE_ID/root/.ssh/*
+	
+	sed -i 's/^#PermitRootLogin yes/PermitRootLogin yes/' /var/lib/machines/$INSTANCE_ID/etc/ssh/sshd_config
+	
+	cp --remove-destination /var/lib/machines/$INSTANCE_ID/usr/lib/systemd/system/sshd.service /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/sshd.service
+	
+	SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+	NUM=`expr $BASE_IP - 1`
+	IP="${SEGMENT}$NUM"	
+	mkdir -p /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts
+	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts/ifcfg-host0
+DEVICE=host0
+TYPE=Ethernet
+IPADDR=$IP
+GATEWAY=${SEGMENT}1
+NETMASK=255.255.255.0
+ONBOOT=yes
+BOOTPROTO=static
+NM_CONTROLLED=no
+DELAY=0
+EOF
+
+	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/resolv.conf
+nameserver 8.8.8.8
+EOF
+
+	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.service
+[Unit]
+Description=proc_remount
+Requires=network.target
+Before=network.target remote-fs.target
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/bin/mount /proc/sys -o rw,remount,bind
+ExecStartPost=-/sbin/sysctl -p
+User=root
+Group=root
+[Install]
+WantedBy=multi-user.target
+EOF
+
+	chmod 644 /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.service
+
+	touch /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network
+
+	systemd-machine-id-setup --root=/var/lib/machines/$INSTANCE_ID
+	machinectl start $INSTANCE_ID
+	sleep 20s
+	
+	/usr/bin/ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${ansible_ssh_private_key_file} root@$IP  "yum -y install selinux-policy firewalld filesystem $PreInstallRPM"
+
+	machinectl stop $INSTANCE_ID
+	sleep 20s
+
+	rm -rf /var/lib/machines/$INSTANCE_ID/home/oracle
+	rm -rf /var/lib/machines/$INSTANCE_ID/var/spool/mail/oracle
+			
 }
 
 replaceinventory(){
