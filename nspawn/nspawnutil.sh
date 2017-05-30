@@ -227,7 +227,7 @@ EOF
 	machinectl start $INSTANCE_ID
 	sleep 20s
 	
-	/usr/bin/ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${ansible_ssh_private_key_file} root@$IP  "yum -y install selinux-policy firewalld filesystem $PreInstallRPM"
+	/usr/bin/ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${ansible_ssh_private_key_file} root@$IP  "yum -y install selinux-policy firewalld filesystem $PreInstallRPM; systemctl disable firewalld; "
 
 	machinectl poweroff $INSTANCE_ID
 	sleep 20s
@@ -236,8 +236,7 @@ EOF
 	rm -rf /var/lib/machines/$INSTANCE_ID/var/spool/mail/oracle
 	rm -rf /var/lib/machines/$INSTANCE_ID/etc/ssh/ssh_host_*
 	
-	rm -rf  /var/lib/machines/$INSTANCE_ID/etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service                                                                 
-	rm -rf  /var/lib/machines/$INSTANCE_ID//etc/systemd/system/basic.target.wants/firewalld.service
+
 }
 
 replaceinventory(){
