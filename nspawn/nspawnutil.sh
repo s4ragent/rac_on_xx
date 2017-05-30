@@ -36,6 +36,12 @@ EOF
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
                                                   
 	systemd-machine-id-setup --root=/var/lib/machines/$INSTANCE_ID
+
+	if [ -e /etc/redhat-release ]; then
+		semanage fcontext -a -t svirt_sandbox_file_t "/var/lib/machines/$INSTANCE_ID(/.*)?"
+		restorecon -R /var/lib/machines/$INSTANCE_ID
+	fi
+	
 	machinectl start $INSTANCE_ID
 	sleep 20s
 
@@ -225,6 +231,12 @@ EOF
 	touch /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network
 
 	systemd-machine-id-setup --root=/var/lib/machines/$INSTANCE_ID
+
+	if [ -e /etc/redhat-release ]; then
+		semanage fcontext -a -t svirt_sandbox_file_t "/var/lib/machines/$INSTANCE_ID(/.*)?"
+		restorecon -R /var/lib/machines/$INSTANCE_ID
+	fi
+	
 	machinectl start $INSTANCE_ID
 	sleep 20s
 	
