@@ -234,7 +234,7 @@ EOF
 
 	rm -rf /var/lib/machines/$INSTANCE_ID/home/oracle
 	rm -rf /var/lib/machines/$INSTANCE_ID/var/spool/mail/oracle
-			
+	rm -rf /var/lib/machines/$INSTANCE_ID/etc/ssh/ssh_host_*			
 }
 
 replaceinventory(){
