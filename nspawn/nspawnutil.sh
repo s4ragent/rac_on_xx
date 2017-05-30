@@ -17,6 +17,20 @@ run(){
 	INSTANCE_ID=${NODENAME}
 	
 	cp -R /var/lib/machines/rac_template /var/lib/machines/$INSTANCE_ID
+	
+	SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+	
+	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts/ifcfg-host0
+DEVICE=host0
+TYPE=Ethernet
+IPADDR=$IP
+GATEWAY=${SEGMENT}1
+NETMASK=255.255.255.0
+ONBOOT=yes
+BOOTPROTO=static
+NM_CONTROLLED=no
+DELAY=0
+EOF
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
@@ -215,7 +229,7 @@ EOF
 	
 	/usr/bin/ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${ansible_ssh_private_key_file} root@$IP  "yum -y install selinux-policy firewalld filesystem $PreInstallRPM"
 
-	machinectl stop $INSTANCE_ID
+	machinectl poweroff $INSTANCE_ID
 	sleep 20s
 
 	rm -rf /var/lib/machines/$INSTANCE_ID/home/oracle
