@@ -234,7 +234,10 @@ EOF
 
 	rm -rf /var/lib/machines/$INSTANCE_ID/home/oracle
 	rm -rf /var/lib/machines/$INSTANCE_ID/var/spool/mail/oracle
-	rm -rf /var/lib/machines/$INSTANCE_ID/etc/ssh/ssh_host_*			
+	rm -rf /var/lib/machines/$INSTANCE_ID/etc/ssh/ssh_host_*
+	
+	rm -rf  /var/lib/machines/$INSTANCE_ID/etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service                                                                 
+	rm -rf  /var/lib/machines/$INSTANCE_ID//etc/systemd/system/basic.target.wants/firewalld.service
 }
 
 replaceinventory(){
