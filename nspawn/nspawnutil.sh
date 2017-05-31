@@ -240,7 +240,7 @@ EOF
 	machinectl start $INSTANCE_ID
 	sleep 20s
 	
-	/usr/bin/ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${ansible_ssh_private_key_file} root@$IP  "yum -y install selinux-policy firewalld filesystem $PreInstallRPM; systemctl disable firewalld; setcap cap_net_raw,cap_net_admin+p /usr/bin/ping"
+	/usr/bin/ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${ansible_ssh_private_key_file} root@$IP  "yum -y install selinux-policy firewalld filesystem $PreInstallRPM; systemctl disable firewalld; "
 
 	machinectl poweroff $INSTANCE_ID
 	sleep 20s
