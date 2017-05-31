@@ -24,8 +24,6 @@ INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: ""
 ####################################################
 ####nspawn system  specific value ##################
-setcap: true
-#ntpconf_create: true
 ####################################################
 #WindowManager: "xfce"
 ####ansible specific
