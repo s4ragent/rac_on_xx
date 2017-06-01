@@ -1,4 +1,4 @@
----
+---      
   - name: "install selinux,firewalld"
     become: yes
     yum: name="{{ item }}" state=present

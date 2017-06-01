@@ -265,3 +265,18 @@
     yum: name=/tmp/cvuqdisk.rpm state=present
     tags:
       - preinstallpackages
+
+  - name: "sysctl"
+    become: yes
+    shell: /sbin/sysctl -p
+    ignore_errors: yes
+    tags:
+      - sysctl
+
+  - name: "setcap ping"
+    become: yes
+    shell: setcap cap_net_raw,cap_net_admin+p /usr/bin/ping
+    ignore_errors: yes
+    when: setcap is defined and setcap !=""
+    tags:
+      - ping

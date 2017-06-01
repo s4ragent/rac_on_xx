@@ -38,7 +38,6 @@ common_preinstall(){
 	common_execansible centos2oel.yml
 	sleep 180s
 	common_execansible rac.yml --skip-tags installdbca
-
 }
 
 common_install_dbca(){
