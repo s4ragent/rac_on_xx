@@ -38,11 +38,11 @@ rac_on_xx/nspawn
 |FRA|flash recovery area|/u01/oradata/fra.img|external|25600|25600|
 
 ## Demo (12-nodes RAC on ubuntu systemd-nspawn)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker01.png)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker02.png)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker03.png)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker04.png)
-
+![machinectl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/nspawn/Screenshot_20170601-120034.jpg)
+![machinectl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/nspawn/Screenshot_20170601-120256.jpg)
+![machinectl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/nspawn/Screenshot_20170601-120323.jpg)
+![machinectl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/nspawn/Screenshot_20170601-120333.jpg)
+![machinectl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/nspawn/Screenshot_20170601-120340.jpg)
 ## Requirement
 - ubuntu/debian(Kernel 3.18 or later), CentOS/RHEL/OEL 7.2 or later
 - bridge-utils
