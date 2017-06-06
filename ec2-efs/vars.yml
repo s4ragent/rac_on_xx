@@ -1,12 +1,13 @@
 #### azure user specific value  ###################
 PREFIX: "raconxx"
-#for oregon region
-#REGION: "us-west-2"
+for oregon region
+REGION: "us-west-2"
 #INSTANCE_OPS: "--image-id ami-4a637f2b"
+INSTANCE_TYPE_OPS: "--instance-type t2.micro"
 #for tokyo region
-REGION: "ap-northeast-1"
-INSTANCE_OPS: "--image-id ami-65e0c80b"
-INSTANCE_TYPE_OPS: "--instance-type m4.large"
+#REGION: "ap-northeast-1"
+#INSTANCE_OPS: "--image-id ami-65e0c80b"
+#INSTANCE_TYPE_OPS: "--instance-type m4.large"
 VXLAN_DEV: "eth0"
 #INSTANCE_TYPE_OPS: "--instance-type t2.micro"
 NODE_DISK_SIZE: "60"
