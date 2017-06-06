@@ -14,8 +14,10 @@ run(){
 	NODENUMBER=$3
 	HOSTGROUP=$4
 
-	vpcid=`aws ec2 describe-vpcs --region $REGION --filters "Name=is-default,Values=true" --query "Vpcs[].VpcId" --output text`
-        sgid=`aws ec2 describe-security-groups --region $REGION --group-names $PREFIX --query "SecurityGroups[].GroupId" --output text`
+	vpcid=`aws ec2 describe-vpcs --region $REGION --filters "Name=tag:Name,Values=VPC-${PREFIX}" --query "Vpcs[].VpcId" --output text`
+	
+ sgid=`aws ec2 describe-security-groups --region $REGION --group-names $PREFIX --query "SecurityGroups[].GroupId" --output text`
+ 
 	subnetid=`aws ec2 describe-subnets --region $REGION --filters "Name=vpc-id,Values=$vpcid" --filters "Name=availabilityZone,Values=${REGION}a" --output text --query "Subnets[].SubnetId"`
         
 	DeviceJson="[{\"DeviceName\":\"${data_disk_dev}\",\"Ebs\":{\"VolumeSize\":${2},\"DeleteOnTermination\":true,\"VolumeType\":\"gp2\"}}]"
@@ -41,14 +43,37 @@ runonly(){
 		nodecount=$1
 	fi
 
-	vpcid=`aws ec2 describe-vpcs --region $REGION --filters "Name=is-default,Values=true" --query "Vpcs[].VpcId" --output text`
-        sgid=`aws ec2 describe-security-groups --region $REGION --group-names $PREFIX --query "SecurityGroups[].GroupId" --output text`
- 
- 	if [ -z ${sgid} ] ; then
-	        sgid=`aws ec2 create-security-group --region $REGION --group-name ${PREFIX} --description "Security group for SSH access" --vpc-id $vpcid --query "GroupId" --output text`
-		aws ec2 authorize-security-group-ingress --region $REGION --group-name ${PREFIX} --protocol all --source-group $sgid
-		aws ec2 authorize-security-group-ingress --region $REGION --group-name ${PREFIX} --protocol tcp --port 22 --cidr 0.0.0.0/0
-	fi
+	vpcid=`aws ec2 create-vpc --cidr-block $VPC_ADDR --region $REGION --query 'Vpc.VpcId' --output text`
+	
+	aws ec2 create-tags --region $REGION --resources $vpcid --tags Key=Name,Value=VPC-${PREFIX}
+
+	aws ec2 modify-vpc-attribute --region $REGION --vpc-id $vpcid --enable-dns-support
+	aws ec2 modify-vpc-attribute --region $REGION --vpc-id $vpcid --enable-dns-hostnames
+
+	subnetid=`aws ec2 create-subnet --vpc-id $vpcid --cidr-block $SUBNET_ADDR  --availability-zone ${REGION}a --region $REGION --query 'Subnet.SubnetId' --output text`
+	 
+	sgid=`aws ec2 create-security-group --region $REGION --group-name ${PREFIX} --description "Security group for SSH access" --vpc-id $vpcid --query "GroupId" --output text`
+	
+	aws ec2 authorize-security-group-ingress --region $REGION --group-name ${PREFIX} --protocol all --source-group $sgid
+	aws ec2 authorize-security-group-ingress --region $REGION --group-name ${PREFIX} --protocol tcp --port 22 --cidr 0.0.0.0/0
+
+	GatewayId=`aws ec2 create-internet-gateway --region $REGION --query 'InternetGateway.InternetGatewayId' --output text`
+
+	aws ec2 attach-internet-gateway --region $REGION --vpc-id $vpcid --internet-gateway-id $GatewayId
+
+	RouteTableId=`aws ec2 create-route-table --region $REGION --vpc-id $vpcid --query 'RouteTable.RouteTableId' --output text`
+
+aws ec2 create-route  --region  $REGION --route-table-id $RouteTableId --destination-cidr-block 0.0.0.0/0 --gateway-id $GatewayId
+
+
+aws ec2 associate-route-table  --subnet-id $subnetid --route-table-id $RouteTableId
+
+
+aws ec2 describe-vpcs --filters "Name=is-default,Values=true" --query "Vpcs[].VpcId" --output text
+
+
+
+
  
         if [  ! -e ${ansible_ssh_private_key_file} ] ; then
 	        aws ec2 create-key-pair --region $REGION --key-name $ansible_ssh_private_key_file  --query 'KeyMaterial' --output text > $ansible_ssh_private_key_file
