@@ -110,6 +110,7 @@ deleteall(){
    		rm -rf ${ansible_ssh_private_key_file}*
 		aws ec2 delete-key-pair --region $REGION --key-name $ansible_ssh_private_key_file
 	fi
+	
 sgid=`aws ec2 describe-security-groups --region $REGION --filters "Name=tag:Name,Values=SG-${PREFIX}" --query "SecurityGroups[].GroupId" --output text`
 
 
