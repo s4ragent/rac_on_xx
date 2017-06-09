@@ -21,7 +21,8 @@
              - "{{ SUBNET_B_ADDR }}"       
          routes: 
            - dest: 0.0.0.0/0 
-         gw: igw region: "{{ REGION }}" 
+         gw: igw 
+         region: "{{ REGION }}" 
          state: present 
          wait: true
          register: vpc_regst
