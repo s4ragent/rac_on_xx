@@ -34,7 +34,7 @@
             Name: "SUBNET-C-{{ PREFIX }}"
           region: "{{ REGION }}"
         register: _subnet_c
-      - name: Route
+      - name: "Route"
         ec2_vpc_route_table:
           vpc_id: "{{ _vpc.vpc.id }}"
           tags:
