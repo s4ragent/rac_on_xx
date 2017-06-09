@@ -16,9 +16,11 @@
              resource_tags: { "Name":"SUBNET-B-{{ PREFIX }}" }
          internet_gateway: True 
          route_tables: 
-           - subnets: - "{{ SUBNET_A_ADDR }}" 
-                      - "{{ SUBNET_B_ADDR }}"       
-         routes: - dest: 0.0.0.0/0 
+           - subnets: 
+             - "{{ SUBNET_A_ADDR }}" 
+             - "{{ SUBNET_B_ADDR }}"       
+         routes: 
+           - dest: 0.0.0.0/0 
          gw: igw region: "{{ REGION }}" 
          state: present 
          wait: true
