@@ -16,3 +16,12 @@
           vpc_id: "{{ _vpc.vpc.id }}"
           region: "{{ REGION }}"
         register: _igw
+      - name: "Public subnet a"
+        ec2_vpc_subnet:
+          vpc_id: "{{ _vpc.vpc.id }}"
+          az: "{{ REGION }}a"
+          cidr: "{{ SUBNET_A_ADDR }}"
+          resource_tags:
+            Name: "SUBNET-A-{{ PREFIX }}"
+          region: "{{ REGION }}"
+        register: _subnet_a
