@@ -7,8 +7,12 @@
     tasks:
       - name: "create VPC"
         ec2_vpc_net:
-          name: "{{ PREFIX }}"
+          name: "VPC-{{ PREFIX }}"
           cidr_block: "{{ VPC_ADDR }}"
           region: "{{ REGION }}"
         register: _vpc
-
+      - name: Internet gateway
+        ec2_vpc_igw:
+          vpc_id: "{{ _vpc.vpc.id }}"
+          region: "{{ REGION }}"
+        register: _igw
