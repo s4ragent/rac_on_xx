@@ -4,8 +4,9 @@
     vars_files:
      - ./ec2/vars.yml
     tasks:
-     - ec2_vpc: cidr_block: "{{ VPC_ADDR }}"
-         resource_tags{ "Name":"VPC-{{ PREFIX }}" } 
+     - ec2_vpc: 
+         cidr_block: "{{ VPC_ADDR }}"
+         resource_tags: { "Name":"VPC-{{ PREFIX }}" } 
          subnets: 
            - cidr: "{{ SUBNET_A_ADDR }}" 
              az: "{{ REGION }}a"
