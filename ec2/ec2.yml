@@ -44,6 +44,6 @@
             - "{{ _subnet_c.subnet.id }}"
           routes:
             - dest: 0.0.0.0/0
-          gateway_id: "{{ _igw.gateway_id  }}"
+              gateway_id: "{{ _igw.gateway_id  }}"
           region: "{{ REGION }}"
         register: _route
