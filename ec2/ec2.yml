@@ -6,8 +6,8 @@
     tasks:
       - name: "create VPC"
         ec2_vpc_net:
-          name: "VPC-{{ PREFIX }}"
-          cidr_block: "{{ VPC_ADDR }}"
-          region: "{{ REGION }}"
-        register: _vpc
+          name: "VPC-{{ PREFIX }}"
+          cidr_block: "{{ VPC_ADDR }}"
+          region: "{{ REGION }}"
+        register: _vpc
 
