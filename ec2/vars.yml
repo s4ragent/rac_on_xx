@@ -1,5 +1,8 @@
 #### azure user specific value  ###################
 PREFIX: "raconxx"
+VPC_ADDR: 10.153.0.0/16
+SUBNET_A_ADDR: 10.153.1.0/24
+SUBNET_B_ADDR: 10.153.2.0/24
 #for oregon region
 #REGION: "us-west-2"
 #INSTANCE_OPS: "--image-id ami-4a637f2b"

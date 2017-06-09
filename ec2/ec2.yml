@@ -1,0 +1,24 @@
+---
+  - hosts: 
+     - localhost 
+    vars_files:
+     - ./ec2/vars.yml
+    tasks:
+     - ec2_vpc: cidr_block: "{{ VPC_ADDR }}"
+         resource_tags{ "Name":"VPC-{{ PREFIX }}" } 
+         subnets: 
+           - cidr: "{{ SUBNET_A_ADDR }}" 
+             az: "{{ REGION }}a"
+             resource_tags: { "Name":"SUBNET-A-{{ PREFIX }}" }
+           - cidr: "{{ SUBNET_B_ADDR }}" 
+             az: "{{ REGION }}b"
+             resource_tags: { "Name":"SUBNET-B-{{ PREFIX }}" }
+         internet_gateway: True 
+         route_tables: 
+           - subnets: - "{{ SUBNET_A_ADDR }}" 
+                      - "{{ SUBNET_B_ADDR }}"       
+         routes: - dest: 0.0.0.0/0 
+         gw: igw region: "{{ REGION }}" 
+         state: present 
+         wait: true
+         register: vpc_regst
