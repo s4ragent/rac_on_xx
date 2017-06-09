@@ -2,7 +2,7 @@
   - hosts: 
       - localhost 
     vars_files:
-      - ./ec2/vars.yml
+      - ./vars.yml
     tasks:
       - name: "create VPC"
         ec2_vpc_net:
