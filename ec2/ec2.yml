@@ -4,8 +4,8 @@
     vars_files:
       - ./ec2/vars.yml
     tasks:
-      - name: "create VPC"
-        ec2_vpc_net:
+      - name: "create VPC"
+        ec2_vpc_net:
           name: "VPC-{{ PREFIX }}"
           cidr_block: "{{ VPC_ADDR }}"
           region: "{{ REGION }}"
