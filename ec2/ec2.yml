@@ -1,13 +1,13 @@
 ---
   - hosts: 
-     - localhost 
+      - localhost 
     vars_files:
-     - ./ec2/vars.yml
+      - ./ec2/vars.yml
     tasks:
-     - name: "create VPC"
-       ec2_vpc_net:
-         name: "VPC-{{ PREFIX }}"
-         cidr_block: "{{ VPC_ADDR }}"
-         region: "{{ REGION }}"
-       register: _vpc
+      - name: "create VPC"
+        ec2_vpc_net:
+          name: "VPC-{{ PREFIX }}"
+          cidr_block: "{{ VPC_ADDR }}"
+          region: "{{ REGION }}"
+        register: _vpc
 
