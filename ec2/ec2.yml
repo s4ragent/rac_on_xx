@@ -82,21 +82,29 @@
               cidr_ip: 0.0.0.0/0
         tags:
           - create
+
+IMAGE_ID: "ami-65e0c80b"
+#INSTANCE_TYPE: "m4.large"
+INSTANCE_TYPE: "t2.micro"
           
       - name: "create storage instance"
         ec2:
           key_name: "{{PREFIX}}"
           group: "SG-{{PREFIX}}"
-          instance_type: c3.medium
-    image: ami-123456
-    wait: yes
-    wait_timeout: 500
-    volumes:
-      - device_name: /dev/xvda
-        volume_type: gp2
-        volume_size: 8
-    vpc_subnet_id: subnet-29e63245
-    assign_public_ip: yes
-    count_tag:
-      Name: dbserver
-    exact_count: 1
+          instance_type: "{{INSTANCE_TYPE}}"
+          image: "{{IMAGE_ID}}"
+          wait: yes
+          volumes:
+            - device_name: /dev/xvda
+              volume_type: gp2
+              delete_on_termination: true
+            - device_name: "{{data_disk_dev}}"
+              volume_type: gp2
+              volume_size: "{{STORAGE_DISK_SIZE}}"
+              delete_on_termination: true
+          vpc_subnet_id: "{{ _subnet_a.subnet.id }}"
+          assign_public_ip: yes
+          count_tag:
+            Name: storage
+          exact_count: 1
+          spot_price: "{{SPOT_PRICE}}"

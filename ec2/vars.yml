@@ -5,13 +5,14 @@ SUBNET_A_ADDR: 10.153.1.0/24
 SUBNET_C_ADDR: 10.153.3.0/24
 #for oregon region
 #REGION: "us-west-2"
-#INSTANCE_OPS: "--image-id ami-4a637f2b"
+#IMAGE_ID: "ami-4a637f2b"
 #for tokyo region
 REGION: "ap-northeast-1"
-INSTANCE_OPS: "--image-id ami-65e0c80b"
-INSTANCE_TYPE_OPS: "--instance-type m4.large"
+IMAGE_ID: "ami-65e0c80b"
+#INSTANCE_TYPE: "m4.large"
+INSTANCE_TYPE: "t2.micro"
 VXLAN_DEV: "eth0"
-#INSTANCE_TYPE_OPS: "--instance-type t2.micro"
+
 NODE_DISK_SIZE: "60"
 STORAGE_DISK_SIZE: "100"
 ####common VIRT_TYPE specific value ################
