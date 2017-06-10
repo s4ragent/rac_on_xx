@@ -98,6 +98,7 @@
               volume_type: gp2
               volume_size: "{{STORAGE_DISK_SIZE}}"
               delete_on_termination: true
+          region: "{{ REGION }}"
           vpc_subnet_id: "{{ _subnet_a.subnet.id }}"
           assign_public_ip: yes
           count_tag:
