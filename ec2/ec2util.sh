@@ -44,13 +44,13 @@ runonly(){
 		nodecount=$1
 	fi
 
-ansible-playbook -i localhost, $VIRT_TYPE/ec2.yml -vvv
-
-        if [  ! -e ${ansible_ssh_private_key_file} ] ; then
-	        aws ec2 create-key-pair --region $REGION --key-name $ansible_ssh_private_key_file  --query 'KeyMaterial' --output text > $ansible_ssh_private_key_file
+	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
+	aws ec2 create-key-pair --region $REGION --key-name $ansible_ssh_private_key_file  --query 'KeyMaterial' --output text > $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
-   
+
+ansible-playbook -i localhost, $VIRT_TYPE/ec2.yml --tags create
+
 
 #	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
 	
