@@ -104,3 +104,5 @@
             Name: storage
           exact_count: 1
           spot_price: "{{SPOT_PRICE}}"
+        tags:
+          - create
