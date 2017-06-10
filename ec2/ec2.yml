@@ -55,7 +55,8 @@
         
       - name: "create security group"
         ec2_group:
-          name: "SG-{PREFIX}"
+          name: "SG-{{PREFIX}}"
+          description: "{{PREFIX}} server security group"
           vpc_id: "{{ _vpc.vpc.id }}"
           region: "{{ REGION }}"
           rules:
@@ -64,7 +65,7 @@
               to_port: 22
               cidr_ip: 0.0.0.0/0
             - proto: all
-              group_name: "SG-{PREFIX}"
+              group_name: "SG-{{PREFIX}}"
           rules_egress:
             - proto: all
               from_port: 0
