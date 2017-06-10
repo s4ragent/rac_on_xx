@@ -83,10 +83,6 @@
         tags:
           - create
 
-IMAGE_ID: "ami-65e0c80b"
-#INSTANCE_TYPE: "m4.large"
-INSTANCE_TYPE: "t2.micro"
-          
       - name: "create storage instance"
         ec2:
           key_name: "{{PREFIX}}"

@@ -12,7 +12,6 @@ IMAGE_ID: "ami-65e0c80b"
 #INSTANCE_TYPE: "m4.large"
 INSTANCE_TYPE: "t2.micro"
 VXLAN_DEV: "eth0"
-
 NODE_DISK_SIZE: "60"
 STORAGE_DISK_SIZE: "100"
 ####common VIRT_TYPE specific value ################
