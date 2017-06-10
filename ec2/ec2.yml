@@ -11,13 +11,17 @@
           cidr_block: "{{ VPC_ADDR }}"
           region: "{{ REGION }}"
         register: _vpc
+        tags:
+          - create
         
       - name: "create Internet gateway"
         ec2_vpc_igw:
           vpc_id: "{{ _vpc.vpc.id }}"
           region: "{{ REGION }}"
         register: _igw
-        
+        tags:
+          - create
+                  
       - name: "create Public subnet a"
         ec2_vpc_subnet:
           vpc_id: "{{ _vpc.vpc.id }}"
@@ -27,7 +31,9 @@
             Name: "SUBNET-A-{{ PREFIX }}"
           region: "{{ REGION }}"
         register: _subnet_a
-        
+        tags:
+          - create
+                  
       - name: "create Public subnet c"
         ec2_vpc_subnet:
           vpc_id: "{{ _vpc.vpc.id }}"
@@ -37,7 +43,9 @@
             Name: "SUBNET-C-{{ PREFIX }}"
           region: "{{ REGION }}"
         register: _subnet_c
-        
+        tags:
+          - create
+                  
       - name: "create Route"
         ec2_vpc_route_table:
           vpc_id: "{{ _vpc.vpc.id }}"
@@ -51,7 +59,8 @@
               gateway_id: "{{ _igw.gateway_id  }}"
           region: "{{ REGION }}"
         register: _route
-        
+        tags:
+          - create        
         
       - name: "create security group"
         ec2_group:
@@ -71,3 +80,7 @@
               from_port: 0
               to_port: 65535
               cidr_ip: 0.0.0.0/0
+        tags:
+          - create
+          
+          
