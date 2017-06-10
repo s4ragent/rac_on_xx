@@ -11,12 +11,14 @@
           cidr_block: "{{ VPC_ADDR }}"
           region: "{{ REGION }}"
         register: _vpc
-      - name: Internet gateway
+        
+      - name: "create Internet gateway"
         ec2_vpc_igw:
           vpc_id: "{{ _vpc.vpc.id }}"
           region: "{{ REGION }}"
         register: _igw
-      - name: "Public subnet a"
+        
+      - name: "create Public subnet a"
         ec2_vpc_subnet:
           vpc_id: "{{ _vpc.vpc.id }}"
           az: "{{ REGION }}a"
@@ -25,7 +27,8 @@
             Name: "SUBNET-A-{{ PREFIX }}"
           region: "{{ REGION }}"
         register: _subnet_a
-      - name: "Public subnet c"
+        
+      - name: "create Public subnet c"
         ec2_vpc_subnet:
           vpc_id: "{{ _vpc.vpc.id }}"
           az: "{{ REGION }}c"
@@ -34,7 +37,8 @@
             Name: "SUBNET-C-{{ PREFIX }}"
           region: "{{ REGION }}"
         register: _subnet_c
-      - name: "Route"
+        
+      - name: "create Route"
         ec2_vpc_route_table:
           vpc_id: "{{ _vpc.vpc.id }}"
           tags:
@@ -47,3 +51,22 @@
               gateway_id: "{{ _igw.gateway_id  }}"
           region: "{{ REGION }}"
         register: _route
+        
+        
+      - name: "create security group"
+        ec2_group:
+          name: "SG-{PREFIX}"
+          vpc_id: "{{ _vpc.vpc.id }}"
+          region: "{{ REGION }}"
+          rules:
+            - proto: tcp
+              from_port: 22
+              to_port: 22
+              cidr_ip: 0.0.0.0/0
+            - proto: all
+              group_name: "SG-{PREFIX}"
+          rules_egress:
+            - proto: all
+              from_port: 0
+              to_port: 65535
+              cidr_ip: 0.0.0.0/0
