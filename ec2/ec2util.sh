@@ -49,7 +49,7 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
-ansible-playbook -i localhost, $VIRT_TYPE/ec2.yml --tags create
+ansible-playbook -i localhost, $VIRT_TYPE/ec2.yml --tags create --extra-vars "nodecount=$nodecount"
 
 
 #	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
