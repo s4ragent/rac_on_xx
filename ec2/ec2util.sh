@@ -41,13 +41,13 @@ runonly(){
 
 ansible-playbook -i localhost, $VIRT_TYPE/ec2.yml --tags create --extra-vars "nodecount=$nodecount"
 
-	instanceid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=storage" --region $REGION --query "Reservations[].Instances[].InstanceId" --output text`
+	instanceid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=storage" "Name=instance-state-name,Values=pending,running" --region $REGION --query "Reservations[].Instances[].InstanceId" --output text`
 
 	STORAGEIP=`run storage $instanceid 0 storage`
 	
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
 
-	instanceids=`aws ec2 describe-instances --filters "Name=tag:Name,Values=dbserver" --region $REGION --query "Reservations[].Instances[].InstanceId" --output text`
+	instanceids=`aws ec2 describe-instances --filters "Name=tag:Name,Values=dbserver" "Name=instance-state-name,Values=pending,running" --region $REGION --query "Reservations[].Instances[].InstanceId" --output text`
 
 cnt=1
 for id in $instanceids
