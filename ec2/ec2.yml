@@ -91,10 +91,6 @@
           image: "{{IMAGE_ID}}"
           wait: yes
           volumes:
-            - device_name: /dev/xvda
-              volume_type: gp2
-              volume_size: 10
-              delete_on_termination: true
             - device_name: "{{data_disk_dev}}"
               volume_type: gp2
               volume_size: "{{STORAGE_DISK_SIZE}}"
@@ -106,5 +102,14 @@
             Name: storage
           exact_count: 1
           spot_price: "{{SPOT_PRICE}}"
+          instance_tags:
+            Name: storage
         tags:
           - create
+          
+      - name: "create storage instance"         
+        ec2_remote_facts:
+          region: "{{ REGION }}"
+        register: ec2_facts
+        tags:
+          - delete
