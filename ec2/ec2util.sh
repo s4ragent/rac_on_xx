@@ -52,8 +52,8 @@ ansible-playbook -i localhost, $VIRT_TYPE/ec2.yml --tags create --extra-vars "no
 cnt=1
 for id in $instanceids
 do
-	echo $id
-	echo $cnt
+	NODENAME="$NODEPREFIX"`printf "%.3d" $cnt`
+	run $NODENAME $id $cnt "dbserver"
 	cnt=`expr $cnt + 1`
 done
 	
