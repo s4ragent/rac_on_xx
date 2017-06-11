@@ -107,9 +107,18 @@
         tags:
           - create
           
-      - name: "create storage instance"         
+      - name: "get instanceids"         
         ec2_remote_facts:
           region: "{{ REGION }}"
         register: ec2_facts
+        tags:
+          - delete
+
+      - name: "delete instance"
+        ec2:
+          instance_ids: "{{ item.id }}"
+          state: absent
+          region: "{{ REGION }}"
+        with_items: "{{ ec2_facts.instances }}"
         tags:
           - delete
