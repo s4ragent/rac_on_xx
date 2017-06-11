@@ -7,7 +7,7 @@
     tasks:
       - name: "create VPC"
         ec2_vpc_net:
-          name: "VPC-{{ PREFIX }}"
+          name: "{{ PREFIX }}-VPC"
           cidr_block: "{{ VPC_ADDR }}"
           region: "{{ REGION }}"
         register: _vpc
@@ -28,7 +28,7 @@
           az: "{{ REGION }}a"
           cidr: "{{ SUBNET_A_ADDR }}"
           resource_tags:
-            Name: "SUBNET-A-{{ PREFIX }}"
+            Name: "{{ PREFIX }}-SUBNET-A"
           region: "{{ REGION }}"
         register: _subnet_a
         tags:
@@ -40,7 +40,7 @@
           az: "{{ REGION }}c"
           cidr: "{{ SUBNET_C_ADDR }}"
           resource_tags:
-            Name: "SUBNET-C-{{ PREFIX }}"
+            Name: "{{ PREFIX }}-SUBNET-C"
           region: "{{ REGION }}"
         register: _subnet_c
         tags:
@@ -50,7 +50,7 @@
         ec2_vpc_route_table:
           vpc_id: "{{ _vpc.vpc.id }}"
           tags:
-            Name: "RT-{{ PREFIX }}"
+            Name: "{{ PREFIX }}-RT"
           subnets:
             - "{{ _subnet_a.subnet.id }}"
             - "{{ _subnet_c.subnet.id }}"
@@ -64,7 +64,7 @@
         
       - name: "create security group"
         ec2_group:
-          name: "SG-{{PREFIX}}"
+          name: "{{PREFIX}}-SG"
           description: "{{PREFIX}} server security group"
           vpc_id: "{{ _vpc.vpc.id }}"
           region: "{{ REGION }}"
@@ -74,7 +74,7 @@
               to_port: 22
               cidr_ip: 0.0.0.0/0
             - proto: all
-              group_name: "SG-{{PREFIX}}"
+              group_name: "{{PREFIX}}-SG"
           rules_egress:
             - proto: all
               from_port: 0
@@ -86,7 +86,7 @@
       - name: "create storage instance"
         ec2:
           key_name: "{{PREFIX}}"
-          group: "SG-{{PREFIX}}"
+          group: "{{PREFIX}}-SG"
           instance_type: "{{INSTANCE_TYPE}}"
           image: "{{IMAGE_ID}}"
           wait: yes
@@ -99,18 +99,18 @@
           vpc_subnet_id: "{{ _subnet_a.subnet.id }}"
           assign_public_ip: yes
           count_tag:
-            Name: storage
+            Name: "{{PREFIX}}-storage"
           exact_count: 1
           spot_price: "{{SPOT_PRICE}}"
           instance_tags:
-            Name: storage
+            Name: "{{PREFIX}}-storage"
         tags:
           - create
 
       - name: "create db instance"
         ec2:
           key_name: "{{PREFIX}}"
-          group: "SG-{{PREFIX}}"
+          group: "{{PREFIX}}-SG"
           instance_type: "{{INSTANCE_TYPE}}"
           image: "{{IMAGE_ID}}"
           wait: yes
@@ -123,17 +123,28 @@
           vpc_subnet_id: "{{ _subnet_a.subnet.id }}"
           assign_public_ip: yes
           count_tag:
-            Name: dbserver
+            Name: "{{PREFIX}}-dbserver"
           exact_count: "{{ nodecount }}"
           spot_price: "{{ SPOT_PRICE }}"
           instance_tags:
-            Name: dbserver
+            Name: "{{PREFIX}}-dbserver"
         tags:
           - create
+ 
+      - name: "get vpcid"
+        ec2_vpc_net_facts:
+          region: "{{ region }}"
+          filters:
+            "tag:Name": "{{ PREFIX }}-VPC"
+        register: vpc_facts 
+        tags:
+          - delete 
           
       - name: "get instanceids"         
         ec2_remote_facts:
           region: "{{ REGION }}"
+          filters:
+            vpc-id: "{{ vpc_facts['vpcs'][0]['id'] }}"
         register: ec2_facts
         tags:
           - delete
