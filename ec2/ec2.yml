@@ -145,7 +145,7 @@
  
       - name: "get vpcid"
         ec2_vpc_net_facts:
-          region: "{{ region }}"
+          region: "{{ REGION }}"
           filters:
             "tag:Name": "{{ PREFIX }}-VPC"
         register: vpc_facts 
