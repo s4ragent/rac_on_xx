@@ -169,3 +169,10 @@
         with_items: "{{ ec2_facts.instances }}"
         tags:
           - delete
+
+      - name: "delete SG"
+        ec2_group:
+          name: "{{PREFIX}}-SG"
+          state: absent
+        region: "{{ REGION }}"
+ 
