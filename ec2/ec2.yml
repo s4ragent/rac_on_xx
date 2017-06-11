@@ -106,6 +106,30 @@
             Name: storage
         tags:
           - create
+
+      - name: "create db instance"
+        ec2:
+          key_name: "{{PREFIX}}"
+          group: "SG-{{PREFIX}}"
+          instance_type: "{{INSTANCE_TYPE}}"
+          image: "{{IMAGE_ID}}"
+          wait: yes
+          volumes:
+            - device_name: "{{data_disk_dev}}"
+              volume_type: gp2
+              volume_size: "{{NODE_DISK_SIZE}}"
+              delete_on_termination: true
+          region: "{{ REGION }}"
+          vpc_subnet_id: "{{ _subnet_a.subnet.id }}"
+          assign_public_ip: yes
+          count_tag:
+            Name: dbserver
+          exact_count: "{{ nodecount }}"
+          spot_price: "{{ SPOT_PRICE }}"
+          instance_tags:
+            Name: dbserver
+        tags:
+          - create
           
       - name: "get instanceids"         
         ec2_remote_facts:

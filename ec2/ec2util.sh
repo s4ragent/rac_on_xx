@@ -46,6 +46,16 @@ ansible-playbook -i localhost, $VIRT_TYPE/ec2.yml --tags create --extra-vars "no
 	STORAGEIP=`run storage $instanceid 0 storage`
 	
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
+
+	instanceids=`aws ec2 describe-instances --filters "Name=tag:Name,Values=dbserver" --region $REGION --query "Reservations[].Instances[].InstanceId" --output text`
+
+cnt=1
+for id in $instanceids
+do
+	echo $id
+	echo $cnt
+	cnt=`expr $cnt + 1`
+done
 	
 #	for i in `seq 1 $nodecount`;
 #	do
