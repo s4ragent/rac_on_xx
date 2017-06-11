@@ -10,20 +10,10 @@ source ./commonutil.sh
 #$1 nodename $2 disksize $3 nodenumber $4 hostgroup#####
 run(){
 	NODENAME=$1
-	DISKSIZE=$2
+	INSTANCE_ID=$2
 	NODENUMBER=$3
 	HOSTGROUP=$4
 
-	vpcid=`aws ec2 describe-vpcs --region $REGION --filters "Name=tag:Name,Values=VPC-${PREFIX}" --query "Vpcs[].VpcId" --output text`
-	
-	sgid=`aws ec2 describe-security-groups --region $REGION --filters "Name=tag:Name,Values=SG-${PREFIX}" --query "SecurityGroups[].GroupId" --output text`
- 
-	subnetid=`aws ec2 describe-subnets --region $REGION --filters "Name=tag:Name,Values=SUBNET-${PREFIX}" --output text --query "Subnets[].SubnetId"`
-
-        
-	DeviceJson="[{\"DeviceName\":\"${data_disk_dev}\",\"Ebs\":{\"VolumeSize\":${2},\"DeleteOnTermination\":true,\"VolumeType\":\"gp2\"}}]"
-	
-	INSTANCE_ID=$(aws ec2 run-instances --region $REGION $INSTANCE_OPS $INSTANCE_TYPE_OPS --key-name $PREFIX --subnet-id $subnetid --security-group-ids $sgid --block-device-mappings $DeviceJson --count 1 --query "Instances[].InstanceId" --output text)
 	aws ec2 create-tags --region $REGION --resources $INSTANCE_ID --tags Key=NODENAME,Value=$NODENAME
 	External_IP=`get_External_IP $INSTANCE_ID`
 	Internal_IP=`get_Internal_IP $INSTANCE_ID`
@@ -51,10 +41,11 @@ runonly(){
 
 ansible-playbook -i localhost, $VIRT_TYPE/ec2.yml --tags create --extra-vars "nodecount=$nodecount"
 
+	instanceid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=storage" --region $REGION --query "Reservations[].Instances[].InstanceId" --output text`
 
-#	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
+	STORAGEIP=`run storage $instanceid 0 storage`
 	
-#	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
+	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
 	
 #	for i in `seq 1 $nodecount`;
 #	do
