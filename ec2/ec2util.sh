@@ -84,30 +84,8 @@ deleteall(){
 		aws ec2 delete-key-pair --region $REGION --key-name $ansible_ssh_private_key_file
 	fi
    	
-	
-sgid=`aws ec2 describe-security-groups --region $REGION --filters "Name=tag:Name,Values=SG-${PREFIX}" --query "SecurityGroups[].GroupId" --output text`
+ansible-playbook -i localhost, $VIRT_TYPE/ec2.yml --tags delete
 
-
-aws ec2 delete-security-group --region $REGION --group-id $sgid
-
-	subnetid=`aws ec2 describe-subnets --region $REGION --filters "Name=tag:Name,Values=SUBNET-${PREFIX}" --output text --query "Subnets[].SubnetId"`
-	
-	aws ec2 delete-subnet --region $REGION --subnet-id $subnetid
-
-RouteTableId=`aws ec2 describe-route-tables --region $REGION --filters "Name=tag:Name,Values=RTABLE-${PREFIX}" --query "RouteTables[].RouteTableId" --output text`
-
-aws ec2 delete-route-table --region $REGION --route-table-id $RouteTableId
-
-
-	vpcid=`aws ec2 describe-vpcs --region $REGION --filters "Name=tag:Name,Values=VPC-${PREFIX}" --query "Vpcs[].VpcId" --output text`
-
-	GatewayId=`aws ec2 describe-internet-gateways --region $REGION --filters "Name=tag:Name,Values=GW-${PREFIX}" --query "InternetGateways[].InternetGatewayId" --output text`
-	
-aws ec2 detach-internet-gateway --region $REGION --internet-gateway-id $GatewayId --vpc-id $vpcid
-
-aws ec2 delete-internet-gateway --region $REGION --internet-gateway-id $GatewayId
-
-aws ec2 delete-vpc --region $REGION --vpc-id $vpcid
 }
 
 replaceinventory(){
