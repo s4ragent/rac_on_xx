@@ -175,4 +175,5 @@
           name: "{{PREFIX}}-SG"
           state: absent
         region: "{{ REGION }}"
- 
+        tags:
+          - delete 
