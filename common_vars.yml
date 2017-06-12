@@ -30,23 +30,6 @@ ORAINVENTORY: /u01/app/oraInventory
 PreInstallRPM: oracle-database-server-12cR2-preinstall
 CVUQDISK: cv/remenv/cvuqdisk-1.0.10-1.rpm
 UNZIP: /usr/bin/unzip
-#####for NFS option values
-##### device size = base_size + multi_size * node count
-storage_type: "nfs"
-ORA_DATA: /u01/oradata
-VOTE_DEV: /u01/oradata/vote.img
-VOTE_BASE_SIZE: 40960
-VOTE_MULTI_SIZE: 2048
-VOTE_DISKGROUP_NAME: VOTE
-DATA_DEV: /u01/oradata/data.img
-DATA_BASE_SIZE: 5120
-DATA_MULTI_SIZE: 1024
-DATA_DISKGROUP_NAME: DATA
-FRA_DEV: /u01/oradata/fra.img
-FRA_BASE_SIZE: 25600
-FRA_MULTI_SIZE: 0
-FRA_DISKGROUP_NAME: FRA
-ASM_STRING: /u01/oradata/*
 ####ansible specific
 ASYNC: 86400
 POLL: 60
