@@ -25,7 +25,7 @@ STOP_CMD_OPS: "--region {{ REGION }}"
 INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
 SWITCH_KERNEL: "0"
-#MEDIA_COPY: "true"
+MEDIA_COPY: "true"
 MEDIA_PATH: /u01/downloadmedia
 DB_MEDIA1: V839960-01.zip
 GRID_MEDIA1: V840012-01.zip
