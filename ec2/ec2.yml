@@ -204,4 +204,21 @@
           region: "{{ REGION }}"
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
         tags:
-          - delete 
+          - delete
+          
+      - name: "delete internet gateway"    
+        ec2_vpc_igw:
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          state: absent
+          region: "{{ REGION }}"
+        tags:
+          - delete
+           
+      - name: "delete VPC"
+        ec2_vpc_net:
+          name: "{{ PREFIX }}-VPC"
+          state: absent
+          cidr_block: "{{ VPC_ADDR }}"
+          region: "{{ REGION }}"
+        tags:
+          - delete
