@@ -4,21 +4,22 @@
    roles:
       - security
       - vxlan
-      - dns
+      - { role: dns, when: "dns == 'dnsmasq'" }
       - common
 
  - hosts: storage
    any_errors_fatal: true
    roles:
-      - nfsserver
+      - { role: nfsserver, when: "storage_type == 'nfs'" }
+      - { role: efs, when: "storage_type == 'efs'" }
 
  - hosts: dbserver
    any_errors_fatal: true
    roles:
       - download
-      - xrdp
-      - nfsclient
-
+      - { role: nfsclient, when: "storage_type == 'nfs'" }
+      - { role: nfsclient, when: "storage_type == 'efs'" }
+      
  - hosts: dbserver
    any_errors_fatal: true
    serial: 1
