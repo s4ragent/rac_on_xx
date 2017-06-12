@@ -178,7 +178,7 @@
         tags:
           - delete
           
-      - name: Remove subnet route table
+      - name: "Remove route table"
         ec2_vpc_route_table:
           region: "{{ REGION }}"
           state: absent
@@ -187,3 +187,21 @@
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
         tags:
           - delete
+          
+      - name: "Remove Subnet a"
+        ec2_vpc_subnet:
+          state: absent
+          cidr: "{{ SUBNET_A_ADDR }}"
+          region: "{{ REGION }}"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+        tags:
+          - delete
+
+      - name: "Remove Subnet c"
+        ec2_vpc_subnet:
+          state: absent
+          cidr: "{{ SUBNET_C_ADDR }}"
+          region: "{{ REGION }}"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+        tags:
+          - delete 
