@@ -170,6 +170,11 @@
         tags:
           - delete
 
+      - pause:
+          minutes: 5
+        tags:
+          - delete
+
       - name: "delete SG"
         ec2_group:
           name: "{{PREFIX}}-SG"
