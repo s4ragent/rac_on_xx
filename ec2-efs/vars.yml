@@ -23,7 +23,7 @@ STOP_CMD_OPS: "--region {{ REGION }}"
 INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
 SWITCH_KERNEL: "0"
-#MEDIA_COPY: "true"
+MEDIA_COPY: "true"
 MEDIA_PATH: /u01/downloadmedia
 DB_MEDIA1: V839960-01.zip
 GRID_MEDIA1: V840012-01.zip
@@ -35,3 +35,22 @@ data_disk_mountpoint: "/u01"
 ####ansible specific
 ansible_ssh_user: ec2-user
 ansible_ssh_private_key_file: raconxx
+dns: dnsmasq
+#####for NFS option values
+##### device size = base_size + multi_size * node count
+storage_type: "efs"
+ORA_DATA: /u01/oradata
+VOTE_DEV: /u01/oradata/vote.img
+VOTE_BASE_SIZE: 40960
+VOTE_MULTI_SIZE: 2048
+VOTE_DISKGROUP_NAME: VOTE
+DATA_DEV: /u01/oradata/data.img
+DATA_BASE_SIZE: 5120
+DATA_MULTI_SIZE: 1024
+DATA_DISKGROUP_NAME: DATA
+FRA_DEV: /u01/oradata/fra.img
+FRA_BASE_SIZE: 25600
+FRA_MULTI_SIZE: 0
+FRA_DISKGROUP_NAME: FRA
+ASM_STRING: /u01/oradata/*
+
