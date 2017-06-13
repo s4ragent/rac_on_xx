@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ####common VIRT_TYPE specific value ################
-VIRT_TYPE="ec2-efs"
+VIRT_TYPE="efs"
 
 cd ..
 source ./commonutil.sh
