@@ -146,15 +146,15 @@
         tags:
           - create
 
-#      - name: "create efs"
-#        efs:
-#          state: present
-#          name: "{{PREFIX}}-EFS"
-#          targets:
-#            - subnet_id: ["{{ _subnet_a.subnet.id }}","{{ _subnet_b.subnet.id }}","{{ _subnet_c.subnet.id }}"]
-#              security_groups: [ "{{ _sg.group_id }}" ]
-#        tags:
-#          - create          
+      - name: "create efs"
+        efs:
+          state: present
+          name: "{{PREFIX}}-EFS"
+          targets:
+            - subnet_id: ["{{ _subnet_a.subnet.id }}","{{ _subnet_b.subnet.id }}","{{ _subnet_c.subnet.id }}"]
+              security_groups: [ "{{ _sg.group_id }}" ]
+        tags:
+          - create          
           
           
       - name: Wait for SSH to come up
