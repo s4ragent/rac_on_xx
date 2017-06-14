@@ -126,6 +126,7 @@
         efs:
           state: present
           name: "{{PREFIX}}-EFS"
+          region: "{{ REGION }}"
           targets:
             - subnet_id: ["{{ _subnet_a.subnet.id }}","{{ _subnet_b.subnet.id }}","{{ _subnet_c.subnet.id }}"]
               security_groups: [ "{{ _sg.group_id }}" ]
