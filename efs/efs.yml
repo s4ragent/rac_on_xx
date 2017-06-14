@@ -97,30 +97,6 @@
         tags:
           - create
 
-      - name: "create storage instance"
-        ec2:
-          key_name: "{{PREFIX}}"
-          group: "{{PREFIX}}-SG"
-          instance_type: "{{INSTANCE_TYPE}}"
-          image: "{{IMAGE_ID}}"
-          wait: yes
-          volumes:
-            - device_name: "{{data_disk_dev}}"
-              volume_type: gp2
-              volume_size: "{{STORAGE_DISK_SIZE}}"
-              delete_on_termination: true
-          region: "{{ REGION }}"
-          vpc_subnet_id: "{{ _subnet_a.subnet.id }}"
-          assign_public_ip: yes
-          count_tag:
-            Name: "{{PREFIX}}-storage"
-          exact_count: 1
-          spot_price: "{{SPOT_PRICE}}"
-          instance_tags:
-            Name: "{{PREFIX}}-storage"
-        tags:
-          - create
-
       - name: "create db instance"
         ec2:
           key_name: "{{PREFIX}}"
