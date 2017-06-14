@@ -33,6 +33,18 @@
         register: _subnet_a
         tags:
           - create
+
+      - name: "create Public subnet b"
+        ec2_vpc_subnet:
+          vpc_id: "{{ _vpc.vpc.id }}"
+          az: "{{ REGION }}b"
+          cidr: "{{ SUBNET_B_ADDR }}"
+          resource_tags:
+            Name: "{{ PREFIX }}-SUBNET-B"
+          region: "{{ REGION }}"
+        register: _subnet_b
+        tags:
+          - create
                   
       - name: "create Public subnet c"
         ec2_vpc_subnet:
@@ -53,6 +65,7 @@
             Name: "{{ PREFIX }}-RT"
           subnets:
             - "{{ _subnet_a.subnet.id }}"
+            - "{{ _subnet_b.subnet.id }}"
             - "{{ _subnet_c.subnet.id }}"
           routes:
             - dest: 0.0.0.0/0
@@ -197,6 +210,15 @@
         ec2_vpc_subnet:
           state: absent
           cidr: "{{ SUBNET_A_ADDR }}"
+          region: "{{ REGION }}"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+        tags:
+          - delete
+
+      - name: "Remove Subnet b"
+        ec2_vpc_subnet:
+          state: absent
+          cidr: "{{ SUBNET_B_ADDR }}"
           region: "{{ REGION }}"
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
         tags:
