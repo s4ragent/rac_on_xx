@@ -93,6 +93,7 @@
               from_port: 0
               to_port: 65535
               cidr_ip: 0.0.0.0/0
+        register: _sg
         tags:
           - create
 
@@ -145,6 +146,17 @@
         tags:
           - create
 
+      - name: "create efs"
+        efs:
+          state: present
+          name: "{{PREFIX}}-EFS"
+          targets:
+            - subnet_id: ["{{ _subnet_a.subnet.id }}","{{ _subnet_b.subnet.id }}","{{ _subnet_c.subnet.id }}"]
+              security_groups: [ "{{ _sg.group_id }}" ]
+        tags:
+          - create          
+          
+          
       - name: Wait for SSH to come up
         wait_for:
           host: "{{ item.public_ip }}"
