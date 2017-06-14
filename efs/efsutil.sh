@@ -39,12 +39,12 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
-ansible-playbook -i localhost, $VIRT_TYPE/ec2.yml --tags create --extra-vars "nodecount=$nodecount"
+ansible-playbook -i localhost, $VIRT_TYPE/efs.yml --tags create --extra-vars "nodecount=$nodecount"
 
 	instanceid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=${PREFIX}-storage" "Name=instance-state-name,Values=pending,running" --region $REGION --query "Reservations[].Instances[].InstanceId" --output text`
 
-	STORAGEIP=`run storage $instanceid 0 storage`
-	
+#STORAGEIP=`run storage $instanceid 0 storage`
+STORAGEIP=`aws efs describe`
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
 
 	instanceids=`aws ec2 describe-instances --filters "Name=tag:Name,Values=${PREFIX}-dbserver" "Name=instance-state-name,Values=pending,running" --region $REGION --query "Reservations[].Instances[].InstanceId" --output text`
@@ -56,7 +56,9 @@ do
 	run $NODENAME $id $cnt "dbserver"
 	cnt=`expr $cnt + 1`
 done
-	
+
+ansible-playbook -i $VIRT_TYPE $VIRT_TYPE/efs.yml --tags route53
+
 #	for i in `seq 1 $nodecount`;
 #	do
 #		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
@@ -85,7 +87,7 @@ deleteall(){
 		aws ec2 delete-key-pair --region $REGION --key-name $ansible_ssh_private_key_file
 	fi
    	
-ansible-playbook -i localhost, $VIRT_TYPE/ec2.yml --tags delete
+ansible-playbook -i localhost, $VIRT_TYPE/efs.yml --tags delete
 
 }
 
