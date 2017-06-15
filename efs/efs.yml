@@ -147,6 +147,26 @@
         with_items: "{{ ec2.instances }}"
         tags:
           - create
+
+      - name: "get vpcid"
+        ec2_vpc_net_facts:
+          region: "{{ REGION }}"
+          filters:
+            "tag:Name": "{{ PREFIX }}-VPC"
+        register: vpc_facts 
+        tags:
+          - route53
+          - delete
+
+     - name: "create private zone"
+       route53_zone:
+         zone: devel.example.com
+         state: present
+         vpc_id: '{{ myvpc_id }}'
+         comment: developer domain
+
+
+
  
       - name: "get vpcid"
         ec2_vpc_net_facts:
@@ -175,8 +195,16 @@
         tags:
           - delete
 
+      - name: "create efs"
+        efs:
+          state: absent
+          name: "{{PREFIX}}-EFS"
+          region: "{{ REGION }}"                         
+        tags:
+          - delete
+
       - pause:
-          minutes: 5
+          minutes: 3
         tags:
           - delete
 
