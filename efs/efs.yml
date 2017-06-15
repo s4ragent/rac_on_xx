@@ -175,7 +175,7 @@
         tags:
           - delete
 
-      - name: "create efs"
+      - name: "delete efs"
         efs:
           state: absent
           name: "{{PREFIX}}-EFS"
