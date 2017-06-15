@@ -158,25 +158,31 @@
           - route53
           - delete
 
-     - name: "create private zone"
-       route53_zone:
-         zone: devel.example.com
-         state: present
-         vpc_id: '{{ myvpc_id }}'
-         comment: developer domain
-
-
-
- 
-      - name: "get vpcid"
-        ec2_vpc_net_facts:
-          region: "{{ REGION }}"
-          filters:
-            "tag:Name": "{{ PREFIX }}-VPC"
-        register: vpc_facts 
+      - name: "create private zone"
+        route53_zone:
+          zone: "{{ DOMAIN_NAME }}"
+          state: present
+          vpc-id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          comment: "{{ PREFIX }}"
         tags:
-          - delete 
+          - route53
           
+      - name: "create private zone"
+        route53:
+          state: present
+          zone: {{ DOMAIN_NAME }}
+          record:  "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
+          type: A
+          ttl: 7200
+          value:
+            - "{{ scan0_IP }}"
+            - "{{ scan1_IP }}"
+            - "{{ scan2_IP }}"
+          wait: yes
+        tags:
+          - route53
+
+                     
       - name: "get instanceids"         
         ec2_remote_facts:
           region: "{{ REGION }}"

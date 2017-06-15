@@ -1,0 +1,43 @@
+---
+  - hosts: 
+      - hosts: dbserver
+    connection: local
+    tasks:
+      - name: "get vpcid"
+        ec2_vpc_net_facts:
+          region: "{{ REGION }}"
+          filters:
+            "tag:Name": "{{ PREFIX }}-VPC"
+        register: vpc_facts 
+        tags:
+          - create
+          - delete
+
+      - name: "create private zone"
+        route53_zone:
+          zone: "{{ DOMAIN_NAME }}"
+          state: present
+          vpc-id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          comment: "{{ PREFIX }}"
+        tags:
+          - create
+          
+      - name: "create private zone"
+        route53:
+          state: present
+          zone: {{ DOMAIN_NAME }}
+          record:  "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
+          type: A
+          ttl: 7200
+          value:
+            - "{{ scan0_IP }}"
+            - "{{ scan1_IP }}"
+            - "{{ scan2_IP }}"
+          wait: yes
+        tags:
+          - create
+
+                     
+
+
+
