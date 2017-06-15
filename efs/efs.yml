@@ -155,33 +155,7 @@
             "tag:Name": "{{ PREFIX }}-VPC"
         register: vpc_facts 
         tags:
-          - route53
           - delete
-
-      - name: "create private zone"
-        route53_zone:
-          zone: "{{ DOMAIN_NAME }}"
-          state: present
-          vpc-id: "{{ vpc_facts['vpcs'][0]['id'] }}"
-          comment: "{{ PREFIX }}"
-        tags:
-          - route53
-          
-      - name: "create private zone"
-        route53:
-          state: present
-          zone: {{ DOMAIN_NAME }}
-          record:  "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
-          type: A
-          ttl: 7200
-          value:
-            - "{{ scan0_IP }}"
-            - "{{ scan1_IP }}"
-            - "{{ scan2_IP }}"
-          wait: yes
-        tags:
-          - route53
-
                      
       - name: "get instanceids"         
         ec2_remote_facts:
