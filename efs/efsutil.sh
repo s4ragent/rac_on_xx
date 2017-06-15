@@ -42,11 +42,11 @@ runonly(){
 ansible-playbook -i localhost, $VIRT_TYPE/efs.yml --tags create --extra-vars "nodecount=$nodecount"
 
 	instanceid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=${PREFIX}-storage" "Name=instance-state-name,Values=pending,running" --region $REGION --query "Reservations[].Instances[].InstanceId" --output text`
- file-system-id=`aws efs describe-file-systems --region $REGION --creation-token ${PREFIX}-EFS --query "FileSystems[].FileSystemId" --output text`
+ filesystemid=`aws efs describe-file-systems --region $REGION --creation-token ${PREFIX}-EFS --query "FileSystems[].FileSystemId" --output text`
 
 #STORAGEIP=`run storage $instanceid 0 storage`
 #STORAGEIP=`aws efs describe`
-	common_update_all_yml "STORAGE_SERVER: ${file-system-id}.efs.${REGION}.amazonaws.com"
+	common_update_all_yml "STORAGE_SERVER: ${filesystemid}.efs.${REGION}.amazonaws.com"
 
 	instanceids=`aws ec2 describe-instances --filters "Name=tag:Name,Values=${PREFIX}-dbserver" "Name=instance-state-name,Values=pending,running" --region $REGION --query "Reservations[].Instances[].InstanceId" --output text`
 
