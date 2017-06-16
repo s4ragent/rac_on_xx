@@ -15,6 +15,7 @@
       - name: "create private zone"
         route53_zone:
           zone: "{{ DOMAIN_NAME }}"
+          region: "{{ REGION }}"
           state: present
           vpc-id: "{{ vpc_facts['vpcs'][0]['id'] }}"
           comment: "{{ PREFIX }}"
@@ -26,6 +27,7 @@
         route53:
           state: present
           zone: "{{ DOMAIN_NAME }}"
+          region: "{{ REGION }}"
           record:  "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
           type: A
           ttl: 300
@@ -42,6 +44,7 @@
         route53:
           command: create
           zone: "{{ DOMAIN_NAME }}"
+          region: "{{ REGION }}"
           type: A
           value: "{{ vxlan0_IP }}"
           overwrite: yes
