@@ -25,9 +25,9 @@
           - create
 
           
-      - name: "create private zone"
+      - name: "create record"
         route53:
-          state: create
+          command: create
           zone: "{{ DOMAIN_NAME }}"
           region: "{{ REGION }}"
           record:  "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
@@ -44,7 +44,7 @@
                      
       - name: "record host dns"
         route53:
-          state: create
+          command: create
           zone: "{{ DOMAIN_NAME }}"
           region: "{{ REGION }}"
           type: A
