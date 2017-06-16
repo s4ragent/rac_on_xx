@@ -156,6 +156,7 @@
         register: vpc_facts 
         tags:
           - delete
+          - deleteinstances
                      
       - name: "get instanceids"         
         ec2_remote_facts:
@@ -165,6 +166,7 @@
         register: ec2_facts
         tags:
           - delete
+          - deleteinstances
 
       - name: "delete instance"
         ec2:
@@ -174,6 +176,7 @@
         with_items: "{{ ec2_facts.instances }}"
         tags:
           - delete
+          - deleteinstances
 
       - name: "delete efs"
         efs:
@@ -182,6 +185,7 @@
           region: "{{ REGION }}"                         
         tags:
           - delete
+          - deleteinstances
 
       - pause:
           minutes: 3
