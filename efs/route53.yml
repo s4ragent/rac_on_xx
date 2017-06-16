@@ -17,7 +17,7 @@
           zone: "{{ DOMAIN_NAME }}"
           region: "{{ REGION }}"
           state: present
-          vpc-id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
           comment: "{{ PREFIX }}"
         run_once: true
         tags:
