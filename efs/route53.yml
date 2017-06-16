@@ -46,7 +46,7 @@
           record:  "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
           type: A
           ttl: 300
-          value: "{{ scan0_IP }}","{{ scan1_IP }}","{{ scan2_IP }}"
+          value: "{{ scan0_IP }},{{ scan1_IP }},{{ scan2_IP }}"
           wait: yes
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
           private_zone: yes
