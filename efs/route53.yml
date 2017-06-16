@@ -13,6 +13,18 @@
           - create
           - delete
 
+      - name: "delete private zone"
+        route53_zone:
+          zone: "{{ DOMAIN_NAME }}"
+          region: "{{ REGION }}"
+          state: absent
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          comment: "{{ PREFIX }}"
+        run_once: true
+        tags:
+          - delete
+          - create
+
       - name: "create private zone"
         route53_zone:
           zone: "{{ DOMAIN_NAME }}"
@@ -57,13 +69,3 @@
         tags:
           - create
           
-      - name: "delete private zone"
-        route53_zone:
-          zone: "{{ DOMAIN_NAME }}"
-          region: "{{ REGION }}"
-          state: absent
-          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
-          comment: "{{ PREFIX }}"
-        run_once: true
-        tags:
-          - delete
