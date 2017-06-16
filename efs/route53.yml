@@ -19,6 +19,7 @@
           region: "{{ REGION }}"
           state: present
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          vpc_regionz: "{{ REGION }}"
           comment: "{{ PREFIX }}"
         run_once: true
         tags:
