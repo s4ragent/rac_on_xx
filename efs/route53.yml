@@ -52,6 +52,7 @@
             - "{{ scan2_IP }}"
           wait: yes
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
         run_once: true
         tags:
           - create
@@ -66,6 +67,9 @@
           overwrite: yes
           record: "{{ NODENAME }}.{{ DOMAIN_NAME }}"
           ttl: 300
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
         tags:
           - create
           
