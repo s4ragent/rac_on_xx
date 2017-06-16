@@ -34,9 +34,9 @@
           type: A
           ttl: 300
           value:
-            - {{ scan0_IP }}
-            - {{ scan1_IP }}
-            - {{ scan2_IP }}
+            - "{{ scan0_IP }}"
+            - "{{ scan1_IP }}"
+            - "{{ scan2_IP }}"
           wait: yes
         run_once: true
         tags:
