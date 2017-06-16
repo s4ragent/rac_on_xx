@@ -87,6 +87,8 @@ deleteall(){
    		rm -rf ${ansible_ssh_private_key_file}*
 		aws ec2 delete-key-pair --region $REGION --key-name $ansible_ssh_private_key_file
 	fi
+
+ansible-playbook -i $VIRT_TYPE $VIRT_TYPE/route53.yml --tags delete
    	
 ansible-playbook -i localhost, $VIRT_TYPE/efs.yml --tags delete
 
