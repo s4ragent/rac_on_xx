@@ -39,6 +39,7 @@
             - "{{ scan1_IP }}"
             - "{{ scan2_IP }}"
           wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
         run_once: true
         tags:
           - create
