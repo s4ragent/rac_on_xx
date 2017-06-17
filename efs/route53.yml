@@ -24,7 +24,7 @@
         run_once: true
         ignore_errors: true
         tags:
-          - create
+          - create`
 
           
       - name: "create record"
@@ -59,3 +59,47 @@
         tags:
           - create
           
+      - name: "delete host dns"
+        route53:
+          command: delete
+          zone: "{{ DOMAIN_NAME }}"
+#          region: "{{ REGION }}"
+          type: A
+          value: "{{ vxlan0_IP }}"
+          overwrite: yes
+          record: "{{ NODENAME }}.{{ DOMAIN_NAME }}"
+          ttl: 300
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        tags:
+          - delete
+
+      - name: "delete record"
+        route53:
+          command: delete
+          zone: "{{ DOMAIN_NAME }}"
+#          region: "{{ REGION }}"
+          record:  "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
+          type: A
+          ttl: 300
+          value: "{{ scan0_IP }},{{ scan1_IP }},{{ scan2_IP }}"
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        run_once: true
+        tags:
+          - delete
+
+      - name: "delete private zone"
+        route53_zone:
+          zone: "{{ DOMAIN_NAME }}"
+          region: "{{ REGION }}"
+          state: absent
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          vpc_region: "{{ REGION }}"
+          comment: "{{ PREFIX }}"
+        run_once: true
+        ignore_errors: true
+        tags:
+          - delete
