@@ -13,18 +13,6 @@
           - create
           - delete
 
-      - name: "delete private zone"
-        route53_zone:
-          zone: "{{ DOMAIN_NAME }}"
-          region: "{{ REGION }}"
-          state: absent
-          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
-          comment: "{{ PREFIX }}"
-        run_once: true
-        tags:
-          - delete
-          - create
-
       - name: "create private zone"
         route53_zone:
           zone: "{{ DOMAIN_NAME }}"
@@ -58,7 +46,7 @@
         route53:
           command: create
           zone: "{{ DOMAIN_NAME }}"
-          region: "{{ REGION }}"
+#          region: "{{ REGION }}"
           type: A
           value: "{{ vxlan0_IP }}"
           overwrite: yes
