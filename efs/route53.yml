@@ -22,6 +22,7 @@
           vpc_region: "{{ REGION }}"
           comment: "{{ PREFIX }}"
         run_once: true
+        ignore_errors: true
         tags:
           - create
 
