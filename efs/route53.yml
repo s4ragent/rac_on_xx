@@ -24,7 +24,7 @@
         run_once: true
         ignore_errors: true
         tags:
-          - create`
+          - create
 
           
       - name: "create record"
