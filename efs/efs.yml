@@ -4,6 +4,7 @@
     connection: local
     vars_files:
       - ./vars.yml
+      - ../common_vars.yml      
     tasks:
       - name: "create VPC"
         ec2_vpc_net:
@@ -17,6 +18,7 @@
       - ec2_vpc_dhcp_options:
           domain_name: "{{ DOMAIN_NAME }}"
           region: "{{ REGION }}"
+          dns_servers: "AmazonProvidedDNS"
           vpc_id: "{{ _vpc.vpc.id }}"
           delete_old: True
           inherit_existing: False
