@@ -1,6 +1,5 @@
 #### azure user specific value  ###################
 PREFIX: "raconxx"
-DOMAIN_NAME: public
 dns: route53
 VPC_ADDR: 10.153.0.0/16
 SUBNET_A_ADDR: 10.153.1.0/24
