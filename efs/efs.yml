@@ -13,7 +13,16 @@
         register: _vpc
         tags:
           - create
-        
+ 
+      - ec2_vpc_dhcp_options:
+          domain_name: "{{ DOMAIN_NAME }}"
+          region: "{{ REGION }}"
+          vpc_id: "{{ _vpc.vpc.id }}"
+          delete_old: True
+          inherit_existing: False
+        tags:
+          - create 
+ 
       - name: "create Internet gateway"
         ec2_vpc_igw:
           vpc_id: "{{ _vpc.vpc.id }}"
