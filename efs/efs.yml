@@ -11,6 +11,7 @@
           name: "{{ PREFIX }}-VPC"
           cidr_block: "{{ VPC_ADDR }}"
           region: "{{ REGION }}"
+          dns_hostnames: no
         register: _vpc
         tags:
           - create
