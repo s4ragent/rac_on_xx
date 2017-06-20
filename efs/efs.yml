@@ -6,6 +6,8 @@
       - ./vars.yml
       - ../common_vars.yml      
     tasks:
+      - debug msg="{{ vxlan0_NETWORK.split('.')[0] }}"
+          
       - name: "create VPC"
         ec2_vpc_net:
           name: "{{ PREFIX }}-VPC"
