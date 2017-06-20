@@ -7,7 +7,7 @@
       - ../common_vars.yml      
     tasks:
       - set_fact:
-          scan0_IP: "{{ vxlan0_NETWORK.split('.')[0] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[2] }}.{{ BASE_IP - 30 }}"
+          scan0_IP: "{{ vxlan0_NETWORK.split('.')[0] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[2] }}.{{ BASE_IP - 20 + 1 }}"
       - debug: msg="{{ scan0_IP }}"
         tags:
           - create
