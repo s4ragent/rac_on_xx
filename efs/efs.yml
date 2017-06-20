@@ -8,6 +8,10 @@
     tasks:
       - set_fact:
           scan0_IP: "{{ vxlan0_NETWORK.split('.')[0] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[2] }}.{{ BASE_IP - 20 + 1 }}"
+        tags:
+          - create          
+          
+          
       - debug: msg="{{ scan0_IP }}"
         tags:
           - create
