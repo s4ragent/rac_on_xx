@@ -39,7 +39,7 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
-ansible-playbook -i localhost, $VIRT_TYPE/efs.yml --tags create --extra-vars "nodecount=$nodecount"
+ansible-playbook -i localhost, $VIRT_TYPE/efs.yml --tags create --extra-vars "nodecount=$nodecount" -vvv
 
 	instanceid=`aws ec2 describe-instances --filters "Name=tag:Name,Values=${PREFIX}-storage" "Name=instance-state-name,Values=pending,running" --region $REGION --query "Reservations[].Instances[].InstanceId" --output text`
  filesystemid=`aws efs describe-file-systems --region $REGION --creation-token ${PREFIX}-EFS --query "FileSystems[].FileSystemId" --output text`
