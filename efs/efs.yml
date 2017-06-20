@@ -21,7 +21,7 @@
                     
       - set_fact:          
           NODEINFO:
-            NODENAME: "{{ NODEPREFIX }}%.3d"|format(item|int)"
+            NODENAME: "{{ NODEPREFIX }}%.3d|format(item|int)"
 #            vxlan0_IP:
         with_sequence: start=1 end="{{ nodecount }}"
         tags:
