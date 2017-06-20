@@ -28,7 +28,7 @@
           - create
           
       - debug: 
-          msg: "{{ item }}"
+          msg: "{{ item.0 }}"
         with_items: "{{ NODEINFO }}"
         tags:
           - create
