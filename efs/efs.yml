@@ -11,28 +11,22 @@
           arpa_public_subnet: "{{ vxlan0_NETWORK.split('.')[2] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[0] }}"
         tags:
           - create
+          - test
 
       - set_fact:                    
           scan0_IP: "{{ public_subnet }}{{ BASE_IP - 20 + 0 }}"
           scan1_IP: "{{ public_subnet }}{{ BASE_IP - 20 + 1 }}"
           scan2_IP: "{{ public_subnet }}{{ BASE_IP - 20 + 2 }}"                                                  
         tags:
-          - create
-                    
-      - set_fact:          
-          NODEINFO:
-            NODENAME: "{{ NODEPREFIX }}%.3d|format(item|int)"
-#            vxlan0_IP:
-        with_sequence: start=1 end="{{ nodecount }}"
-        register: result
-        tags:
-          - create
+          - create                    
+          - test
           
       - debug: 
-          msg: "{{ item.ansible_facts.NODEINFO.NODENAME}}"
-        with_items: result.results
+          msg: "{{ {{ NODEPREFIX }}%.3d|format(item|int) }}"
+        with_sequence: start=1 end="{{ nodecount }}"
         tags:
           - create
+          - test
 
         
       - name: "create VPC"
