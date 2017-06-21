@@ -24,12 +24,13 @@
             NODENAME: "{{ NODEPREFIX }}%.3d|format(item|int)"
 #            vxlan0_IP:
         with_sequence: start=1 end="{{ nodecount }}"
+        register: result
         tags:
           - create
           
       - debug: 
-          msg: "{{ item.0 }}"
-        with_items: "{{ NODEINFO }}"
+          msg: "{{ item.ansible_facts.NODEINFO.NODENAME}}"
+        with_items: result.results
         tags:
           - create
 
