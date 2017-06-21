@@ -8,10 +8,9 @@
     tasks:
       - set_fact:
           public_subnet: "{{ vxlan0_NETWORK.split('.')[0] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[2] }}."
-          arpa_public_subnet: "{{ vxlan0_NETWORK.split('.')[2] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[0] }}"
+          arpa_public_subnet: ".{{ vxlan0_NETWORK.split('.')[2] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[0] }}"
         tags:
           - create
-          - test
 
       - set_fact:                    
           scan0_IP: "{{ public_subnet }}{{ BASE_IP - 20 + 0 }}"
@@ -19,16 +18,13 @@
           scan2_IP: "{{ public_subnet }}{{ BASE_IP - 20 + 2 }}"                                                  
         tags:
           - create                    
-          - test
           
       - debug: 
           msg: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}"
         with_sequence: start=1 end="{{ nodecount }}"
         tags:
           - create
-          - test
 
-        
       - name: "create VPC"
         ec2_vpc_net:
           name: "{{ PREFIX }}-VPC"
@@ -190,7 +186,7 @@
           state: present
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
           vpc_region: "{{ REGION }}"
-          comment: "{{ PREFIX }}"
+          comment: "{{ PREFIX }}-Private"
         run_once: true
         ignore_errors: true
         tags:
@@ -208,7 +204,6 @@
           wait: yes
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
           private_zone: yes
-        run_once: true
         tags:
           - create
 
@@ -218,9 +213,9 @@
           zone: "{{ DOMAIN_NAME }}"
 #          region: "{{ REGION }}"
           type: A
-          value: "{{ vxlan0_NETWORK.split('.')[0] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[2] }}.{{ BASE_IP  + item }}"
+          value: "{{ public_subnet }}{{ BASE_IP  + item }}"
           overwrite: yes
-          record: "{{ NODEPREFIX }}.{{ DOMAIN_NAME }}"
+          record: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}.{{ DOMAIN_NAME }}"
           ttl: 300
           wait: yes
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
