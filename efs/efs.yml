@@ -22,7 +22,7 @@
           - test
           
       - debug: 
-          msg: "{{ %.3d|format(item|int) }}"
+          msg: "{{ '%.3d'|format(item|int) }}"
         with_sequence: start=1 end="{{ nodecount }}"
         tags:
           - create
