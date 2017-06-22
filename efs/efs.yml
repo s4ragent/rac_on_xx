@@ -223,7 +223,7 @@
           command: create
           zone: "{{ DOMAIN_NAME }}"
           type: A
-          value: "{{ public_subnet }}{{ BASE_IP + 0 + item }}"
+          value: "{{ public_subnet }}{{ BASE_IP - 0 + item }}"
           overwrite: yes
           record: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}.{{ DOMAIN_NAME }}"
           ttl: 300
