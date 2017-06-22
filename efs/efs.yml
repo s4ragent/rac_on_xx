@@ -12,6 +12,7 @@
         tags:
           - create
           - delete
+          - test
 
       - set_fact:                    
           scan0_IP: "{{ public_subnet }}{{ BASE_IP - 20 + 0 }}"
@@ -20,6 +21,7 @@
         tags:
           - create                    
           - delete
+          - test
 
       - name: "create VPC"
         ec2_vpc_net:
@@ -30,6 +32,7 @@
         register: _vpc
         tags:
           - create
+          - test
  
       - ec2_vpc_dhcp_options:
           domain_name: "{{ DOMAIN_NAME }}"
@@ -187,6 +190,7 @@
         ignore_errors: true
         tags:
           - create
+          - test
 
       - name: "create record"
         route53:
@@ -201,6 +205,7 @@
           private_zone: yes
         tags:
           - create
+          - test
 
       - name: "record host dns"
         route53:
@@ -217,6 +222,7 @@
         with_sequence: start=1 end="{{ nodecount }}" 
         tags:
           - create
+          - test
 
       - name: "create PTR zone"
         route53_zone:
@@ -230,6 +236,7 @@
         ignore_errors: true
         tags:
           - create
+          - test
 
       - name: "create ptr record scan"
         route53:
@@ -245,6 +252,7 @@
         with_sequence: start=1 end=3
         tags:
           - create
+          - test
 
       - name: "record ptr host"
         route53:
@@ -261,6 +269,7 @@
         with_sequence: start=1 end="{{ nodecount }}" 
         tags:
           - create
+          - test
 
 
       - name: "get vpcid"
