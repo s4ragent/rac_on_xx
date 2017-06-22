@@ -32,7 +32,6 @@
         register: _vpc
         tags:
           - create
-          - test
  
       - ec2_vpc_dhcp_options:
           domain_name: "{{ DOMAIN_NAME }}"
@@ -178,6 +177,18 @@
         tags:
           - create
 
+      - name: "get vpcid"
+        ec2_vpc_net_facts:
+          region: "{{ REGION }}"
+          filters:
+            "tag:Name": "{{ PREFIX }}-VPC"
+        register: vpc_facts 
+        tags:
+          - delete
+          - deleteinstances
+          - create
+          - test
+
       - name: "create private zone"
         route53_zone:
           zone: "{{ DOMAIN_NAME }}"
@@ -270,17 +281,6 @@
         tags:
           - create
           - test
-
-
-      - name: "get vpcid"
-        ec2_vpc_net_facts:
-          region: "{{ REGION }}"
-          filters:
-            "tag:Name": "{{ PREFIX }}-VPC"
-        register: vpc_facts 
-        tags:
-          - delete
-          - deleteinstances
 
       - name: "delete ptr record scan"
         route53:
