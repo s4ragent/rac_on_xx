@@ -8,9 +8,10 @@
     tasks:
       - set_fact:
           public_subnet: "{{ vxlan0_NETWORK.split('.')[0] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[2] }}."
-          arpa_public_subnet: ".{{ vxlan0_NETWORK.split('.')[2] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[0] }}"
+          arpa_public_subnet: "{{ vxlan0_NETWORK.split('.')[2] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[0] }}"
         tags:
           - create
+          - delete
 
       - set_fact:                    
           scan0_IP: "{{ public_subnet }}{{ BASE_IP - 20 + 0 }}"
@@ -18,12 +19,7 @@
           scan2_IP: "{{ public_subnet }}{{ BASE_IP - 20 + 2 }}"                                                  
         tags:
           - create                    
-          
-      - debug: 
-          msg: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}"
-        with_sequence: start=1 end="{{ nodecount }}"
-        tags:
-          - create
+          - delete
 
       - name: "create VPC"
         ec2_vpc_net:
@@ -196,7 +192,6 @@
         route53:
           command: create
           zone: "{{ DOMAIN_NAME }}"
-#          region: "{{ REGION }}"
           record:  "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
           type: A
           ttl: 300
@@ -211,7 +206,6 @@
         route53:
           command: create
           zone: "{{ DOMAIN_NAME }}"
-#          region: "{{ REGION }}"
           type: A
           value: "{{ public_subnet }}{{ BASE_IP  + item }}"
           overwrite: yes
@@ -224,6 +218,51 @@
         tags:
           - create
 
+      - name: "create PTR zone"
+        route53_zone:
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          region: "{{ REGION }}"
+          state: present
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          vpc_region: "{{ REGION }}"
+          comment: "{{ PREFIX }}-PTR"
+        run_once: true
+        ignore_errors: true
+        tags:
+          - create
+
+      - name: "create ptr record scan"
+        route53:
+          command: create
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          record:  "{{ BASE_IP - 20 + item }}.{{ arpa_public_subnet }}.in-addr.arpa"
+          type: PTR
+          ttl: 300
+          value: "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_sequence: start=1 end=3
+        tags:
+          - create
+
+      - name: "record ptr host"
+        route53:
+          command: create
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          type: PTR
+          record: "{{ BASE_IP  + item }}.{{ arpa_public_subnet }}.in-addr.arpa"
+          overwrite: yes
+          value: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}.{{ DOMAIN_NAME }}"
+          ttl: 300
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_sequence: start=1 end="{{ nodecount }}" 
+        tags:
+          - create
+
+
       - name: "get vpcid"
         ec2_vpc_net_facts:
           region: "{{ REGION }}"
@@ -233,7 +272,94 @@
         tags:
           - delete
           - deleteinstances
-                     
+
+      - name: "delete ptr record scan"
+        route53:
+          command: delete
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          record:  "{{ BASE_IP - 20 + item }}.{{ arpa_public_subnet }}.in-addr.arpa"
+          type: PTR
+          ttl: 300
+          value: "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_sequence: start=1 end=3
+        tags:
+          - delete
+
+      - name: "delete record ptr host"
+        route53:
+          command: delete 
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          type: PTR
+          record: "{{ BASE_IP  + item }}.{{ arpa_public_subnet }}.in-addr.arpa"
+          overwrite: yes
+          value: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}.{{ DOMAIN_NAME }}"
+          ttl: 300
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_sequence: start=1 end="{{ nodecount }}" 
+        tags:
+          - delete
+          
+      - name: "delete PTR zone"
+        route53_zone:
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          region: "{{ REGION }}"
+          state: absent
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          vpc_region: "{{ REGION }}"
+          comment: "{{ PREFIX }}-PTR"
+        run_once: true
+        ignore_errors: true
+        tags:
+          - delete
+
+      - name: "delete record"
+        route53:
+          command: delete
+          zone: "{{ DOMAIN_NAME }}"
+          record:  "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
+          type: A
+          ttl: 300
+          value: "{{ scan0_IP }},{{ scan1_IP }},{{ scan2_IP }}"
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        tags:
+          - delete
+
+      - name: "record host dns"
+        route53:
+          command: delete
+          zone: "{{ DOMAIN_NAME }}"
+          type: A
+          value: "{{ public_subnet }}{{ BASE_IP  + item }}"
+          overwrite: yes
+          record: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}.{{ DOMAIN_NAME }}"
+          ttl: 300
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_sequence: start=1 end="{{ nodecount }}" 
+        tags:
+          - delete
+          
+      - name: "delete private zone"
+        route53_zone:
+          zone: "{{ DOMAIN_NAME }}"
+          region: "{{ REGION }}"
+          state: absent
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          vpc_region: "{{ REGION }}"
+          comment: "{{ PREFIX }}-Private"
+        run_once: true
+        ignore_errors: true
+        tags:
+          - delete
+                                
       - name: "get instanceids"         
         ec2_remote_facts:
           region: "{{ REGION }}"
