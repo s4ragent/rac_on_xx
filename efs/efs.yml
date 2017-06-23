@@ -9,6 +9,8 @@
       - set_fact:
           public_subnet: "{{ vxlan0_NETWORK.split('.')[0] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[2] }}."
           arpa_public_subnet: "{{ vxlan0_NETWORK.split('.')[2] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[0] }}"
+          PREFIX_PTR: "{{ PREFIX }}-PTR"
+          PREFIX_Private: "{{ PREFIX }}-Private"
         tags:
           - create
           - delete
@@ -196,7 +198,7 @@
           state: present
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
           vpc_region: "{{ REGION }}"
-          comment: "{{ PREFIX }}-Private"
+          comment: "{{ PREFIX_Private }}"
         run_once: true
         ignore_errors: true
         tags:
@@ -242,7 +244,7 @@
           state: present
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
           vpc_region: "{{ REGION }}"
-          comment: "{{ PREFIX }}-PTR"
+          comment: "{{ PREFIX_PTR }}"
         run_once: true
         ignore_errors: true
         tags:
@@ -291,7 +293,7 @@
 
       - debug:
           msg: "{{ item.Id }}"
-        when: item.Config.Comment == PREFIX
+        when: item.Config.Comment == PREFIX_Private
         with_items: "{{ hosted_zones.HostedZones }}" 
         tags:
           - delete
