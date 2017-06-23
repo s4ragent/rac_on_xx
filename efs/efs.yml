@@ -291,8 +291,11 @@
 
       - debug:
           msg: "{{ item.Id }}"
-        when: "{{ item.Config.Comment }}" == "{{ PREFIX }}-PTR"
+        when: "{{ item.Config.Comment }} == {{ PREFIX }}-PTR"
         with_items: "{{ hosted_zones }}" 
+        tags:
+          - delete
+          - test
 
       - name: List all record
         route53_facts:
