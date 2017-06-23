@@ -302,8 +302,9 @@
       - name: List all record
         route53_facts:
           query: record_sets
-          hosted_zone_id: hosted_zones.id 
-        register: hosted_zones
+          hosted_zone_id: "{{ item.Id[12:-1] }}" 
+        with_items: "{{ hosted_zones.HostedZones }}"
+        when: item.Config.Comment == PREFIX_Private OR item.Config.Comment == PREFIX_Private
         tags:
           - delete
           - test
