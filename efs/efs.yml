@@ -283,11 +283,11 @@
         tags:
           - create
 
-       - route53: 
-           state: get
-           zone: "{{ arpa_public_subnet }}.in-addr.arpa"
-           type: A 
-           register: rec 
+      - route53: 
+          state: get
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          type: A 
+          register: rec 
         tags:
           - delete
           - test
