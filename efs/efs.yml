@@ -284,10 +284,10 @@
           - create
 
       - route53: 
-          state: get
+          command: get
           zone: "{{ arpa_public_subnet }}.in-addr.arpa"
           type: A 
-          register: rec 
+        register: rec 
         tags:
           - delete
           - test
