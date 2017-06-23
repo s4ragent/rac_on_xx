@@ -193,7 +193,9 @@
         route53_facts:
           query: hosted_zone
         register: hosted_zones
-
+        tags:
+          - delete
+          - test
 
       - name: "create private zone"
         route53_zone:
