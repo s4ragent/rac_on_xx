@@ -304,7 +304,7 @@
           query: record_sets
           hosted_zone_id: "{{ item.Id[12:-1] }}" 
         with_items: "{{ hosted_zones.HostedZones }}"
-        when: item.Config.Comment == PREFIX_Private OR item.Config.Comment == PREFIX_Private
+        when: item.Config.Comment == PREFIX_Private or item.Config.Comment == PREFIX_Private
         tags:
           - delete
           - test
