@@ -253,7 +253,7 @@
         route53:
           command: create
           zone: "{{ arpa_public_subnet }}.in-addr.arpa"
-          record:  "{{ BASE_IP - 20 + item }}.{{ arpa_public_subnet }}.in-addr.arpa"
+          record:  "{{ BASE_IP - 20 + item|int }}.{{ arpa_public_subnet }}.in-addr.arpa"
           type: PTR
           ttl: 300
           value: "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
