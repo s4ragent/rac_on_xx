@@ -292,7 +292,7 @@
           - test
 
       - debug:
-          msg: "{{ item.Id }}"
+          msg: "{{ item.Id | substring(7) }}"
         when: item.Config.Comment == PREFIX_Private
         with_items: "{{ hosted_zones.HostedZones }}" 
         tags:
