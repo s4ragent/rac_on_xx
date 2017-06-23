@@ -292,7 +292,7 @@
       - debug:
           msg: "{{ item.Id }}"
         when: "{{ item.Config.Comment }} == {{ PREFIX }}-PTR"
-        with_items: "{{ hosted_zones }}" 
+        with_items: "{{ hosted_zones.HostedZones }}" 
         tags:
           - delete
           - test
