@@ -283,28 +283,11 @@
         tags:
           - create
 
-      - name: List all hosted zones
-        route53_facts:
-          query: hosted_zone
-        register: hosted_zones
-        tags:
-          - delete
-          - test
-
-      - debug:
-          msg: "{{ item.Id[12:-0] }}"
-        when: item.Config.Comment == PREFIX_Private
-        with_items: "{{ hosted_zones.HostedZones }}" 
-        tags:
-          - delete
-          - test
-
-      - name: List all record
-        route53_facts:
-          query: record_sets
-          hosted_zone_id: "{{ item.Id[12:30] }}" 
-        with_items: "{{ hosted_zones.HostedZones }}"
-        when: item.Config.Comment == PREFIX_Private or item.Config.Comment == PREFIX_PTR
+       - route53: 
+           state: get
+           zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+           type: A 
+           register: rec 
         tags:
           - delete
           - test
