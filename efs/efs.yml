@@ -286,6 +286,7 @@
       - route53: 
           command: get
           zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          record: "*.{{ arpa_public_subnet }}.in-addr.arpa"
           type: A 
         register: rec 
         tags:
