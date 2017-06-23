@@ -189,14 +189,6 @@
           - create
           - test
 
-      - name: List all hosted zones
-        route53_facts:
-          query: hosted_zone
-        register: hosted_zones
-        tags:
-          - delete
-          - test
-
       - name: "create private zone"
         route53_zone:
           zone: "{{ DOMAIN_NAME }}"
@@ -209,7 +201,7 @@
         ignore_errors: true
         tags:
           - create
-          - test
+
 
       - name: "create record"
         route53:
@@ -224,7 +216,7 @@
           private_zone: yes
         tags:
           - create
-          - test
+
 
       - name: "record host dns"
         route53:
@@ -241,7 +233,7 @@
         with_sequence: start=1 end="{{ nodecount }}" 
         tags:
           - create
-          - test
+
 
       - name: "create PTR zone"
         route53_zone:
@@ -255,7 +247,7 @@
         ignore_errors: true
         tags:
           - create
-          - test
+
 
       - name: "create ptr record scan"
         route53:
@@ -271,7 +263,7 @@
         with_sequence: start=0 end=2
         tags:
           - create
-          - test
+
 
       - name: "record ptr host"
         route53:
@@ -288,7 +280,31 @@
         with_sequence: start=1 end="{{ nodecount }}" 
         tags:
           - create
+
+      - name: List all hosted zones
+        route53_facts:
+          query: hosted_zone
+        register: hosted_zones
+        tags:
+          - delete
           - test
+
+      - debug:
+          msg: "{{ item.Id }}"
+        when: "{{ item.Config.Comment }}" == "{{ PREFIX }}-PTR"
+        with_items: hosted_zones
+
+      - name: List all record
+        route53_facts:
+          query: record_sets
+          hosted_zone_id: hosted_zones.id 
+        register: hosted_zones
+        tags:
+          - delete
+          - test
+
+
+
 
       - name: "delete ptr record scan"
         route53:
