@@ -287,7 +287,9 @@
           command: get
           zone: "{{ arpa_public_subnet }}.in-addr.arpa"
           record: "*.{{ arpa_public_subnet }}.in-addr.arpa"
-          type: A 
+          type: A
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes 
         register: rec 
         tags:
           - delete
