@@ -270,7 +270,7 @@
           command: create
           zone: "{{ arpa_public_subnet }}.in-addr.arpa"
           type: PTR
-          record: "{{ BASE_IP  item|int }}.{{ arpa_public_subnet }}.in-addr.arpa"
+          record: "{{ BASE_IP + item|int }}.{{ arpa_public_subnet }}.in-addr.arpa"
           overwrite: yes
           value: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}.{{ DOMAIN_NAME }}"
           ttl: 300
