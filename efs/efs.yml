@@ -282,17 +282,23 @@
         with_sequence: start=1 end="{{ nodecount }}" 
         tags:
           - create
-
-      - route53: 
-          command: get
-          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
-          record: ".{{ arpa_public_subnet }}.in-addr.arpa"
-          type: A
-          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
-          private_zone: yes 
-        register: rec 
-        tags:
-          - delete
+          
+      - name: List all hosted zones 
+        route53_facts: 
+          query: hosted_zone 
+        register: hosted_zones 
+        tags: 
+          - delete 
+          - test
+     
+      - name: List all record 
+        route53_facts: 
+          query: record_sets 
+          hosted_zone_id: "{{ item.Id[12:30] }}"    
+        with_items: "{{ hosted_zones.HostedZones }}"
+        when: item.Config.Comment == PREFIX_Private or item.Config.Comment == PREFIX_PTR 
+        tags: 
+          - delete 
           - test
 
 
