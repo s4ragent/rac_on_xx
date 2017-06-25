@@ -314,7 +314,7 @@
           - test
 
       - debug:
-          msg: "{{ item.Name }} {% for ResourceRecord in item.ResourceRecords  %}{{ ResourceRecord.Value }} {% endfor %}"
+          msg: "{% for ResourceRecord in item.ResourceRecords  %}{{ ResourceRecord.Value }} {% endfor %}"
         with_items: record_sets_private.ResourceRecordSets
         tags: 
           - delete 
