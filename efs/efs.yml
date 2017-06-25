@@ -316,6 +316,9 @@
       - debug:
           msg: "{{ item }}"
         with_items: record_sets_ptr
+        tags: 
+          - delete 
+          - test
         
       - name: "delete ptr record scan"
         route53:
