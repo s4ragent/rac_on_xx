@@ -304,7 +304,7 @@
           - test
 
       - debug:
-          var: "{{ item }}"
+          var: "{{ item.item }}"
         with_items: 
           - "{{ record_sets.results}}"
         tags: 
