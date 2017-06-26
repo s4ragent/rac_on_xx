@@ -343,7 +343,7 @@
 
       - debug:
           var: "{{ item }}"
-        with_items: "{{ record_sets_ptr.results[0].ResourceRecordSets }}"
+        with_items: "{{ record_sets_ptr.results[0] }}"
         tags: 
           - delete 
           - test
