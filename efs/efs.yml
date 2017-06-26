@@ -342,8 +342,8 @@
           - test
 
       - debug:
-          var: "{{ item }}"
-        with_items: "{{ record_sets_ptr }}"
+          var: record_sets_ptr
+#        with_items: "{{ record_sets_ptr }}"
         tags: 
           - delete 
           - test
