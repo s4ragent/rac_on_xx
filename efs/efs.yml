@@ -322,8 +322,8 @@
           - test
           
       - debug:
-#          msg: "{% for ResourceRecord in item.ResourceRecords  %}{{ ResourceRecord.Value }} {% endfor %}"
-          var: "{{ item }}"
+          msg: "{% for ResourceRecord in item.ResourceRecords  %}{{ ResourceRecord.Value }} {% endfor %}"
+#          var: "{{ item }}"
         with_items: "{{ record_sets_private.results[0].ResourceRecordSets }}"
         tags: 
           - delete 
