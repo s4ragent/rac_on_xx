@@ -315,7 +315,7 @@
 
 
       - debug:
-          var: {{ record_sets_private }}
+          var: "{{ record_sets_private }}"
 #        with_items: record_sets_private
         tags: 
           - delete 
