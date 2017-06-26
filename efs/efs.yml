@@ -314,12 +314,7 @@
           - test
 
 
-      - debug:
-          var: record_sets_private.results[0].ResourceRecordSets
-#        with_items: record_sets_private
-        tags: 
-          - delete 
-          - test
+
           
       - debug:
           msg: "{% for ResourceRecord in item.ResourceRecords  %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
@@ -346,6 +341,13 @@
           - delete
           - test
 
+      - debug:
+          var: "{{ item }}"
+        with_items: "{{ record_sets_ptr.results[0].ResourceRecordSets }}"
+        tags: 
+          - delete 
+          - test
+          
       - name: "delete ptr record"
         route53:
           command: delete
