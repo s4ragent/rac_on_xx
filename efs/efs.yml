@@ -315,7 +315,7 @@
 
 
       - debug:
-          var: record_sets_private.results.ResourceRecordSets
+          var: record_sets_private.results
 #        with_items: record_sets_private
         tags: 
           - delete 
