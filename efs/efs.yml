@@ -312,7 +312,7 @@
           - test
 
       - debug:
-          var: "{{ item.1.3 }}"
+#          var: "{{ item.1.3 }}"
         with_nested: 
           - "{{ record_sets.results}}"
           - ResourceRecordSets
