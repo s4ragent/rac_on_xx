@@ -346,6 +346,23 @@
           - delete
           - test
 
+      - name: "delete ptr record"
+        route53:
+          command: delete
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          record:  "{{ item.Name }}"
+          type: PTR
+          ttl: "{{ item.TTL }}"
+          value: "{% for ResourceRecord in item.ResourceRecords  %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_items: "{{ record_sets_ptr.results[0].ResourceRecordSets }}"
+        when: item.Type == "PTR"          
+        tags:
+          - delete
+          - test
+
         
       - name: "delete ptr record scan"
         route53:
