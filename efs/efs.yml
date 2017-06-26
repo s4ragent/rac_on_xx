@@ -304,8 +304,8 @@
           - test
 
       - debug:
-          var: "{{ item }}"
-        with_items: "{{ record_sets.results}}"
+          var: "{{ item.0 }}"
+        with_nested: "{{ record_sets.results}}"
         tags: 
           - delete 
           - test
