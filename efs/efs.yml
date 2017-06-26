@@ -323,7 +323,7 @@
           
       - debug:
           msg: "{% for ResourceRecord in item.ResourceRecords  %}{{ ResourceRecord.Value }} {% endfor %}"
-        with_items: record_sets_private.results.ResourceRecordSets
+        with_items: record_sets_private.results[0].ResourceRecordSets
         tags: 
           - delete 
           - test
