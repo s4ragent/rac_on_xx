@@ -296,24 +296,19 @@
           query: record_sets 
           hosted_zone_id: "{{ item.Id[12:30] }}"    
         with_items: "{{ hosted_zones.HostedZones }}"
-        when: item.Config.Comment == PREFIX_Private
-        register: record_sets_private
+#        when: item.Config.Comment == PREFIX_Private
+#        when: item.Config.Comment == PREFIX_PTR
+        register: record_sets
         tags: 
           - delete 
           - test
 
-      - name: List all record 
-        route53_facts: 
-          query: record_sets 
-          hosted_zone_id: "{{ item.Id[12:30] }}"    
-        with_items: "{{ hosted_zones.HostedZones }}"
-        when: item.Config.Comment == PREFIX_PTR
-        register: record_sets_ptr
+      - debug:
+          var: "{{ item }}"
+        with_items: "{{ record_sets.results}}"
         tags: 
           - delete 
           - test
-
-
 
           
       - debug:
