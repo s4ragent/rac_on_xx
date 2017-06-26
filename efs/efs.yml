@@ -313,6 +313,14 @@
           - delete 
           - test
 
+
+      - debug:
+          var: {{ record_sets_private }}
+#        with_items: record_sets_private
+        tags: 
+          - delete 
+          - test
+          
       - debug:
           msg: "{% for ResourceRecord in item.ResourceRecords  %}{{ ResourceRecord.Value }} {% endfor %}"
         with_items: record_sets_private
