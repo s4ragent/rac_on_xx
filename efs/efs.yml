@@ -305,7 +305,7 @@
 
       - debug:
           var: "{{ item.0 }}"
-        with_nested: "{{ record_sets.results}}"
+        with_subelements: "{{ record_sets.results}}"
         tags: 
           - delete 
           - test
