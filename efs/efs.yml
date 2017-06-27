@@ -306,10 +306,9 @@
 
 
       - debug:
-          msg: "{{ item.1}}"
-        with_nested: 
+          msg: "{{ item.0}}"
+        with_item: 
           - "{{ record_sets.results}}"
-          - ResourceRecordSets
         tags: 
           - delete 
           - test
