@@ -306,7 +306,7 @@
 
 
       - debug:
-          msg: "{{ item.item }}"
+          msg: "{{ item.item.Config.Comment }}"
         with_items: "{{ record_sets.results }}"
         tags: 
           - delete 
