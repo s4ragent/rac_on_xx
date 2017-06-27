@@ -306,7 +306,7 @@
 
 
       - debug:
-          msg: "{{ item.1.0 }}"
+          msg: "{{ item.1}}"
         with_nested: 
           - "{{ record_sets.results}}"
           - ResourceRecordSets
