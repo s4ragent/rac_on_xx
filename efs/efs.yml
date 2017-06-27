@@ -306,7 +306,7 @@
 
 
       - debug:
-          msg: "{% for ResourceRecord in item.item.ResourceRecords  %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
+          msg: "{% for ResourceRecord in item.ResourceRecords %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
         with_items: "{{ record_sets.results }}"
         when: item.item.Config.Comment == PREFIX_Private
         tags: 
