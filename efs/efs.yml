@@ -306,7 +306,7 @@
 
 
       - debug:
-          msg: "{{ item }}"
+          msg: "{{ item.item }}"
         with_items: "{{ record_sets.results }}"
         tags: 
           - delete 
