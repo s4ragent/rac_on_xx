@@ -303,7 +303,8 @@
           - delete 
           - test
 
-      - debug:
+      - name: test
+        debug:
           var: "{{ item.item }}"
         with_items: 
           - "{{ record_sets.results}}"
