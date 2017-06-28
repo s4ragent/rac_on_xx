@@ -317,9 +317,11 @@
 
           
       - debug:
-          msg: "{% for ResourceRecord in item.ResourceRecords  %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
-        when: item.Type == "A"
-        with_items: "{{ record_sets_private.results[0].ResourceRecordSets }}"
+          msg: "{% for ResourceRecord in item.1.ResourceRecords  %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
+        with_subelements: 
+          - "{{ record_sets.results }}"
+          - ResourceRecordSets
+        when: item.0.item.Config.Comment == PREFIX_PTR and item.1.Type == "PTR"
         tags: 
           - delete 
           - test
