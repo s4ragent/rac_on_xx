@@ -289,7 +289,6 @@
         register: hosted_zones 
         tags: 
           - delete 
-          - test
      
       - name: List all record 
         route53_facts: 
@@ -301,8 +300,6 @@
         register: record_sets
         tags: 
           - delete 
-          - test
-
 
 
       - debug:
@@ -312,19 +309,7 @@
           - ResourceRecordSets
         when: item.0.item.Config.Comment == PREFIX_Private and item.1.Type == "A"
         tags: 
-          - delete 
-          - test
-
-          
-      - debug:
-          msg: "{% for ResourceRecord in item.1.ResourceRecords  %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
-        with_subelements: 
-          - "{{ record_sets.results }}"
-          - ResourceRecordSets
-        when: item.0.item.Config.Comment == PREFIX_PTR and item.1.Type == "PTR"
-        tags: 
-          - delete 
-          - test
+          - delete
 
       - name: "delete record"
         route53:
@@ -343,8 +328,15 @@
         when: item.0.item.Config.Comment == PREFIX_Private and item.1.Type == "A"          
         tags:
           - delete
-          - test
 
+      - debug:
+          msg: "{% for ResourceRecord in item.1.ResourceRecords  %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
+        with_subelements: 
+          - "{{ record_sets.results }}"
+          - ResourceRecordSets
+        when: item.0.item.Config.Comment == PREFIX_PTR and item.1.Type == "PTR"
+        tags: 
+          - delete
           
       - name: "delete ptr record"
         route53:
@@ -363,7 +355,6 @@
         when: item.0.item.Config.Comment == PREFIX_PTR and item.1.Type == "PTR"         
         tags:
           - delete
-          - test
 
       - name: "delete private zone"
         route53_zone:
