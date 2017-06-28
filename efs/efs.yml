@@ -307,7 +307,7 @@
 
       - debug:
           msg: "{{ item.0 }}"
-        with_nested: 
+        with_subelements: 
           - "{{ record_sets.results }}"
           - ResourceRecordSets
 #        when: item.item.Config.Comment == PREFIX_Private
