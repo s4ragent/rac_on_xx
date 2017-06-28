@@ -81,8 +81,6 @@ ansible-playbook -i $VIRT_TYPE $VIRT_TYPE/route53.yml --tags create
 }
 
 deleteall(){
-	ansible-playbook -i $VIRT_TYPE $VIRT_TYPE/route53.yml --tags delete
-
    	common_deleteall $*
 	#### VIRT_TYPE specific processing ###
 	if [ -e "$ansible_ssh_private_key_file" ]; then
