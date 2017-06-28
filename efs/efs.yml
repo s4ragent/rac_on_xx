@@ -306,9 +306,10 @@
 
 
       - debug:
-#          msg: "{% for ResourceRecord in item.ResourceRecords %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
-          msg: "{{ item.ResourceRecordSets }}"
-        with_items: "{{ record_sets.results }}"
+          msg: "{{ item.0 }}"
+        with_nested: 
+          - "{{ record_sets.results }}"
+          - ResourceRecordSets
         when: item.item.Config.Comment == PREFIX_Private
         tags: 
           - delete 
