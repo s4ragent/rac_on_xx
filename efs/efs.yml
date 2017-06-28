@@ -467,15 +467,6 @@
           region: "{{ REGION }}"
         tags:
           - delete
-           
-      - name: "delete VPC"
-        ec2_vpc_net:
-          name: "{{ PREFIX }}-VPC"
-          state: absent
-          cidr_block: "{{ VPC_ADDR }}"
-          region: "{{ REGION }}"
-        tags:
-          - delete
 
       - name: "delete dhcp option"
         ec2_vpc_dhcp_options:
@@ -488,3 +479,13 @@
           state: absent
         tags:
           - delete
+                     
+      - name: "delete VPC"
+        ec2_vpc_net:
+          name: "{{ PREFIX }}-VPC"
+          state: absent
+          cidr_block: "{{ VPC_ADDR }}"
+          region: "{{ REGION }}"
+        tags:
+          - delete
+
