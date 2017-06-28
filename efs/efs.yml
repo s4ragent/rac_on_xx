@@ -306,7 +306,7 @@
 
 
       - debug:
-          msg: "{{ item.0 }}"
+          msg: "{{ item.1 }}"
         with_subelements: 
           - "{{ record_sets.results }}"
           - ResourceRecordSets
