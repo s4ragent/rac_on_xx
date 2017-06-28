@@ -310,7 +310,7 @@
         with_nested: 
           - "{{ record_sets.results }}"
           - ResourceRecordSets
-        when: item.item.Config.Comment == PREFIX_Private
+#        when: item.item.Config.Comment == PREFIX_Private
         tags: 
           - delete 
           - test
