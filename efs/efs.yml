@@ -365,35 +365,16 @@
           - delete
           - test
 
-        
-      - name: "delete ptr record scan"
-        route53:
-          command: delete
-          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
-          record:  "{{ BASE_IP - 20 + item|int }}.{{ arpa_public_subnet }}.in-addr.arpa"
-          type: PTR
-          ttl: 300
-          value: "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
-          wait: yes
+      - name: "delete private zone"
+        route53_zone:
+          zone: "{{ DOMAIN_NAME }}"
+          region: "{{ REGION }}"
+          state: absent
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
-          private_zone: yes
-        with_sequence: start=1 end=3
-        tags:
-          - delete
-
-      - name: "delete record ptr host"
-        route53:
-          command: delete 
-          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
-          type: PTR
-          record: "{{ BASE_IP  + item }}.{{ arpa_public_subnet }}.in-addr.arpa"
-          overwrite: yes
-          value: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}.{{ DOMAIN_NAME }}"
-          ttl: 300
-          wait: yes
-          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
-          private_zone: yes
-        with_sequence: start=1 end="{{ nodecount }}" 
+          vpc_region: "{{ REGION }}"
+          comment: "{{ PREFIX }}-Private"
+        run_once: true
+        ignore_errors: true
         tags:
           - delete
           
@@ -405,49 +386,6 @@
           vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
           vpc_region: "{{ REGION }}"
           comment: "{{ PREFIX }}-PTR"
-        run_once: true
-        ignore_errors: true
-        tags:
-          - delete
-
-      - name: "delete record"
-        route53:
-          command: delete
-          zone: "{{ DOMAIN_NAME }}"
-          record:  "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
-          type: A
-          ttl: 300
-          value: "{{ scan0_IP }},{{ scan1_IP }},{{ scan2_IP }}"
-          wait: yes
-          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
-          private_zone: yes
-        tags:
-          - delete
-
-      - name: "record host dns"
-        route53:
-          command: delete
-          zone: "{{ DOMAIN_NAME }}"
-          type: A
-          value: "{{ public_subnet }}{{ BASE_IP  + item }}"
-          overwrite: yes
-          record: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}.{{ DOMAIN_NAME }}"
-          ttl: 300
-          wait: yes
-          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
-          private_zone: yes
-        with_sequence: start=1 end="{{ nodecount }}" 
-        tags:
-          - delete
-          
-      - name: "delete private zone"
-        route53_zone:
-          zone: "{{ DOMAIN_NAME }}"
-          region: "{{ REGION }}"
-          state: absent
-          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
-          vpc_region: "{{ REGION }}"
-          comment: "{{ PREFIX }}-Private"
         run_once: true
         ignore_errors: true
         tags:
