@@ -306,7 +306,7 @@
 
 
       - debug:
-          msg: "{{ item.1 }}"
+          msg: "{% for ResourceRecord in item.1.ResourceRecords  %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
         with_subelements: 
           - "{{ record_sets.results }}"
           - ResourceRecordSets
