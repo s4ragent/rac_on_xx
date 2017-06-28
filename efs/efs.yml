@@ -310,7 +310,7 @@
         with_subelements: 
           - "{{ record_sets.results }}"
           - ResourceRecordSets
-#        when: item.item.Config.Comment == PREFIX_Private
+        when: item.0.item.Config.Comment == PREFIX_Private
         tags: 
           - delete 
           - test
