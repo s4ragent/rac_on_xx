@@ -58,7 +58,6 @@ do
 	cnt=`expr $cnt + 1`
 done
 
-ansible-playbook -i $VIRT_TYPE $VIRT_TYPE/route53.yml --tags create
 
 #	for i in `seq 1 $nodecount`;
 #	do
