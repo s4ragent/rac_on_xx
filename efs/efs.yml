@@ -235,6 +235,22 @@
         tags:
           - create
 
+      - name: "record host dns vip"
+        route53:
+          command: create
+          zone: "{{ DOMAIN_NAME }}"
+          type: A
+          value: "{{ public_subnet }}{{ BASE_IP + item|int +100 }}"
+          overwrite: yes
+          record: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}-vip.{{ DOMAIN_NAME }}"
+          ttl: 300
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_sequence: start=1 end="{{ nodecount }}" 
+        tags:
+          - create
+
 
       - name: "create PTR zone"
         route53_zone:
@@ -281,7 +297,23 @@
         with_sequence: start=1 end="{{ nodecount }}" 
         tags:
           - create
-          
+
+      - name: "record ptr host vip"
+        route53:
+          command: create
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          type: PTR
+          record: "{{ BASE_IP + item|int + 100 }}.{{ arpa_public_subnet }}.in-addr.arpa"
+          overwrite: yes
+          value: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}-vip.{{ DOMAIN_NAME }}"
+          ttl: 300
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_sequence: start=1 end="{{ nodecount }}" 
+        tags:
+          - create
+
       - name: List all hosted zones 
         route53_facts: 
           query: hosted_zone 
