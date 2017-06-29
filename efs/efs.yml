@@ -443,7 +443,7 @@
           - deleteinstances
 
       - pause:
-          minutes: 3
+          minutes: 1
         tags:
           - delete
 
