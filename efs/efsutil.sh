@@ -46,7 +46,7 @@ ansible-playbook -i localhost, $VIRT_TYPE/efs.yml --tags create --extra-vars "no
 
 #STORAGEIP=`run storage $instanceid 0 storage`
 #STORAGEIP=`aws efs describe`
-	common_update_all_yml "STORAGE_SERVER: ${REGION}a${filesystemid}.efs.${REGION}.amazonaws.com"
+	common_update_all_yml "STORAGE_SERVER: ${filesystemid}.efs.${REGION}.amazonaws.com"
 
 	instanceids=`aws ec2 describe-instances --filters "Name=tag:Name,Values=${PREFIX}-dbserver" "Name=instance-state-name,Values=pending,running" --region $REGION --query "Reservations[].Instances[].InstanceId" --output text`
 
