@@ -137,18 +137,6 @@
     tags:
       - kernel
 
-  - name: "edit ifcfg-eth0"
-    become: yes
-    lineinfile:
-      dest: /etc/sysconfig/network-scripts/ifcfg-eth0
-      regexp: "^MTU"
-      line: "MTU {{ MTU }}"
-      insertafter: EOF
-      state: present
-    when: 	MTU is defined
-    tags:
-      - kernel
-
   - name: "restart network"
     become: yes
     service: name=network.service state=restarted
