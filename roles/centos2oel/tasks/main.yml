@@ -74,7 +74,7 @@
     lineinfile:
       dest: /etc/sysconfig/network-scripts/ifcfg-eth0
       regexp: "^MTU"
-      line: "MTU {{ MTU }}"
+      line: "MTU={{ MTU }}"
       insertafter: EOF
       state: present
     when: 	MTU is defined
