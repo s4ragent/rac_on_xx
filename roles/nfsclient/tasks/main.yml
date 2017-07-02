@@ -20,7 +20,7 @@
 
   - name: "mount oradata"
     become: yes
-    mount: name={{ ORA_DATA }} src="{{ STORAGE_SERVER }}:/" fstype=nfs opts=rw,hard,rsize={{ RSIZE }},wsize={{ WSIZE }},tcp,vers=4,timeo=600,actimeo=0 state=mounted
+    mount: name={{ ORA_DATA }} src="{{ STORAGE_SERVER }}:/" fstype=nfs opts=rw,bg,hard,rsize={{ RSIZE }},wsize={{ WSIZE }},tcp,vers=4,timeo=600,actimeo=0 state=mounted
     when: storage_type == "nfs"
     tags:
       - nfsclient
