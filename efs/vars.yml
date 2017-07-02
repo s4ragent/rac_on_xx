@@ -26,7 +26,7 @@ STOP_CMD: "aws ec2 stop-instances --instance-ids"
 STOP_CMD_OPS: "--region {{ REGION }}"
 INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
-SWITCH_KERNEL: "0"
+SWITCH_KERNEL: "1"
 MEDIA_COPY: "true"
 MEDIA_PATH: /u01/downloadmedia
 DB_MEDIA1: V839960-01.zip
@@ -58,7 +58,7 @@ FRA_DISKGROUP_NAME: FRA
 ASM_STRING: /u01/oradata/*
 RSIZE: 32768
 WSIZE: 32768
-MTU: 1500 
+#MTU: 1500 
 #DD_CMD: dd
 
 
