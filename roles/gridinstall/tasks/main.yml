@@ -70,7 +70,7 @@
     shell: "make -f ins_rdbms.mk dnfs_off"
     args:
       chdir: "{{ GRID_ORACLE_HOME }}/rdbms/lib"
-    when: when: DISABLE_DNFS is defined and DISABLE_DNFS !=""
+    when: DISABLE_DNFS is defined and DISABLE_DNFS !=""
 #    ignore_errors: True
     tags:
       - grid1strootsh
