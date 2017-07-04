@@ -73,6 +73,7 @@
     when: DISABLE_DNFS is defined and DISABLE_DNFS !=""
 #    ignore_errors: True
     tags:
+      - griddisablednfs
       - grid1strootsh
       - gridrootsh
       - gridinstall
