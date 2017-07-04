@@ -64,20 +64,6 @@
 #      - gridrootsh
 #      - gridinstall
 
-  - name: "disable dnfs"
-    become: yes
-    become_user: grid
-    shell: "rm -rf {{ GRID_ORACLE_HOME }}/rdbms/lib/odm/libnfsodm12.so"
-    when: DISABLE_DNFS is defined and DISABLE_DNFS !=""
-#    ignore_errors: True
-    tags:
-      - griddisablednfs
-      - grid1strootsh
-      - gridrootsh
-      - gridinstall
-      - installdbca
-
-
   - name: "grid 1st root.sh"
     become: yes
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
@@ -136,4 +122,39 @@
       - gridinstall
       - installdbca
 
+  - name: "disable dnfs"
+    become: yes
+    file: 
+      path: "{{ GRID_ORACLE_HOME }}/rdbms/lib/odm/libnfsodm12.so"
+      state: absent
+    when: DISABLE_DNFS is defined and DISABLE_DNFS !=""
+#    ignore_errors: True
+    tags:
+      - griddisablednfs
+      - grid1strootsh
+      - gridrootsh
+      - gridinstall
+      - installdbca
 
+  - name: reboot
+    become: yes
+    shell: sleep 2 && reboot &
+    when: DISABLE_DNFS is defined and DISABLE_DNFS !=""
+    async: 1
+    poll: 0
+    tags:
+      - griddisablednfs
+      - grid1strootsh
+      - gridrootsh
+      - gridinstall
+      - installdbca
+      
+  - pause:
+      minutes: 10
+    when: DISABLE_DNFS is defined and DISABLE_DNFS !=""
+    tags:
+      - griddisablednfs
+      - grid1strootsh
+      - gridrootsh
+      - gridinstall
+      - installdbca
