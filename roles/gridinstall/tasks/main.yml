@@ -67,9 +67,7 @@
   - name: "disable dnfs"
     become: yes
     become_user: grid
-    shell: "make -f ins_rdbms.mk dnfs_off"
-    args:
-      chdir: "{{ GRID_ORACLE_HOME }}/rdbms/lib"
+    shell: "rm -rf {{ GRID_ORACLE_HOME }}/rdbms/lib/odm/libnfsodm12.so"
     when: DISABLE_DNFS is defined and DISABLE_DNFS !=""
 #    ignore_errors: True
     tags:
