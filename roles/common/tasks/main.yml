@@ -1,0 +1,304 @@
+---
+#### set hostname #################################
+
+  - name: "copy sethost.init"
+    become: yes
+    template: src=sethost.init.j2 dest=/usr/local/bin/sethost.init owner=root group=root mode=0700
+    tags:
+      - sethost
+      
+  - name: "copy sethost.service"
+    become: yes
+    copy: src=sethost.service dest=/etc/systemd/system/sethost.service owner=root group=root mode=0700
+    tags:
+      - sethost
+
+  - name: "start_enable sethost.service"
+    become: yes
+    service: name=sethost.service state=started enabled=yes
+    tags:
+      - sethost
+
+
+
+  - name: "create group"
+    become: yes
+    group: name={{ item.name }} state=present gid={{ item.gid }}
+    with_items:
+      - { name: 'oinstall', gid: '601' }
+      - { name: 'dba', gid: '602' }
+      - { name: 'oper', gid: '603' }
+      - { name: 'asmadmin', gid: '2001' }
+      - { name: 'asmdba', gid: '2002' }
+      - { name: 'asmoper', gid: '2003' }
+    tags:
+      - createuser
+
+  - name: "delete user"
+    become: yes
+    user: name={{ item }} state=absent remove=yes
+    ignore_errors: true
+    with_items:
+      - oracle
+      - grid
+    tags:
+      - createuser
+
+  - name: "create user"
+    become: yes
+    user: name={{ item.name}} uid={{ item.uid }} group=oinstall groups={{ item.groups}} shell=/bin/bash
+    with_items:
+      - { name: 'oracle', uid: '501',groups: 'dba,oper,asmdba' }
+      - { name: 'grid', uid: '2001',groups: 'asmadmin,asmdba,asmoper' }
+    tags:
+      - createuser
+
+#  - name: "chmod user's home"
+#    become: yes
+#    file: path="/home/{{ item }}" state=directory owner={{ item }} group=oinstall mode=0700
+#    with_items:
+#      - oracle
+#      - grid
+#    tags:
+#      - createuser
+
+  - name: "copy .bashrc"
+    become: yes
+    copy: src=.bashrc dest=/home/{{ item }}/.bashrc mode=644 owner={{ item }} group=oinstall 
+    with_items:
+      - oracle
+      - grid
+    tags:
+      - profile
+      - createuser
+
+  - name: "copy .bash_profile"
+    become: yes
+    template: src=.bash_profile_{{ item }}.j2 dest=/home/{{ item }}/.bash_profile mode=0644 owner={{ item }} group=oinstall
+    with_items:
+      - oracle
+      - grid
+    tags:
+      - profile
+      - createuser
+      
+  - name: "create ssh key"
+    local_action: shell ssh-keygen -t rsa -P "" -f id_rsa
+    args:
+      creates: id_rsa
+    run_once: true
+    tags:
+      - sshkey
+ 
+  - name: "copy authorized key"
+    become: yes
+    authorized_key: user={{ item }} key="{{ lookup('file', 'id_rsa.pub') }}" 
+    with_items:
+      - oracle
+      - grid
+    tags:
+      - sshkey
+
+  - name: "copy private key"
+    become: yes
+    copy: dest=/home/{{ item }}/.ssh/id_rsa mode=600 owner={{ item }} group=oinstall content="{{ lookup('file', 'id_rsa') }}"
+    with_items:
+      - oracle
+      - grid
+    tags:
+      - sshkey
+
+  - name: "create known hosts"
+    become: yes
+    template: src=known_hosts.j2 dest=/home/{{ item }}/.ssh/known_hosts owner={{ item }} group=oinstall mode=0644
+    with_items:
+      - oracle
+      - grid
+    tags:
+      - sshkey
+
+
+  - name: "delete ssh key"
+    local_action: shell rm -rf id_rsa*
+    run_once: true
+    tags:
+      - sshkey
+
+
+  - name: "copy limits.nonf"
+    become: yes
+    copy: src=limits.conf dest=/etc/security/limits.conf mode=644 owner=root group=root
+    tags:
+      - kernel
+
+  - name: "copy ifcfg-lo"
+    become: yes
+    copy: src=ifcfg-lo dest=/etc/sysconfig/network-scripts/ifcfg-lo mode=644 owner=root group=root
+    tags:
+      - kernel
+
+  - name: "restart network"
+    become: yes
+    service: name=network.service state=restarted
+    tags:
+      - kernel
+
+  - name: "disable ntpd"
+    become: yes
+    service: name=ntpd.service state=stopped enabled=no
+    ignore_errors: yes
+    tags:
+      - ntp
+
+  - name: "mv ntpd.conf"
+    become: yes
+    shell: mv /etc/ntp.conf /etc/ntp.conf.original
+    args:
+      creates: /etc/ntp.conf.original
+    ignore_errors: yes
+    tags:
+      - ntp
+
+  - name: "rm  ntpd.pid"
+    become: yes
+    file: path=/var/run/ntpd.pid state=absent
+    ignore_errors: yes
+    tags:
+      - ntp
+
+  - name: "Partition additional disks"
+    become: yes
+    shell: |
+      if
+        [ -b {{ data_disk_dev }} ]
+      then
+        [ -b {{ data_disk_dev }}1 ] || parted --script "{{ data_disk_dev }}" mklabel gpt mkpart primary 1MiB 100%
+      fi
+    args:
+      creates: '{{ data_disk_dev }}1'
+      executable: '/bin/bash'
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
+      - fdisk
+
+  - name: "fdisk data_disk_dev"
+    become: yes
+    filesystem: fstype=xfs dev={{ data_disk_dev }}1
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
+      - fdisk
+
+  - name: get blkid
+    become: yes
+    shell: '/sbin/blkid {{ data_disk_dev }}1 | awk -F''"'' ''{ print $2 }'' '
+    register: uuid
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
+      - fdisk
+      - blkid
+
+  - debug: var=uuid.stdout
+    tags:
+      - blkid
+
+  - name: "create data_disk mountpoint"
+    become: yes
+    file: path={{ data_disk_mountpoint }} state=directory owner=grid group=oinstall mode=0755
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
+      - fdisk
+
+  - name: "mount data_disk_dev"
+    become: yes
+    mount: name={{ data_disk_mountpoint }} src="UUID={{ uuid.stdout }}" fstype=xfs opts=defaults passno=0 dump=0 state=mounted
+    when: data_disk_dev is defined and data_disk_dev !=""
+    tags:
+      - oraclehome
+      - fdisk
+
+  - name: "create gridbase gridhome oradata orainventry"
+    become: yes
+    file: path={{ item.path }} state=directory owner={{ item.name }} group=oinstall mode=0755
+    with_items:
+      - { name: 'grid', path: "{{ ORAINVENTORY }}" }
+      - { name: 'grid', path: "{{ GRID_ORACLE_BASE }}" }
+      - { name: 'grid', path: "{{ GRID_ORACLE_HOME }}" }
+      - { name: 'oracle', path: "{{ ORA_ORACLE_BASE }}" }
+      - { name: 'oracle', path: "{{ ORA_ORACLE_HOME }}" }
+    tags:
+      - oraclehome
+
+  - name: "install preinstall packages"
+    become: yes
+    yum: name={{ PreInstallRPM }} state=present enablerepo=ol7_optional_latest
+    async: "{{ ASYNC }}"
+    poll: "{{ POLL }}"
+    tags:
+      - preinstallpackages
+
+  - name: "create swap(dd)"
+    become: yes
+    shell: dd if=/dev/zero of=/swap bs=1M count={{ SWAP_SIZE }} && mkswap /swap
+    async: "{{ ASYNC }}"
+    poll: "{{ POLL }}"
+    when: ansible_swaptotal_mb < 1
+    tags:
+      - ddswap
+      - swap
+
+  - name: "create swap(swapon)"
+    become: yes
+    shell: swapon /swap
+    when: ansible_swaptotal_mb < 1
+    tags:
+      - swapon
+      - swap
+      
+  - name: "mount swap(fstab)"
+    become: yes
+    mount: name=swap src=/swap fstype=swap opts=defaults passno=0 dump=0 state=present
+    when: ansible_swaptotal_mb < 1
+    tags:
+      - fstabswap
+      - swap
+
+  - name: "unzip cvuqdisk"
+    local_action: shell {{ UNZIP }} /media/{{ GRID_MEDIA1 }} {{ CVUQDISK }}
+    args:
+      creates: "/tmp/{{ CVUQDISK }}"
+      executable: /bin/bash
+      chdir: /tmp
+    run_once: true
+    tags:
+      - preinstallpackages
+      
+  - name: "copy cvuqdisk"
+    become: yes
+    copy: src="/tmp/{{ CVUQDISK }}" dest=/tmp/cvuqdisk.rpm
+    tags:
+      - preinstallpackages
+      
+  - name: "install cvuqdisk"
+    become: yes
+    yum: name=/tmp/cvuqdisk.rpm state=present
+    tags:
+      - preinstallpackages
+
+  - name: "sysctl"
+    become: yes
+    shell: /sbin/sysctl -p
+    ignore_errors: yes
+    tags:
+      - sysctl
+
+  - name: "setcap ping"
+    become: yes
+    shell: setcap cap_net_raw,cap_net_admin+p /usr/bin/ping
+    ignore_errors: yes
+    when: setcap is defined and setcap !=""
+    tags:
+      - ping
