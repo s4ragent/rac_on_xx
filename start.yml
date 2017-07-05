@@ -1,0 +1,13 @@
+---
+#### start
+ - hosts: storage
+   gather_facts: False
+   connection: local
+   roles:
+     - start
+
+ - hosts: all:!storage
+   gather_facts: False
+   connection: local
+   roles:
+     - start

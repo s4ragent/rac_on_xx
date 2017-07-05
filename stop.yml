@@ -1,0 +1,17 @@
+---
+####  stop
+ - hosts: all:!storage
+   gather_facts: False
+   connection: local
+   roles:
+     - stop
+
+ - hosts: storage
+   roles:
+     - stop-storage-service
+ 
+ - hosts: storage
+   gather_facts: False
+   connection: local
+   roles:
+     - stop
