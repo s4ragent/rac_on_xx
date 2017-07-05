@@ -66,7 +66,7 @@
 
   - name: "Update relink_rac_on(dnfs_off)"
     become: yes
-    lineinfile:
+    replace:
       dest: "{{ GRID_ORACLE_HOME }}/crs/config/relink_rac_on"
       regexp: "dnfs_on"
       replace: "dnfs_on 	dnfs_off"
