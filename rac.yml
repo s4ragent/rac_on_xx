@@ -29,6 +29,7 @@
  - hosts: dbserver
    any_errors_fatal: true
    roles:
+      - { role: disablednfs, when: "DNFS == 'disable'" }
       - mgmtdb
       - createdg
       - dbinstall
