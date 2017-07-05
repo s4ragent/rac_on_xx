@@ -1,0 +1,4 @@
+#
+{% for host in play_hosts %}
+{{ hostvars[host]['public_IP'] }},{{ hostvars[host]['NODENAME'] }},{{ hostvars[host]['NODENAME'] }}.{{ DOMAIN_NAME }} ssh-rsa {{ hostvars[host].ansible_ssh_host_key_rsa_public }}
+{% endfor %}
