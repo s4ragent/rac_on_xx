@@ -1,0 +1,51 @@
+---
+  - name: "disable fastestmirror"
+    become: yes
+    shell: sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    ignore_errors: true
+
+  - name: "yum clean all"
+    become: yes
+    shell: yum -y clean all
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    ignore_errors: true
+
+  - name: "dummy yum command (GPGKEY INSTALL)"
+    become: yes
+    shell: yum -y search nfs-utils
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    ignore_errors: true
+
+  - name: "install unzip"
+    become: yes
+    yum: name=unzip state=present
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+
+  - name: "crete directory"
+    become: yes
+    file: path={{ MEDIA_PATH }} state=directory mode=0755 group=root owner=root
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+
+  - name: "download media"
+    become: yes
+    copy: src="/media/{{ item }}" dest="{{ MEDIA_PATH }}/{{ item }}"
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    with_items:
+      - "{{ DB_MEDIA1 }}"
+      - "{{ GRID_MEDIA1 }}"
+
+  - name: "unzip oracle media & delete"
+    become: yes
+    shell: "unzip {{ MEDIA_PATH }}/{{ item }} -d {{ MEDIA_PATH }} && rm -f {{ MEDIA_PATH }}/{{ item }}"
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    with_items:
+      - "{{ DB_MEDIA1 }}"
+
+  - name: "unzip grid media"
+    become: yes
+    become_user: grid
+    shell: "unzip {{ MEDIA_PATH }}/{{ item }} -d {{ GRID_ORACLE_HOME }}"
+    when: inventory_hostname == groups["dbserver"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    with_items:
+      - "{{ GRID_MEDIA1 }}"
