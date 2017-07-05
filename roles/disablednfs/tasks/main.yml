@@ -15,7 +15,6 @@
   - name: reboot
     become: yes
     shell: sleep 2 && reboot &
-    when: DISABLE_DNFS is defined and DISABLE_DNFS !=""
     async: 1
     poll: 0
     tags:
