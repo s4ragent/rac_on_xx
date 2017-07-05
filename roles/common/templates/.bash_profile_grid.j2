@@ -1,0 +1,26 @@
+# .bash_profile
+
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+        . ~/.bashrc
+fi
+
+
+# User specific environment and startup programs
+
+
+PATH=$PATH:$HOME/.local/bin:$HOME/bin
+
+
+export PATH
+
+### for grid install
+#export ORACLE_HOSTNAME={{ NODENAME }}.{{ DOMAIN_NAME }}
+export ORACLE_BASE={{ GRID_ORACLE_BASE }}
+export ORACLE_HOME={{ GRID_ORACLE_HOME }}
+
+export TMPDIR=/tmp
+export TEMP=/tmp
+export PATH=$ORACLE_HOME/bin:$ORACLE_HOME/jdk/bin:${PATH}
+export LD_LIBRARY_PATH=$ORACLE_HOME/lib
