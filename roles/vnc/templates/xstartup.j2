@@ -1,0 +1,11 @@
+#!/bin/bash
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+#exec /usr/bin/xfce4-session
+#mwm &
+{% if WindowManager == "gnome" %}
+exec gnome-session &
+{% endif %}
+{% if WindowManager == "xfce" %}
+exec /usr/bin/xfce4-session &
+{% endif %}
