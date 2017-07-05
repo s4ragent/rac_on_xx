@@ -1,0 +1,97 @@
+---
+  - name: "install epel"
+    become: yes
+    yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
+    when: xrdp_pass is defined and xrdp_pass !=""
+    tags:
+      - xrdp
+
+  - name: "dummy yum command (GPGKEY INSTALL)"
+    become: yes
+    shell: yum -y search nfs-utils
+    when: xrdp_pass is defined and xrdp_pass !=""
+    ignore_errors: true
+    tags:
+      - xrdp
+
+
+#environment groups must "@^"
+#packages group must"@"
+  - name: "install vnc,xrdp,firefox"
+    become: yes
+    yum: name="{{ item }}" state=present
+    with_items:
+#      - "@^graphical-server-environment"
+      - "@xfce-desktop"
+      - vnc-server
+      - xrdp
+      - firefox
+      - unzip
+    when: xrdp_pass is defined and xrdp_pass !=""
+    tags:
+      - xrdp
+
+  - name: "copy .Xclients"
+    become: yes
+    copy: src=.Xclients dest=/etc/skel/.Xclients owner=root group=root mode=0700
+    when: xrdp_pass is defined and xrdp_pass !=""
+    tags:
+      - xrdp
+
+  - name: "chcon"
+    become: yes
+    shell: chcon -t bin_t /usr/sbin/xrdp /usr/sbin/xrdp-sesman
+    when: xrdp_pass is defined and xrdp_pass !=""
+    tags:
+      - xrdp
+
+  - name: "edit xrdp.ini"
+    become: yes
+    shell: sed -i -e 's/max_bpp=32/max_bpp=24/g' /etc/xrdp/xrdp.ini
+    when: xrdp_pass is defined and xrdp_pass !=""
+    tags:
+      - xrdp
+
+  - name: "start and enable xrdp"
+    become: yes
+    service: name=xrdp state=started enabled=yes
+    when: xrdp_pass is defined and xrdp_pass !=""
+    tags:
+      - xrdp
+
+  - name: "change oracle/grid password"
+    become: yes
+    user: name={{ item }} password="{{ xrdp_pass | password_hash('sha512') }}"
+    with_items:
+      - oracle
+      - grid
+    when: xrdp_pass is defined and xrdp_pass !=""
+    tags:
+      - xrdp
+
+  - name: "copy .Xclients"
+    become: yes
+    copy: src=.Xclients dest="/home/{{ item }}/.Xclients" owner={{ item }} group=oinstall mode=0700
+    with_items:
+      - oracle
+      - grid
+    when: xrdp_pass is defined and xrdp_pass !=""
+    tags:
+      - xrdp
+
+  - name: "crete directory"
+    become: yes
+    file: path={{ MEDIA_PATH }} state=directory mode=0777 group=oinstall owner=oracle
+    when: xrdp_pass is defined and xrdp_pass !=""
+    tags:
+      - xrdp
+
+  - name: add sudoer
+    become: yes
+    lineinfile: dest=/etc/sudoers.d/{{ item }} line="{{ item }} ALL=(ALL) NOPASSWD:ALL" create=yes owner=root group=root mode=0440
+    with_items:
+      - oracle
+      - grid
+    when: xrdp_pass is defined and xrdp_pass !=""
+    tags:
+      - xrdp
