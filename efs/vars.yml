@@ -1,0 +1,62 @@
+#### azure user specific value  ###################
+PREFIX: "raconxx"
+dns: route53
+VPC_ADDR: 10.153.0.0/16
+SUBNET_A_ADDR: 10.153.1.0/24
+SUBNET_B_ADDR: 10.153.2.0/24
+SUBNET_C_ADDR: 10.153.3.0/24
+#for oregon region
+REGION: "us-west-2"
+IMAGE_ID: "ami-4a637f2b"
+#for tokyo region
+#REGION: "ap-northeast-1"
+#IMAGE_ID: "ami-65e0c80b"
+INSTANCE_TYPE: "r4.large"
+#INSTANCE_TYPE: "t2.micro"
+VXLAN_DEV: "eth0"
+NODE_DISK_SIZE: "60"
+STORAGE_DISK_SIZE: "100"
+SPOT_PRICE: 0.05
+####common VIRT_TYPE specific value ################
+DELETE_CMD: "aws ec2 terminate-instances --instance-ids"
+DELETE_CMD_OPS: "--region {{ REGION }}"
+START_CMD: "aws ec2 start-instances --instance-ids"
+START_CMD_OPS: "--region {{ REGION }}"
+STOP_CMD: "aws ec2 stop-instances --instance-ids"
+STOP_CMD_OPS: "--region {{ REGION }}"
+INSTALL_OPS: "-ignorePrereqFailure"
+DHCPCLIENT: "/etc/dhclient-eth0.conf"
+SWITCH_KERNEL: "2"
+MEDIA_COPY: "true"
+MEDIA_PATH: /u01/downloadmedia
+DB_MEDIA1: V839960-01.zip
+GRID_MEDIA1: V840012-01.zip
+#BUCKET_URL="gs://xxxxxxxxx"
+#WindowManager: "gnome"
+## for additional disk values
+data_disk_dev: "/dev/xvdc"
+data_disk_mountpoint: "/u01"
+####ansible specific
+ansible_ssh_user: ec2-user
+ansible_ssh_private_key_file: raconxx
+#####for NFS option values
+##### device size = base_size + multi_size * node count
+storage_type: "nfs"
+ORA_DATA: /u01/oradata
+VOTE_DEV: /u01/oradata/vote.img
+VOTE_BASE_SIZE: 40960
+VOTE_MULTI_SIZE: 2048
+VOTE_DISKGROUP_NAME: VOTE
+DATA_DEV: /u01/oradata/data.img
+DATA_BASE_SIZE: 5120
+DATA_MULTI_SIZE: 1024
+DATA_DISKGROUP_NAME: DATA
+FRA_DEV: /u01/oradata/fra.img
+FRA_BASE_SIZE: 25600
+FRA_MULTI_SIZE: 0
+FRA_DISKGROUP_NAME: FRA
+ASM_STRING: /u01/oradata/*
+RSIZE: 32768
+WSIZE: 32768
+DNFS: disable
+
