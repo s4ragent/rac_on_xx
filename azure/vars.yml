@@ -1,0 +1,60 @@
+#### azure user specific value  ###################
+PREFIX: "raconxx"
+RG_NAME: "rg_raconxx"
+#ZONE: "westus2"
+ZONE: "japanwest"
+VNET_ADDR: "10.153.0.0/16"
+SNET_ADDR: "10.153.1.0/24"
+VXLAN_DEV: "eth0"
+INSTANCE_TYPE_OPS: "--size Standard_A2m_v2"
+#INSTANCE_TYPE_OPS: "--size Standard_A0"
+INSTANCE_OPS: "--image Oracle:Oracle-Linux:7.2:latest"
+NODE_DISK_SIZE: "60"
+STORAGE_DISK_SIZE: "100"
+######## common user specific value  ###############
+#xrdp_pass: Xrdp123!
+#guac_pass: Guac123!
+#WindowManager: "xfce"
+#WindowManager: "gnome"
+####common VIRT_TYPE specific value ################
+DELETE_CMD: "az vm delete -n"
+DELETE_CMD_OPS: "-g {{ RG_NAME }} -y"
+START_CMD: "az vm start -n"
+START_CMD_OPS: "-g {{ RG_NAME }}"
+STOP_CMD: "az vm deallocate -n"
+STOP_CMD_OPS: "-g {{ RG_NAME }}"
+INSTALL_OPS: "-ignorePrereqFailure"
+DHCPCLIENT: "/etc/dhclient-eth0.conf"
+MEDIA_COPY: "true"
+SWITCH_KERNEL: "0"
+MEDIA_PATH: /downloadmedia
+DB_MEDIA1: V839960-01.zip
+GRID_MEDIA1: V840012-01.zip
+#BUCKET_URL="gs://xxxxxxxxx"
+## for additional disk values
+data_disk_dev: "/dev/sdc"
+data_disk_mountpoint: "/u01"
+####ansible specific
+ansible_ssh_user: azureuser
+ansible_ssh_private_key_file: raconxx
+dns: dnsmasq
+#####for NFS option values
+##### device size = base_size + multi_size * node count
+storage_type: "nfs"
+ORA_DATA: /u01/oradata
+VOTE_DEV: /u01/oradata/vote.img
+VOTE_BASE_SIZE: 40960
+VOTE_MULTI_SIZE: 2048
+VOTE_DISKGROUP_NAME: VOTE
+DATA_DEV: /u01/oradata/data.img
+DATA_BASE_SIZE: 5120
+DATA_MULTI_SIZE: 1024
+DATA_DISKGROUP_NAME: DATA
+FRA_DEV: /u01/oradata/fra.img
+FRA_BASE_SIZE: 25600
+FRA_MULTI_SIZE: 0
+FRA_DISKGROUP_NAME: FRA
+ASM_STRING: /u01/oradata/*
+RSIZE: 32768
+WSIZE: 32768
+DNFS: enable
