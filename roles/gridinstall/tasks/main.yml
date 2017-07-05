@@ -70,7 +70,6 @@
       dest: "{{ GRID_ORACLE_HOME }}/crs/config/relink_rac_on"
       regexp: "dnfs_on"
       replace: "dnfs_on 	dnfs_off"
-      state: present
     when: DNFS is defined and DNFS == 'disable'
     tags:
       - disablednfs
