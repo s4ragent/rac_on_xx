@@ -1,0 +1,6 @@
+---
+  - name: "start container/instance"
+    shell: "{{ START_CMD }} {{ INSTANCE_ID }} {{ START_CMD_OPS }}" 
+    ignore_errors: yes
+    tags:
+      - start
