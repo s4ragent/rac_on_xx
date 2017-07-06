@@ -32,7 +32,7 @@
     tags:
       - nfsclient
 
-  - name: "create asm device vote"
+  - name: "create asm device vote(qemu-img)"
     become: yes
     #shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
     shell: "qemu-img create -f raw -o size={{ item.size }}M {{ item.name }}"
@@ -46,7 +46,7 @@
     tags:
       - nfsclient
 
-  - name: "create asm device vote"
+  - name: "create asm device vote(dd)"
     become: yes
     shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
     when: inventory_hostname == groups["dbserver"][0] and storage_type == "nfs" and DD_CMD is defined
