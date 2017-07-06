@@ -42,3 +42,14 @@
       - dbrootsh
       - dbinstall
       - installdbca
+
+  - name: "disable dnfs"
+    become: yes
+    shell: "make -f ins_rdbms.mk dnfs_off"
+    args:
+      chdir: "{{ ORA_ORACLE_HOME }}/rdbms/lib"
+    tags:
+      - dbrootsh
+      - dbinstall
+      - installdbca
+      - oradisablednfs
