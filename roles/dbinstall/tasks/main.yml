@@ -45,7 +45,7 @@
 
   - name: "disable dnfs"
     become: yes
-    shell: "make -f ins_rdbms.mk dnfs_off"
+    shell: "make -f ins_rdbms.mk ORACLE_HOME={{ ORA_ORACLE_HOME }} dnfs_off"
     args:
       chdir: "{{ ORA_ORACLE_HOME }}/rdbms/lib"
     tags:
