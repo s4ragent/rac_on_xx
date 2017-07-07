@@ -25,7 +25,9 @@ eval $(parse_yaml common_vars.yml)
 eval $(parse_yaml $VIRT_TYPE/vars.yml)
 
 common_execansible(){
+			starttime=`date`
    ansible-playbook -f 64 -T 600 -i $VIRT_TYPE $*
+   echo "###  $starttime - `date` ###"
 }
 
 common_runall(){
