@@ -58,6 +58,6 @@ FRA_DISKGROUP_NAME: FRA
 ASM_STRING: /u01/oradata/*
 RSIZE: 32768
 WSIZE: 32768
-DD_CMD: dd
+#DD_CMD: dd
 DNFS: disable
 
