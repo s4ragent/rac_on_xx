@@ -33,4 +33,5 @@
       - createdg
       - dbinstall
  #     - dbcaserial
-      - dbca
+      - { role: dbcaserial, when: "dbca == 'serial'" }
+      - { role: dbca, when: "dbca == 'paralell'" }
