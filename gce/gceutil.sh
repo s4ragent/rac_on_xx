@@ -104,7 +104,7 @@ get_External_IP(){
 	LIST_RESULT=$(gcloud compute instances list  $NODENAME --zones $ZONE | tail -n 1)
 	MACHINE_TYPE=`echo $LIST_RESULT | awk '{print $3}'`
 	if [ "$MACHINE_TYPE" = "custom" ]; then
-		External_IP=`echo $LIST_RESULT | awk '{print $9}'`
+		External_IP=`echo $LIST_RESULT | awk '{print $10}'`
 	else
 		External_IP=`echo $LIST_RESULT | awk '{print $5}'`
 	fi
@@ -123,7 +123,7 @@ get_Internal_IP(){
 	LIST_RESULT=$(gcloud compute instances list  $NODENAME --zones $ZONE | tail -n 1)
 	MACHINE_TYPE=`echo $LIST_RESULT | awk '{print $3}'`
 	if [ "$MACHINE_TYPE" = "custom" ]; then
-		Internal_IP=`echo $LIST_RESULT | awk '{print $8}'`
+		Internal_IP=`echo $LIST_RESULT | awk '{print $9}'`
 	else
 		Internal_IP=`echo $LIST_RESULT | awk '{print $4}'`
 	fi
