@@ -2,42 +2,35 @@
   - name: "install nfs packages"
     become: yes
     yum: name=nfs-utils state=present
-    when: storage_type == "nfs"
     tags:
       - nfsserver
 
   - name: "create nfs root directory"
     become: yes
     file: path={{ STORAGE_ROOT }} state=directory owner=root group=root mode=0755
-    when: storage_type == "nfs"
     tags:
       - nfsserver
 
-      
   - name: "create exports"
     become: yes
     template: src=exports.j2 dest=/etc/exports owner=root group=root mode=0644
-    when: storage_type == "nfs"
     tags:
        - nfsserver
 
   - name: "restart rpcbind"
     become: yes
     service: name=rpcbind.service state=restarted enabled=yes
-    when: storage_type == "nfs"
     tags:
       - nfsserver
 
   - name: "restart nfs-server"
     become: yes
     service: name=nfs-server.service state=restarted enabled=yes
-    when: storage_type == "nfs"
     tags:
       - nfsserver
 
   - name: "nfs-idmap start"
     become: yes
     service: name=nfs-idmap.service state=started
-    when: storage_type =="nfs"
     tags:
       - nfsserver
