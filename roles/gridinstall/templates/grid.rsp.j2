@@ -31,6 +31,15 @@ oracle.install.asmOnNAS.configureGIMRDataDG=false
 oracle.install.asmOnNAS.gimrLocation=
 oracle.install.asm.SYSASMPassword={{ ASMSYSPASSWORD }} 
 oracle.install.asm.diskGroup.name={{ VOTE_DISKGROUP_NAME }} 
+{% if storage_type == 'nfslocal' %}
+oracle.install.asm.diskGroup.redundancy=NORMAL
+oracle.install.asm.diskGroup.AUSize=4
+oracle.install.asm.diskGroup.FailureGroups=
+oracle.install.asm.diskGroup.disksWithFailureGroupNames={% for host in groups['dbserver'] %}{{ ORA_DATA }}/{{ hostvars[host]['NODENAME'] }}/{{ VOTE_FILE }},{% if not loop.last %},{% endif %}{% endfor %} 
+oracle.install.asm.diskGroup.disks={% for host in groups['dbserver'] %}{{ ORA_DATA }}/{{ hostvars[host]['NODENAME'] }}/{{ VOTE_FILE }},{% endfor %} 
+oracle.install.asm.diskGroup.quorumFailureGroupNames=
+oracle.install.asm.diskGroup.diskDiscoveryString={{ ASM_STRING }} 
+{% else %}
 oracle.install.asm.diskGroup.redundancy=EXTERNAL
 oracle.install.asm.diskGroup.AUSize=4
 oracle.install.asm.diskGroup.FailureGroups=
@@ -38,6 +47,7 @@ oracle.install.asm.diskGroup.disksWithFailureGroupNames={{ VOTE_DEV }},
 oracle.install.asm.diskGroup.disks={{ VOTE_DEV }} 
 oracle.install.asm.diskGroup.quorumFailureGroupNames=
 oracle.install.asm.diskGroup.diskDiscoveryString={{ ASM_STRING }} 
+{% endif %}
 oracle.install.asm.monitorPassword={{ ASMMONPASSWORD }} 
 oracle.install.asm.gimrDG.name=
 oracle.install.asm.gimrDG.redundancy=
