@@ -17,7 +17,9 @@
    any_errors_fatal: true
    roles:
       - download
+      - { role: nfsserver, when: "storage_type == 'nfslocal'" }
       - { role: nfsclient, when: "storage_type == 'nfs'" }
+      - { role: nfsclient, when: "storage_type == 'nfslocal'" }
 #      - { role: nfsclient, when: "storage_type == 'efs'" }
       
  - hosts: dbserver
