@@ -62,9 +62,9 @@ runonly(){
 	fi
    
 	if [ "${storage_type}" = "nfsmulti" ] ; then
-				run storage01 $STORAGE_DISK_SIZE 100 storage
-				run storage02 $STORAGE_DISK_SIZE 101 storage
-				run storage03 $STORAGE_DISK_SIZE 102 storage
+				run storage01 $STORAGE_DISK_SIZE 70 storage
+				run storage02 $STORAGE_DISK_SIZE 71 storage
+				run storage03 $STORAGE_DISK_SIZE 72 storage
 	else
 		STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
