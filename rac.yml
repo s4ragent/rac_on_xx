@@ -11,15 +11,15 @@
    any_errors_fatal: true
    roles:
       - { role: nfsserver, when: "storage_type == 'nfs'" }
+      - { role: nfsserver, when: "storage_type == 'nfsmulti'" }
 #      - { role: efs, when: "storage_type == 'efs'" }
 
  - hosts: dbserver
    any_errors_fatal: true
    roles:
       - download
-      - { role: nfsserver, when: "storage_type == 'nfslocal'" }
       - { role: nfsclient, when: "storage_type == 'nfs'" }
-      - { role: nfsclient, when: "storage_type == 'nfslocal'" }
+      - { role: nfsclient, when: "storage_type == 'nfsmulti'" }
 #      - { role: nfsclient, when: "storage_type == 'efs'" }
       
  - hosts: dbserver
