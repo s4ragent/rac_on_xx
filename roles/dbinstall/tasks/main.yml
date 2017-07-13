@@ -48,6 +48,7 @@
     shell: "make -f ins_rdbms.mk ORACLE_HOME={{ ORA_ORACLE_HOME }} dnfs_off"
     args:
       chdir: "{{ ORA_ORACLE_HOME }}/rdbms/lib"
+    when: DNFS is defined and DNFS == 'disable'
     tags:
       - dbrootsh
       - dbinstall
