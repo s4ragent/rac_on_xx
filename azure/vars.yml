@@ -39,14 +39,8 @@ ansible_ssh_user: azureuser
 ansible_ssh_private_key_file: raconxx
 dns: dnsmasq
 #####for NFS option values
+#storage_type: "nfs"
 ##### device size = base_size + multi_size * node count
-####
-storage_type: "nfslocal"
-VOTE_FILE: vote.img
-DATA_FILE: data.img
-FRA_FILE: fra.img
-STORAGE_ROOT: /u01/nfs
-NODE_DISK_SIZE: "120"
 ####
 ORA_DATA: /u01/oradata
 VOTE_DEV: /u01/oradata/vote.img
@@ -65,6 +59,13 @@ ASM_STRING: /u01/oradata/*
 RSIZE: 1048576
 WSIZE: 1048576
 DNFS: enable
+####for nfslocal option values
+storage_type: "nfslocal"
+VOTE_FILE: vote.img
+DATA_FILE: data.img
+FRA_FILE: fra.img
+STORAGE_ROOT: /u01/nfs
+NODE_DISK_SIZE: "120"
 ###
 NODEPREFIX: node
 DOMAIN_NAME: public
@@ -81,7 +82,7 @@ ASMSYSPASSWORD: oracle123
 ASMMONPASSWORD: oracle123
 CHARSET: AL32UTF8
 NCHAR: AL16UTF16
-MEMORYTARGET: 1800
+MEMORYTARGET: 10240
 TEMPLATENAME: General_Purpose.dbc
 DATABASETYPE: MULTIPURPOSE
 dbca: paralell
