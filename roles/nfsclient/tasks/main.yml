@@ -98,7 +98,7 @@
     shell: "{% for host in groups['storage']  %}dd if=/dev/zero of={{ ORA_DATA }}/{{ hostvars[ host ]['NODENAME'] }}/{{ item.name }} bs=1M count={{ item.size }};{% endfor %}"
     args:
       creates: "{{ item.name }}"
-    when: inventory_hostname == groups["dbserver"][0] DD_CMD is defined and storage_type == "nfsmulti"
+    when: inventory_hostname == groups["dbserver"][0] and DD_CMD is defined and storage_type == "nfsmulti"
     with_items:
       - { name: "{{ VOTE_FILE }}", size: "{{ VOTE_BASE_SIZE + VOTE_MULTI_SIZE * groups['dbserver'] | length  }}" }
       - { name: "{{ DATA_FILE }}", size: "{{ DATA_BASE_SIZE + DATA_MULTI_SIZE * groups['dbserver'] | length }}" }
