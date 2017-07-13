@@ -71,7 +71,7 @@
   - name: "create asm device vote(qemu-img) nfslocal"
     become: yes
     #shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
-    shell: "qemu-img create -f raw -o size={{ item.size }}M  {{ ORA_DATA }}/{{ hostvars[ inventory_hostname ]['NODENAME'] }/{{ item.name }}"
+    shell: "qemu-img create -f raw -o size={{ item.size }}M {{ ORA_DATA }}/{{ hostvars[ inventory_hostname ]['NODENAME'] }}/{{ item.name }}"
     args:
       creates: "{{ item.name }}"
     when: DD_CMD is undefined and storage_type == "nfslocal"
