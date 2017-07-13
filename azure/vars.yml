@@ -61,7 +61,7 @@ RSIZE: 1048576
 WSIZE: 1048576
 DNFS: enable
 ####for nfslocal option values
-storage_type: "nfslocal"
+storage_type: "nfsmulti"
 VOTE_FILE: vote.img
 DATA_FILE: data.img
 FRA_FILE: fra.img
