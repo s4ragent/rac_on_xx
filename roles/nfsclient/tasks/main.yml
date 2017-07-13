@@ -93,7 +93,7 @@
 
   - name: "copy asm files"
     become: yes
-    shell: "cp {{ ORA_DATA }}/{{ item }} {{ ORA_DATA }}/{{ hostvars[ inventory_hostname ]['NODENAME'] }}"
+    shell: "cp {{ ORA_DATA }}/{{ item.name }} {{ ORA_DATA }}/{{ hostvars[ inventory_hostname ]['NODENAME'] }}"
     with_items:
       - { name: "{{ VOTE_FILE }}" }
       - { name: "{{ DATA_FILE }}" }
