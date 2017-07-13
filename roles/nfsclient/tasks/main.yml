@@ -121,7 +121,7 @@
     become: yes
     file: path="{{ ORA_DATA }}/{{ hostvars[ item.1 ]['NODENAME'] }}/{{ item.0 }}"  state=file owner=grid group=asmadmin mode=0660
     when: inventory_hostname == groups["dbserver"][0] and storage_type == "nfsmulti"
-    with_items:
+    with_nested:
     - [ "{{ VOTE_FILE }}", "{{ DATA_FILE }}", "{{ FRA_FILE }}" ]
     - "{{ groups['dbserver'] }}"
     tags:
