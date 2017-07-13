@@ -61,7 +61,7 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
    
-	if [ ${storage_type} -eq "nfsmulti" ] ; then
+	if [ "${storage_type}" = "nfsmulti" ] ; then
 				run storage01 $STORAGE_DISK_SIZE 100 storage
 				run storage02 $STORAGE_DISK_SIZE 101 storage
 				run storage03 $STORAGE_DISK_SIZE 102 storage
