@@ -61,7 +61,7 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
    
-	if [ ${strage_type} -ne "nfslocal" ] ; then
+	if [ ${storage_type} -ne "nfslocal" ] ; then
 	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
 	fi
