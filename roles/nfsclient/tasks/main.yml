@@ -123,7 +123,7 @@
     when: inventory_hostname == groups["dbserver"][0] and storage_type == "nfsmulti"
     with_nested:
     - [ "{{ VOTE_FILE }}", "{{ DATA_FILE }}", "{{ FRA_FILE }}" ]
-    - "{{ groups['dbserver'] }}"
+    - "{{ groups['storage'] }}"
     tags:
       - nfsclient
 
