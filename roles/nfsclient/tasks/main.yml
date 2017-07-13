@@ -17,11 +17,11 @@
     tags:
       - nfsclient
 
-  - name: "create oradata(nfslocal)"
+  - name: "create oradata(nfsmulti)"
     become: yes
     file: path="{{ ORA_DATA }}/{{ hostvars[item.1]['NODENAME'] }}" state=directory owner=grid group=oinstall mode=0755
-    with_indexed_items: "{{ groups['dbserver'] }}"
-    when: storage_type == 'nfslocal'
+    with_indexed_items: "{{ groups['storage'] }}"
+    when: storage_type == 'nfsmulti'
     tags:
       - nfsclient
 
@@ -32,11 +32,11 @@
     tags:
       - nfsclient
 
-  - name: "mount oradata(nfslocal)"
+  - name: "mount oradata(nfsmulti)"
     become: yes
     mount: name="{{ ORA_DATA }}/{{ hostvars[item.1]['NODENAME'] }}" src="{{ hostvars[item.1]['ansible_eth0']['ipv4']['address'] }}:/" fstype=nfs opts=rw,bg,hard,rsize={{ RSIZE }},wsize={{ WSIZE }},tcp,vers=4.1,timeo=600,actimeo=0 state=mounted
-    when: storage_type == 'nfslocal'
-    with_indexed_items: "{{ groups['dbserver'] }}"
+    when: storage_type == 'nfsmulti'
+    with_indexed_items: "{{ groups['storage'] }}"
     tags:
       - nfsclient
 
@@ -46,11 +46,11 @@
     tags:
       - nfsclient
 
-  - name: "chown oradata(nfslocal)"
+  - name: "chown oradata(nfsmulti)"
     become: yes
     file: path="{{ ORA_DATA }}/{{ hostvars[item.1]['NODENAME'] }}" state=directory owner=grid group=oinstall mode=0775
     with_indexed_items: "{{ groups['dbserver'] }}"
-    when: storage_type == 'nfslocal'
+    when: storage_type == 'nfsmulti'
     tags:
       - nfsclient
 
@@ -68,13 +68,13 @@
     tags:
       - nfsclient
 
-  - name: "create asm device vote(qemu-img) nfslocal"
+  - name: "create asm device vote(qemu-img) nfsmulti"
     become: yes
     #shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
-    shell: "qemu-img create -f raw -o size={{ item.size }}M {{ ORA_DATA }}/{{ hostvars[ inventory_hostname ]['NODENAME'] }}/{{ item.name }}"
+    shell: "{% for host in groups['storage']  %}qemu-img create -f raw -o size={{ item.size }}M {{ ORA_DATA }}/{{ hostvars[ host ]['NODENAME'] }}/{{ item.name }};{% endfor %}"
     args:
       creates: "{{ item.name }}"
-    when: DD_CMD is undefined and storage_type == "nfslocal"
+    when: inventory_hostname == groups["dbserver"][0] and DD_CMD is undefined and storage_type == "nfsmulti"
     with_items:
       - { name: "{{ VOTE_FILE }}", size: "{{ VOTE_BASE_SIZE + VOTE_MULTI_SIZE * groups['dbserver'] | length  }}" }
       - { name: "{{ DATA_FILE }}", size: "{{ DATA_BASE_SIZE + DATA_MULTI_SIZE * groups['dbserver'] | length }}" }
@@ -93,12 +93,12 @@
     tags:
       - nfsclient
 
-  - name: "create asm device vote(dd) nfslocal"
+  - name: "create asm device vote(dd) nfsmulti"
     become: yes
-    shell: "dd if=/dev/zero of={{ ORA_DATA }}/{{ hostvars[ inventory_hostname ]['NODENAME'] }}/{{ item.name }} bs=1M count={{ item.size }}"
+    shell: "{% for host in groups['storage']  %}dd if=/dev/zero of={{ ORA_DATA }}/{{ hostvars[ host ]['NODENAME'] }}/{{ item.name }} bs=1M count={{ item.size }};{% endfor %}"
     args:
       creates: "{{ item.name }}"
-    when: DD_CMD is defined and storage_type == "nfslocal"
+    when: inventory_hostname == groups["dbserver"][0] DD_CMD is defined and storage_type == "nfsmulti"
     with_items:
       - { name: "{{ VOTE_FILE }}", size: "{{ VOTE_BASE_SIZE + VOTE_MULTI_SIZE * groups['dbserver'] | length  }}" }
       - { name: "{{ DATA_FILE }}", size: "{{ DATA_BASE_SIZE + DATA_MULTI_SIZE * groups['dbserver'] | length }}" }
@@ -117,14 +117,13 @@
     tags:
       - nfsclient
 
-  - name: "chown oradata nfslocal"
+  - name: "chown oradata nfsmulti"
     become: yes
-    file: path="{{ ORA_DATA }}/{{ hostvars[ inventory_hostname ]['NODENAME'] }}/{{ item.name }}"  state=file owner=grid group=asmadmin mode=0660
-    when: storage_type == "nfslocal"
+    file: path="{{ ORA_DATA }}/{{ hostvars[ item.1 ]['NODENAME'] }}/{{ item.0 }}"  state=file owner=grid group=asmadmin mode=0660
+    when: inventory_hostname == groups["dbserver"][0] and storage_type == "nfsmulti"
     with_items:
-      - { name: "{{ VOTE_FILE }}" }
-      - { name: "{{ DATA_FILE }}" }
-      - { name: "{{ FRA_FILE }}" }
+    - [ "{{ VOTE_FILE }}", "{{ DATA_FILE }}", "{{ FRA_FILE }}" ]
+    - "{{ groups['dbserver'] }}"
     tags:
       - nfsclient
 
