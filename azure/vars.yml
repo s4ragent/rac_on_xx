@@ -65,8 +65,6 @@ storage_type: "nfsmulti"
 VOTE_FILE: vote.img
 DATA_FILE: data.img
 FRA_FILE: fra.img
-STORAGE_ROOT: /u01/nfs
-NODE_DISK_SIZE: "120"
 ###
 NODEPREFIX: node
 DOMAIN_NAME: public
