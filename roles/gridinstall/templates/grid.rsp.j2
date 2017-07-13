@@ -38,7 +38,7 @@ oracle.install.asm.diskGroup.FailureGroups=
 oracle.install.asm.diskGroup.disksWithFailureGroupNames={% for host in groups['dbserver'] %}{{ ORA_DATA }}/{{ hostvars[host]['NODENAME'] }}/{{ VOTE_FILE }},{% if not loop.last %},{% endif %}{% endfor %} 
 oracle.install.asm.diskGroup.disks={% for host in groups['dbserver'] %}{{ ORA_DATA }}/{{ hostvars[host]['NODENAME'] }}/{{ VOTE_FILE }},{% endfor %} 
 oracle.install.asm.diskGroup.quorumFailureGroupNames=
-oracle.install.asm.diskGroup.diskDiscoveryString={{ ASM_STRING }} 
+oracle.install.asm.diskGroup.diskDiscoveryString={% for host in groups['dbserver'] %}{{ ORA_DATA }}/{{ hostvars[host]['NODENAME'] }}/*{% if not loop.last %},{% endif %}{% endfor %} 
 {% else %}
 oracle.install.asm.diskGroup.redundancy=EXTERNAL
 oracle.install.asm.diskGroup.AUSize=4
