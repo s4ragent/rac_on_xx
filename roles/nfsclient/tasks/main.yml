@@ -95,7 +95,7 @@
 
   - name: "create asm device vote(dd) nfslocal"
     become: yes
-    shell: "dd if=/dev/zero of={{ ORA_DATA }}/{{ hostvars[ inventory_hostname ]['NODENAME'] }/{{ item.name }} bs=1M count={{ item.size }}"
+    shell: "dd if=/dev/zero of={{ ORA_DATA }}/{{ hostvars[ inventory_hostname ]['NODENAME'] }}/{{ item.name }} bs=1M count={{ item.size }}"
     args:
       creates: "{{ item.name }}"
     when: DD_CMD is defined and storage_type == "nfslocal"
@@ -119,7 +119,7 @@
 
   - name: "chown oradata nfslocal"
     become: yes
-    file: path="{{ ORA_DATA }}/{{ hostvars[ inventory_hostname ]['NODENAME'] }/{{ item.name }}"  state=file owner=grid group=asmadmin mode=0660
+    file: path="{{ ORA_DATA }}/{{ hostvars[ inventory_hostname ]['NODENAME'] }}/{{ item.name }}"  state=file owner=grid group=asmadmin mode=0660
     when: storage_type == "nfslocal"
     with_items:
       - { name: "{{ VOTE_FILE }}" }
