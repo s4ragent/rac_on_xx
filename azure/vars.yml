@@ -59,7 +59,7 @@ FRA_DISKGROUP_NAME: FRA
 ASM_STRING: /u01/oradata/*
 RSIZE: 1048576
 WSIZE: 1048576
-DNFS: enable
+DNFS: disable
 ####for nfslocal option values
 storage_type: "nfsmulti"
 VOTE_FILE: vote.img
