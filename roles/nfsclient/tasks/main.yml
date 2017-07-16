@@ -27,14 +27,14 @@
 
   - name: "mount oradata"
     become: yes
-    mount: name={{ ORA_DATA }} src="{{ STORAGE_SERVER }}:/" fstype=nfs opts="{{ NFS_OPS }}" state=mounted
+    mount: name={{ ORA_DATA }} src="{{ STORAGE_SERVER }}:{{ NFS_MOUNTPOINT }}" fstype=nfs opts="{{ NFS_OPS }}" state=mounted
     when: storage_type == 'nfs'
     tags:
       - nfsclient
 
   - name: "mount oradata(nfsmulti)"
     become: yes
-    mount: name="{{ ORA_DATA }}/{{ hostvars[item.1]['NODENAME'] }}" src="{{ hostvars[item.1]['ansible_eth0']['ipv4']['address'] }}:/" fstype=nfs opts="{{ NFS_OPS }}" state=mounted
+    mount: name="{{ ORA_DATA }}/{{ hostvars[item.1]['NODENAME'] }}" src="{{ hostvars[item.1]['ansible_eth0']['ipv4']['address'] }}:{{ NFS_MOUNTPOINT }}" fstype=nfs opts="{{ NFS_OPS }}" state=mounted
     when: storage_type == 'nfsmulti'
     with_indexed_items: "{{ groups['storage'] }}"
     tags:
