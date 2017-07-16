@@ -27,7 +27,7 @@ STOP_CMD_OPS: "-g {{ RG_NAME }}"
 INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
 MEDIA_COPY: "true"
-SWITCH_KERNEL: "2"
+SWITCH_KERNEL: "0"
 MEDIA_PATH: /downloadmedia
 DB_MEDIA1: V839960-01.zip
 GRID_MEDIA1: V840012-01.zip
@@ -57,8 +57,7 @@ FRA_BASE_SIZE: 25600
 FRA_MULTI_SIZE: 0
 FRA_DISKGROUP_NAME: FRA
 ASM_STRING: /u01/oradata/*
-NFS_MOUNTPOINT: /u01
-NFS_OPS:  "rw,bg,soft,nointr,rsize=1048576,wsize=1048576,tcp,vers=3,timeo=600,actimeo=0"
+NFS_OPS:  "rw,bg,hard,nointr,rsize=1048576,wsize=1048576,tcp,vers=4.1,timeo=600,actimeo=0"
 DNFS: disable
 ####for nfslocal option values
 storage_type: "nfsmulti"
