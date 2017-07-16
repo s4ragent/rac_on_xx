@@ -57,9 +57,8 @@ FRA_BASE_SIZE: 25600
 FRA_MULTI_SIZE: 0
 FRA_DISKGROUP_NAME: FRA
 ASM_STRING: /u01/oradata/*
-RSIZE: 1048576
-WSIZE: 1048576
-DNFS: enable
+NFS_OPS:  "rw,bg,soft,nointr,rsize=1048576,wsize=1048576,tcp,vers=4.1,timeo=600,actimeo=0"
+DNFS: disable
 ####for nfslocal option values
 storage_type: "nfsmulti"
 VOTE_FILE: vote.img
