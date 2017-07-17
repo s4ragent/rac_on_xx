@@ -1,7 +1,7 @@
 ---
   - name: Update the /etc/fstab
     become: yes
-    lineinfile:
+    replace:
       dest: /etc/fstab
       regexp: "hard"
       replace: "soft"
