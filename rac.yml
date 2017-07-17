@@ -37,3 +37,4 @@
  #     - dbcaserial
       - { role: dbcaserial, when: "dbca == 'serial'" }
       - { role: dbca, when: "dbca == 'paralell'" }
+      - { role: softmount, when: "storage_type == 'nfsmulti'" }
