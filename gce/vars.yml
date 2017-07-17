@@ -37,7 +37,7 @@ dns: dnsmasq
 #storage_type: "nfs"
 ####for nfslocal option values
 storage_type: "nfsmulti"
-STORAGE_ROOT: /u01/nfs
+NFS_ROOT: /u01/nfs
 VOTE_FILE: vote.img
 DATA_FILE: data.img
 FRA_FILE: fra.img
