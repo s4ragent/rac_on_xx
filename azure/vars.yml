@@ -43,6 +43,7 @@ dns: dnsmasq
 storage_type: "nfs"
 ##### device size = base_size + multi_size * node count
 ####
+NFS_ROOT: /
 ORA_DATA: /u01/oradata
 VOTE_DEV: /u01/oradata/vote.img
 VOTE_BASE_SIZE: 40960
