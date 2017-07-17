@@ -40,7 +40,7 @@ ansible_ssh_user: azureuser
 ansible_ssh_private_key_file: raconxx
 dns: dnsmasq
 #####for NFS option values
-#storage_type: "nfs"
+storage_type: "nfs"
 ##### device size = base_size + multi_size * node count
 ####
 ORA_DATA: /u01/oradata
@@ -59,11 +59,6 @@ FRA_DISKGROUP_NAME: FRA
 ASM_STRING: /u01/oradata/*
 NFS_OPS:  "rw,bg,hard,nointr,rsize=1048576,wsize=1048576,tcp,vers=4.1,timeo=600,actimeo=0"
 DNFS: disable
-####for nfslocal option values
-storage_type: "nfsmulti"
-VOTE_FILE: vote.img
-DATA_FILE: data.img
-FRA_FILE: fra.img
 ###
 NODEPREFIX: node
 DOMAIN_NAME: public
