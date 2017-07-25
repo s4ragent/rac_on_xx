@@ -34,7 +34,6 @@ dns: dnsmasq
 #####for NFS option values
 ##### device size = base_size + multi_size * node count
 storage_type: "nfs"
-NFS_ROOT: /
 NFS_OPS:  "rw,bg,hard,nointr,rsize=1048576,wsize=1048576,tcp,vers=4.1,timeo=600,actimeo=0"
 ORA_DATA: /u01/oradata
 VOTE_DEV: /u01/oradata/vote.img
@@ -50,8 +49,6 @@ FRA_BASE_SIZE: 25600
 FRA_MULTI_SIZE: 0
 FRA_DISKGROUP_NAME: FRA
 ASM_STRING: /u01/oradata/*
-RSIZE: 1048576
-WSIZE: 1048576
 DNFS: enable
 ###
 NODEPREFIX: node
