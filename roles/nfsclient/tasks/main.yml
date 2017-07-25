@@ -17,40 +17,17 @@
     tags:
       - nfsclient
 
-  - name: "create oradata(nfsmulti)"
-    become: yes
-    file: path="{{ ORA_DATA }}/{{ hostvars[item.1]['NODENAME'] }}" state=directory owner=grid group=oinstall mode=0755
-    with_indexed_items: "{{ groups['storage'] }}"
-    when: storage_type == 'nfsmulti'
-    tags:
-      - nfsclient
 
   - name: "mount oradata"
     become: yes
-    mount: name={{ ORA_DATA }} src="{{ STORAGE_SERVER }}:{{ NFS_ROOT }}" fstype=nfs opts="{{ NFS_OPS }}" state=mounted
+    mount: name={{ ORA_DATA }} src="{{ STORAGE_SERVER }}:/" fstype=nfs opts="{{ NFS_OPS }}" state=mounted
     when: storage_type == 'nfs'
-    tags:
-      - nfsclient
-
-  - name: "mount oradata(nfsmulti)"
-    become: yes
-    mount: name="{{ ORA_DATA }}/{{ hostvars[item.1]['NODENAME'] }}" src="{{ hostvars[item.1]['ansible_eth0']['ipv4']['address'] }}:{{ NFS_ROOT }}" fstype=nfs opts="{{ NFS_OPS }}" state=mounted
-    when: storage_type == 'nfsmulti'
-    with_indexed_items: "{{ groups['storage'] }}"
     tags:
       - nfsclient
 
   - name: "chown oradata"
     become: yes
     file: path={{ ORA_DATA }} state=directory owner=grid group=oinstall mode=0775
-    tags:
-      - nfsclient
-
-  - name: "chown oradata(nfsmulti)"
-    become: yes
-    file: path="{{ ORA_DATA }}/{{ hostvars[item.1]['NODENAME'] }}" state=directory owner=grid group=oinstall mode=0775
-    with_indexed_items: "{{ groups['dbserver'] }}"
-    when: storage_type == 'nfsmulti'
     tags:
       - nfsclient
 
@@ -68,20 +45,6 @@
     tags:
       - nfsclient
 
-  - name: "create asm device vote(qemu-img) nfsmulti"
-    become: yes
-    #shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
-    shell: "{% for host in groups['storage']  %}qemu-img create -f raw -o size={{ item.size }}M {{ ORA_DATA }}/{{ hostvars[ host ]['NODENAME'] }}/{{ item.name }};{% endfor %}"
-    args:
-      creates: "{{ item.name }}"
-    when: inventory_hostname == groups["dbserver"][0] and DD_CMD is undefined and storage_type == "nfsmulti"
-    with_items:
-      - { name: "{{ VOTE_FILE }}", size: "{{ VOTE_BASE_SIZE + VOTE_MULTI_SIZE * groups['dbserver'] | length  }}" }
-      - { name: "{{ DATA_FILE }}", size: "{{ DATA_BASE_SIZE + DATA_MULTI_SIZE * groups['dbserver'] | length }}" }
-      - { name: "{{ FRA_FILE }}", size: "{{ FRA_BASE_SIZE + FRA_MULTI_SIZE * groups['dbserver'] | length }}" }
-    tags:
-      - nfsclient
-
   - name: "create asm device vote(dd)"
     become: yes
     shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
@@ -93,19 +56,6 @@
     tags:
       - nfsclient
 
-  - name: "create asm device vote(dd) nfsmulti"
-    become: yes
-    shell: "{% for host in groups['storage']  %}dd if=/dev/zero of={{ ORA_DATA }}/{{ hostvars[ host ]['NODENAME'] }}/{{ item.name }} bs=1M count={{ item.size }};{% endfor %}"
-    args:
-      creates: "{{ item.name }}"
-    when: inventory_hostname == groups["dbserver"][0] and DD_CMD is defined and storage_type == "nfsmulti"
-    with_items:
-      - { name: "{{ VOTE_FILE }}", size: "{{ VOTE_BASE_SIZE + VOTE_MULTI_SIZE * groups['dbserver'] | length  }}" }
-      - { name: "{{ DATA_FILE }}", size: "{{ DATA_BASE_SIZE + DATA_MULTI_SIZE * groups['dbserver'] | length }}" }
-      - { name: "{{ FRA_FILE }}", size: "{{ FRA_BASE_SIZE + FRA_MULTI_SIZE * groups['dbserver'] | length }}" }
-    tags:
-      - nfsclient
-
   - name: "chown oradata"
     become: yes
     file: path={{ item.name }} state=file owner=grid group=asmadmin mode=0660
@@ -114,16 +64,6 @@
       - { name: "{{ VOTE_DEV }}" }
       - { name: "{{ DATA_DEV }}" }
       - { name: "{{ FRA_DEV }}" }
-    tags:
-      - nfsclient
-
-  - name: "chown oradata nfsmulti"
-    become: yes
-    file: path="{{ ORA_DATA }}/{{ hostvars[ item.1 ]['NODENAME'] }}/{{ item.0 }}"  state=file owner=grid group=asmadmin mode=0660
-    when: inventory_hostname == groups["dbserver"][0] and storage_type == "nfsmulti"
-    with_nested:
-    - [ "{{ VOTE_FILE }}", "{{ DATA_FILE }}", "{{ FRA_FILE }}" ]
-    - "{{ groups['storage'] }}"
     tags:
       - nfsclient
 
