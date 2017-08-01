@@ -23,6 +23,7 @@ VCONF=/etc/vxlan
 LOG=/var/log/vxlan
 ipcmd=/sbin/ip
 bridgecmd=/sbin/bridge
+perlcmd=/usr/bin/perl
 # Check the configuration directory                                                                                      
 if [ ! -d $VCONF ]; then
     date >>$LOG
@@ -79,9 +80,19 @@ fdb_append(){
   { 
     for ip in  `cat $iplist`
     do
-      if [ $ip != $myip ]; then
+    		ipcalc -c $ip
+    		if [ $? -ne 0 ]; then
+						ip=`$perlcmd -e 'print join(".",unpack C4=>(gethostbyname shift)[4]), "\n"' $ip`
+						
+						if [ $? -ne 0 ]; then
+							continue
+						fi	
+						
+     fi
+
+     if [ $ip != $myip ]; then
 		exe_log "$bridgecmd fdb append 00:00:00:00:00:00 dev $vdev dst $ip" 
-      fi
+     fi
     done
   }
 }
@@ -98,10 +109,20 @@ vxlan_start(){
 	for conf in $VCONF/*.conf 
 	do
 		getvxlanconf
-      		init_vxlan
-      		fdb_append
-    	done
-    	touch /var/lock/subsys/vxlan
+		init_vxlan
+	done
+	
+	while true;
+	do
+		for conf in $VCONF/*.conf 
+		do
+			getvxlanconf
+			fdb_append
+		done	
+		sleep 30s
+	done
+	
+	touch /var/lock/subsys/vxlan
 }
 
 vxlan_stop(){
@@ -113,17 +134,7 @@ vxlan_stop(){
 	rm -f /var/lock/subsys/vxlan
 }
 
-nm_init(){
-	if [ "$1" = "up" ]; then
-  		vxlan_start
-  	elif [ "$1" = "down" ]; then
-  		vxlan_stop
-	fi
-}
-
 case "$1" in
-  eth0)
-    shift;nm_init $*;;
   start)
     vxlan_start
     ;;

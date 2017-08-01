@@ -5,11 +5,11 @@ After=network.target
 Before=remote-fs.target
 
 [Service]
-Type=oneshot
-RemainAfterExit=yes
+Type=simple
 ExecStart=/usr/local/bin/vxlan.init start
-ExecReload=/usr/local/bin/vxlan.init reload
 ExecStop=/usr/local/bin/vxlan.init stop
+KillMode=process
+Restart=always
 User=root
 Group=root
 
