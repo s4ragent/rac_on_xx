@@ -23,7 +23,7 @@ VCONF=/etc/vxlan
 LOG=/var/log/vxlan
 ipcmd=/sbin/ip
 bridgecmd=/sbin/bridge
-perlcmd=/usr/bin/perl
+pythoncmd=/usr/bin/python
 # Check the configuration directory                                                                                      
 if [ ! -d $VCONF ]; then
     date >>$LOG
@@ -82,15 +82,16 @@ fdb_append(){
     do
     		ipcalc -c $ip
     		if [ $? -ne 0 ]; then
-						ip=`$perlcmd -e 'print join(".",unpack C4=>(gethostbyname shift)[4]), "\n"' $ip`
-						
+						ip=`$pythoncmd -c "import socket;import sys; 
+print socket.gethostbyname('$ip')"`
+						ipcalc -c $ip
 						if [ $? -ne 0 ]; then
 							continue
 						fi	
 						
      fi
 
-     if [ $ip != $myip ]; then
+     if [ "$ip" != "$myip" ]; then
 		exe_log "$bridgecmd fdb append 00:00:00:00:00:00 dev $vdev dst $ip" 
      fi
     done
