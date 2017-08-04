@@ -178,6 +178,7 @@
       - name: "delete SG"
         ec2_group:
           name: "{{PREFIX}}-SG"
+          description: "{{PREFIX}} server security group"
           state: absent
           region: "{{ REGION }}"
         tags:
