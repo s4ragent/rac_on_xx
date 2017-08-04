@@ -455,17 +455,7 @@
           region: "{{ REGION }}"
         tags:
           - delete
-          
-      - name: "Remove route table"
-        ec2_vpc_route_table:
-          region: "{{ REGION }}"
-          state: absent
-          tags:
-            Name: "{{ PREFIX }}-RT"
-          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
-        tags:
-          - delete
-          
+                   
       - name: "Remove Subnet a"
         ec2_vpc_subnet:
           state: absent
@@ -510,6 +500,16 @@
           delete_old: True
           inherit_existing: False
           state: absent
+        tags:
+          - delete
+
+      - name: "Remove route table"
+        ec2_vpc_route_table:
+          region: "{{ REGION }}"
+          state: absent
+          tags:
+            Name: "{{ PREFIX }}-RT"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
         tags:
           - delete
                      
