@@ -89,9 +89,8 @@ deleteall(){
 	#### VIRT_TYPE specific processing ###
 	if [ -e "$ansible_ssh_private_key_file" ]; then
    		rm -rf ${ansible_ssh_private_key_file}*
-		az group delete -n $RG_NAME  -y
 	fi
-   
+   az group delete -n $RG_NAME  -y
 }
 
 replaceinventory(){
