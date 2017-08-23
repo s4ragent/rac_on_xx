@@ -61,12 +61,8 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
    
-	if [ "${storage_type}" = "nfsmulti" ] ; then
-				run storage01 $STORAGE_DISK_SIZE 70 storage
-				run storage02 $STORAGE_DISK_SIZE 71 storage
-				run storage03 $STORAGE_DISK_SIZE 72 storage
-	else
-		STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
+
+	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
 	fi
    
