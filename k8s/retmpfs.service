@@ -1,0 +1,14 @@
+[Unit]
+Description=tmpfs_remount
+Requires=network.target
+Before=network.target
+remote-fs.target
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/retmpfs.sh start
+ExecStop=/usr/local/bin/retmpfs.sh stop
+User=root
+Group=root
+[Install]
+WantedBy=multi-user.target
