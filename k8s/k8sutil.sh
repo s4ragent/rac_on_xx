@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VIRT_TYPE="docker"
+VIRT_TYPE="k8s"
 
 cd ..
 source ./commonutil.sh
@@ -60,7 +60,16 @@ runonly(){
 	
 	HasNework=`docker network ls | grep $BRNAME | wc -l`
 	if [ "$HasNework" = "0" ]; then
-		docker network create -d bridge --subnet=$DOCKERSUBNET $BRNAME
+			cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Service
+metadata:
+  name: $DOMAIN_NAME
+spec:
+  selector:
+    name: busybox
+  clusterIP: None
+EOF
 	fi
 	
 	if [  ! -e $ansible_ssh_private_key_file ] ; then
