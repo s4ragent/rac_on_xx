@@ -125,14 +125,11 @@ get_External_IP(){
 
 get_Internal_IP(){
 	if [ "$1" = "storage" ]; then
-		NUM=`expr $BASE_IP`
+		echo "storagepod.$DOMAIN_NAME.$NAMESPACE.svc.$CLUSTERDOMAIN"
 	else
-		NUM=`expr $BASE_IP + $1`
-	fi
-	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
-	Internal_IP="${SEGMENT}$NUM"
-
-	echo $Internal_IP	
+		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		echo "${NODENAME}pod.$DOMAIN_NAME.$NAMESPACE.svc.$CLUSTERDOMAIN"
+	fi	
 }
 
 
