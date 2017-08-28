@@ -51,7 +51,7 @@ EOF
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
-cat > $VIRT_TYPE/host_vars/$1 <<EOF
+cat >> $VIRT_TYPE/host_vars/$1 <<EOF
 VXLAN_NODENAME: "${NODENAME}.$DOMAIN_NAME.$NAMESPACE.svc.$CLUSTERDOMAIN"
 EOF
 
@@ -103,6 +103,7 @@ spec:
     name: busybox
   clusterIP: None
 EOF
+sleep 30s
 	fi
 	
 	if [  ! -e $ansible_ssh_private_key_file ] ; then
