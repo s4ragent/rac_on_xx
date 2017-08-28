@@ -14,39 +14,66 @@ run(){
 	IP=$2
 	NODENUMBER=$3
 	HOSTGROUP=$4
+	INSTANCE_ID="${NODENAME}"
 	
-	IsDeviceMapper=`docker info | grep devicemapper | grep -v grep | wc -l`
-
-#	if [ "$IsDeviceMapper" != "0" ]; then
-		mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
-		StorageOps="-v $DOCKER_VOLUME_PATH/$NODENAME:/u01:rw"
-#     		#DeviceMapper_BaseSize=$DeviceMapper_BaseSize
-#	else
-      		#DeviceMapper_BaseSize=""
-#      		StorageOps=""
-#	fi
-#   
-#    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
-
-
-    	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
+	cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: $INSTANCE_ID
+spec:
+  hostname: $INSTANCE_ID
+  subdomain: $DOMAIN_NAME
+		containers:
+    - name: $INSTANCE_ID
+      image: s4ragent/rac_on_xx:OEL7
+      ports:
+        - containerPort: 80
+          hostPort: 80
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: cgroups
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+		volumes:
+    - hostPath:
+        path: /sys/fs/cgroup
+      name: cgroups
+EOF
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
-	docker exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
-	docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
-	docker exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
-	docker cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
-	docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
+cat > $VIRT_TYPE/host_vars/$1 <<EOF
+VXLAN_NODENAME: "${NODENAME}.$DOMAIN_NAME.$NAMESPACE.svc.$CLUSTERDOMAIN"
+EOF
 
-	sleep 10
-   
-#   docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
-	docker exec ${NODENAME} systemctl start sshd
-	docker exec ${NODENAME} systemctl enable sshd
-#	docker exec $NODENAME systemctl start NetworkManager
-#	docker exec $NODENAME systemctl enable NetworkManager
+}
+
+run_init(){
+	NODENAME=$1
+	
+	kubectl exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
+	kubectl exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
+	kubectl exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
+	kubectl cp ${ansible_ssh_private_key_file}.pub $DOMAIN_NAME/${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
+
+	kubectl exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
+
+	kubectl cp ../rac_on_xx $DOMAIN_NAME/${NODENAME}:/home/$ansible_ssh_user/
+
+	kubectl exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/rac_on_xx"
+
+	kubectl exec ${NODENAME} bash -c "cp /home/$ansible_ssh_user/rac_on_xx/$VIRT_TYPE/retmpfs.sh /usr/local/bin/retmpfs.sh && chmod +x /usr/local/bin/retmpfs.sh"
+	
+	kubectl exec ${NODENAME} bash -c "cp /home/$ansible_ssh_user/rac_on_xx/$VIRT_TYPE/retmpfs.service /etc/systemd/system"
+
+	kubectl exec ${NODENAME} systemctl start retmpfs
+	kubectl exec ${NODENAME} systemctl enable retmpfs
+
+	kubectl exec ${NODENAME} systemctl start sshd
+	kubectl exec ${NODENAME} systemctl enable sshd
 }
 
 #### VIRT_TYPE specific processing  (must define)###
@@ -125,10 +152,10 @@ get_External_IP(){
 
 get_Internal_IP(){
 	if [ "$1" = "storage" ]; then
-		echo "storagepod.$DOMAIN_NAME.$NAMESPACE.svc.$CLUSTERDOMAIN"
+		echo "storage.$DOMAIN_NAME.$NAMESPACE.svc.$CLUSTERDOMAIN"
 	else
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		echo "${NODENAME}pod.$DOMAIN_NAME.$NAMESPACE.svc.$CLUSTERDOMAIN"
+		echo "${NODENAME}.$DOMAIN_NAME.$NAMESPACE.svc.$CLUSTERDOMAIN"
 	fi	
 }
 
