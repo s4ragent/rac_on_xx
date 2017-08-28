@@ -21,6 +21,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: $INSTANCE_ID
+  namespace: $NAMESPACE
 spec:
   hostname: $INSTANCE_ID
   subdomain: $DOMAIN_NAME
@@ -60,29 +61,29 @@ EOF
 run_init(){
 	NODENAME=$1
 	
-	kubectl exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
-	kubectl exec ${NODENAME} -- echo "$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$ansible_ssh_user
-	kubectl exec ${NODENAME} -- mkdir /home/$ansible_ssh_user/.ssh
-	kubectl cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
+	kubectl --namespace $NAMESPACE exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- echo "$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$ansible_ssh_user
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- mkdir /home/$ansible_ssh_user/.ssh
+	kubectl cp ${ansible_ssh_private_key_file}.pub $NAMESPACE/{NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
 
-	kubectl exec ${NODENAME} -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh        
-	kubectl exec ${NODENAME} -- chmod 700 /home/$ansible_ssh_user/.ssh
-	kubectl exec ${NODENAME} -- chmod 600 /home/$ansible_ssh_user/.ssh/*
+	kubectl --namespace $NAMESPACEexec ${NODENAME} -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh        
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 700 /home/$ansible_ssh_user/.ssh
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 600 /home/$ansible_ssh_user/.ssh/*
 
-	kubectl cp ../rac_on_xx ${NODENAME}:/home/$ansible_ssh_user/
+	kubectl cp ../rac_on_xx $NAMESPACE/${NODENAME}:/home/$ansible_ssh_user/
 
-	kubectl exec ${NODENAME} -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/rac_on_xx
+	kubectl exec --namespace $NAMESPACE ${NODENAME} -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/rac_on_xx
 
-	kubectl exec ${NODENAME} -- cp /home/$ansible_ssh_user/rac_on_xx/$VIRT_TYPE/retmpfs.sh /usr/local/bin/retmpfs.sh
-	kubectl exec ${NODENAME} -- chmod +x /usr/local/bin/retmpfs.sh
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- cp /home/$ansible_ssh_user/rac_on_xx/$VIRT_TYPE/retmpfs.sh /usr/local/bin/retmpfs.sh
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod +x /usr/local/bin/retmpfs.sh
 	
-	kubectl exec ${NODENAME} cp /home/$ansible_ssh_user/rac_on_xx/$VIRT_TYPE/retmpfs.service /etc/systemd/system
+	kubectl --namespace $NAMESPACE exec ${NODENAME} cp /home/$ansible_ssh_user/rac_on_xx/$VIRT_TYPE/retmpfs.service /etc/systemd/system
 
-	kubectl exec ${NODENAME} -- systemctl start retmpfs
-	kubectl exec ${NODENAME} -- systemctl enable retmpfs
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start retmpfs
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable retmpfs
 
-	kubectl exec ${NODENAME} -- systemctl start sshd
-	kubectl exec ${NODENAME} -- systemctl enable sshd
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start sshd
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable sshd
 }
 
 #### VIRT_TYPE specific processing  (must define)###
@@ -94,13 +95,14 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	HasService=`kubectl get services | grep $DOMAIN_NAME | wc -l`
+	HasService=`kubectl --namespace $NAMESPACE get services | grep $DOMAIN_NAME | wc -l`
 	if [ "$HasService" = "0" ]; then
 			cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Service
 metadata:
   name: $DOMAIN_NAME
+  namespace: $NAMESPACE
 spec:
   selector:
     name: busybox

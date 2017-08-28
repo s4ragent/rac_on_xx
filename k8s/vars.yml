@@ -14,7 +14,7 @@ CLUSTERDOMAIN: cluster.local
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: ""
-DELETE_CMD: "kubectl delete pod "
+DELETE_CMD: "kubectl --namespace {{ NAMESPACE }} delete pod "
 START_CMD: ""
 START_CMD_OPS: ""
 STOP_CMD: ""
