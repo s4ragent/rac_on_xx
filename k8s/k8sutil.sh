@@ -39,7 +39,7 @@ spec:
         - name: u01
           mountPath: /u01
           readOnly: false
-		volumes:
+  volumes:
     - hostPath:
         path: /sys/fs/cgroup
       name: cgroups
