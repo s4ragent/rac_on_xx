@@ -10,6 +10,7 @@ MEDIA_COPY:
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
 NAMESPACE: raconxx
+SUBDOMAIN: sub
 CLUSTERDOMAIN: cluster.local
 ####################################################
 ####common VIRT_TYPE specific value ################

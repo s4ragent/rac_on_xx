@@ -22,9 +22,11 @@ kind: Pod
 metadata:
   name: $INSTANCE_ID
   namespace: $NAMESPACE
+  labels:
+    name: rac
 spec:
   hostname: $INSTANCE_ID
-  subdomain: $DOMAIN_NAME
+  subdomain: $SUBDOMAIN
   containers:
     - name: $INSTANCE_ID
       image: s4ragent/rac_on_xx:OEL7
@@ -53,7 +55,7 @@ EOF
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
 cat >> $VIRT_TYPE/host_vars/$1 <<EOF
-VXLAN_NODENAME: "${NODENAME}.$DOMAIN_NAME.$NAMESPACE.svc.$CLUSTERDOMAIN"
+VXLAN_NODENAME: "${NODENAME}.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
 EOF
 
 }
@@ -96,18 +98,18 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	HasService=`kubectl --namespace $NAMESPACE get services | grep $DOMAIN_NAME | wc -l`
+	HasService=`kubectl --namespace $NAMESPACE get services | grep $SUBDOMAIN | wc -l`
 	if [ "$HasService" = "0" ]; then
 	  kubectl create namespace $NAMESPACE
 			cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Service
 metadata:
-  name: $DOMAIN_NAME
+  name: $SUBDOMAIN
   namespace: $NAMESPACE
 spec:
   selector:
-    name: busybox
+    name: rac
   clusterIP: None
 EOF
 	fi
@@ -152,7 +154,7 @@ deleteall(){
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
 	
-	kubectl --namespace $NAMESPACE delete service $DOMAIN_NAME
+	kubectl --namespace $NAMESPACE delete service $SUBDOMAIN
  kubectl delete namespace $NAMESPACE
 	rm -rf /tmp/$CVUQDISK
 }
@@ -170,10 +172,10 @@ get_External_IP(){
 
 get_Internal_IP(){
 	if [ "$1" = "storage" ]; then
-		echo "storage.$DOMAIN_NAME.$NAMESPACE.svc.$CLUSTERDOMAIN"
+		echo "storage.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
 	else
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		echo "${NODENAME}.$DOMAIN_NAME.$NAMESPACE.svc.$CLUSTERDOMAIN"
+		echo "${NODENAME}.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
 	fi	
 }
 
