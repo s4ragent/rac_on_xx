@@ -97,6 +97,7 @@ runonly(){
 	
 	HasService=`kubectl --namespace $NAMESPACE get services | grep $DOMAIN_NAME | wc -l`
 	if [ "$HasService" = "0" ]; then
+	  kubectl create namespace $NAMESPACE
 			cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Service
@@ -150,8 +151,8 @@ deleteall(){
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
 	
-	kubectl delete service $DOMAIN_NAME
-  	
+	kubectl --namespace $NAMESPACE delete service $DOMAIN_NAME
+ kubectl delete namespace $NAMESPACE
 	rm -rf /tmp/$CVUQDISK
 }
 
