@@ -61,19 +61,19 @@ run_init(){
 	NODENAME=$1
 	
 	kubectl exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
-	kubectl exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
-	kubectl exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
+	kubectl exec ${NODENAME} "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
+	kubectl exec ${NODENAME} "mkdir /home/$ansible_ssh_user/.ssh"
 	kubectl cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
 
-	kubectl exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
+	kubectl exec ${NODENAME} "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
 
 	kubectl cp ../rac_on_xx ${NODENAME}:/home/$ansible_ssh_user/
 
-	kubectl exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/rac_on_xx"
+	kubectl exec ${NODENAME} "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/rac_on_xx"
 
-	kubectl exec ${NODENAME} bash -c "cp /home/$ansible_ssh_user/rac_on_xx/$VIRT_TYPE/retmpfs.sh /usr/local/bin/retmpfs.sh && chmod +x /usr/local/bin/retmpfs.sh"
+	kubectl exec ${NODENAME} "cp /home/$ansible_ssh_user/rac_on_xx/$VIRT_TYPE/retmpfs.sh /usr/local/bin/retmpfs.sh && chmod +x /usr/local/bin/retmpfs.sh"
 	
-	kubectl exec ${NODENAME} bash -c "cp /home/$ansible_ssh_user/rac_on_xx/$VIRT_TYPE/retmpfs.service /etc/systemd/system"
+	kubectl exec ${NODENAME} "cp /home/$ansible_ssh_user/rac_on_xx/$VIRT_TYPE/retmpfs.service /etc/systemd/system"
 
 	kubectl exec ${NODENAME} systemctl start retmpfs
 	kubectl exec ${NODENAME} systemctl enable retmpfs
@@ -92,7 +92,7 @@ runonly(){
 	fi
 	
 	HasService=`kubectl get services | grep $DOMAIN_NAME | wc -l`
-	if [ "$HasNework" = "0" ]; then
+	if [ "$HasService" = "0" ]; then
 			cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Service
@@ -103,7 +103,6 @@ spec:
     name: busybox
   clusterIP: None
 EOF
-sleep 30s
 	fi
 	
 	if [  ! -e $ansible_ssh_private_key_file ] ; then
