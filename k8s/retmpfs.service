@@ -1,8 +1,7 @@
 [Unit]
 Description=tmpfs_remount
 Requires=network.target
-Before=network.target
-remote-fs.target
+Before=network.target remote-fs.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
