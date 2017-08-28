@@ -122,7 +122,7 @@ EOF
 		run $NODENAME $NODEIP $i "dbserver"
 	done
 
-	sleep 600s
+	sleep 60s
 	run_init "storage"
 	for i in `seq 1 $nodecount`;
 	do
