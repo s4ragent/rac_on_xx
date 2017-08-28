@@ -67,7 +67,7 @@ run_init(){
 
 	kubectl exec ${NODENAME} -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh        
 	kubectl exec ${NODENAME} -- chmod 700 /home/$ansible_ssh_user/.ssh
-	kubectl exec ${NODENAME} -- chmod 600 /home/$ansible_ssh_user/.ssh/*"
+	kubectl exec ${NODENAME} -- chmod 600 /home/$ansible_ssh_user/.ssh/*
 
 	kubectl cp ../rac_on_xx ${NODENAME}:/home/$ansible_ssh_user/
 
