@@ -63,11 +63,11 @@ run_init(){
 	kubectl exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
 	kubectl exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
 	kubectl exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
-	kubectl cp ${ansible_ssh_private_key_file}.pub $DOMAIN_NAME/${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
+	kubectl cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
 
 	kubectl exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
 
-	kubectl cp ../rac_on_xx $DOMAIN_NAME/${NODENAME}:/home/$ansible_ssh_user/
+	kubectl cp ../rac_on_xx ${NODENAME}:/home/$ansible_ssh_user/
 
 	kubectl exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/rac_on_xx"
 
