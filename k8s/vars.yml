@@ -6,18 +6,18 @@
 #### k8s user specific value  ###################
 VXLAN_DEV: "eth0"
 MEDIA_PATH: /downloadmedia
-MEDIA_COPY: "true"
+MEDIA_COPY: 
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
 NAMESPACE: raconxx
 CLUSTERDOMAIN: cluster.local
 ####################################################
 ####common VIRT_TYPE specific value ################
-DELETE_CMD_OPS: "-f"
-DELETE_CMD: "docker rm {{ DELETE_CMD_OPS }}"
-START_CMD: "docker start"
+DELETE_CMD_OPS: ""
+DELETE_CMD: "kubectl delete pod "
+START_CMD: ""
 START_CMD_OPS: ""
-STOP_CMD: "docker stop"
+STOP_CMD: ""
 STOP_CMD_OPS: ""
 INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: ""
