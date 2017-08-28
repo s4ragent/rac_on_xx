@@ -24,7 +24,7 @@ metadata:
 spec:
   hostname: $INSTANCE_ID
   subdomain: $DOMAIN_NAME
-		containers:
+  containers:
     - name: $INSTANCE_ID
       image: s4ragent/rac_on_xx:OEL7
       ports:
