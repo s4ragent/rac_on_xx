@@ -85,7 +85,7 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	HasNework=`docker network ls | grep $BRNAME | wc -l`
+	HasService=`kubectl get services | grep $DOMAIN_NAME | wc -l`
 	if [ "$HasNework" = "0" ]; then
 			cat <<EOF | kubectl create -f -
 apiVersion: v1
@@ -115,7 +115,16 @@ EOF
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		run $NODENAME $NODEIP $i "dbserver"
 	done
-	
+
+	sleep 600s
+	run_init "storage"
+	for i in `seq 1 $nodecount`;
+	do
+		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		run_init $NODENAME
+	done
+
+
 #	CLIENTNUM=70
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
 #	CLIENTIP="${SEGMENT}$NUM"	
