@@ -72,7 +72,7 @@ run_init(){
 		if [ "$loopcnt" = "30" ]; then
 			break
 		fi	
-		loopcnt = `expr $loopcnt + 1`
+		loopcnt=`expr $loopcnt + 1`
 		sleep 30s
 	done
 	
