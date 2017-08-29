@@ -67,11 +67,12 @@ run_init(){
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
 
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- mkdir /home/$ansible_ssh_user/.ssh
-	kubectl cp ${ansible_ssh_private_key_file}.pub $NAMESPACE/${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
+	kubectl cp ${ansible_ssh_private_key_file}.pub $NAMESPACE/${NODENAME}:/home/$ansible_ssh_user/.ssh
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- mv /home/$ansible_ssh_user/.ssh/${ansible_ssh_private_key_file}.pub /home/$ansible_ssh_user/.ssh/authorized_keys
 
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh        
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 700 /home/$ansible_ssh_user/.ssh
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 600 /home/$ansible_ssh_user/.ssh/*
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 600 /home/$ansible_ssh_user/.ssh/authorized_keys
 
 	kubectl cp ../rac_on_xx $NAMESPACE/${NODENAME}:/home/$ansible_ssh_user/
 
@@ -111,6 +112,10 @@ spec:
   selector:
     name: rac
   clusterIP: None
+  ports:
+  - name: foo
+    port: 80
+    targetPort: 80
 EOF
 	fi
 	
