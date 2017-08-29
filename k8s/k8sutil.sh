@@ -201,7 +201,7 @@ get_Internal_IP(){
 
 install(){
 	common_execansible rac.yml --tags security,dnsmasq,setresolvconf
-	common_execansible rac.yml --skip-tags security,dnsmasq,setresolvconf
+	common_execansible rac.yml --skip-tags security,dnsmasq
 }
 
 case "$1" in
