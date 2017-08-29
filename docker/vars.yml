@@ -35,3 +35,43 @@ TMPFS_OPS: "--shm-size=1200m"
 ####ansible specific
 ansible_ssh_user: opc
 ansible_ssh_private_key_file: raconxx
+dns: dnsmasq
+#####for NFS option values
+##### device size = base_size + multi_size * node count
+storage_type: "nfs"
+NFS_OPS:  "rw,bg,hard,nointr,rsize=1048576,wsize=1048576,tcp,vers=4.1,timeo=600,actimeo=0"
+ORA_DATA: /u01/oradata
+VOTE_DEV: /u01/oradata/vote.img
+VOTE_BASE_SIZE: 40960
+VOTE_MULTI_SIZE: 2048
+VOTE_DISKGROUP_NAME: VOTE
+DATA_DEV: /u01/oradata/data.img
+DATA_BASE_SIZE: 5120
+DATA_MULTI_SIZE: 1024
+DATA_DISKGROUP_NAME: DATA
+FRA_DEV: /u01/oradata/fra.img
+FRA_BASE_SIZE: 25600
+FRA_MULTI_SIZE: 0
+FRA_DISKGROUP_NAME: FRA
+ASM_STRING: /u01/oradata/*
+DNFS: enable
+###
+NODEPREFIX: node
+DOMAIN_NAME: public
+SCAN_NAME: scan
+INSTALL_LANG: ja
+SWAP_SIZE: 4096
+CLUSTER_NAME: node-cluster
+DBNAME: ORCL
+SIDNAME: ORCL
+SYSPASSWORD: oracle123
+SYSTEMPASSWORD: oracle123
+REDOFILESIZE: 10
+ASMSYSPASSWORD: oracle123
+ASMMONPASSWORD: oracle123
+CHARSET: AL32UTF8
+NCHAR: AL16UTF16
+MEMORYTARGET: 1800
+TEMPLATENAME: General_Purpose.dbc
+DATABASETYPE: MULTIPURPOSE
+dbca: paralell

@@ -64,6 +64,19 @@
 #      - gridrootsh
 #      - gridinstall
 
+  - name: "Update relink_rac_on(dnfs_off)"
+    become: yes
+    replace:
+      dest: "{{ GRID_ORACLE_HOME }}/crs/config/relink_rac_on"
+      regexp: "dnfs_on"
+      replace: "dnfs_on 	dnfs_off"
+    when: DNFS is defined and DNFS == 'disable'
+    tags:
+      - disablednfs
+      - gridrootsh
+      - gridinstall
+      - installdbca
+
   - name: "grid 1st root.sh"
     become: yes
     shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
@@ -121,5 +134,4 @@
       - crsctl
       - gridinstall
       - installdbca
-
 

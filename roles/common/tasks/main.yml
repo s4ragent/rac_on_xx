@@ -1,4 +1,25 @@
 ---
+#### set hostname #################################
+
+  - name: "copy sethost.init"
+    become: yes
+    template: src=sethost.init.j2 dest=/usr/local/bin/sethost.init owner=root group=root mode=0700
+    tags:
+      - sethost
+      
+  - name: "copy sethost.service"
+    become: yes
+    copy: src=sethost.service dest=/etc/systemd/system/sethost.service owner=root group=root mode=0700
+    tags:
+      - sethost
+
+  - name: "start_enable sethost.service"
+    become: yes
+    service: name=sethost.service state=started enabled=yes
+    ignore_errors: True
+    tags:
+      - sethost
+
   - name: "create group"
     become: yes
     group: name={{ item.name }} state=present gid={{ item.gid }}

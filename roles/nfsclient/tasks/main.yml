@@ -5,7 +5,6 @@
     with_items:
       - nfs-utils
       - qemu-img
-    when: storage_type == "nfs"
     tags:
       - nfsclient
 
@@ -14,31 +13,42 @@
     file: path={{ item.path }} state=directory owner={{ item.name }} group=oinstall mode=0755
     with_items:
       - { name: 'grid', path: "{{ ORA_DATA }}" }
-    when: storage_type == "nfs"
+    when: storage_type == 'nfs'
     tags:
       - nfsclient
 
+
   - name: "mount oradata"
     become: yes
-    mount: name={{ ORA_DATA }} src="{{ STORAGE_SERVER }}:/" fstype=nfs opts=rw,hard,rsize=32768,wsize=32768,tcp,vers=4,timeo=600,actimeo=0 state=mounted
-    when: storage_type == "nfs"
+    mount: name={{ ORA_DATA }} src="{{ STORAGE_SERVER }}:/" fstype=nfs opts="{{ NFS_OPS }}" state=mounted
+    when: storage_type == 'nfs'
     tags:
       - nfsclient
 
   - name: "chown oradata"
     become: yes
     file: path={{ ORA_DATA }} state=directory owner=grid group=oinstall mode=0775
-    when: storage_type == "nfs"
     tags:
       - nfsclient
 
-  - name: "create asm device vote"
+  - name: "create asm device vote(qemu-img)"
     become: yes
     #shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
     shell: "qemu-img create -f raw -o size={{ item.size }}M {{ item.name }}"
     args:
       creates: "{{ item.name }}"
-    when: inventory_hostname == groups["dbserver"][0] and storage_type == "nfs"
+    when: inventory_hostname == groups["dbserver"][0] and DD_CMD is undefined and storage_type == "nfs"
+    with_items:
+      - { name: "{{ VOTE_DEV }}", size: "{{ VOTE_BASE_SIZE + VOTE_MULTI_SIZE * groups['dbserver'] | length  }}" }
+      - { name: "{{ DATA_DEV }}", size: "{{ DATA_BASE_SIZE + DATA_MULTI_SIZE * groups['dbserver'] | length }}" }
+      - { name: "{{ FRA_DEV }}", size: "{{ FRA_BASE_SIZE + FRA_MULTI_SIZE * groups['dbserver'] | length }}" }
+    tags:
+      - nfsclient
+
+  - name: "create asm device vote(dd)"
+    become: yes
+    shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
+    when: inventory_hostname == groups["dbserver"][0] and DD_CMD is defined and storage_type == "nfs"
     with_items:
       - { name: "{{ VOTE_DEV }}", size: "{{ VOTE_BASE_SIZE + VOTE_MULTI_SIZE * groups['dbserver'] | length  }}" }
       - { name: "{{ DATA_DEV }}", size: "{{ DATA_BASE_SIZE + DATA_MULTI_SIZE * groups['dbserver'] | length }}" }
@@ -60,6 +70,5 @@
   - name: "enable remote-fs.target"
     become: yes
     service: name=remote-fs.target enabled=yes
-    when: storage_type == "nfs"
     tags:
       - nfsclient

@@ -63,9 +63,9 @@ runonly(){
    
 
 	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
-	
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
-	
+	fi
+   
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
@@ -85,9 +85,8 @@ deleteall(){
 	#### VIRT_TYPE specific processing ###
 	if [ -e "$ansible_ssh_private_key_file" ]; then
    		rm -rf ${ansible_ssh_private_key_file}*
-		az group delete -n $RG_NAME  -y
 	fi
-   
+   az group delete -n $RG_NAME  -y
 }
 
 replaceinventory(){

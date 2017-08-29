@@ -1,0 +1,231 @@
+---
+  - hosts: 
+      - localhost
+    connection: local
+    vars_files:
+      - ./vars.yml
+    tasks:
+      - name: "create VPC"
+        ec2_vpc_net:
+          name: "{{ PREFIX }}-VPC"
+          cidr_block: "{{ VPC_ADDR }}"
+          region: "{{ REGION }}"
+        register: _vpc
+        tags:
+          - create
+        
+      - name: "create Internet gateway"
+        ec2_vpc_igw:
+          vpc_id: "{{ _vpc.vpc.id }}"
+          region: "{{ REGION }}"
+        register: _igw
+        tags:
+          - create
+                  
+      - name: "create Public subnet a"
+        ec2_vpc_subnet:
+          vpc_id: "{{ _vpc.vpc.id }}"
+          az: "{{ REGION }}a"
+          cidr: "{{ SUBNET_A_ADDR }}"
+          resource_tags:
+            Name: "{{ PREFIX }}-SUBNET-A"
+          region: "{{ REGION }}"
+        register: _subnet_a
+        tags:
+          - create
+                  
+      - name: "create Public subnet c"
+        ec2_vpc_subnet:
+          vpc_id: "{{ _vpc.vpc.id }}"
+          az: "{{ REGION }}c"
+          cidr: "{{ SUBNET_C_ADDR }}"
+          resource_tags:
+            Name: "{{ PREFIX }}-SUBNET-C"
+          region: "{{ REGION }}"
+        register: _subnet_c
+        tags:
+          - create
+                  
+      - name: "create Route"
+        ec2_vpc_route_table:
+          vpc_id: "{{ _vpc.vpc.id }}"
+          tags:
+            Name: "{{ PREFIX }}-RT"
+          subnets:
+            - "{{ _subnet_a.subnet.id }}"
+            - "{{ _subnet_c.subnet.id }}"
+          routes:
+            - dest: 0.0.0.0/0
+              gateway_id: "{{ _igw.gateway_id  }}"
+          region: "{{ REGION }}"
+        register: _route
+        tags:
+          - create        
+        
+      - name: "create security group"
+        ec2_group:
+          name: "{{PREFIX}}-SG"
+          description: "{{PREFIX}} server security group"
+          vpc_id: "{{ _vpc.vpc.id }}"
+          region: "{{ REGION }}"
+          rules:
+            - proto: tcp
+              from_port: 22
+              to_port: 22
+              cidr_ip: 0.0.0.0/0
+            - proto: all
+              group_name: "{{PREFIX}}-SG"
+          rules_egress:
+            - proto: all
+              from_port: 0
+              to_port: 65535
+              cidr_ip: 0.0.0.0/0
+        tags:
+          - create
+
+      - name: "create storage instance"
+        ec2:
+          key_name: "{{PREFIX}}"
+          group: "{{PREFIX}}-SG"
+          instance_type: "{{INSTANCE_TYPE}}"
+          image: "{{IMAGE_ID}}"
+          wait: yes
+          volumes:
+            - device_name: "{{data_disk_dev}}"
+              volume_type: gp2
+              volume_size: "{{STORAGE_DISK_SIZE}}"
+              delete_on_termination: true
+          region: "{{ REGION }}"
+          vpc_subnet_id: "{{ _subnet_a.subnet.id }}"
+          assign_public_ip: yes
+          count_tag:
+            Name: "{{PREFIX}}-storage"
+          exact_count: 1
+          spot_price: "{{SPOT_PRICE}}"
+          instance_tags:
+            Name: "{{PREFIX}}-storage"
+        tags:
+          - create
+
+      - name: "create db instance"
+        ec2:
+          key_name: "{{PREFIX}}"
+          group: "{{PREFIX}}-SG"
+          instance_type: "{{INSTANCE_TYPE}}"
+          image: "{{IMAGE_ID}}"
+          wait: yes
+          volumes:
+            - device_name: "{{data_disk_dev}}"
+              volume_type: gp2
+              volume_size: "{{NODE_DISK_SIZE}}"
+              delete_on_termination: true
+          region: "{{ REGION }}"
+          vpc_subnet_id: "{{ _subnet_a.subnet.id }}"
+          assign_public_ip: yes
+          count_tag:
+            Name: "{{PREFIX}}-dbserver"
+          exact_count: "{{ nodecount }}"
+          spot_price: "{{ SPOT_PRICE }}"
+          instance_tags:
+            Name: "{{PREFIX}}-dbserver"
+        register: ec2
+        tags:
+          - create
+
+      - name: Wait for SSH to come up
+        wait_for:
+          host: "{{ item.public_ip }}"
+          port: 22
+          delay: 60
+          timeout: 320
+          state: started
+        with_items: "{{ ec2.instances }}"
+        tags:
+          - create
+ 
+      - name: "get vpcid"
+        ec2_vpc_net_facts:
+          region: "{{ REGION }}"
+          filters:
+            "tag:Name": "{{ PREFIX }}-VPC"
+        register: vpc_facts 
+        tags:
+          - delete 
+          
+      - name: "get instanceids"         
+        ec2_remote_facts:
+          region: "{{ REGION }}"
+          filters:
+            vpc-id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+        register: ec2_facts
+        tags:
+          - delete
+
+      - name: "delete instance"
+        ec2:
+          instance_ids: "{{ item.id }}"
+          state: absent
+          region: "{{ REGION }}"
+        with_items: "{{ ec2_facts.instances }}"
+        tags:
+          - delete
+
+      - pause:
+          minutes: 5
+        tags:
+          - delete
+
+      - name: "delete SG"
+        ec2_group:
+          name: "{{PREFIX}}-SG"
+          description: "{{PREFIX}} server security group"
+          state: absent
+          region: "{{ REGION }}"
+        tags:
+          - delete
+          
+      - name: "Remove Subnet a"
+        ec2_vpc_subnet:
+          state: absent
+          cidr: "{{ SUBNET_A_ADDR }}"
+          region: "{{ REGION }}"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+        tags:
+          - delete
+
+      - name: "Remove Subnet c"
+        ec2_vpc_subnet:
+          state: absent
+          cidr: "{{ SUBNET_C_ADDR }}"
+          region: "{{ REGION }}"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+        tags:
+          - delete
+          
+      - name: "delete internet gateway"    
+        ec2_vpc_igw:
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          state: absent
+          region: "{{ REGION }}"
+        tags:
+          - delete
+          
+      - name: "Remove route table"
+        ec2_vpc_route_table:
+          region: "{{ REGION }}"
+          state: absent
+          tags:
+            Name: "{{ PREFIX }}-RT"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+        tags:
+          - delete
+          
+           
+      - name: "delete VPC"
+        ec2_vpc_net:
+          name: "{{ PREFIX }}-VPC"
+          state: absent
+          cidr_block: "{{ VPC_ADDR }}"
+          region: "{{ REGION }}"
+        tags:
+          - delete

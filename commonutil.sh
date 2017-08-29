@@ -1,6 +1,8 @@
 #!/bin/bash
 export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30"
-export  ANSIBLE_INVENTORY_IGNORE="~, .orig, .bak, .ini, .cfg, .retry, .pyc, .pyo, .yml, .md, .sh, images, .log"
+export  ANSIBLE_INVENTORY_IGNORE="~, .orig, .bak, .ini, .cfg, .retry, .pyc, .pyo, .yml, .md, .sh, images, .log, .service"
+export ANSIBLE_LOG_PATH="./ansible-`date +%Y%m%d%H%M%S`.log"
+
 
 parse_yaml(){
    local prefix=$2
@@ -23,7 +25,9 @@ eval $(parse_yaml common_vars.yml)
 eval $(parse_yaml $VIRT_TYPE/vars.yml)
 
 common_execansible(){
+			starttime=`date`
    ansible-playbook -f 64 -T 600 -i $VIRT_TYPE $*
+   echo "###START $starttime END `date` ###"
 }
 
 common_runall(){

@@ -22,7 +22,7 @@
 
   - debug: var=runinstallerdb_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
-    failed_when: runinstallerdb_result.rc !=0 and runinstallergrid_result.rc != 250
+    failed_when: runinstallerdb_result.rc !=0 and runinstallerdb_result.rc != 250
     tags:
       - runinstallerdb
       - dbinstall
@@ -42,3 +42,15 @@
       - dbrootsh
       - dbinstall
       - installdbca
+
+  - name: "disable dnfs"
+    become: yes
+    shell: "make -f ins_rdbms.mk ORACLE_HOME={{ ORA_ORACLE_HOME }} dnfs_off"
+    args:
+      chdir: "{{ ORA_ORACLE_HOME }}/rdbms/lib"
+    when: DNFS is defined and DNFS == 'disable'
+    tags:
+      - dbrootsh
+      - dbinstall
+      - installdbca
+      - oradisablednfs

@@ -55,8 +55,13 @@ runonly(){
 		gcloud compute firewall-rules create default-allow-internal --network default --allow tcp:0-65535,udp:0-65535,icmp --source-ranges 10.0.0.0/8
 	fi
 
-
-	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
+	if [ "${storage_type}" = "nfsmulti" ] ; then
+				run storage01 $STORAGE_DISK_SIZE 70 storage
+				run storage02 $STORAGE_DISK_SIZE 71 storage
+				run storage03 $STORAGE_DISK_SIZE 72 storage
+	else
+		STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
+	fi
 	
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
 	
