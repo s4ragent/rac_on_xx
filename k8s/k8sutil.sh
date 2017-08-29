@@ -66,23 +66,26 @@ run_init(){
 	kubectl --namespace $NAMESPACE exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- mkdir /home/$ansible_ssh_user/.ssh
-	kubectl cp ${ansible_ssh_private_key_file}.pub $NAMESPACE/${NODENAME}:/home/$ansible_ssh_user/.ssh
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- mv /home/$ansible_ssh_user/.ssh/${ansible_ssh_private_key_file}.pub /home/$ansible_ssh_user/.ssh/authorized_keys
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh        
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 700 /home/$ansible_ssh_user/.ssh
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 600 /home/$ansible_ssh_user/.ssh/authorized_keys
 
-	kubectl cp ../rac_on_xx $NAMESPACE/${NODENAME}:/home/$ansible_ssh_user/
+	kubectl cp ../rac_on_xx $NAMESPACE/${NODENAME}:/root/
 
-	kubectl exec --namespace $NAMESPACE ${NODENAME} -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/rac_on_xx
+	kubectl exec --namespace $NAMESPACE ${NODENAME} -- chown -R ${ansible_ssh_user} /home/root/rac_on_xx
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- cp /home/$ansible_ssh_user/rac_on_xx/$VIRT_TYPE/retmpfs.sh /usr/local/bin/retmpfs.sh
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.sh /usr/local/bin/retmpfs.sh
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod +x /usr/local/bin/retmpfs.sh
-	
-	kubectl --namespace $NAMESPACE exec ${NODENAME} cp /home/$ansible_ssh_user/rac_on_xx/$VIRT_TYPE/retmpfs.service /etc/systemd/system
 
+	kubectl --namespace $NAMESPACE exec ${NODENAME} cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.service /etc/systemd/system
+
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- mkdir /home/$ansible_ssh_user/.ssh
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- cp /root/rac_on_xx/${ansible_ssh_private_key_file}.pub /home/$ansible_ssh_user/.ssh/authorized_keys
+	
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh
+	        
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 700 /home/$ansible_ssh_user/.ssh
+	
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 600 /home/$ansible_ssh_user/.ssh/authorized_keys
+	
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start retmpfs
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable retmpfs
 
