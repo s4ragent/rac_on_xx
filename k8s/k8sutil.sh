@@ -70,8 +70,6 @@ run_init(){
 
 	kubectl cp ../rac_on_xx $NAMESPACE/${NODENAME}:/root/
 
-	kubectl exec --namespace $NAMESPACE ${NODENAME} -- chown -R ${ansible_ssh_user} /home/root/rac_on_xx
-
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.sh /usr/local/bin/retmpfs.sh
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod +x /usr/local/bin/retmpfs.sh
 
