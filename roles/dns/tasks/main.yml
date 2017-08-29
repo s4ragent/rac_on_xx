@@ -51,6 +51,11 @@
     tags:
       - setresolvconf
 
+  - pause:
+      seconds: 5
+    tags:
+      - setresolvconf
+      
 ###### for dhclient enable environment (e.g. gce/ec2)
   - name: "check dhclient"
     become: yes
