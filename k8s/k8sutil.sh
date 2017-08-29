@@ -62,6 +62,19 @@ EOF
 
 run_init(){
 	NODENAME=$1
+ loopcnt=0
+	while :
+	do
+		status=`kubectl --namespace $NAMESPACE get pods $NODENAME | grep Running | wc -l`
+		if [ "$status" = "1" ]; then
+			break
+		fi	
+		if [ "$loopcnt" = "30" ]; then
+			break
+		fi	
+		loopcnt = `expr $loopcnt + 1`
+		sleep 30s
+	done
 	
 	kubectl --namespace $NAMESPACE exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
@@ -137,7 +150,7 @@ EOF
 		run $NODENAME $NODEIP $i "dbserver"
 	done
 
-	sleep 60s
+	
 	run_init "storage"
 	for i in `seq 1 $nodecount`;
 	do
