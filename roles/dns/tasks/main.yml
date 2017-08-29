@@ -24,11 +24,11 @@
     tags:
       - dnsmasq
 
-  - name: "add nameserver 8.8.8.8 resolv.dnsmasq.conf"
-    become: yes
-    lineinfile: state=present create=yes insertafter=EOF line="nameserver 8.8.8.8" dest=/etc/resolv.dnsmasq.conf
-    tags:
-      - dnsmasq
+#  - name: "add nameserver 8.8.8.8 resolv.dnsmasq.conf"
+#    become: yes
+#    lineinfile: state=present create=yes insertafter=EOF line="nameserver 8.8.8.8" dest=/etc/resolv.dnsmasq.conf
+#    tags:
+#      - dnsmasq
 
 
 ###### set resolvconf
