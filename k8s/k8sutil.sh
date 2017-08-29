@@ -181,6 +181,7 @@ deleteall(){
 buildimage(){
 	docker build -t $IMAGE --no-cache=true ./images/OEL7
 }
+
 replaceinventory(){
 	echo ""
 }
@@ -198,5 +199,14 @@ get_Internal_IP(){
 	fi	
 }
 
+install(){
+	execansible rac.yml --tags security,dnsmasq,setresolvconf
+		execansible rac.yml --skip-tags security,dnsmasq,setresolvconf
+}
+
+case "$1" in
+  "runpod" ) shift;runonly $*;;
+  "install" ) shift;install $*;;
+esac
 
 source ./common_menu.sh
