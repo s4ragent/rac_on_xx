@@ -5,7 +5,8 @@
 ####################################################
 #### k8s user specific value  ###################
 VXLAN_DEV: "eth0"
-MEDIA_PATH: /media
+MEDIA_PATH: /u01/downloadmedia
+MEDIA_COPY: "true"
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
 NAMESPACE: raconxx
