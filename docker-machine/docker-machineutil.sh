@@ -65,11 +65,11 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
- docher-machine create $DOCKERMACHINE_OPS storage
+ docker-machine create $DOCKERMACHINE_OPS storage
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		docher-machine create $DOCKERMACHINE_OPS $NODENAME
+		docker-machine create $DOCKERMACHINE_OPS $NODENAME
 	done
 	
 	setup_host_vxlan
