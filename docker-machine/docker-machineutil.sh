@@ -18,10 +18,10 @@ run(){
 	IsDeviceMapper=`docker info | grep devicemapper | grep -v grep | wc -l`
 
 #	if [ "$IsDeviceMapper" != "0" ]; then
-		eval $(docker-machine env $NODENAME)
-		docker-machine ssh $NODENAME sudo mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
-		docker-machine ssh $NODENAME sudo chmod -R 777  $DOCKER_VOLUME_PATH
-		StorageOps="-v $DOCKER_VOLUME_PATH/$NODENAME:/u01:rw"
+	eval $(docker-machine env $NODENAME)
+	docker-machine ssh $NODENAME sudo mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
+	docker-machine ssh $NODENAME sudo chmod -R 777  $DOCKER_VOLUME_PATH
+	StorageOps="-v $DOCKER_VOLUME_PATH/$NODENAME:/u01:rw"
 #     		#DeviceMapper_BaseSize=$DeviceMapper_BaseSize
 #	else
       		#DeviceMapper_BaseSize=""
@@ -31,7 +31,7 @@ run(){
 #    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
 
 
-    	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
+	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
