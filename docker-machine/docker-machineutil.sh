@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VIRT_TYPE="docker"
+VIRT_TYPE="docker-machine"
 
 cd ..
 source ./commonutil.sh
@@ -100,11 +100,11 @@ deleteall(){
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
 
-	if [ -n "$DOCKER_VOLUME_PATH" ]; then
-   		rm -rf $DOCKER_VOLUME_PATH/*
-	fi	
-	
-	docker network rm $BRNAME
+	hostlist=`docker-machine ls -q`
+	for host in $hostlist;
+	do
+		docker-machine rm -y $host
+	done
   	
 	rm -rf /tmp/$CVUQDISK
 }
