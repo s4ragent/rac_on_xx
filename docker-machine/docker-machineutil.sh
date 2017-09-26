@@ -135,11 +135,12 @@ get_Internal_IP(){
 
 setup_host_vxlan(){
 	hostlist="localhost `docker-machine ls -q`"
-
+	
+	cnt=0
 	for src in $hostlist;
 	do
 		
-		cnt=0
+
 		SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.'`
 		if [ "$src" = "localhost" ]; then
 			sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $LOCALMACHINE_VXLAN_DEV
