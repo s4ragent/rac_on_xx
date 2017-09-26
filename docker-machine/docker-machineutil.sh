@@ -100,12 +100,9 @@ deleteall(){
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
 
-	hostlist=`docker-machine ls -q`
-	for host in $hostlist;
-	do
-		docker-machine rm -y $host
-	done
-  	
+		sudo ip link set vxlan100 down
+		sudo ip link del vxlan100 
+			
 	rm -rf /tmp/$CVUQDISK
 }
 
