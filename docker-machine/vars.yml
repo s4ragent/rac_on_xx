@@ -13,7 +13,7 @@ MEDIA_COPY: "true"
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
 ####################################################
-DOCKERMACHINE_OPS: "-d virtualbox --virtualbox-memory 6144 --virtualbox-disk-size 100000"
+DOCKERMACHINE_OPS: "-d virtualbox --virtualbox-memory 6144 --virtualbox-disk-size 100000 --virtualbox-boot2docker-url  https://github.com/boot2docker/boot2docker/releases/download/v1.13.0/boot2docker.iso"
 DOCKERMACHINE_VXLAN_DEV: "eth1"
 DOCKERMACHINE_BRIDGE_CMD: "/usr/local/sbin/bridge"
 LOCALMACHINE_VXLAN_DEV: "vboxnet1"
