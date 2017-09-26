@@ -31,7 +31,8 @@ run(){
 #    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
 
 
-	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
+	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init
+	INSTANCE_ID=$NODENAME
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
@@ -100,9 +101,15 @@ deleteall(){
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
 
-		sudo ip link set vxlan100 down
-		sudo ip link del vxlan100 
-			
+	hostlist=`docker-machine ls -q`
+	for host in $hostlist;
+	do
+		docker-machine rm -y $host
+	done
+	
+	sudo ip link set vxlan100 down
+	sudo ip link del vxlan100 
+  	
 	rm -rf /tmp/$CVUQDISK
 }
 
