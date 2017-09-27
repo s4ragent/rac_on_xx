@@ -7,6 +7,7 @@
 DOCKERSUBNET: "172.15.0.0/16"
 VXLAN_DEV: "eth0"
 BRNAME: "raconxx"
+MTU: 1450
 DOCKER_VOLUME_PATH: "/mnt/sda1/rac_on_docker"
 MEDIA_PATH: /downloadmedia
 MEDIA_COPY: "true"
