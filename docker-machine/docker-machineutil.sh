@@ -5,7 +5,6 @@ VIRT_TYPE="docker-machine"
 cd ..
 source ./commonutil.sh
 
-
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 ip $3 nodenumber $4 hostgroup#####
 run(){
