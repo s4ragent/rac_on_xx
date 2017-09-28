@@ -146,7 +146,7 @@ setup_host_vxlan(){
 		docker-machine ssh $src sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $DOCKERMACHINE_VXLAN_DEV
 		docker-machine ssh $src sudo ip link set dev vxlan100 master $BRNAME
 		docker-machine ssh $src sudo ip link set vxlan100 up	
-			bridgecmd="docker-machine ssh $src sudo $DOCKERMACHINE_BRIDGE_CMD"
+		bridgecmd="docker-machine ssh $src sudo $DOCKERMACHINE_BRIDGE_CMD"
 				
 		for dst in $hostlist;
 		do
@@ -173,9 +173,10 @@ run_init(){
 	docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
 
 	if [ "$2" = "1" ]; then
+		docker exec ${NODENAME} mkdir -p $MEDIA_PATH
 		docker cp ../rac_on_xx ${NODENAME}:/root/
-		docker cp /media/$DB_MEDIA1 ${NODENAME}:/media
-		docker cp /media/$GRID_MEDIA1 ${NODENAME}:/media
+		docker cp /media/$DB_MEDIA1 ${NODENAME}:$MEDIA_PATH
+		docker cp /media/$GRID_MEDIA1 ${NODENAME}:$MEDIA_PATH
 	fi
 
    
