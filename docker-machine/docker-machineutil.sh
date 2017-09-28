@@ -189,9 +189,10 @@ run_init(){
 install(){
 #	common_execansible rac.yml --tags security,vxlan_conf,dnsmasq,setresolvconf
 #	common_execansible rac.yml --skip-tags security,dnsmasq,vxlan_conf
-	common_execansible centos2oel.yml
-	sleep 180s
-	common_execansible rac.yml
+	NODENAME="$NODEPREFIX"`printf "%.3d" 1`
+	
+	eval $(docker-machine env $NODENAME)
+	docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx/docker-machine && bash docker-machineutil.sh execansible rac.yml"
 }
 
 case "$1" in
