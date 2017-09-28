@@ -9,7 +9,7 @@ VXLAN_DEV: "eth0"
 BRNAME: "raconxx"
 MTU: 1450
 DOCKER_VOLUME_PATH: "/mnt/sda1/rac_on_docker"
-MEDIA_PATH: /dmedia
+MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "false"
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
