@@ -18,8 +18,8 @@ run(){
 
 #	if [ "$IsDeviceMapper" != "0" ]; then
 	eval $(docker-machine env $NODENAME)
-	docker-machine ssh $NODENAME sudo mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
-	docker-machine ssh $NODENAME sudo chmod -R 777  $DOCKER_VOLUME_PATH
+#	docker-machine ssh $NODENAME sudo mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
+#	docker-machine ssh $NODENAME sudo chmod -R 777  $DOCKER_VOLUME_PATH
 	StorageOps="-v $DOCKER_VOLUME_PATH/$NODENAME:/u01:rw"
 #     		#DeviceMapper_BaseSize=$DeviceMapper_BaseSize
 #	else
@@ -30,28 +30,14 @@ run(){
 #    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
 
 
-	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps $IMAGE /sbin/init
+	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps -v /media/:/media:ro $IMAGE /sbin/init
 	INSTANCE_ID=$NODENAME
 
 #docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init
-	INSTANCE_ID=$NODENAME
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
-	docker exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
-	docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
-	docker exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
-	docker cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
-	docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
-
-	sleep 10
-   
-#   docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
-	docker exec ${NODENAME} systemctl start sshd
-	docker exec ${NODENAME} systemctl enable sshd
-#	docker exec $NODENAME systemctl start NetworkManager
-#	docker exec $NODENAME systemctl enable NetworkManager
 }
 
 #### VIRT_TYPE specific processing  (must define)###
@@ -89,6 +75,15 @@ runonly(){
 		run $NODENAME $NODEIP $i "dbserver"
 	done
 	
+	sleep 10
+	
+	run_init "storage" 0
+	for i in `seq 1 $nodecount`;
+	do
+		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		run_init $NODENAME $i
+	done
+	
 #	CLIENTNUM=70
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
 #	CLIENTIP="${SEGMENT}$NUM"	
@@ -107,10 +102,7 @@ deleteall(){
 	for host in $hostlist;
 	do
 		docker-machine rm -y $host
-	done
-	
-	sudo ip link set vxlan100 down
-	sudo ip link del vxlan100 
+	done 
   	
 	rm -rf /tmp/$CVUQDISK
 }
@@ -140,7 +132,7 @@ get_Internal_IP(){
 
 
 setup_host_vxlan(){
-	hostlist="localhost `docker-machine ls -q`"
+	hostlist="`docker-machine ls -q`"
 	
 	cnt=0
 	for src in $hostlist;
@@ -148,34 +140,21 @@ setup_host_vxlan(){
 		
 
 		SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.'`
-		if [ "$src" = "localhost" ]; then
-			sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $LOCALMACHINE_VXLAN_DEV
-			sudo ip link set vxlan100 up
-			bridgecmd="sudo $LOCALMACHINE_BRIDGE_CMD"
-			
-			sudo ip addr add ${SEGMENT}${cnt}.254/16 dev vxlan100
-			
-		else
 
-			docker-machine ssh $src docker network create -d bridge --subnet=$DOCKERSUBNET --gateway="${SEGMENT}${cnt}.254" --opt "com.docker.network.bridge.name"=$BRNAME --opt "com.docker.network.driver.mtu"=$MTU $BRNAME
-			docker-machine ssh $src sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $DOCKERMACHINE_VXLAN_DEV
-			docker-machine ssh $src sudo ip link set dev vxlan100 master $BRNAME
-			docker-machine ssh $src sudo ip link set vxlan100 up	
+
+		docker-machine ssh $src docker network create -d bridge --subnet=$DOCKERSUBNET --gateway="${SEGMENT}${cnt}.254" --opt "com.docker.network.bridge.name"=$BRNAME --opt "com.docker.network.driver.mtu"=$MTU $BRNAME
+		docker-machine ssh $src sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $DOCKERMACHINE_VXLAN_DEV
+		docker-machine ssh $src sudo ip link set dev vxlan100 master $BRNAME
+		docker-machine ssh $src sudo ip link set vxlan100 up	
 			bridgecmd="docker-machine ssh $src sudo $DOCKERMACHINE_BRIDGE_CMD"
 				
-		fi
-	
 		for dst in $hostlist;
 		do
 			if [ "$src" = "$dst" ]; then
 				continue;
 			fi
 			
-			if [ "$dst" = "localhost" ]; then
-				dstip=`ip addr show $LOCALMACHINE_VXLAN_DEV | grep "inet " | awk -F '[/ ]' '{print $6}'`
-			else
-				dstip=`docker-machine ip $dst`
-			fi
+			dstip=`docker-machine ip $dst`
 			
 			$bridgecmd fdb append 00:00:00:00:00:00 dev vxlan100 dst $dstip
 		done
@@ -184,7 +163,28 @@ setup_host_vxlan(){
 	
 	done
 }
+run_init(){
+	NODENAME=$1
+	eval $(docker-machine env $NODENAME)
+	docker exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
+	docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
+	docker exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
+	docker cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
+	docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
 
+	if [ "$2" = "1" ]; then
+		docker cp ../rac_on_xx ${NODENAME}:/root/
+		docker cp /media/$DB_MEDIA1 ${NODENAME}:/media
+		docker cp /media/$GRID_MEDIA1 ${NODENAME}:/media
+	fi
+
+   
+#   docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
+	docker exec ${NODENAME} systemctl start sshd
+	docker exec ${NODENAME} systemctl enable sshd
+#	docker exec $NODENAME systemctl start NetworkManager
+#	docker exec $NODENAME systemctl enable NetworkManager
+}
 source ./common_menu.sh
 
 
