@@ -197,6 +197,7 @@ install(){
 
 case "$1" in
   "install" ) shift;install $*;;
+  "setup_host_vxlan" ) shift;setup_host_vxlan $*;;
 esac
 source ./common_menu.sh
 
