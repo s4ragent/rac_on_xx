@@ -32,7 +32,7 @@ run(){
 
 #	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps $IMAGE /sbin/init
 
-	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=host $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps $IMAGE /sbin/init
+	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=host -p 2022:2022 -p 2049:2049 -p 4789:4789 $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps $IMAGE /sbin/init
 	INSTANCE_ID=$NODENAME
 
 #docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init
