@@ -30,13 +30,15 @@ run(){
 #    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
 
 
-	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps $IMAGE /sbin/init
+#	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps $IMAGE /sbin/init
+
+	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=host $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps $IMAGE /sbin/init
 	INSTANCE_ID=$NODENAME
 
 #docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
-	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
+	common_update_ansible_inventory $NODENAME "`docker-machine ip $NODENAME`:2022" $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
 }
 
@@ -61,7 +63,7 @@ runonly(){
 		docker-machine create $DOCKERMACHINE_OPS $NODENAME
 	done
 	
-	setup_host_vxlan
+	#setup_host_vxlan
 
 	STORAGEIP=`get_Internal_IP storage`
 	run "storage" $STORAGEIP 0 "storage"
@@ -180,7 +182,12 @@ run_init(){
 	fi
 
    
-#   docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
+ docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
+
+ docker exec $NODENAME sed -i "s/#Port 22/Port 2022/" /etc/ssh/sshd_config
+ 
+ docker exec $NODENAME sed -e '$ a Port 2022' /etc/ssh/ssh_config
+  
 	docker exec ${NODENAME} systemctl start sshd
 	docker exec ${NODENAME} systemctl enable sshd
 #	docker exec $NODENAME systemctl start NetworkManager
