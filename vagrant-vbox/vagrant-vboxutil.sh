@@ -114,8 +114,9 @@ create_vagrantfile()
 	cat > Vagrantfile <<EOF
 Vagrant.configure(2) do |config|
 	config.vm.box = "$VBOX_URL"
-	config.ssh.private_key_path = "$sshkeypath/$ansible_ssh_private_key_file"
+	config.ssh.private_key_path = "$sshkeypath/${ansible_ssh_private_key_file}"
 	config.ssh.username = "$ansible_ssh_user"
+	config.ssh.insert_key = false
 	config.vm.define "storage" do |node|
  		node.vm.hostname = "storage"
 		node.vm.network "private_network", ip: "$STORAGEIP"
