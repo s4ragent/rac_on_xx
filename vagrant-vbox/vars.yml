@@ -4,7 +4,7 @@
 ####################################################
 ####################################################
 #### vargrant-vbox user specific value  ###################
-VBOXSUBNET: "10.153.0.0/16"
+VBOXSUBNET: "192.168.68.0/24"
 VXLAN_DEV: "eth1"
 VBOX_MEMORY: 6144
 VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
