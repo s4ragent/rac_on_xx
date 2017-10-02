@@ -59,7 +59,7 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	create_box $nodecount $VIRT_TYPE
+	create_vagrantfile $nodecount $VIRT_TYPE
 	
 
 	
@@ -111,20 +111,43 @@ create_box()
 	fi
 	
 	STORAGEIP=`get_Internal_IP storage`
-	run "storage" $STORAGEIP 0 "storage"
-	
-	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
+	cat > Vagrantfile <<EOF
+Vagrant.configure(2) do |config|
+	config.vm.box = "$BOX_URL"
+	config.vm.define "storage" do |node|
+ 	node.vm.hostname = "storage"
+	node.vm.network :forwarded_port, id: "ssh", guest: 22, host: $forward_sship
+	node.vm.network "private_network", ip: "$STORAGEIP"
+	node.vm.provider "virtualbox" do |vb|
+		vb.memory = "$BOX_MEMORY"
+	end
+
+EOF
+
 	
 	for i in `seq 1 $nodecount`;
 	do
 		NODEIP=`get_Internal_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		run $NODENAME $NODEIP $i "dbserver"
-	done
+	cat >> Vagrantfile <<EOF
+	config.vm.define "$NODENAME" do |node|
+ 	node.vm.hostname = "$NODENAME"
+	node.vm.network :forwarded_port, id: "ssh", guest: 22, host: $forward_sship
+	node.vm.network "private_network", ip: "$NODEIP"
+	node.vm.provider "virtualbox" do |vb|
+		vb.memory = "$BOX_MEMORY"
+	end
 	
+EOF
+	done
+
+cat >> Vagrantfile <<EOF
+end
+EOF
+
 }
 case "$1" in
-  "create_box" ) shift;create_box $*;;
+  "create_vagrantfile" ) shift;create_vagrantfile $*;;
 esac
 
 source ./common_menu.sh
