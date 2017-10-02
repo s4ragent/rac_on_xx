@@ -53,6 +53,8 @@ runonly(){
 	cd vagrant-vbox
 	bash vagrant-vboxutil.sh create_box $nodecount $VIRT_TYPE
 
+	sleep 10
+
 	vagrant ssh storage -c "sudo yum -y install docker-engine"
  
 	for i in `seq 1 $nodecount`;
@@ -75,7 +77,6 @@ runonly(){
 		run $NODENAME $NODEIP $i "dbserver"
 	done
 	
-	sleep 10
 	
 	run_init "storage" 0
 	for i in `seq 1 $nodecount`;
