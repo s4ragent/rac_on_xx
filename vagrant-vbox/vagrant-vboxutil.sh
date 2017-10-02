@@ -101,6 +101,7 @@ get_Internal_IP(){
 
 create_box()
 {
+	nodecount=$1
 	VIRT_TYPE=$2
 	source ./commonutil.sh
 	cd $VIRT_TYPE
