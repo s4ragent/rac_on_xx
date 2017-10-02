@@ -105,17 +105,11 @@ create_vagrantfile()
 	curdir=$2
 	cd $curdir
 	sshkeypath=`pwd`
-	if [  ! -e $ansible_ssh_private_key_file ] ; then
-		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
-		chmod 600 ${ansible_ssh_private_key_file}*
-	fi
-	
+
 	STORAGEIP=`get_Internal_IP storage`
 	cat > Vagrantfile <<EOF
 Vagrant.configure(2) do |config|
 	config.vm.box = "$VBOX_URL"
-	config.ssh.private_key_path = "$sshkeypath/${ansible_ssh_private_key_file}"
-	config.ssh.username = "$ansible_ssh_user"
 	config.ssh.insert_key = false
 	config.vm.define "storage" do |node|
  		node.vm.hostname = "storage"
