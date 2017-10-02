@@ -141,7 +141,7 @@ setup_host_vxlan(){
 		SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.'`
 
 	if [ "$src" = "localhost" ]; then
-	;
+	sleep 1s
 	else
 		vagrant ssh $src -c docker network create -d bridge --subnet=$DOCKERSUBNET --gateway="${SEGMENT}${cnt}.254" --opt "com.docker.network.bridge.name"=$BRNAME --opt "com.docker.network.driver.mtu"=$MTU $BRNAME
 		vagrant ssh $src -c sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $DOCKERMACHINE_VXLAN_DEV
