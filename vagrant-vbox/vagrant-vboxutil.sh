@@ -113,13 +113,12 @@ create_vagrantfile()
 	STORAGEIP=`get_Internal_IP storage`
 	cat > Vagrantfile <<EOF
 Vagrant.configure(2) do |config|
-	config.vm.box = "$BOX_URL"
+	config.vm.box = "$VBOX_URL"
 	config.vm.define "storage" do |node|
  	node.vm.hostname = "storage"
-	node.vm.network :forwarded_port, id: "ssh", guest: 22, host: $forward_sship
 	node.vm.network "private_network", ip: "$STORAGEIP"
 	node.vm.provider "virtualbox" do |vb|
-		vb.memory = "$BOX_MEMORY"
+		vb.memory = "$VBOX_MEMORY"
 	end
 
 EOF
@@ -132,10 +131,9 @@ EOF
 	cat >> Vagrantfile <<EOF
 	config.vm.define "$NODENAME" do |node|
  	node.vm.hostname = "$NODENAME"
-	node.vm.network :forwarded_port, id: "ssh", guest: 22, host: $forward_sship
 	node.vm.network "private_network", ip: "$NODEIP"
 	node.vm.provider "virtualbox" do |vb|
-		vb.memory = "$BOX_MEMORY"
+		vb.memory = "$VBOX_MEMORY"
 	end
 	
 EOF
