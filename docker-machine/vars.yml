@@ -22,6 +22,7 @@ LOCALMACHINE_VXLAN_DEV: "vboxnet1"
 LOCALMACHINE_BRIDGE_CMD: "/sbin/bridge"
 VBOX_MEMORY: 4096
 VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
+VBOXSUBNET: "192.168.68.0/24"
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: "-y"
 DELETE_CMD: "docker-machine rm {{ DELETE_CMD_OPS }}"
