@@ -51,10 +51,8 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	if [  ! -e $ansible_ssh_private_key_file ] ; then
-		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
-		chmod 600 ${ansible_ssh_private_key_file}*
-	fi
+	cd vagrant-vbox
+	bash vagrant-vboxutil create_box $nodecount $VIRT_TYPE
 
  docker-machine create $DOCKERMACHINE_OPS storage
 	for i in `seq 1 $nodecount`;
