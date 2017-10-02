@@ -94,7 +94,7 @@ get_Internal_IP(){
 	else
 		NUM=`expr $BASE_IP + $1`
 	fi
-	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+	SEGMENT=`echo $VBOXSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 	Internal_IP="${SEGMENT}$NUM"
 
 	echo $Internal_IP	
