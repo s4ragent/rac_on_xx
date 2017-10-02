@@ -52,7 +52,7 @@ runonly(){
 	fi
 	
 	cd vagrant-vbox
-	bash vagrant-vboxutil create_box $nodecount $VIRT_TYPE
+	bash vagrant-vboxutil.sh create_box $nodecount $VIRT_TYPE
 
  docker-machine create --driver generic --generic-ip-address=`bash vagrant-vboxutil get_External_IP storage` --generic-ssh-key $ansible_ssh_user --generic-ssh-user $ansible_ssh_private_key_file storage
  
