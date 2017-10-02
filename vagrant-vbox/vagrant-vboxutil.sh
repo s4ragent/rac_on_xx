@@ -115,10 +115,11 @@ create_vagrantfile()
 Vagrant.configure(2) do |config|
 	config.vm.box = "$VBOX_URL"
 	config.vm.define "storage" do |node|
- 	node.vm.hostname = "storage"
-	node.vm.network "private_network", ip: "$STORAGEIP"
-	node.vm.provider "virtualbox" do |vb|
-		vb.memory = "$VBOX_MEMORY"
+ 		node.vm.hostname = "storage"
+		node.vm.network "private_network", ip: "$STORAGEIP"
+		node.vm.provider "virtualbox" do |vb|
+			vb.memory = "$VBOX_MEMORY"
+		end
 	end
 
 EOF
@@ -130,10 +131,11 @@ EOF
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 	cat >> Vagrantfile <<EOF
 	config.vm.define "$NODENAME" do |node|
- 	node.vm.hostname = "$NODENAME"
-	node.vm.network "private_network", ip: "$NODEIP"
-	node.vm.provider "virtualbox" do |vb|
-		vb.memory = "$VBOX_MEMORY"
+ 		node.vm.hostname = "$NODENAME"
+		node.vm.network "private_network", ip: "$NODEIP"
+		node.vm.provider "virtualbox" do |vb|
+			vb.memory = "$VBOX_MEMORY"
+		end
 	end
 	
 EOF
