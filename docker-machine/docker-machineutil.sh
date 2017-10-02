@@ -53,7 +53,7 @@ runonly(){
 	cd vagrant-vbox
 	bash vagrant-vboxutil.sh create_box $nodecount $VIRT_TYPE
 
-	sleep 10
+	cd ../$VIRT_TYPE
 
 	vagrant ssh storage -c "sudo yum -y install docker-engine"
  
