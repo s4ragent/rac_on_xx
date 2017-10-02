@@ -59,8 +59,7 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	create_vagrantfile $nodecount $VIRT_TYPE
-	
+	create_box $nodecount $VIRT_TYPE
 
 	
 #	CLIENTNUM=70
@@ -100,10 +99,11 @@ get_Internal_IP(){
 	echo $Internal_IP	
 }
 
-create_vagrantfile()
+create_box()
 {
-	curdir=$2
-	cd $curdir
+	VIRT_TYPE=$2
+	source ./commonutil.sh
+	cd $VIRT_TYPE
 	vagrant plugin install vagrant-disksize
 	STORAGEIP=`get_Internal_IP storage`
 	cat > Vagrantfile <<EOF
@@ -142,10 +142,10 @@ EOF
 cat >> Vagrantfile <<EOF
 end
 EOF
-
+vagrant up
 }
 case "$1" in
-  "create_vagrantfile" ) shift;create_vagrantfile $*;;
+  "create_box" ) shift;create_box $*;;
 esac
 
 source ./common_menu.sh
