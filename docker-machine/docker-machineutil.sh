@@ -16,25 +16,15 @@ run(){
 	IsDeviceMapper=`docker info | grep devicemapper | grep -v grep | wc -l`
 
 #	if [ "$IsDeviceMapper" != "0" ]; then
-	eval $(docker-machine env $NODENAME)
+
 #	docker-machine ssh $NODENAME sudo mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
 #	docker-machine ssh $NODENAME sudo chmod -R 777  $DOCKER_VOLUME_PATH
 	StorageOps="-v $DOCKER_VOLUME_PATH/$NODENAME:/u01:rw"
-#     		#DeviceMapper_BaseSize=$DeviceMapper_BaseSize
-#	else
-      		#DeviceMapper_BaseSize=""
-#      		StorageOps=""
-#	fi
-#   
-#    INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /media/:/media:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $DeviceMapper_BaseSize $IMAGE /sbin/init)
 
 
-#	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps $IMAGE /sbin/init
 
-	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=host -p 2022:2022 -p 2049:2049 -p 4789:4789 $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps $IMAGE /sbin/init
-	INSTANCE_ID=$NODENAME
+vagrant ssh ${NODENAME} -c "docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps $IMAGE /sbin/init"
 
-#docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME "`docker-machine ip $NODENAME`:2022" $INSTANCE_ID $NODENUMBER $HOSTGROUP
@@ -55,12 +45,12 @@ runonly(){
 
 	cd ../$VIRT_TYPE
 
-	vagrant ssh storage -c "sudo yum -y install docker-engine"
+	vagrant ssh storage -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user}"
  
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		vagrant ssh $NODENAME -c "sudo yum -y install docker-engine"
+		vagrant ssh $NODENAME -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user}"
 	done
 	
 	#setup_host_vxlan
@@ -141,7 +131,7 @@ get_Internal_IP(){
 
 
 setup_host_vxlan(){
-	hostlist="`docker-machine ls -q`"
+	hostlist="localhost `docker-machine ls -q`"
 	
 	cnt=0
 	for src in $hostlist;
@@ -150,13 +140,16 @@ setup_host_vxlan(){
 
 		SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.'`
 
+	if [ "$src" = "localhost" ]; then
 
-		docker-machine ssh $src docker network create -d bridge --subnet=$DOCKERSUBNET --gateway="${SEGMENT}${cnt}.254" --opt "com.docker.network.bridge.name"=$BRNAME --opt "com.docker.network.driver.mtu"=$MTU $BRNAME
-		docker-machine ssh $src sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $DOCKERMACHINE_VXLAN_DEV
-		docker-machine ssh $src sudo ip link set dev vxlan100 master $BRNAME
-		docker-machine ssh $src sudo ip link set vxlan100 up	
+	else
+		vagrant ssh $src -c docker network create -d bridge --subnet=$DOCKERSUBNET --gateway="${SEGMENT}${cnt}.254" --opt "com.docker.network.bridge.name"=$BRNAME --opt "com.docker.network.driver.mtu"=$MTU $BRNAME
+		vagrant ssh $src -c sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $DOCKERMACHINE_VXLAN_DEV
+		vagrant ssh $src -c sudo ip link set dev vxlan100 master $BRNAME
+		vagrant ssh $src -c sudo ip link set vxlan100 up	
 		bridgecmd="docker-machine ssh $src sudo $DOCKERMACHINE_BRIDGE_CMD"
-				
+		
+	fi
 		for dst in $hostlist;
 		do
 			if [ "$src" = "$dst" ]; then
@@ -172,28 +165,19 @@ setup_host_vxlan(){
 	
 	done
 }
+
 run_init(){
 	NODENAME=$1
-	eval $(docker-machine env $NODENAME)
+
 	docker exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
 	docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
 	docker exec ${NODENAME} bash -c "mkdir /home/$ansible_ssh_user/.ssh"
-	docker cp ${ansible_ssh_private_key_file}.pub ${NODENAME}:/home/$ansible_ssh_user/.ssh/authorized_keys
+	
+	docker cp ${ansible_ssh_private_key_file} ${NODENAME}:/home/$ansible_ssh_user/.ssh/id_rsa
+	
+	docker exec ${NODENAME} bash -c "ssh-keygen -yf /home/$ansible_ssh_user/.ssh/id_rsa > /home/$ansible_ssh_user/.ssh/authorized_keys"
+	
 	docker exec ${NODENAME} bash -c "chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh && chmod 700 /home/$ansible_ssh_user/.ssh && chmod 600 /home/$ansible_ssh_user/.ssh/*"
-
-	if [ "$2" = "1" ]; then
-		docker exec ${NODENAME} mkdir -p $MEDIA_PATH
-		docker cp ../rac_on_xx ${NODENAME}:/root/
-		docker cp /media/$DB_MEDIA1 ${NODENAME}:$MEDIA_PATH
-		docker cp /media/$GRID_MEDIA1 ${NODENAME}:$MEDIA_PATH
-	fi
-
-   
- docker exec $NODENAME sed -i "s/#UseDNS yes/UseDNS no/" /etc/ssh/sshd_config
-
- docker exec $NODENAME sed -i "s/#Port 22/Port 2022/" /etc/ssh/sshd_config
- 
- docker exec $NODENAME sed -e '$ a Port 2022' /etc/ssh/ssh_config
   
 	docker exec ${NODENAME} systemctl start sshd
 	docker exec ${NODENAME} systemctl enable sshd
