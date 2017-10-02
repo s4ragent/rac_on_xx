@@ -45,7 +45,7 @@ TMPFS_OPS: "--shm-size=1200m"
 #WindowManager: "xfce"
 ####ansible specific
 ansible_ssh_user: vagrant
-ansible_ssh_private_key_file: "~/.vagrant.d/insecure_private_key"
+ansible_ssh_private_key_file: ~/.vagrant.d/insecure_private_key
 dns: dnsmasq
 #####for NFS option values
 ##### device size = base_size + multi_size * node count
