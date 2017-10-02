@@ -100,7 +100,7 @@ get_Internal_IP(){
 	echo $Internal_IP	
 }
 
-create_box()
+create_vagrantfile()
 {
 	curdir=$2
 	cd $curdir
