@@ -54,11 +54,12 @@ runonly(){
 	cd vagrant-vbox
 	bash vagrant-vboxutil create_box $nodecount $VIRT_TYPE
 
- docker-machine create $DOCKERMACHINE_OPS storage
+ docker-machine create --driver generic --generic-ip-address=`bash vagrant-vboxutil get_External_IP storage` --generic-ssh-key $ansible_ssh_user --generic-ssh-user $ansible_ssh_private_key_file storage
+ 
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		docker-machine create $DOCKERMACHINE_OPS $NODENAME
+		docker-machine create --driver generic --generic-ip-address=`bash vagrant-vboxutil get_External_IP $i` --generic-ssh-key $ansible_ssh_user --generic-ssh-user $ansible_ssh_private_key_file $NODENAME
 	done
 	
 	#setup_host_vxlan
