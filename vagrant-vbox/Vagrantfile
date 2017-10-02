@@ -1,0 +1,17 @@
+VAGRANTFILE_API_VERSION = '2'
+
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  config.vm.box = 'http://yum.oracle.com/boxes/oraclelinux/ol73/ol73.box'
+  config.vm.provision 'shell', path: 'provision.sh'
+  
+  (1..$num_instances).each do |i|
+    config.vm.define vm_name = "%s-%02d" % [$instance_name_prefix, i] do |config|
+      config.vm.hostname = vm_name
+
+
+    
+  end
+end
+
