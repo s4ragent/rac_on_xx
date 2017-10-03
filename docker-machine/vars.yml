@@ -14,8 +14,6 @@ MEDIA_COPY: "false"
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
 ####################################################
-DOCKERMACHINE_OPS: "-d virtualbox --virtualbox-memory 6144 --virtualbox-disk-size 100000"
-MACHINE_STORAGE_PATH: /machines
 DOCKERMACHINE_VXLAN_DEV: "eth1"
 DOCKERMACHINE_BRIDGE_CMD: "/sbin/bridge"
 LOCALMACHINE_VXLAN_DEV: "vboxnet0"
@@ -24,11 +22,11 @@ VBOX_MEMORY: 6144
 VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
 VBOXSUBNET: "192.168.67.0/24"
 ####common VIRT_TYPE specific value ################
-DELETE_CMD_OPS: "-y"
-DELETE_CMD: "docker-machine rm {{ DELETE_CMD_OPS }}"
-START_CMD: "docker-machine start"
+DELETE_CMD_OPS: ""
+DELETE_CMD: ""
+START_CMD: ""
 START_CMD_OPS: ""
-STOP_CMD: "docker-machine stop"
+STOP_CMD: ""
 STOP_CMD_OPS: ""
 INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: ""
