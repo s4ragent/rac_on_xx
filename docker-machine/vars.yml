@@ -8,7 +8,7 @@ DOCKERSUBNET: "172.15.0.0/16"
 VXLAN_DEV: "eth1"
 BRNAME: "raconxx"
 MTU: 1450
-DOCKER_VOLUME_PATH: "/mnt/sda1/rac_on_docker"
+DOCKER_VOLUME_PATH: "/rac_on_docker"
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "false"
 DB_MEDIA1: linuxx64_12201_database.zip
@@ -17,10 +17,10 @@ GRID_MEDIA1: linuxx64_12201_grid_home.zip
 DOCKERMACHINE_OPS: "-d virtualbox --virtualbox-memory 6144 --virtualbox-disk-size 100000"
 MACHINE_STORAGE_PATH: /machines
 DOCKERMACHINE_VXLAN_DEV: "eth1"
-DOCKERMACHINE_BRIDGE_CMD: "/usr/local/sbin/bridge"
-LOCALMACHINE_VXLAN_DEV: "vboxnet1"
+DOCKERMACHINE_BRIDGE_CMD: "/sbin/bridge"
+LOCALMACHINE_VXLAN_DEV: "vboxnet0"
 LOCALMACHINE_BRIDGE_CMD: "/sbin/bridge"
-VBOX_MEMORY: 4096
+VBOX_MEMORY: 6144
 VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
 VBOXSUBNET: "192.168.67.0/24"
 ####common VIRT_TYPE specific value ################
