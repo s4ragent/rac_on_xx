@@ -7,27 +7,23 @@ source ./commonutil.sh
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 ip $3 nodenumber $4 hostgroup#####
 run(){
-
+	
 	NODENAME=$1
+	INSTANCE_ID=$NODENAME
 	IP=$2
 	NODENUMBER=$3
 	HOSTGROUP=$4
-	
+	eval $(docker-machine env $NODENAME)
 	IsDeviceMapper=`docker info | grep devicemapper | grep -v grep | wc -l`
 
-#	if [ "$IsDeviceMapper" != "0" ]; then
-
-#	docker-machine ssh $NODENAME sudo mkdir -p $DOCKER_VOLUME_PATH/$NODENAME
-#	docker-machine ssh $NODENAME sudo chmod -R 777  $DOCKER_VOLUME_PATH
 	StorageOps="-v $DOCKER_VOLUME_PATH/$NODENAME:/u01:rw"
 
 
 
-vagrant ssh ${NODENAME} -c "docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps $IMAGE /sbin/init"
-
+	docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS -v /boot/:/boot:ro  $StorageOps $IMAGE /sbin/init
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
-	common_update_ansible_inventory $NODENAME "`docker-machine ip $NODENAME`:2022" $INSTANCE_ID $NODENUMBER $HOSTGROUP
+	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
 }
 
@@ -46,8 +42,7 @@ runonly(){
 	cd ../$VIRT_TYPE
 
 	vagrant ssh storage -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user} && sudo rm -f /etc/systemd/system/docker.service.d/docker-sysconfig.conf"
-
-docker-machine create --driver generic --generic-ip-address=`get_External_IP storage` --generic-ssh-key  $ansible_ssh_private_key_file --generic-ssh-user $ansible_ssh_user storage
+	docker-machine create --driver generic --generic-ip-address=`get_External_IP storage` --generic-ssh-key  $ansible_ssh_private_key_file --generic-ssh-user $ansible_ssh_user storage
  
 	for i in `seq 1 $nodecount`;
 	do
