@@ -171,6 +171,7 @@ setup_host_vxlan(){
 
 run_init(){
 	NODENAME=$1
+	eval $(docker-machine env $NODENAME)
 
 	docker exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
 	docker exec ${NODENAME} bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
