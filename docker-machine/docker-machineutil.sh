@@ -198,7 +198,7 @@ create_box()
 	source ./commonutil.sh
 	cd $VIRT_TYPE
 	vagrant plugin install vagrant-disksize
-	STORAGEIP=`get_Internal_IP storage`
+	STORAGEIP=`get_External_IP storage`
 	cat > Vagrantfile <<EOF
 Vagrant.configure(2) do |config|
 	config.vm.box = "$VBOX_URL"
@@ -217,7 +217,7 @@ EOF
 	
 	for i in `seq 1 $nodecount`;
 	do
-		NODEIP=`get_Internal_IP $i`
+		NODEIP=`get_External_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 	cat >> Vagrantfile <<EOF
 	config.vm.define "$NODENAME" do |node|
