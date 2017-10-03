@@ -52,12 +52,11 @@ docker-machine create --driver generic --generic-ip-address=`get_External_IP sto
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		vagrant ssh $NODENAME -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user} && sudo rm -f /etc/systemd/system/docker.service.d/docker-sysconfig.c
-nf"
+		vagrant ssh $NODENAME -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user} && sudo rm -f /etc/systemd/system/docker.service.d/docker-sysconfig.conf"
 		docker-machine create --driver generic --generic-ip-address=`get_External_IP $i` --generic-ssh-key  $ansible_ssh_private_key_file --generic-ssh-user $ansible_ssh_user $NODENAME
 	done
 	
-	#setup_host_vxlan
+	setup_host_vxlan
 
 	STORAGEIP=`get_Internal_IP storage`
 	run "storage" $STORAGEIP 0 "storage"
@@ -145,9 +144,9 @@ setup_host_vxlan(){
 		SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.'`
 
 	if [ "$src" = "localhost" ]; then
-	sleep 1s
+
 	else
-		vagrant ssh $src -c docker network create -d bridge --subnet=$DOCKERSUBNET --gateway="${SEGMENT}${cnt}.254" --opt "com.docker.network.bridge.name"=$BRNAME --opt "com.docker.network.driver.mtu"=$MTU $BRNAME
+		docker-machine ssh $src -c docker network create -d bridge --subnet=$DOCKERSUBNET --gateway="${SEGMENT}${cnt}.254" --opt "com.docker.network.bridge.name"=$BRNAME --opt "com.docker.network.driver.mtu"=$MTU $BRNAME
 		vagrant ssh $src -c sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $DOCKERMACHINE_VXLAN_DEV
 		vagrant ssh $src -c sudo ip link set dev vxlan100 master $BRNAME
 		vagrant ssh $src -c sudo ip link set vxlan100 up	
