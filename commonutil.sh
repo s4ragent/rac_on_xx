@@ -221,6 +221,7 @@ common_create_box()
 	cat > Vagrantfile <<EOF
 Vagrant.configure(2) do |config|
 	config.vm.box = "$VBOX_URL"
+	config.vm.provision "shell", path: "setup.sh"
 	config.ssh.insert_key = false
 EOF
 
