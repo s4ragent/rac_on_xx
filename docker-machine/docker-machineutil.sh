@@ -45,12 +45,17 @@ runonly(){
 
 	cd ../$VIRT_TYPE
 
-	vagrant ssh storage -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user}"
+	vagrant ssh storage -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user} && sudo rm -f /etc/systemd/system/docker.service.d/docker-sysconfig.c
+nf"
+
+docker-machine create --driver generic --generic-ip-address=`get_External_IP storage` --generic-ssh-key  $ansible_ssh_private_key_file --generic-ssh-user $ansible_ssh_user storage
  
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		vagrant ssh $NODENAME -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user}"
+		vagrant ssh $NODENAME -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user} && sudo rm -f /etc/systemd/system/docker.service.d/docker-sysconfig.c
+nf"
+		docker-machine create --driver generic --generic-ip-address=`get_External_IP $i` --generic-ssh-key  $ansible_ssh_private_key_file --generic-ssh-user $ansible_ssh_user $NODENAME
 	done
 	
 	#setup_host_vxlan
