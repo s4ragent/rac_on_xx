@@ -45,8 +45,7 @@ runonly(){
 
 	cd ../$VIRT_TYPE
 
-	vagrant ssh storage -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user} && sudo rm -f /etc/systemd/system/docker.service.d/docker-sysconfig.c
-nf"
+	vagrant ssh storage -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user} && sudo rm -f /etc/systemd/system/docker.service.d/docker-sysconfig.conf"
 
 docker-machine create --driver generic --generic-ip-address=`get_External_IP storage` --generic-ssh-key  $ansible_ssh_private_key_file --generic-ssh-user $ansible_ssh_user storage
  
