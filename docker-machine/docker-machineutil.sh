@@ -36,10 +36,7 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	cd vagrant-vbox
-	bash vagrant-vboxutil.sh create_box $nodecount $VIRT_TYPE
-
-	cd ../$VIRT_TYPE
+	create_box $nodecount $VIRT_TYPE
 
 	vagrant ssh storage -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user} && sudo rm -f /etc/systemd/system/docker.service.d/docker-sysconfig.conf"
 	docker-machine create --driver generic --generic-ip-address=`get_External_IP storage` --generic-ssh-key  $ansible_ssh_private_key_file --generic-ssh-user $ansible_ssh_user storage
