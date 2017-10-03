@@ -88,6 +88,9 @@ deleteall(){
 	cd $VIRT_TYPE
 	vagrant destroy -f
 	
+	sudo ip link set vxlan100 down
+	sudo ip link add vxlan100
+	
 	rm -rf /tmp/$CVUQDISK
 }
 
@@ -131,7 +134,7 @@ setup_host_vxlan(){
 	do
 		
 
-	SEGMENT=`echo $VBOXSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.'`
+	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.'`
 
 		if [ "$src" = "localhost" ]; then
 			sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $LOCALMACHINE_VXLAN_DEV
