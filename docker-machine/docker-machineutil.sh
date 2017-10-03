@@ -85,6 +85,7 @@ deleteall(){
 		docker-machine rm -y $host
 	done 
   	
+	cd $VIRT_TYPE
 	vagrant destroy -f
 	
 	rm -rf /tmp/$CVUQDISK
