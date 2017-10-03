@@ -82,17 +82,14 @@ runonly(){
 
 deleteall(){
    	common_deleteall $*
-	#### VIRT_TYPE specific processing ###
-	if [ -e "$ansible_ssh_private_key_file" ]; then
-   		rm -rf ${ansible_ssh_private_key_file}*
-	fi
-
 	hostlist=`docker-machine ls -q`
 	for host in $hostlist;
 	do
 		docker-machine rm -y $host
 	done 
   	
+	vagrant destroy -f
+	
 	rm -rf /tmp/$CVUQDISK
 }
 
@@ -185,9 +182,8 @@ run_init(){
   
 	docker exec ${NODENAME} systemctl start sshd
 	docker exec ${NODENAME} systemctl enable sshd
-#	docker exec $NODENAME systemctl start NetworkManager
-#	docker exec $NODENAME systemctl enable NetworkManager
 }
+
 install(){
 #	common_execansible rac.yml --tags security,vxlan_conf,dnsmasq,setresolvconf
 #	common_execansible rac.yml --skip-tags security,dnsmasq,vxlan_conf
