@@ -89,7 +89,7 @@ deleteall(){
 	vagrant destroy -f
 	
 	sudo ip link set vxlan100 down
-	sudo ip link add vxlan100
+	sudo ip link del vxlan100
 	
 	rm -rf /tmp/$CVUQDISK
 }
