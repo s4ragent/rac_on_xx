@@ -211,5 +211,55 @@ fi
 
 }
 
+common_create_box()
+{
+	nodecount=$1
 
+	cd $VIRT_TYPE
+	vagrant plugin install vagrant-disksize
+
+	cat > Vagrantfile <<EOF
+Vagrant.configure(2) do |config|
+	config.vm.box = "$VBOX_URL"
+	config.ssh.insert_key = false
+EOF
+
+	STORAGEIP=`get_External_IP storage`
+	cat >> Vagrantfile <<EOF
+	config.vm.define "storage" do |node|
+ 		node.vm.hostname = "storage"
+ 		node.disksize.size = '100GB'
+		node.vm.network "private_network", ip: "$STORAGEIP"
+		node.vm.provider "virtualbox" do |vb|
+			vb.memory = "$VBOX_MEMORY"
+		end
+	end
+
+EOF
+
+	
+	for i in `seq 1 $nodecount`;
+	do
+		NODEIP=`get_External_IP $i`
+		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+	cat >> Vagrantfile <<EOF
+	config.vm.define "$NODENAME" do |node|
+ 		node.vm.hostname = "$NODENAME"
+		node.vm.network "private_network", ip: "$NODEIP"
+		node.disksize.size = '100GB'
+		node.vm.provider "virtualbox" do |vb|
+			vb.memory = "$VBOX_MEMORY"
+		end
+	end
+	
+EOF
+	done
+
+cat >> Vagrantfile <<EOF
+end
+EOF
+vagrant up
+
+cd ..
+}
 
