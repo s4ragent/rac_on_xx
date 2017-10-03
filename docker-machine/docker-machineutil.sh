@@ -141,26 +141,31 @@ setup_host_vxlan(){
 	do
 		
 
-		SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.'`
+	SEGMENT=`echo $DOCKERSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.'`
 
-	if [ "$src" = "localhost" ]; then
+		if [ "$src" = "localhost" ]; then
+			sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $LOCALMACHINE_VXLAN_DEV
+			sudo ip link set vxlan100 up
+			sudo ip addr add ${SEGMENT}${cnt}.254/16 dev vxlan100
+			bridgecmd="sudo $LOCALMACHINE_BRIDGE_CMD"
+		else
+			docker-machine ssh $src docker network create -d bridge --subnet=$DOCKERSUBNET --gateway="${SEGMENT}${cnt}.254" --opt "com.docker.network.bridge.name"=$BRNAME --opt "com.docker.network.driver.mtu"=$MTU $BRNAME
+			docker-machine ssh $src sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $DOCKERMACHINE_VXLAN_DEV
+			docker-machine ssh $src sudo ip link set dev vxlan100 master $BRNAME
+			docker-machine ssh $src sudo ip link set vxlan100 up	
+			bridgecmd="docker-machine ssh $src sudo $DOCKERMACHINE_BRIDGE_CMD"
 
-	else
-		docker-machine ssh $src -c docker network create -d bridge --subnet=$DOCKERSUBNET --gateway="${SEGMENT}${cnt}.254" --opt "com.docker.network.bridge.name"=$BRNAME --opt "com.docker.network.driver.mtu"=$MTU $BRNAME
-		vagrant ssh $src -c sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $DOCKERMACHINE_VXLAN_DEV
-		vagrant ssh $src -c sudo ip link set dev vxlan100 master $BRNAME
-		vagrant ssh $src -c sudo ip link set vxlan100 up	
-		bridgecmd="docker-machine ssh $src sudo $DOCKERMACHINE_BRIDGE_CMD"
-		
-	fi
+		fi
 		for dst in $hostlist;
 		do
 			if [ "$src" = "$dst" ]; then
 				continue;
 			fi
-			
-			dstip=`docker-machine ip $dst`
-			
+			if [ "$dst" = "localhost" ]; then
+				dstip=`ip addr show $LOCALMACHINE_VXLAN_DEV | grep "inet " | awk -F '[/ ]' '{print $6}'`
+			else
+				dstip=`docker-machine ip $dst`
+			fi
 			$bridgecmd fdb append 00:00:00:00:00:00 dev vxlan100 dst $dstip
 		done
 	
