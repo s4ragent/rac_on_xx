@@ -36,7 +36,7 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	create_box $nodecount
+	common_create_box $nodecount
 
 	docker-machine create --driver generic --generic-ip-address=`get_External_IP storage` --generic-ssh-key  $ansible_ssh_private_key_file --generic-ssh-user $ansible_ssh_user storage
  
@@ -77,7 +77,7 @@ runonly(){
 }
 
 deleteall(){
-   	common_deleteall $*
+
 	hostlist=`docker-machine ls -q`
 	for host in $hostlist;
 	do
