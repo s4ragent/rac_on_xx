@@ -36,9 +36,8 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	create_box $nodecount $VIRT_TYPE
+	create_box $nodecount
 
-	vagrant ssh storage -c "sudo yum -y install docker-engine && sudo usermod -aG docker ${ansible_ssh_user} && sudo rm -f /etc/systemd/system/docker.service.d/docker-sysconfig.conf"
 	docker-machine create --driver generic --generic-ip-address=`get_External_IP storage` --generic-ssh-key  $ansible_ssh_private_key_file --generic-ssh-user $ansible_ssh_user storage
  
 	for i in `seq 1 $nodecount`;
@@ -194,57 +193,9 @@ install(){
 	docker exec -ti $NODENAME bash -c "cd /root/rac_on_xx/docker-machine && bash docker-machineutil.sh execansible rac.yml"
 }
 
-create_box()
-{
-	nodecount=$1
-	VIRT_TYPE=$2
-	source ./commonutil.sh
-	cd $VIRT_TYPE
-	vagrant plugin install vagrant-disksize
-	STORAGEIP=`get_External_IP storage`
-	cat > Vagrantfile <<EOF
-Vagrant.configure(2) do |config|
-	config.vm.box = "$VBOX_URL"
-	config.ssh.insert_key = false
-	config.vm.define "storage" do |node|
- 		node.vm.hostname = "storage"
- 		node.disksize.size = '100GB'
-		node.vm.network "private_network", ip: "$STORAGEIP"
-		node.vm.provider "virtualbox" do |vb|
-			vb.memory = "$VBOX_MEMORY"
-		end
-	end
-
-EOF
-
-	
-	for i in `seq 1 $nodecount`;
-	do
-		NODEIP=`get_External_IP $i`
-		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-	cat >> Vagrantfile <<EOF
-	config.vm.define "$NODENAME" do |node|
- 		node.vm.hostname = "$NODENAME"
-		node.vm.network "private_network", ip: "$NODEIP"
-		node.disksize.size = '100GB'
-		node.vm.provider "virtualbox" do |vb|
-			vb.memory = "$VBOX_MEMORY"
-		end
-	end
-	
-EOF
-	done
-
-cat >> Vagrantfile <<EOF
-end
-EOF
-vagrant up
-}
-
 case "$1" in
   "install" ) shift;install $*;;
   "setup_host_vxlan" ) shift;setup_host_vxlan $*;;
-  "create_box" ) shift;create_box $*;;
 esac
 source ./common_menu.sh
 
