@@ -222,7 +222,8 @@ common_create_box()
 Vagrant.configure(2) do |config|
 	config.vm.box = "$VBOX_URL"
 	config.vm.provision "shell", path: "setup.sh"
-	config.ssh.insert_key = false
+	config.ssh.private_key_path="../$ansible_ssh_private_key_file"
+	config.ssh.username="$ansible_ssh_username"
 EOF
 
 	STORAGEIP=`get_External_IP storage`
