@@ -140,7 +140,7 @@ setup_host_vxlan(){
 			sudo ip addr add ${SEGMENT}${cnt}.254/16 dev vxlan100
 			bridgecmd="sudo $LOCALMACHINE_BRIDGE_CMD"
 		else
-			docker-machine ssh $src docker network create -d bridge --subnet=$DOCKERSUBNET --gateway="${SEGMENT}${cnt}.254" --opt "com.docker.network.bridge.name"=$BRNAME --opt "com.docker.network.driver.mtu"=$MTU $BRNAME
+			docker-machine ssh $src sudo docker network create -d bridge --subnet=$DOCKERSUBNET --gateway="${SEGMENT}${cnt}.254" --opt "com.docker.network.bridge.name"=$BRNAME --opt "com.docker.network.driver.mtu"=$MTU $BRNAME
 			docker-machine ssh $src sudo ip link add vxlan100 type vxlan id 100 ttl 4 dev $DOCKERMACHINE_VXLAN_DEV
 			docker-machine ssh $src sudo ip link set dev vxlan100 master $BRNAME
 			docker-machine ssh $src sudo ip link set vxlan100 up	
