@@ -76,7 +76,7 @@ runonly(){
 }
 
 deleteall(){
-
+	common_deleteall $*
 	hostlist=`docker-machine ls -q`
 	for host in $hostlist;
 	do
