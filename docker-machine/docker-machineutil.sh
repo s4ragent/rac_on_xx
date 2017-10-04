@@ -37,7 +37,8 @@ runonly(){
 	fi
 	
 	if [  ! -e $ansible_ssh_private_key_file ] ; then
-		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
+		cp ~/.vagrant.d/insecure_private_key $ansible_ssh_private_key_file
+		ssh-keygen -y -f $ansible_ssh_private_key_file > ${ansible_ssh_private_key_file}.pub
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 	
