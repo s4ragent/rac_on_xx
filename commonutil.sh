@@ -222,6 +222,7 @@ common_create_box()
 Vagrant.configure(2) do |config|
 	config.vm.box = "$VBOX_URL"
 	config.vm.provision "shell", path: "setup.sh"
+	config.ssh.insert_key = false
 EOF
 
 	STORAGEIP=`get_External_IP storage`
