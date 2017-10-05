@@ -5,7 +5,7 @@
 ####################################################
 #### docker user specific value  ###################
 DOCKERSUBNET: "172.15.0.0/16"
-VXLAN_DEV: "eth1"
+VXLAN_DEV: "eth0"
 BRNAME: "raconxx"
 MTU: 1450
 DOCKER_VOLUME_PATH: "/rac_on_docker"
