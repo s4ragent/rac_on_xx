@@ -7,7 +7,7 @@
 DOCKERSUBNET: "172.15.0.0/16"
 VXLAN_DEV: "eth0"
 BRNAME: "raconxx"
-MTU: 1400
+MTU: 1450
 DOCKER_VOLUME_PATH: "/rac_on_docker"
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
@@ -20,7 +20,8 @@ LOCALMACHINE_VXLAN_DEV: "vboxnet0"
 LOCALMACHINE_BRIDGE_CMD: "/sbin/bridge"
 VBOX_STORAGE_MEMORY: 2048
 VBOX_NODE_MEMORY: 4096
-VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
+#VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
+VBOX_URL: centos/7
 VBOXSUBNET: "192.168.67.0/24"
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: ""
