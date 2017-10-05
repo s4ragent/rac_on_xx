@@ -2,6 +2,7 @@
 case "$1" in
   "execansible" ) shift;common_execansible $*;;
   "preinstall" ) shift;common_preinstall $*;;
+  "after_runonly" ) shift;common_after_runonly $*;;
   "install_dbca" ) shift;common_install_dbca $*;;
   "startall" ) shift;common_startall $*;;
   "start" ) shift;common_start $*;;
