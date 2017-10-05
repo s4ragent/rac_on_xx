@@ -1,6 +1,6 @@
 #!/bin/bash
 export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30"
-export  ANSIBLE_INVENTORY_IGNORE="~, .orig, .bak, .ini, .cfg, .retry, .pyc, .pyo, .yml, .md, .sh, images, .log, .service"
+export  ANSIBLE_INVENTORY_IGNORE="~, .orig, .bak, .ini, .cfg, .retry, .pyc, .pyo, .yml, .md, .sh, images, .log, .service,Vagrantfile"
 export ANSIBLE_LOG_PATH="./ansible-`date +%Y%m%d%H%M%S`.log"
 
 
@@ -42,6 +42,12 @@ common_preinstall(){
 	common_execansible centos2oel.yml
 	sleep 180s
 	common_execansible rac.yml --skip-tags installdbca
+}
+
+common_after_runonly(){
+	common_execansible centos2oel.yml
+	sleep 180s
+	common_execansible rac.yml
 }
 
 common_install_dbca(){
