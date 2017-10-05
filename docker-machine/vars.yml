@@ -18,7 +18,7 @@ DOCKERMACHINE_VXLAN_DEV: "eth1"
 DOCKERMACHINE_BRIDGE_CMD: "/sbin/bridge"
 LOCALMACHINE_VXLAN_DEV: "vboxnet0"
 LOCALMACHINE_BRIDGE_CMD: "/sbin/bridge"
-VBOX_MEMORY: 2048
+VBOX_MEMORY: 5120
 VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
 VBOXSUBNET: "192.168.67.0/24"
 ####common VIRT_TYPE specific value ################
