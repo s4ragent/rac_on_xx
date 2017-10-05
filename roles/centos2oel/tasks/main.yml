@@ -73,7 +73,7 @@
     become: yes
     lineinfile: state=present create=yes insertafter=EOF line="{{ item }}" dest="/etc/dhcp/dhclient.conf"
     with_items:
-      - "supersede interface-mtu 1500;"
+      - "supersede interface-mtu {{ MTU }};"
     when: MTU is defined
     tags:
       - centos2oel
