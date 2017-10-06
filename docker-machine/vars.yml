@@ -38,7 +38,8 @@ IMAGE: "s4ragent/rac_on_xx:OEL7"
 #CAP_OPS: "--cap-add=NET_ADMIN"
 #DOCKER_CAPS: "--privileged --security-opt seccomp=unconfined"
 #DOCKER_CAPS: "--cap-add SYS_ADMIN --privileged --security-opt seccomp=unconfined --tmpfs /run --tmpfs /run/lock --tmpfs /tmp"
-DOCKER_CAPS: "--privileged"
+DOCKER_CAPS: "--privileged --security-opt seccomp=unconfined"
+#DOCKER_CAPS: "--privileged"
 DOCKER_START_OPS: "--restart=always"
 TMPFS_OPS: "--shm-size=1200m"
 ####################################################
@@ -65,7 +66,7 @@ FRA_BASE_SIZE: 25600
 FRA_MULTI_SIZE: 0
 FRA_DISKGROUP_NAME: FRA
 ASM_STRING: /u01/oradata/*
-DNFS: enable
+DNFS: disable
 ###
 NODEPREFIX: node
 DOMAIN_NAME: public
