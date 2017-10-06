@@ -8,7 +8,7 @@ VBOXSUBNET: "192.168.68.0/24"
 VXLAN_DEV: "eth1"
 VBOX_STORAGE_MEMORY: 2048
 VBOX_NODE_MEMORY: 4096
-VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
+VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol73/ol73.box
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
 DB_MEDIA1: linuxx64_12201_database.zip
