@@ -44,10 +44,8 @@ runonly(){
 
 deleteall(){
    	common_deleteall $*
-	#### VIRT_TYPE specific processing ###
-#	if [ -e "$ansible_ssh_private_key_file" ]; then
-#   		rm -rf ${ansible_ssh_private_key_file}*
-#	fi
+	cd $VIRT_TYPE
+	vagrant destroy -f
   	
 	rm -rf /tmp/$CVUQDISK
 }
