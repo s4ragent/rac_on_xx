@@ -237,6 +237,7 @@ EOF
  		node.vm.hostname = "storage"
  		node.disksize.size = '100GB'
 		node.vm.network "private_network", ip: "$STORAGEIP"
+		virtualbox__intnet: "$VBOX_NETNAME"
 		node.vm.provider "virtualbox" do |vb|
 			vb.memory = "$VBOX_STORAGE_MEMORY"
 		end
@@ -253,6 +254,7 @@ EOF
 	config.vm.define "$NODENAME" do |node|
  		node.vm.hostname = "$NODENAME"
 		node.vm.network "private_network", ip: "$NODEIP"
+		virtualbox__intnet: "$VBOX_NETNAME"
 		node.disksize.size = '100GB'
 		node.vm.provider "virtualbox" do |vb|
 			vb.memory = "$VBOX_NODE_MEMORY"
