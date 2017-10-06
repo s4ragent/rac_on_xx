@@ -31,7 +31,6 @@ runonly(){
 	do
 		NODEIP=`get_Internal_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,$dbserver"
 	done
 	
