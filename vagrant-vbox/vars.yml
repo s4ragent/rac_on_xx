@@ -6,7 +6,8 @@
 #### vargrant-vbox user specific value  ###################
 VBOXSUBNET: "192.168.68.0/24"
 VXLAN_DEV: "eth1"
-VBOX_MEMORY: 6144
+VBOX_STORAGE_MEMORY: 2048
+VBOX_NODE_MEMORY: 4096
 VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
