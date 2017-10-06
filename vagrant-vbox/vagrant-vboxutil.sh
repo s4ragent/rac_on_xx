@@ -30,7 +30,7 @@ runonly(){
 	do
 		NODEIP=`get_Internal_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,$dbserver"
+		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,dbserver"
 	done
 	
 	common_create_inventry "STORAGE_SERVER: $STORAGEIP" "$arg_string"
