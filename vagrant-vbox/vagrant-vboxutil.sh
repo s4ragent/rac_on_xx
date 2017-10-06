@@ -26,7 +26,6 @@ runonly(){
 	
 	STORAGEIP= `get_Internal_IP storage`
 	arg_string="storage,$STORAGEIP,storage,0,storage"
-	carg_string=""
 	for i in `seq 1 $nodecount`;
 	do
 		NODEIP=`get_Internal_IP $i`
