@@ -13,7 +13,7 @@ case "$1" in
   "runall" ) shift;common_runall $*;;
   "ssh" ) shift;common_ssh $*;;
   "replaceinventory" ) shift;replaceinventory $*;;
-  "create_inventry" ) shift; common_create_inventry "$@";;
+  "create_inventry" ) shift;common_create_inventry "$@";;
   "run" ) shift;run $*;;
   "runonly" ) shift;runonly $*;;
   "deleteall" ) shift;deleteall $*;;
