@@ -82,7 +82,7 @@
   - name: reboot
     become: yes
     shell: sleep 2 && reboot &
-    when: centos2oel_rerult.rc != 0 or ( SWITCH_KERNEL is defined and SWITCH_KERNEL !="" ) or MTU is defined
+    when: centos2oel_rerult.rc != 0 or ( SWITCH_KERNEL is defined and SWITCH_KERNEL !="" ) 
     async: 1
     poll: 0
     ignore_errors: true
