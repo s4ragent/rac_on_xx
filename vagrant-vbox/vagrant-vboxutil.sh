@@ -21,7 +21,20 @@ runonly(){
 	fi
 	
 	common_create_box $nodecount
-
+	
+	
+	STORAGEIP= `get_Internal_IP storage`
+	arg_string="storage,$STORAGEIP,storage,0,storage"
+	carg_string=""
+	for i in `seq 1 $nodecount`;
+	do
+		NODEIP=`get_Internal_IP $i`
+		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
+		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,$dbserver"
+	done
+	
+	common_create_inventry "STORAGE_SERVER:e"
 	
 #	CLIENTNUM=70
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
