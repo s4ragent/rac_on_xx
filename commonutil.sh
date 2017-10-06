@@ -274,7 +274,7 @@ cd ..
 #$2 "$NODENAME,$IP,$INSTANCE_ID,$NODENUMBER,$HOSTGROUP $NODENAME,$IP,$INSTANCE_ID,$NODENUMBER,$HOSTGROUP"
 common_create_inventry(){
 	common_update_all_yml "$1"
-	$nodelist=$2
+	nodelist=$2
 	for node in $nodelist;
 	do
 		cargs=`echo $node | sed 's/,/ /g'`
