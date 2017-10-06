@@ -34,7 +34,7 @@ runonly(){
 		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,$dbserver"
 	done
 	
-	common_create_inventry "STORAGE_SERVER:e"
+	common_create_inventry "STORAGE_SERVER: STORAGEIP" "$arg_string"
 	
 #	CLIENTNUM=70
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
