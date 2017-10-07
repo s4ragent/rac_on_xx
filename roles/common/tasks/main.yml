@@ -272,18 +272,21 @@
       executable: /bin/bash
       chdir: /tmp
     run_once: true
+    when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
       
   - name: "copy cvuqdisk"
     become: yes
     copy: src="/tmp/{{ CVUQDISK }}" dest=/tmp/cvuqdisk.rpm
+    when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
       
   - name: "install cvuqdisk"
     become: yes
     yum: name=/tmp/cvuqdisk.rpm state=present
+    when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
 
