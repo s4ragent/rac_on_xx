@@ -1,7 +1,7 @@
 #### gce user specific value  ###################
 #ZONE: "us-west1-b"
 ZONE: "asia-east1-c"
-#INSTANCE_SIZE_OPS: "--machine-type n1-highmem-2"
+#INSTANCE_TYPE_OPS: "--machine-type n1-highmem-2"
 VXLAN_DEV: "eth0"
 INSTANCE_TYPE_OPS: "--custom-cpu 2 --custom-memory 8 --preemptible --maintenance-policy TERMINATE"
 NODE_DISK_SIZE: "50GB"
