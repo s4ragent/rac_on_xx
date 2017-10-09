@@ -223,10 +223,11 @@ common_create_box()
 
 	cd $VIRT_TYPE
 	vagrant plugin install vagrant-disksize
+	vagrant box add $VBOX_NAME $VBOX_URL
 
 	cat > Vagrantfile <<EOF
 Vagrant.configure(2) do |config|
-	config.vm.box = "$VBOX_URL"
+	config.vm.box = "$VBOX_NAME"
 	config.vm.provision "shell", path: "setup.sh"
 	config.ssh.insert_key = false
 EOF
