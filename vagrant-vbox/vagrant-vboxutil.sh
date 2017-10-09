@@ -20,6 +20,13 @@ runonly(){
 	else
 		nodecount=$1
 	fi
+
+	
+	if [  ! -e $ansible_ssh_private_key_file ] ; then
+		cp ~/.vagrant.d/insecure_private_key $ansible_ssh_private_key_file
+		ssh-keygen -y -f $ansible_ssh_private_key_file > ${ansible_ssh_private_key_file}.pub
+		chmod 600 ${ansible_ssh_private_key_file}*
+	fi
 	
 	common_create_box $nodecount
 	
@@ -43,7 +50,7 @@ runonly(){
 }
 
 deleteall(){
-   	common_deleteall $*
+ common_deleteall $*
 	cd $VIRT_TYPE
 	vagrant destroy -f
   	
