@@ -15,7 +15,7 @@ VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
 VBOX_NETNAME: raconxx
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
-SWITCH_KERNEL: "0"
+#SWITCH_KERNEL: "0"
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
 ####################################################
