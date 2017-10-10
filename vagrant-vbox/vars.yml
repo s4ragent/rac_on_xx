@@ -9,7 +9,8 @@ VXLAN_DEV: "eth1"
 VBOX_STORAGE_MEMORY: 2048
 VBOX_NODE_MEMORY: 4096
 VBOX_NAME: ol73
-VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol73/ol73.box
+#VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol73/ol73.box
+VBOX_URL: centos/7
 VBOX_NETNAME: raconxx
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
