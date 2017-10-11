@@ -268,8 +268,7 @@ cat >> Vagrantfile <<EOF
 end
 EOF
 
-cat <<< '
-#!/bin/bash
+cat > setup.sh <<EOF
 sudo yum -y install parted
 sudo parted -s /dev/sda unit Gib mkpart primary $VBOX_ADD_DISKPART_SIZE 100% set $VBOX_ADD_DISKPART_NUM lvm on
 sudo pvcreate /dev/sda${VBOX_ADD_DISKPART_NUM}
@@ -281,7 +280,7 @@ sudo xfs_growfs /
 #chmod u+x /etc/rc.d/rc.local
 #echo "ethtool -K eth0 tso off gro off gso off tx off rx off" >> /etc/rc.d/rc.local
 #echo "ethtool -K eth1 tso off gro off gso off tx off rx off" >> /etc/rc.d/rc.local
-' > setup.sh
+EOF
 
 vagrant up
 
