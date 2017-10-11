@@ -271,7 +271,7 @@ EOF
 cat >> setup.sh <<EOF
 #!/bin/bash
 sudo yum -y install parted
-sudo parted -s /dev/sda unit Gib mkpart primary $VBOX_ADD_DISKSIZE 100% set 3 lvm on
+sudo parted -s /dev/sda unit Gib mkpart primary $VBOX_ADD_DISKPART_SIZE 100% set $VBOX_ADD_DISKPART_NUM lvm on
 sudo pvcreate /dev/sda3
 sudo vgextend vg_main /dev/sda3
 sudo lvextend -l +100%FREE /dev/mapper/vg_main-lv_root
