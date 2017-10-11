@@ -222,12 +222,12 @@ common_create_box()
 	nodecount=$1
 
 	cd $VIRT_TYPE
-	vagrant plugin install vagrant-disksize
-	vagrant box add $VBOX_NAME $VBOX_URL
+	vagrant plugin install vagrant-persistent-storage
+	#vagrant box add $VBOX_NAME $VBOX_URL
 
 	cat > Vagrantfile <<EOF
 Vagrant.configure(2) do |config|
-	config.vm.box = "$VBOX_NAME"
+	config.vm.box = "$VBOX_URL"
 	config.vm.provision "shell", path: "setup.sh"
 	config.ssh.insert_key = false
 EOF
@@ -235,8 +235,12 @@ EOF
 	STORAGEIP=`get_External_IP storage`
 	cat >> Vagrantfile <<EOF
 	config.vm.define "storage" do |node|
- 		node.vm.hostname = "storage"
- 		node.disksize.size = '100GB'
+ 		node.vm.hostname = "storage"	
+		node.persistent_storage.enabled = true
+		node.persistent_storage.location = "./storage.vdi"
+		node.persistent_storage.size = $VBOX_STORAGE_DISKSIZE
+		node.persistent_storage.partition = false
+		node.persistent_storage.diskdevice = '/dev/sde'
 		node.vm.network "private_network", ip: "$STORAGEIP"
 		node.vm.provider "virtualbox" do |vb|
 			vb.memory = "$VBOX_STORAGE_MEMORY"
@@ -254,7 +258,11 @@ EOF
 	config.vm.define "$NODENAME" do |node|
  		node.vm.hostname = "$NODENAME"
 		node.vm.network "private_network", ip: "$NODEIP"
-		node.disksize.size = '100GB'
+		node.persistent_storage.enabled = true
+		node.persistent_storage.location = "./${NODENAME}.vdi"
+		node.persistent_storage.size = $VBOX_NODE_DISKSIZE
+		node.persistent_storage.partition = false
+		node.persistent_storage.diskdevice = '/dev/sde'
 		node.vm.provider "virtualbox" do |vb|
 			vb.memory = "$VBOX_NODE_MEMORY"
 		end
