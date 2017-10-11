@@ -31,7 +31,7 @@ runonly(){
 	common_create_box $nodecount
 	
 	
-	STORAGEIP= `get_Internal_IP storage`
+	STORAGEIP=`get_Internal_IP storage`
 	arg_string="storage,$STORAGEIP,storage,0,storage"
 	for i in `seq 1 $nodecount`;
 	do
