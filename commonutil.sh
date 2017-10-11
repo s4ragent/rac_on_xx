@@ -268,7 +268,8 @@ cat >> Vagrantfile <<EOF
 end
 EOF
 
-cat > setup.sh <<EOF
+rm -f setup.sh
+cat >> setup.sh <<EOF
 #!/bin/bash
 sudo yum -y install parted
 sudo parted -s /dev/sda unit Gib mkpart primary $VBOX_ADD_DISKPART_SIZE 100% set $VBOX_ADD_DISKPART_NUM lvm on
