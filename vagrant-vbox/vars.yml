@@ -29,8 +29,6 @@ VBOX_NETNAME: raconxx
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
 SWITCH_KERNEL: "0"
-data_disk_dev: "/dev/sde"
-data_disk_mountpoint: "/u01"
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
 ####################################################
