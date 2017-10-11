@@ -241,6 +241,10 @@ EOF
 		node.vm.network "private_network", ip: "$STORAGEIP"
 		node.vm.provider "virtualbox" do |vb|
 			vb.memory = "$VBOX_STORAGE_MEMORY"
+			vb.customize ['modifyvm', :id, '--nictype1', 'virtio']
+			vb.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
+			vb.customize ['modifyvm', :id, '--nictype2', 'virtio']
+			vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
 		end
 	end
 
@@ -258,6 +262,10 @@ EOF
 		node.disksize.size = "$VBOX_NODE_DISKSIZE"
 		node.vm.provider "virtualbox" do |vb|
 			vb.memory = "$VBOX_NODE_MEMORY"
+			vb.customize ['modifyvm', :id, '--nictype1', 'virtio']
+			vb.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
+			vb.customize ['modifyvm', :id, '--nictype2', 'virtio']
+			vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
 		end
 	end
 	
