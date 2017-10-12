@@ -22,8 +22,8 @@ VBOX_LV_NAME: vg_main-lv_root
 #VBOX_URL: centos/7
 #VBOX_ADD_DISKPART_SIZE: 40.0
 #VBOX_ADD_DISKPART_NUM: 4
-VBOX_VG_NAME: VolGroup00
-VBOX_LV_NAME: VolGroup00-LogVol00
+#VBOX_VG_NAME: VolGroup00
+#VBOX_LV_NAME: VolGroup00-LogVol00
 ###
 VBOX_NETNAME: raconxx
 MEDIA_PATH: /u01/downloadmedia
