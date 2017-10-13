@@ -37,6 +37,11 @@ common_runall(){
 	common_execansible rac.yml
 }
 
+common_iperf(){
+	runonly $*
+	common_execansible iperf.yml
+}
+
 common_preinstall(){
 	runonly $*
 	common_execansible centos2oel.yml
