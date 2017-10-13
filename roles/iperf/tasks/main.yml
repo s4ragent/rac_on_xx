@@ -3,12 +3,6 @@
     become: yes
     yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
 
-  - name: "dummy yum command (GPGKEY INSTALL)"
-    become: yes
-    shell: yum -y search nfs-utils
-    when: xrdp_pass is defined and xrdp_pass !=""
-    ignore_errors: true
-
   - name: "install iperf3"
     become: yes
     yum: name="iperf3" state=present
@@ -24,7 +18,7 @@
 
   - name: client iperf
     become: yes
-    shell: iperf3 --client {{ hostvars[groups['dbserver'][0]]['NODEIP'] }} --time 600
+    shell: iperf3 --client {{ hostvars[groups['dbserver'][0]]['public_IP'] }} --time 600
     when: inventory_hostname == groups["dbserver"][1]
     tags:
       - iperf
