@@ -18,6 +18,7 @@
    roles:
       - download
       - { role: nfsclient, when: "storage_type == 'nfs'" }
+      - { role: cvu, when: "cvu is defined" }
 #      - { role: nfsclient, when: "storage_type == 'efs'" }
       
  - hosts: dbserver
