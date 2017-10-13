@@ -37,6 +37,13 @@ common_runall(){
 	common_execansible rac.yml
 }
 
+common_cvu(){
+	runonly $*
+	common_execansible centos2oel.yml
+	sleep 180s
+	common_execansible rac.yml --skip-tags installdbca --extra-vars "cvu=on"
+}
+
 common_iperf(){
 	runonly $*
 	common_execansible iperf.yml
@@ -313,3 +320,4 @@ common_create_inventry(){
 		common_update_ansible_inventory $cargs
 	done
 }
+
