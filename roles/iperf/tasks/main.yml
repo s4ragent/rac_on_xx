@@ -20,9 +20,13 @@
     become: yes
     shell: iperf3 --client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} --time 600
     when: inventory_hostname == groups["dbserver"][1]
+    register: iperf_result
     tags:
       - iperf
 
-
+  - debug: var=iperf_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][1]
+    tags:
+      - iperf
 
 
