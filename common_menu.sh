@@ -1,6 +1,7 @@
 #!/bin/bash
 case "$1" in
   "execansible" ) shift;common_execansible $*;;
+  "iperf" ) shift;common_iperf $*;;
   "preinstall" ) shift;common_preinstall $*;;
   "after_runonly" ) shift;common_after_runonly $*;;
   "install_dbca" ) shift;common_install_dbca $*;;
