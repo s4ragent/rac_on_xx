@@ -1,0 +1,37 @@
+---
+  - name: "install epel"
+    become: yes
+    yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
+
+  - name: "dummy yum command (GPGKEY INSTALL)"
+    become: yes
+    shell: yum -y search nfs-utils
+    when: xrdp_pass is defined and xrdp_pass !=""
+    ignore_errors: true
+
+
+#environment groups must "@^"
+#packages group must"@"
+  - name: "install iperf3"
+    become: yes
+    yum: name="{{ item }}" state=present
+    with_items:
+      - iperf3
+    tags:
+      - iperf
+
+  - name: start server iperf
+    become: yes
+    shell: iperf3 --server --one-off --daemon
+    tags:
+      - iperf
+
+  - name: add sudoer
+    become: yes
+    lineinfile: dest=/etc/sudoers.d/{{ item }} line="{{ item }} ALL=(ALL) NOPASSWD:ALL" create=yes owner=root group=root mode=0440
+    with_items:
+      - oracle
+      - grid
+    when: xrdp_pass is defined and xrdp_pass !=""
+    tags:
+      - xrdp
