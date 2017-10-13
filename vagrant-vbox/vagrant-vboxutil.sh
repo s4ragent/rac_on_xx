@@ -28,9 +28,6 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 	
-	common_create_box $nodecount
-	
-	
 	STORAGEIP=`get_Internal_IP storage`
 	arg_string="storage,$STORAGEIP,storage,0,storage"
 	for i in `seq 1 $nodecount`;
@@ -41,6 +38,8 @@ runonly(){
 	done
 	
 	common_create_inventry "STORAGE_SERVER: $STORAGEIP" "$arg_string"
+	
+	common_create_box $nodecount
 	
 #	CLIENTNUM=70
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
