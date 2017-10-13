@@ -24,7 +24,7 @@
 
   - name: client iperf
     become: yes
-    shell: shell: "iperf3 --client {{ hostvars[groups['dbserver'][0]]['NODEIP']] }} --time 600
+    shell: "iperf3 --client {{ hostvars[groups['dbserver'][0]]['NODEIP']] }} --time 600
     when: inventory_hostname == groups["dbserver"][1]
     tags:
       - iperf
