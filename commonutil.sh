@@ -237,10 +237,6 @@ common_create_box()
 	cd $VIRT_TYPE
 	#vagrant plugin install vagrant-persistent-storage
 	vagrant plugin install vagrant-disksize
-	IsBox=`vagrant box list | grep $VBOX_URL | wc -l`
-	if [ "$IsBox" = "0" ]; then
-		vagrant box add $VBOX_URL
-	fi
 
 	cat > Vagrantfile <<EOF
 Vagrant.configure(2) do |config|
