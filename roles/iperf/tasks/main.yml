@@ -12,14 +12,14 @@
   - name: start server iperf
     become: yes
     shell: iperf3 --server --one-off --daemon
-    when: inventory_hostname == groups["dbserver"][0]
+    when: inventory_hostname == groups["storage"][0]
     tags:
       - iperf
 
   - name: client iperf
     become: yes
-    shell: iperf3 --client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} --time 60
-    when: inventory_hostname == groups["dbserver"][1]
+    shell: iperf3 --client {{ hostvars[groups['storage'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} --time 60
+    when: inventory_hostname == groups["dbserver"][0]
     register: iperf_result
     tags:
       - iperf
