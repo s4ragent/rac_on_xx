@@ -48,6 +48,7 @@
   - name: "dummy yum command (GPGKEY INSTALL)"
     become: yes
     shell: yum -y search nfs-utils
+    when: SWITCH_KERNEL is defined and SWITCH_KERNEL !=""
     ignore_errors: true
     tags:
       - centos2oel
