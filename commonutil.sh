@@ -45,7 +45,7 @@ common_cvu(){
 }
 
 common_iperf(){
-	runonly $*
+	runonly 1
 	common_execansible iperf.yml
 }
 
