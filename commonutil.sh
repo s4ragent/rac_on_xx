@@ -229,6 +229,25 @@ fi
 
 }
 
+#$1 nodename $2 disksize $3 memory $4 extenalip $5 internalip
+common_add_vagrantfile(){
+
+	cat >> Vagrantfile <<EOF
+	config.vm.define "$1" do |node|
+ 		node.vm.hostname = "$1"
+		node.disksize.size = "$2"
+		node.vm.network "private_network", ip: "$4"
+		node.vm.network "private_network", ip: "$5", virtualbox__intnet: true
+		node.vm.provider "virtualbox" do |vb|
+			vb.memory = "$3"
+			vb.cpus = 2
+		end
+	end
+
+EOF
+
+}
+
 common_create_box()
 {
 	nodecount=$1
@@ -245,37 +264,17 @@ Vagrant.configure(2) do |config|
 	config.ssh.insert_key = false
 EOF
 
-	STORAGEIP=`get_External_IP storage`
-	cat >> Vagrantfile <<EOF
-	config.vm.define "storage" do |node|
- 		node.vm.hostname = "storage"	
-		node.disksize.size = "$VBOX_STORAGE_DISKSIZE"
-		node.vm.network "private_network", ip: "$STORAGEIP"
-		node.vm.provider "virtualbox" do |vb|
-			vb.memory = "$VBOX_STORAGE_MEMORY"
-			vb.cpus = 2
-		end
-	end
-
-EOF
+#$1 nodename $2 disksize $3 memory $4 extenalip $5 internalip
+	common_add_vagrantfile storage $VBOX_STORAGE_DISKSIZE $VBOX_STORAGE_MEMORY `get_External_IP storage` `get_Internal_IP storage`
 
 	
 	for i in `seq 1 $nodecount`;
 	do
 		NODEIP=`get_External_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-	cat >> Vagrantfile <<EOF
-	config.vm.define "$NODENAME" do |node|
- 		node.vm.hostname = "$NODENAME"
-		node.vm.network "private_network", ip: "$NODEIP"
-		node.disksize.size = "$VBOX_NODE_DISKSIZE"
-		node.vm.provider "virtualbox" do |vb|
-			vb.memory = "$VBOX_NODE_MEMORY"
-			vb.cpus = 2
-		end
-	end
-	
-EOF
+		
+		common_add_vagrantfile $NODENAME $VBOX_STORAGE_DISKSIZE $VBOX_STORAGE_MEMORY `get_External_IP $i` `get_Internal_IP $i`
+
 	done
 
 cat >> Vagrantfile <<EOF
