@@ -229,24 +229,6 @@ fi
 
 }
 
-#$1 nodename $2 disksize $3 memory $4 extenalip $5 internalip
-common_add_vagrantfile(){
-
-	cat >> Vagrantfile <<EOF
-	config.vm.define "$1" do |node|
- 		node.vm.hostname = "$1"
-		node.disksize.size = "$2"
-		node.vm.network "private_network", ip: "$4"
-		node.vm.network "private_network", ip: "$5", virtualbox__intnet: true
-		node.vm.provider "virtualbox" do |vb|
-			vb.memory = "$3"
-			vb.cpus = 2
-		end
-	end
-
-EOF
-
-}
 
 common_create_box()
 {
@@ -294,6 +276,26 @@ vagrant up
 
 cd ..
 }
+
+#$1 nodename $2 disksize $3 memory $4 extenalip $5 internalip
+common_add_vagrantfile(){
+
+	cat >> Vagrantfile <<EOF
+	config.vm.define "$1" do |node|
+ 		node.vm.hostname = "$1"
+		node.disksize.size = "$2"
+		node.vm.network "private_network", ip: "$4"
+		node.vm.network "private_network", ip: "$5"
+		node.vm.provider "virtualbox" do |vb|
+			vb.memory = "$3"
+			vb.cpus = 2
+		end
+	end
+
+EOF
+
+}
+
 
 #$1 ""
 #$2 "$NODENAME,$IP,$INSTANCE_ID,$NODENUMBER,$HOSTGROUP $NODENAME,$IP,$INSTANCE_ID,$NODENUMBER,$HOSTGROUP"
