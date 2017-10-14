@@ -5,7 +5,8 @@
 ####################################################
 #### vargrant-vbox user specific value  ###################
 VBOXSUBNET: "192.168.68.0/24"
-VXLAN_DEV: "eth1"
+VBOXSUBNET2: "192.168.69.0/24"
+VXLAN_DEV: "eth2"
 VBOX_STORAGE_MEMORY: 2048
 VBOX_NODE_MEMORY: 6144
 VBOX_STORAGE_DISKSIZE: 100GB
