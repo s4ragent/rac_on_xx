@@ -13,7 +13,7 @@ VBOX_NODE_DISKSIZE: 100GB
 ###for ol73/ol74
 VBOX_NAME: ol74
 VBOX_URL: http://yum.oracle.com/boxes/oraclelinux/ol74/ol74.box
-VBOX_ADD_DISKPART: 36.5
+VBOX_ADD_DISKPART_SIZE: 36.5
 VBOX_ADD_DISKPART_NUM: 3
 VBOX_VG_NAME: vg_main
 VBOX_LV_NAME: vg_main-lv_root
