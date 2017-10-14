@@ -29,12 +29,13 @@ runonly(){
 	fi
 	
 	STORAGEIP=`get_External_IP storage`
-	arg_string="storage,$STORAGEIP,storage,0,storage"
+	
+	arg_string="storage,127.0.0.1:`common_get_ssh_port 0`,storage,0,storage"
 	for i in `seq 1 $nodecount`;
 	do
 		NODEIP=`get_External_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,dbserver"
+		arg_string="$arg_string $NODENAME,127.0.0.1:`common_get_ssh_port $i`,$NODENAME,$i,dbserver"
 	done
 	
 	common_create_inventry "STORAGE_SERVER: $STORAGEIP" "$arg_string"
