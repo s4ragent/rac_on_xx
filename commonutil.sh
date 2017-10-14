@@ -291,6 +291,7 @@ common_add_vagrantfile(){
 			vb.customize ['modifyvm', :id, '--nictype2', 'virtio']
 			vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
 			vb.customize ['modifyvm', :id, '--nictype3', 'virtio']
+			vb.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
 		end
 	end
 
