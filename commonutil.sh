@@ -252,7 +252,6 @@ EOF
 	
 	for i in `seq 1 $nodecount`;
 	do
-		NODEIP=`get_External_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		
 		common_add_vagrantfile $NODENAME $VBOX_STORAGE_DISKSIZE $VBOX_STORAGE_MEMORY `get_External_IP $i` `get_Internal_IP $i`
@@ -289,6 +288,12 @@ common_add_vagrantfile(){
 		node.vm.provider "virtualbox" do |vb|
 			vb.memory = "$3"
 			vb.cpus = 2
+			vb.customize ['modifyvm', :id, '--nictype1', 'virtio']
+			vb.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
+			vb.customize ['modifyvm', :id, '--nictype2', 'virtio']
+			vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
+			vb.customize ['modifyvm', :id, '--nictype3', 'virtio']
+			vb.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']
 		end
 	end
 
