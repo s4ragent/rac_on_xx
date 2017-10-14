@@ -28,11 +28,11 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 	
-	STORAGEIP=`get_Internal_IP storage`
+	STORAGEIP=`get_External_IP storage`
 	arg_string="storage,$STORAGEIP,storage,0,storage"
 	for i in `seq 1 $nodecount`;
 	do
-		NODEIP=`get_Internal_IP $i`
+		NODEIP=`get_External_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,dbserver"
 	done
