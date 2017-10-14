@@ -25,7 +25,7 @@
       - iperf
 
   - debug: var=iperf_result.stdout_lines
-    when: inventory_hostname == groups["dbserver"][1]
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - iperf
 
