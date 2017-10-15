@@ -265,7 +265,7 @@ EOF
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		
-	common_add_vagrantfile $NODENAME $VBOX_STORAGE_DISKSIZE $VBOX_STORAGE_MEMORY `get_External_IP $i` `common_get_ssh_port $i`
+	common_add_vagrantfile $NODENAME $VBOX_STORAGE_DISKSIZE $VBOX_NODE_MEMORY `get_External_IP $i` `common_get_ssh_port $i`
 
 	done
 
