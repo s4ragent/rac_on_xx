@@ -280,6 +280,11 @@ sudo pvcreate /dev/sda${VBOX_ADD_DISKPART_NUM}
 sudo vgextend $VBOX_VG_NAME /dev/sda${VBOX_ADD_DISKPART_NUM}
 sudo lvextend -l +100%FREE /dev/mapper/${VBOX_LV_NAME}
 sudo xfs_growfs /
+ethtool -K eth0 tso off gro off gso off tx off rx off
+ethtool -K eth1 tso off gro off gso off tx off rx off
+chmod u+x /etc/rc.d/rc.local
+echo "ethtool -K eth0 tso off gro off gso off tx off rx off" >> /etc/rc.d/rc.local
+echo "ethtool -K eth1 tso off gro off gso off tx off rx off" >> /etc/rc.d/rc.local
 EOF
 
 vagrant up
