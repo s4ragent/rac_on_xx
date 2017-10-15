@@ -52,7 +52,7 @@ dns: dnsmasq
 #####for NFS option values
 ##### device size = base_size + multi_size * node count
 storage_type: "nfs"
-NFS_OPS:  "rw,bg,hard,nointr,rsize=1048576,wsize=1048576,tcp,vers=4.1,timeo=600,actimeo=0"
+NFS_OPS:  "rw,bg,hard,nointr,rsize=32768,wsize=32768,tcp,vers=4.1,timeo=600,actimeo=0"
 ORA_DATA: /u01/oradata
 VOTE_DEV: /u01/oradata/vote.img
 VOTE_BASE_SIZE: 40960
