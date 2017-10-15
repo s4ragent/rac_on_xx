@@ -280,13 +280,17 @@ sudo pvcreate /dev/sda${VBOX_ADD_DISKPART_NUM}
 sudo vgextend $VBOX_VG_NAME /dev/sda${VBOX_ADD_DISKPART_NUM}
 sudo lvextend -l +100%FREE /dev/mapper/${VBOX_LV_NAME}
 sudo xfs_growfs /
+EOF
+
+if [ "$VBOX_TSO" = "off" ]; then
+cat >> setup.sh <<EOF
 ethtool -K eth0 tso off gro off gso off tx off rx off
 ethtool -K eth1 tso off gro off gso off tx off rx off
 chmod u+x /etc/rc.d/rc.local
 echo "ethtool -K eth0 tso off gro off gso off tx off rx off" >> /etc/rc.d/rc.local
 echo "ethtool -K eth1 tso off gro off gso off tx off rx off" >> /etc/rc.d/rc.local
 EOF
-
+fi
 vagrant up
 
 cd ..
@@ -304,8 +308,8 @@ common_add_vagrantfile(){
 		node.vm.provider "virtualbox" do |vb|
 			vb.memory = "$3"
 			vb.cpus = 2
-			vb.customize ['modifyvm', :id, '--nictype1', 'virtio']
-			vb.customize ['modifyvm', :id, '--nictype2', 'virtio']
+			vb.customize ['modifyvm', :id, '--nictype1', '$VBOX_NICTYPE']
+			vb.customize ['modifyvm', :id, '--nictype2', '$VBOX_NICTYPE']
 			vb.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
 			vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
 		end
