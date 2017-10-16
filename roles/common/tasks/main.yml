@@ -252,7 +252,7 @@
   - name: "create swap(swapon)"
     become: yes
     shell: swapon /swap
-    when: ansible_swaptotal_mb < 1
+    when: ansible_swaptotal_mb < SWAP_SIZE
     tags:
       - swapon
       - swap
@@ -260,7 +260,7 @@
   - name: "mount swap(fstab)"
     become: yes
     mount: name=swap src=/swap fstype=swap opts=defaults passno=0 dump=0 state=present
-    when: ansible_swaptotal_mb < 1
+    when: ansible_swaptotal_mb < SWAP_SIZE
     tags:
       - fstabswap
       - swap
