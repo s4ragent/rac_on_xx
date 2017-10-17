@@ -2,5 +2,4 @@
  - hosts: all
    roles:
       - ssh
-      - { role: iperf, when: "IPERF_DEV in ['eth0', 'eth1'],['eth2']" }
       - centos2oel
