@@ -33,7 +33,7 @@ runonly(){
 	arg_string="storage,127.0.0.1:`common_get_ssh_port 0`,storage,0,storage"
 	for i in `seq 1 $nodecount`;
 	do
-		NODEIP=`get_External_IP $i`
+		#NODEIP=`get_External_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		arg_string="$arg_string $NODENAME,127.0.0.1:`common_get_ssh_port $i`,$NODENAME,$i,dbserver"
 	done
