@@ -46,7 +46,10 @@ common_cvu(){
 common_iperf(){
 	runonly 1
 	common_execansible centos2oel.yml
-	common_execansible rac.yml --tags security,vxlan_conf,iperf --extra-vars "IPERF_DEV=$1"
+	if [ "$1" = "vxlan0" ]; then
+ 		common_execansible rac.yml --tags security,vxlan_conf
+ fi
+	common_execansible rac.yml --tags iperf --extra-vars "IPERF_DEV=$1"
 }
 
 common_preinstall(){
