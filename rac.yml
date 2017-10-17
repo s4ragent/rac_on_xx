@@ -4,7 +4,7 @@
    roles:
       - security
       - vxlan
-      - { role: iperf, when: "IPERF_DEV == 'vxlan0'" }
+      - { role: iperf, when: "IPERF_DEV is defined" }
       - { role: dns, when: "dns == 'dnsmasq'" }
       - common
 
