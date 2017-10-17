@@ -258,14 +258,13 @@ Vagrant.configure(2) do |config|
 EOF
 
 #$1 nodename $2 disksize $3 memory $4 extenalip $5 internalip
-	common_add_vagrantfile storage $VBOX_STORAGE_DISKSIZE $VBOX_STORAGE_MEMORY `get_External_IP storage` `common_get_ssh_port 0`
+	common_add_vagrantfile storage $VBOX_STORAGE_DISKSIZE $VBOX_STORAGE_MEMORY `get_External_IP storage` `get_Internal_IP storage` `common_get_ssh_port 0`
 
-	
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		
-	common_add_vagrantfile $NODENAME $VBOX_STORAGE_DISKSIZE $VBOX_NODE_MEMORY `get_External_IP $i` `common_get_ssh_port $i`
+	common_add_vagrantfile $NODENAME $VBOX_STORAGE_DISKSIZE $VBOX_NODE_MEMORY `get_External_IP $i` 	`get_Internal_IP $i` `common_get_ssh_port $i`
 
 	done
 
@@ -296,22 +295,25 @@ vagrant up
 cd ..
 }
 
-#$1 nodename $2 disksize $3 memory $4 extenalip $5 sshport
+#$1 nodename $2 disksize $3 memory $4 extenalip $5 intenalip $6 sshport
 common_add_vagrantfile(){
 	
 	cat >> Vagrantfile <<EOF
 	config.vm.define "$1" do |node|
  		node.vm.hostname = "$1"
 		node.disksize.size = "$2"
-		node.vm.network "forwarded_port", guest: 22, host: $5, id: "ssh"
-		node.vm.network "private_network", ip: "$4",virtualbox__intnet: true
+		node.vm.network "forwarded_port", guest: 22, host: $6, id: "ssh"
+		node.vm.network "private_network", ip: "$4"
+		node.vm.network "private_network", ip: "$5",virtualbox__intnet: true
 		node.vm.provider "virtualbox" do |vb|
 			vb.memory = "$3"
 			vb.cpus = 2
 			vb.customize ['modifyvm', :id, '--nictype1', '$VBOX_NICTYPE']
 			vb.customize ['modifyvm', :id, '--nictype2', '$VBOX_NICTYPE']
+			vb.customize ['modifyvm', :id, '--nictype3', '$VBOX_NICTYPE']
 			vb.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
 			vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
+			vb.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']			
 		end
 	end
 
