@@ -26,7 +26,7 @@ VBOX_LV_NAME: vg_main-lv_root
 #VBOX_ADD_DISKPART_NUM: 4
 #VBOX_VG_NAME: VolGroup00
 #VBOX_LV_NAME: VolGroup00-LogVol00
-SWITCH_KERNEL: "0"
+#SWITCH_KERNEL: "0"
 ###
 VBOX_NETNAME: raconxx
 MEDIA_PATH: /u01/downloadmedia
