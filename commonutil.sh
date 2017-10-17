@@ -311,12 +311,6 @@ common_add_vagrantfile(){
 		node.vm.provider "virtualbox" do |vb|
 			vb.memory = "$3"
 			vb.cpus = 2
-			vb.customize ['modifyvm', :id, '--nictype1', '$VBOX_NICTYPE']
-			vb.customize ['modifyvm', :id, '--nictype2', '$VBOX_NICTYPE']
-			vb.customize ['modifyvm', :id, '--nictype3', '$VBOX_NICTYPE']
-			vb.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
-			vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
-			vb.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']			
 		end
 	end
 
