@@ -40,16 +40,13 @@ common_runall(){
 common_cvu(){
 	runonly $*
 	common_execansible centos2oel.yml
-	sleep 180s
 	common_execansible rac.yml --skip-tags installdbca --extra-vars "cvu=on"
 }
 
 common_iperf(){
 	runonly 1
 	common_execansible centos2oel.yml
-	sleep 180s
 	common_execansible rac.yml --tags security,vxlan_conf,iperf --extra-vars "IPERF_DEV=$1"
-
 }
 
 common_preinstall(){
