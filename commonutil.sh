@@ -307,7 +307,7 @@ common_add_vagrantfile(){
 		node.disksize.size = "$2"
 		node.vm.network "forwarded_port", guest: 22, host: $6, id: "ssh"
 		node.vm.network "private_network", ip: "$4"
-		node.vm.network "private_network", ip: "$5", virtualbox__intnet: "vxlan"
+		node.vm.network "private_network", ip: "$5"
 		node.vm.provider "virtualbox" do |vb|
 			vb.memory = "$3"
 			vb.cpus = 2
