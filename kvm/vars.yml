@@ -3,15 +3,16 @@
 #xrdp_pass: Xrdp123!
 ####################################################
 ####################################################
-#### docker user specific value  ###################
-DOCKERSUBNET: "10.153.0.0/16"
+#### kvm user specific value  ###################
+KVMSUBNET: "10.153.0.0/16"
 VXLAN_DEV: "eth0"
 BRNAME: "raconxx"
-DOCKER_VOLUME_PATH: "/rac_on_docker"
+KVM_IMAGE_PATH: "/rac_on_docker"
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
+OS_URL: http://ftp.riken.jp/Linux/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: "-f"
