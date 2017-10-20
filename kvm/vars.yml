@@ -12,7 +12,8 @@ MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
-OS_URL: http://ftp.riken.jp/Linux/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1708.iso
+OS_URL: http://ftp.riken.jp/Linux/centos/7/isos/x86_64/
+OS_IMAGE: CentOS-7-x86_64-Minimal-1708.iso
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: "-f"
@@ -24,18 +25,11 @@ STOP_CMD_OPS: ""
 INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: ""
 ####################################################
-####docker system  specific value ##################
-IMAGE: "s4ragent/rac_on_xx:OEL7"
-#CAP_OPS: "--cap-add=NET_ADMIN"
-DOCKER_CAPS: "--privileged=true --security-opt seccomp=unconfined"
-#DOCKER_CAPS: "--cap-add=ALL --security-opt=seccomp=unconfined"
-DOCKER_START_OPS: "--restart=always"
-TMPFS_OPS: "--shm-size=1200m"
 ####################################################
 #WindowManager: "xfce"
 ####ansible specific
 ansible_ssh_user: opc
-ansible_ssh_private_key_file: raconxx
+ansible_ssh_private_key_file: kvmraconxx
 dns: dnsmasq
 #####for NFS option values
 ##### device size = base_size + multi_size * node count
