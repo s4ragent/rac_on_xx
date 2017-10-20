@@ -176,79 +176,28 @@ deleteall(){
 }
 
 buildimage(){
-	INSTANCE_ID=rac_template
-	mkdir -p /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/
-	curl -L -o /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo http://yum.oracle.com/public-yum-ol7.repo
-	yum -c /var/lib/machines/$INSTANCE_ID/etc/yum.repos.d/public-yum-ol7.repo -y --nogpg --installroot=/var/lib/machines/$INSTANCE_ID install systemd openssh openssh-server passwd yum sudo oraclelinux-release vim-minimal iproute initscripts iputils
 
-	mkdir -p /var/lib/machines/$INSTANCE_ID/root/.ssh
-	cp ${ansible_ssh_private_key_file}.pub /var/lib/machines/$INSTANCE_ID/root/.ssh/authorized_keys
-	chmod 700 /var/lib/machines/$INSTANCE_ID/root/.ssh 
-	chmod 600 /var/lib/machines/$INSTANCE_ID/root/.ssh/*
-	
-	sed -i 's/^#PermitRootLogin yes/PermitRootLogin yes/' /var/lib/machines/$INSTANCE_ID/etc/ssh/sshd_config
-	
-	cp --remove-destination /var/lib/machines/$INSTANCE_ID/usr/lib/systemd/system/sshd.service /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/sshd.service
-	
-	SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
-	NUM=`expr $BASE_IP - 1`
-	IP="${SEGMENT}$NUM"	
-	mkdir -p /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts
-	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts/ifcfg-host0
-DEVICE=host0
-TYPE=Ethernet
-IPADDR=$IP
-GATEWAY=${SEGMENT}1
-NETMASK=255.255.255.0
-ONBOOT=yes
-BOOTPROTO=static
-NM_CONTROLLED=no
-DELAY=0
-EOF
 
-	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/resolv.conf
-nameserver 8.8.8.8
-EOF
+qemu-img create -f qcow2 /var/lib/libvirt/images/centos7.img 5G
 
-	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.service
-[Unit]
-Description=proc_remount
-Requires=network.target
-Before=network.target remote-fs.target
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=/bin/mount /proc/sys -o rw,remount,bind
-ExecStartPost=-/sbin/sysctl -p
-User=root
-Group=root
-[Install]
-WantedBy=multi-user.target
-EOF
-
-	chmod 644 /var/lib/machines/$INSTANCE_ID/etc/systemd/system/multi-user.target.wants/procremount.service
-
-	touch /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network
-
-	systemd-machine-id-setup --root=/var/lib/machines/$INSTANCE_ID
-
-	if [ -e /etc/redhat-release ]; then
-		semanage fcontext -a -t svirt_sandbox_file_t "/var/lib/machines/$INSTANCE_ID(/.*)?"
-		restorecon -R /var/lib/machines/$INSTANCE_ID
-	fi
-	
-	machinectl start $INSTANCE_ID
-	sleep 20s
-	
-	/usr/bin/ssh -o StrictHostKeyChecking=no -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${ansible_ssh_private_key_file} root@$IP  "yum -y install selinux-policy firewalld filesystem $PreInstallRPM; systemctl disable firewalld; "
-
-	machinectl poweroff $INSTANCE_ID
-	sleep 20s
-
-	rm -rf /var/lib/machines/$INSTANCE_ID/home/oracle
-	rm -rf /var/lib/machines/$INSTANCE_ID/var/spool/mail/oracle
-	rm -rf /var/lib/machines/$INSTANCE_ID/etc/ssh/ssh_host_*
-	
+virt-install \
+  --name centos7 \
+  --hvm \
+  --virt-type kvm \
+  --ram 1024 \
+  --vcpus 1 \
+  --arch x86_64 \
+  --os-type linux \
+  --os-variant rhel7 \
+  --boot hd \
+  --disk /var/lib/libvirt/images/centos7.img \
+  --network network=default \
+  --graphics none \
+  --serial pty \
+  --console pty \
+  --location /iso/CentOS-7.0-1406-x86_64-Minimal.iso \
+  --initrd-inject /tmp/centos7.ks.cfg \
+  --extra-args "inst.ks=file:/centos7.ks.cfg console=ttyS0"
 
 }
 
