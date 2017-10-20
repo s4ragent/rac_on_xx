@@ -56,70 +56,15 @@ runonly(){
 		nodecount=$1
 	fi
 	
-	if [  ! -e /etc/systemd/system/multi-user.target.wants/createbr.service ] ; then
-		SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
-		ipcmd=`which ip`
-		brctlcmd=`which brctl`
-		iptablescmd=`which iptables`
-		cat << EOF > /etc/systemd/system/multi-user.target.wants/createbr.service
-[Unit]
-Description=createbr
-Requires=network.target
-Before=network.target remote-fs.target
-[Service]
-Type=oneshot
-RemainAfterExit=yes
-ExecStart=-$brctlcmd addbr $BRNAME ; $ipcmd addr add dev $BRNAME ${SEGMENT}1/24 ; $ipcmd link set up dev $BRNAME
-ExecStartPost=-$iptablescmd -t nat -N $BRNAME ; $iptablescmd -t nat -A PREROUTING -m addrtype --dst-type LOCAL -j $BRNAME ; $iptablescmd -t nat -A OUTPUT ! -d 127.0.0.0/8 -m addrtype --dst-type LOCAL -j $BRNAME ; $iptablescmd -t nat -A POSTROUTING -s ${SEGMENT}0/24 ! -o $BRNAME -j MASQUERADE ;	$iptablescmd -t nat -A $BRNAME -i $BRNAME -j RETURN ; $iptablescmd -I FORWARD -i $BRNAME -o $BRNAME -j ACCEPT ; $iptablescmd -I FORWARD -i $BRNAME ! -o $BRNAME -j ACCEPT ; $iptablescmd -I FORWARD -o $BRNAME -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT ; /sbin/sysctl -w net.ipv4.ip_forward=1
-User=root
-Group=root
-[Install]
-WantedBy=multi-user.target
-EOF
-	systemctl daemon-reload
-	systemctl start createbr.service
-	fi
-	
-#	sysctl -w net.core.rmem_default = 2621440
-#	sysctl -w net.core.rmem_max = 41943040
-#	sysctl -w net.core.wmem_default = 2621440
-#	sysctl -w net.core.wmem_max = 10485760
-#	sysctl -w fs.aio-max-nr = 10485760
-#	sysctl -w fs.file-max = 68157440
-#	sysctl -w net.ipv4.ip_local_port_range = 9000 65500
-	
+
 	if [  ! -e $ansible_ssh_private_key_file ] ; then
 		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
-	nspawncmd=`which systemd-nspawn`
-	ipcmd=`which ip`
-	mkdir -p /etc/systemd/system/systemd-nspawn@.service.d
-	if [  ! -e /etc/systemd/system/systemd-nspawn@.service.d/override.conf ] ; then
-			cat << EOF  > /etc/systemd/system/systemd-nspawn@.service.d/override.conf
-[Service]
-ExecStart=
-ExecStart=$nspawncmd --quiet --keep-unit --boot --link-journal=try-guest --machine=%I --network-bridge=$BRNAME --bind-ro=/boot --capability=all
-ExecStopPost=-${ipcmd} link del vb-%I
-KillMode=
-KillMode=mixed                                                                    
-Type=
-Type=notify 
-RestartForceExitStatus=
-RestartForceExitStatus=133
-SuccessExitStatus=
-SuccessExitStatus=133  
-Slice=
-Slice=machine.slice
-Delegate=
-Delegate=yes
-EOF
 
-	systemctl daemon-reload
-	fi
 
-	if [  ! -e /var/lib/machines/rac_template ] ; then
+	if [  ! -e /var/lib/libvirt/images/rac_template.img ] ; then
 		buildimage
 	fi
 
@@ -177,11 +122,54 @@ deleteall(){
 
 buildimage(){
 
+wget ${OS_URL}${OS_IMAGE} -O /var/lib/libvirt/images/${OS_IMAGE}
 
-qemu-img create -f qcow2 /var/lib/libvirt/images/centos7.img 5G
+qemu-img create -f qcow2 /var/lib/libvirt/images/rac_template.img 100G
+
+cat > /tmp/centos7.ks.cfg <<EOF 
+#version=RHEL7
+
+install
+cdrom
+text
+cmdline
+skipx
+
+lang en_US.UTF-8
+
+network --activate --bootproto=dhcp --noipv6
+
+zerombr
+bootloader --location=mbr
+
+clearpart --all --initlabel
+part / --fstype=xfs --grow --size=1 --asprimary --label=root
+
+rootpw --plaintext password
+auth --enableshadow --passalgo=sha512
+selinux --disabled
+firewall --disabled
+firstboot --disabled
+
+reboot
+
+%packages
+%end
+%post --log=/root/install-post.log
+
+useradd $ansible_ssh_user                                                                                                          
+echo "$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$ansible_ssh_user
+mkdir /home/$ansible_ssh_user/.ssh
+echo "`cat ${ansible_ssh_private_key_file}.pub`"  > /home/$ansible_ssh_user/.ssh/authorized_keys
+chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh 
+chmod 700 /home/$ansible_ssh_user/.ssh
+chmod 600 /home/$ansible_ssh_user/.ssh/*
+
+%end
+EOF
 
 virt-install \
-  --name centos7 \
+  --name rac_template \
   --hvm \
   --virt-type kvm \
   --ram 1024 \
@@ -190,12 +178,12 @@ virt-install \
   --os-type linux \
   --os-variant rhel7 \
   --boot hd \
-  --disk /var/lib/libvirt/images/centos7.img \
+  --disk /var/lib/libvirt/images/rac_template.img \
   --network network=default \
   --graphics none \
   --serial pty \
   --console pty \
-  --location /iso/CentOS-7.0-1406-x86_64-Minimal.iso \
+  --location /var/lib/libvirt/images/${OS_IMAGE} \
   --initrd-inject /tmp/centos7.ks.cfg \
   --extra-args "inst.ks=file:/centos7.ks.cfg console=ttyS0"
 
