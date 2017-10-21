@@ -151,7 +151,7 @@ selinux --disabled
 firewall --disabled
 firstboot --disabled
 
-shutdown
+poweroff
 
 %packages
 %end
