@@ -97,6 +97,7 @@ deleteall(){
 
   	
 	rm -rf /tmp/$CVUQDISK
+	virsh destroy rac_template
 	virsh undefine rac_template
 	rm -rf /var/lib/libvirt/images/rac_template.img
 }
