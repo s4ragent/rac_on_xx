@@ -117,6 +117,8 @@ cmdline
 skipx
 
 lang en_US.UTF-8
+keyboard --vckeymap=jp106 --xlayouts=jp
+timezone Asia/Tokyo --isUtc --nontp
 
 network --activate --bootproto=dhcp --noipv6
 
@@ -132,7 +134,7 @@ selinux --disabled
 firewall --disabled
 firstboot --disabled
 
-poweroff
+reboot
 
 %packages
 %end
