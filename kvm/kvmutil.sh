@@ -95,29 +95,10 @@ deleteall(){
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
 
-	systemctl stop 'systemd-nspawn@rac_template.service'
-	ip link del vb-rac_template
-		
-	systemctl stop 'systemd-nspawn@storage.service'
-	ip link del vb-storage
-	
-	
-	for i in `seq 1 100`;
-	do
-		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		systemctl stop 'systemd-nspawn@'${NODENAME}.service
-		ip link del vb-${NODENAME}
-	done
-	
-	rm -rf /var/lib/machines/*
-	ip link set $BRNAME down
-	brctl delbr $BRNAME
-	systemctl stop createbr.service
   	
 	rm -rf /tmp/$CVUQDISK
-	rm -rf /etc/systemd/system/systemd-nspawn@.service.d/override.conf
-	rm -rf /etc/systemd/system/multi-user.target.wants/createbr.service
-	systemctl daemon-reload
+	virsh undefine rac_template
+	rm -rf /var/lib/libvirt/images/rac_template.img
 }
 
 buildimage(){
