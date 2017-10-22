@@ -12,8 +12,10 @@ MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
-OS_URL: http://ftp.riken.jp/Linux/centos/7/isos/x86_64/
-OS_IMAGE: CentOS-7-x86_64-Minimal-1708.iso
+OS_URL:
+http://ftp.riken.jp/Linux/centos/7/os/x86_64/
+#OS_URL http://ftp.riken.jp/Linux/centos/7/isos/x86_64/
+#OS_IMAGE: CentOS-7-x86_64-Minimal-1708.iso
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: "-f"
