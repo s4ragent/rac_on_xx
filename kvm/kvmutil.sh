@@ -167,7 +167,7 @@ virt-install \
   --disk /var/lib/libvirt/images/rac_template.img \
   --network network=default \
   --graphics none \
-  --noreboot
+  --noreboot \
   --serial pty \
   --console pty \
   --location /var/lib/libvirt/images/${OS_IMAGE} \
