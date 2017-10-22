@@ -104,7 +104,9 @@ deleteall(){
 
 buildimage(){
 
-wget ${OS_URL}${OS_IMAGE} -O /var/lib/libvirt/images/${OS_IMAGE}
+	if [ -e /var/lib/libvirt/images/${OS_IMAGE} ]; then
+   		wget ${OS_URL}${OS_IMAGE} -O /var/lib/libvirt/images/${OS_IMAGE}
+	fi
 
 qemu-img create -f qcow2 /var/lib/libvirt/images/rac_template.img 100G
 
@@ -135,7 +137,7 @@ selinux --disabled
 firewall --disabled
 firstboot --disabled
 
-reboot
+poweroff
 
 %packages
 %end
