@@ -104,7 +104,7 @@ deleteall(){
 
 buildimage(){
 
-#wget ${OS_URL}${OS_IMAGE} -O /var/lib/libvirt/images/${OS_IMAGE}
+wget ${OS_URL}${OS_IMAGE} -O /var/lib/libvirt/images/${OS_IMAGE}
 
 qemu-img create -f qcow2 /var/lib/libvirt/images/rac_template.img 100G
 
@@ -167,7 +167,7 @@ virt-install \
   --graphics none \
   --serial pty \
   --console pty \
-  --location ${OS_URL} \
+  --location /var/lib/libvirt/images/${OS_IMAGE} \
   --initrd-inject /tmp/centos7.ks.cfg \
   --extra-args "inst.ks=file:/centos7.ks.cfg console=ttyS0"
 
