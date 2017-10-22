@@ -104,7 +104,7 @@ deleteall(){
 
 buildimage(){
 
-	if [ -e /var/lib/libvirt/images/${OS_IMAGE} ]; then
+	if [ ! -e /var/lib/libvirt/images/${OS_IMAGE} ]; then
    		wget ${OS_URL}${OS_IMAGE} -O /var/lib/libvirt/images/${OS_IMAGE}
 	fi
 
@@ -167,6 +167,7 @@ virt-install \
   --disk /var/lib/libvirt/images/rac_template.img \
   --network network=default \
   --graphics none \
+  --noreboot
   --serial pty \
   --console pty \
   --location /var/lib/libvirt/images/${OS_IMAGE} \
