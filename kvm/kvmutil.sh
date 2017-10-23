@@ -20,7 +20,7 @@ run(){
 	
 	SEGMENT=`echo $KVMSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 	
-	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts/ifcfg-host0
+	cat << EOF > /tmp/ifcfg-eth0
 DEVICE=eth0
 TYPE=Ethernet
 IPADDR=$IP
@@ -32,6 +32,14 @@ NM_CONTROLLED=no
 DELAY=0
 EOF
 
+virt-copy-in -d ${NODENAME} /tmp/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0
+
+virsh setvcpus ${NODENAME} ${CPUCOUNT} --config --maximum
+virsh setvcpus ${NODENAME} ${CPUCOUNT} --config
+virsh setmaxmem ${NODENAME} ${MEMSIZE} --config
+virsh setmem ${NODENAME} ${MEMSIZE} --config
+
+virsh start ${NODENAME}
 
 }
 
