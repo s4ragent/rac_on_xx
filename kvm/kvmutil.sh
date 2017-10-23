@@ -33,7 +33,7 @@ NM_CONTROLLED=no
 DELAY=0
 EOF
 
-virt-copy-in -d ${NODENAME} /tmp/ifcfg-eth0 /etc/sysconfig/network-scripts/ifcfg-eth0
+virt-copy-in -d ${NODENAME} /tmp/ifcfg-eth0 /etc/sysconfig/network-scripts
 
 virsh setvcpus ${NODENAME} ${CPUCOUNT} --config --maximum
 virsh setvcpus ${NODENAME} ${CPUCOUNT} --config
