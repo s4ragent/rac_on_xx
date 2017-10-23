@@ -4,9 +4,8 @@
 ####################################################
 ####################################################
 #### kvm user specific value  ###################
-KVMSUBNET: "10.153.0.0/16"
 VXLAN_DEV: "eth0"
-BRNAME: "raconxx"
+KVMBRNAME: "virbr0"
 KVM_IMAGE_PATH: "/rac_on_docker"
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
@@ -15,6 +14,8 @@ GRID_MEDIA1: linuxx64_12201_grid_home.zip
 #OS_URL: http://ftp.riken.jp/Linux/centos/7/os/x86_64/
 OS_URL: http://ftp.riken.jp/Linux/centos/7/isos/x86_64/
 OS_IMAGE: CentOS-7-x86_64-Minimal-1708.iso
+MEMSIZE: 6144
+CPUCOUNT: 2
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: "-f"
