@@ -16,12 +16,12 @@ run(){
 	HOSTGROUP=$4
 	INSTANCE_ID=${NODENAME}
 	
-	cp -R /var/lib/machines/rac_template /var/lib/machines/$INSTANCE_ID
+	virt-clone --original rac_template --name $NODENAME --file /var/lib/libvirt/images/${NODENAME}.img
 	
-	SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+	SEGMENT=`echo $KVMSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 	
 	cat << EOF > /var/lib/machines/$INSTANCE_ID/etc/sysconfig/network-scripts/ifcfg-host0
-DEVICE=host0
+DEVICE=eth0
 TYPE=Ethernet
 IPADDR=$IP
 GATEWAY=${SEGMENT}1
@@ -32,18 +32,6 @@ NM_CONTROLLED=no
 DELAY=0
 EOF
 
-	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
-	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
-                                                  
-	systemd-machine-id-setup --root=/var/lib/machines/$INSTANCE_ID
-
-	if [ -e /etc/redhat-release ]; then
-		semanage fcontext -a -t svirt_sandbox_file_t "/var/lib/machines/$INSTANCE_ID(/.*)?"
-		restorecon -R /var/lib/machines/$INSTANCE_ID
-	fi
-	
-	machinectl start $INSTANCE_ID
-	sleep 20s
 
 }
 
@@ -71,7 +59,6 @@ runonly(){
 	STORAGEIP=`get_Internal_IP storage`
 	run "storage" $STORAGEIP 0 "storage"
 	
-	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
 	
 	for i in `seq 1 $nodecount`;
 	do
