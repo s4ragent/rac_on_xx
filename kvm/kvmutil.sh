@@ -5,7 +5,7 @@ VIRT_TYPE="kvm"
 cd ..
 source ./commonutil.sh
 
-KVMSUBNET=`ip addr show $KVMBR | grep -o 'inet [0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+/[0-9]+' | grep -o [0-9].*`
+KVMSUBNET=`ip addr show $KVMBRNAME | grep -o 'inet [0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+/[0-9]+' | grep -o [0-9].*`
 
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 ip $3 nodenumber $4 hostgroup#####
@@ -147,12 +147,11 @@ chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh
 chmod 700 /home/$ansible_ssh_user/.ssh
 chmod 600 /home/$ansible_ssh_user/.ssh/*
 
-sed -i 's/HWADDR/#HWADDR/g' /etc/sysconfig/network-scripts/ifcfg-eth0
-
-sed -i 's/UUID/#UUID/g' /etc/sysconfig/network-scripts/ifcfg-eth0
-
 %end
 EOF
+
+#sed -i 's/HWADDR/#HWADDR/g' /etc/sysconfig/network-scripts/ifcfg-eth0
+#sed -i 's/UUID/#UUID/g' /etc/sysconfig/network-scripts/ifcfg-eth0
 
 virt-install \
   --name rac_template \
@@ -190,7 +189,7 @@ get_Internal_IP(){
 	else
 		NUM=`expr $BASE_IP + $1`
 	fi
-	SEGMENT=`echo $NSPAWNSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
+	SEGMENT=`echo $KVMSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 	Internal_IP="${SEGMENT}$NUM"
 
 	echo $Internal_IP	
