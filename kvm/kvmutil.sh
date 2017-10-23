@@ -173,6 +173,11 @@ chmod 600 /home/$ansible_ssh_user/.ssh/*
 %end
 EOF
 
+#curl -O https://linux.oracle.com/switch/centos2ol.sh && sh centos2ol.sh
+#yum -y distro-sync
+#yum: name="kernel-uek-4*" state=latest enablerepo=ol7_UEKR4 disablerepo=ol7_UEKR3
+#grub2-set-default {{ SWITCH_KERNEL }} && grub2-mkconfig -o /etc/grub2.cfg
+
 #sed -i 's/HWADDR/#HWADDR/g' /etc/sysconfig/network-scripts/ifcfg-eth0
 #sed -i 's/UUID/#UUID/g' /etc/sysconfig/network-scripts/ifcfg-eth0
 
