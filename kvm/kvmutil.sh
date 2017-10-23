@@ -103,16 +103,22 @@ deleteall(){
 		virsh undefine $NODENAME
 		rm -rf /var/lib/libvirt/images/${NODENAME}.img
 	done
-	
+
+
+	if [ "$1" = "all" ]; then
+   		rm -rf ${ansible_ssh_private_key_file}*
+		virsh destroy rac_template
+		virsh undefine rac_template
+		rm -rf /var/lib/libvirt/images/rac_template.img
+	fi
+
 	#### VIRT_TYPE specific processing ###
 	#if [ -e "$ansible_ssh_private_key_file" ]; then
    	#	rm -rf ${ansible_ssh_private_key_file}*
 	#fi
 
 	rm -rf /tmp/$CVUQDISK
-	#virsh destroy rac_template
-	#virsh undefine rac_template
-	#rm -rf /var/lib/libvirt/images/rac_template.img
+
 }
 
 buildimage(){
