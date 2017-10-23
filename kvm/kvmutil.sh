@@ -59,16 +59,22 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
-
-
 	if [  ! -e /var/lib/libvirt/images/rac_template.img ] ; then
 		buildimage
 	fi
 
-	STORAGEIP=`get_Internal_IP storage`
+	STORAGEIP=`get_External_IP storage`
+	arg_string="storage,$STORAGEIP,storage,0,storage"
+	for i in `seq 1 $nodecount`;
+	do
+		NODEIP=`get_External_IP $i`
+		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,dbserver"
+	done
+	
+	common_create_inventry "STORAGE_SERVER: $STORAGEIP" "$arg_string"
+
 	run "storage" $STORAGEIP 0 "storage"
-	
-	
 	for i in `seq 1 $nodecount`;
 	do
 		NODEIP=`get_Internal_IP $i`
@@ -76,7 +82,7 @@ runonly(){
 		run $NODENAME $NODEIP $i "dbserver"
 	done
 	
-	sleep 30s
+	sleep 120s
 #	CLIENTNUM=70
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
 #	CLIENTIP="${SEGMENT}$NUM"	
@@ -86,6 +92,14 @@ runonly(){
 
 deleteall(){
    	common_deleteall $*
+	
+	rm -rf /var/lib/libvirt/images/storage.img
+	for i in `seq 1 $nodecount`;
+	do
+		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		rm -rf /var/lib/libvirt/images/${NODENAME}.img
+	done
+	
 	#### VIRT_TYPE specific processing ###
 	if [ -e "$ansible_ssh_private_key_file" ]; then
    		rm -rf ${ansible_ssh_private_key_file}*
