@@ -5,7 +5,7 @@ VIRT_TYPE="kvm"
 cd ..
 source ./commonutil.sh
 
-KVMSUBNET=`ip addr show $KVMBRNAME | grep -o 'inet [0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+/[0-9]+' | grep -o [0-9].*`
+KVMSUBNET=`ip addr show $KVMBRNAME | grep -o 'inet [0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+\/[0-9]+' | grep -o [0-9].*`
 
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 ip $3 nodenumber $4 hostgroup#####
