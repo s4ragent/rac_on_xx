@@ -151,6 +151,10 @@ chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh
 chmod 700 /home/$ansible_ssh_user/.ssh
 chmod 600 /home/$ansible_ssh_user/.ssh/*
 
+sed -i 's/HWADDR/#HWADDR/g' /etc/sysconfig/network-scripts/ifcfg-eth0
+
+sed -i 's/UUID/#UUID/g' /etc/sysconfig/network-scripts/ifcfg-eth0
+
 %end
 EOF
 
