@@ -93,10 +93,14 @@ runonly(){
 deleteall(){
    	common_deleteall $*
 	
+	virsh destroy storage
+	virsh undefine storage
 	rm -rf /var/lib/libvirt/images/storage.img
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		virsh destroy $NODENAME
+		virsh undefine $NODENAME
 		rm -rf /var/lib/libvirt/images/${NODENAME}.img
 	done
 	
