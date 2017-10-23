@@ -96,7 +96,7 @@ deleteall(){
 	virsh destroy storage
 	virsh undefine storage
 	rm -rf /var/lib/libvirt/images/storage.img
-	for i in `seq 1 $nodecount`;
+	for i in `seq 1 100`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		virsh destroy $NODENAME
