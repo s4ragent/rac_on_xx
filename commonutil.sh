@@ -170,11 +170,17 @@ vip_IP="`echo $vxlan0_NETWORK | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`$VIPIP"
 
 ansible_ssh_host=`echo $2 | awk -F ':' '{print $1}'`
 ansible_ssh_port=`echo $2 | awk -F ':' '{print $2}'`
-
+ansible_ssh_pass=`echo $2 | awk -F ':' '{print $3}'`
 if [ "$ansible_ssh_port" = "" ]; then
 	echo "$1 ansible_ssh_host=$2" >> $VIRT_TYPE/${hostgroup}.inventory
 else
-	echo "$1 ansible_ssh_host=$ansible_ssh_host ansible_ssh_port=$ansible_ssh_port" >> $VIRT_TYPE/${hostgroup}.inventory
+
+	if [ "$ansible_ssh_pass" = "" ]; then
+		echo "$1 ansible_ssh_host=$ansible_ssh_host ansible_ssh_port=$ansible_ssh_port" >> $VIRT_TYPE/${hostgroup}.inventory
+	else
+		echo "$1 ansible_ssh_host=$ansible_ssh_host ansible_ssh_port=$ansible_ssh_port ansible_ssh_pass=$ansible_ssh_pass ansible_sudo_pass=$ansible_sudo_pass" >> $VIRT_TYPE/${hostgroup}.inventory	
+	fi
+
 fi
 
 
