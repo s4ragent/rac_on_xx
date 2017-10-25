@@ -22,7 +22,7 @@ runonly(){
 		NODENUMBER=`expr $NODENUMBER + 1`
 	done
 
-`
+
 #	CLIENTIP="${SEGMENT}$NUM"	
 #	run "client01" $CLIENTIP $CLIENTNUM "client"
 	
