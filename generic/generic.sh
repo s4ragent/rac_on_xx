@@ -10,6 +10,7 @@ source ./commonutil.sh
 #$1 nodecount                                  #####
 runonly(){
 	
+	common_update_all_yml
 	NODENUMBER=0
 	for node in $NODELIST;
 	do
