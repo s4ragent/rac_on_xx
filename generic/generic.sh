@@ -11,16 +11,14 @@ source ./commonutil.sh
 runonly(){
 	
 	common_update_all_yml
-	NODENUMBER=0
 	for node in $NODELIST;
 	do
 		NODENAME=`echo $node | awk -F ',' '{print $1}' `
 		IP=`echo $node | awk -F ',' '{print $2}' `
-		HOSTGROUP=`echo $node | awk -F ',' '{print $3}' `
+		NODENUMBER=`echo $node | awk -F ',' '{print $3}' `
+		HOSTGROUP=`echo $node | awk -F ',' '{print $4}' `
 		INSTANCE_ID=$NODENAME
-		
 		common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
-		NODENUMBER=`expr $NODENUMBER + 1`
 	done
 
 
