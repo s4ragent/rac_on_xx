@@ -37,3 +37,9 @@
  #     - dbcaserial
       - { role: dbcaserial, when: "dbca == 'serial'" }
       - { role: dbca, when: "dbca == 'paralell'" }
+
+ - hosts: client
+   any_errors_fatal: true
+   roles:
+      - { role: jdbcrunner, when: "jdbcrunner is defined" }
+#      - { role: nfsclient, when: "storage_type == 'efs'" }
