@@ -5,6 +5,7 @@
 ####################################################
 #### kvm user specific value  ###################
 VXLAN_DEV: "eth0"
+KVMPASS: kvmpass
 KVMBRNAME: "virbr0"
 KVM_IMAGE_PATH: "/rac_on_docker"
 MEDIA_PATH: /u01/downloadmedia
