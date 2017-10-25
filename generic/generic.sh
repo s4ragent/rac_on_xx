@@ -9,12 +9,20 @@ source ./commonutil.sh
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodecount                                  #####
 runonly(){
+	
+	NODENUMBER=0
+	for node in $NODELIST;
+	do
+		NODENAME=`echo $node | awk -F ',' '{print $1}' `
+		IP=`echo $node | awk -F ',' '{print $2}' `
+		HOSTGROUP=`echo $node | awk -F ',' '{print $3}' `
+		INSTANCE_ID=$NODENAME
+		
+		common_update_ansible_inventory "$NODENAME,$IP,$INSTANCE_ID,$NODENUMBER,$HOSTGROUP"
+		NODENUMBER=`expr $NODENUMBER + 1`
+	done
 
-	common_create_inventry "STORAGE_SERVER: $STORAGEIP" "$NODELIST"
-
-
-#	CLIENTNUM=70
-#	NUM=`expr $BASE_IP + $CLIENTNUM`
+`
 #	CLIENTIP="${SEGMENT}$NUM"	
 #	run "client01" $CLIENTIP $CLIENTNUM "client"
 	
