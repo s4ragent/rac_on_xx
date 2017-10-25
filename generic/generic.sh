@@ -18,7 +18,7 @@ runonly(){
 		HOSTGROUP=`echo $node | awk -F ',' '{print $3}' `
 		INSTANCE_ID=$NODENAME
 		
-		common_update_ansible_inventory "$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP"
+		common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 		NODENUMBER=`expr $NODENUMBER + 1`
 	done
 
