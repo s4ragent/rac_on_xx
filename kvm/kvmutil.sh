@@ -171,6 +171,9 @@ chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh
 chmod 700 /home/$ansible_ssh_user/.ssh
 chmod 600 /home/$ansible_ssh_user/.ssh/*
 
+curl -O https://linux.oracle.com/switch/centos2ol.sh && sh centos2ol.sh
+yum -y distro-sync
+
 %end
 EOF
 
