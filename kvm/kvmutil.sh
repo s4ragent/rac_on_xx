@@ -150,7 +150,7 @@ bootloader --location=mbr
 clearpart --all --initlabel
 part / --fstype=xfs --grow --size=1 --asprimary --label=root
 
-rootpw --plaintext password
+rootpw --plaintext $KVMPASS
 auth --enableshadow --passalgo=sha512
 selinux --disabled
 firewall --disabled
@@ -162,7 +162,8 @@ poweroff
 %end
 %post --log=/root/install-post.log
 
-useradd $ansible_ssh_user                                                                                                          
+useradd $ansible_ssh_user
+echo "$ansible_ssh_user:$KVMPASS" | chpasswd
 echo "$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/$ansible_ssh_user
 mkdir /home/$ansible_ssh_user/.ssh
 echo "`cat ${ansible_ssh_private_key_file}.pub`"  > /home/$ansible_ssh_user/.ssh/authorized_keys
