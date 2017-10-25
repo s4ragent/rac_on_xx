@@ -9,22 +9,7 @@ source ./commonutil.sh
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodecount                                  #####
 runonly(){
-	
-	common_update_all_yml
-	for node in $NODELIST;
-	do
-		NODENAME=`echo $node | awk -F ',' '{print $1}' `
-		IP=`echo $node | awk -F ',' '{print $2}' `
-		NODENUMBER=`echo $node | awk -F ',' '{print $3}' `
-		HOSTGROUP=`echo $node | awk -F ',' '{print $4}' `
-		INSTANCE_ID=$NODENAME
-		common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
-	done
-
-
-#	CLIENTIP="${SEGMENT}$NUM"	
-#	run "client01" $CLIENTIP $CLIENTNUM "client"
-	
+	common_create_inventry "" "$NODELIST"	
 }
 
 deleteall(){
