@@ -15,7 +15,7 @@ GRID_MEDIA1: linuxx64_12201_grid_home.zip
 #OS_URL: http://ftp.riken.jp/Linux/centos/7/os/x86_64/
 OS_URL: http://ftp.riken.jp/Linux/centos/7/isos/x86_64/
 OS_IMAGE: CentOS-7-x86_64-Minimal-1708.iso
-MEMSIZE: 5G
+MEMSIZE: 6G
 CPUCOUNT: 1
 ####################################################
 ####common VIRT_TYPE specific value ################
