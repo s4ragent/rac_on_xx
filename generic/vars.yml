@@ -3,8 +3,12 @@
 #xrdp_pass: Xrdp123!
 ####################################################
 ####################################################
+####ansible specific
+ansible_ssh_user: opc
+ansible_ssh_private_key_file: raconxx
 #### generic user specific value  ###################
-NODELIST: 
+#  NODENAME,IP,NODENAME,nodenumber,hostgroup"
+NODELIST: "storage,192.168.122.50,storage,0:storage node001,192.168.122.51,node001,1,dbserver node002,192.168.122.52,node002,2,dbserver node003,192.168.122.53,node003,3,dbserver" 
 VXLAN_DEV: "eth0"
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
@@ -23,9 +27,6 @@ DHCPCLIENT: ""
 ####################################################
 ####################################################
 #WindowManager: "xfce"
-####ansible specific
-ansible_ssh_user: opc
-ansible_ssh_private_key_file: raconxx
 dns: dnsmasq
 #####for NFS option values
 ##### device size = base_size + multi_size * node count
