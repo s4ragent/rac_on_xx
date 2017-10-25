@@ -5,12 +5,12 @@
 ####################################################
 ####ansible specific
 ansible_ssh_user: opc
-ansible_ssh_private_key_file: genericraconxx
+ansible_ssh_private_key_file: raconxx
 #ansible_ssh_pass: kvmpass
 #### generic user specific value  ###################
 #  "NODENAME,IP,nodenumber,hostgroup NODENAME,IP,nodenumber,hostgroup"
-NODELIST: "storage,192.168.122.50,0,storage node001,192.168.122.51,1,dbserver node002,192.168.122.52,2,dbserver node003,192.168.122.53,3,dbserver" 
-STORAGE_SERVER: 192.168.122.50
+NODELIST: "storage,10.153.0.50,0,storage node001,10.153.0.51,1,dbserver node002,10.153.0.52,2,dbserver node003,10.153.0.53,3,dbserver" 
+STORAGE_SERVER: 10.153.0.50
 VXLAN_DEV: "eth0"
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
