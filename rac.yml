@@ -42,4 +42,3 @@
    any_errors_fatal: true
    roles:
       - { role: jdbcrunner, when: "jdbcrunner is defined" }
-#      - { role: nfsclient, when: "storage_type == 'efs'" }
