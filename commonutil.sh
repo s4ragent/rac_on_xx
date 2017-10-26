@@ -37,6 +37,14 @@ common_runall(){
 	common_execansible rac.yml
 }
 
+common_jdbcrunner(){
+	isCLIENT="on"
+	runonly $*
+	common_execansible centos2oel.yml
+ 	sleep 180s
+	common_execansible rac.yml --extra-vars "isCLIENT=on,jdbcrunner=on"
+}
+
 common_cvu(){
 	runonly $*
 	common_execansible centos2oel.yml
