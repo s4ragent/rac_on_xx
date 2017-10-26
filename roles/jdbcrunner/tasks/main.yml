@@ -13,14 +13,7 @@
   - name: "create user"
     become: yes
     become_user: oracle
-    shell: |
-      {{ ORA_ORACLE_HOME }}/bin/sqlplus /nolog <<EOF
-      conn /as sysdba
-      CREATE USER tpcc IDENTIFIED BY tpcc;
-      GRANT connect, resource TO tpcc;
-      exit
-      EOF
-      
+    script: createuser.sh
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - jdbcrunner   
