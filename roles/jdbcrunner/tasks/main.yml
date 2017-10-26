@@ -7,6 +7,8 @@
       - java-1.7.0-openjdk-devel
       - ant
     when: inventory_hostname == groups["client"][0]
+    tags:
+      - jdbcrunner
 
   - name: "create user"
     become: yes
