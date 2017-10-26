@@ -21,7 +21,9 @@
       exit
       EOF
     when: inventory_hostname == groups["dbserver"][0]
-    
+    tags:
+      - jdbcrunner   
+
   - name:
     git:
       repo: 'https://foosball.example.org/path/to/repo.git'
