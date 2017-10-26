@@ -14,7 +14,7 @@
     become: yes
     become_user: oracle
     shell: |
-      sqlplus /nolog <<EOF
+      {{ ORA_ORACLE_HOME }}/bin/sqlplus /nolog <<EOF
       conn /as sysdba
       CREATE USER tpcc IDENTIFIED BY tpcc;
       GRANT connect, resource TO tpcc;
