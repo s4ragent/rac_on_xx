@@ -13,7 +13,7 @@
   - name: "create user"
     become: yes
     become_user: oracle
-    script: createuser.sh --some-arguments "{{ SIDNAME }}1"
+    script: createuser.sh "{{ SIDNAME }}1"
     when: inventory_hostname == groups["dbserver"][0]
     register: createuser_result
     tags:
