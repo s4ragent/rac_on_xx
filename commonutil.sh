@@ -77,6 +77,9 @@ common_install_dbca(){
 	common_execansible rac.yml --tags installdbca
 }
 
+common_gridrootsh(){
+	common_execansible rac.yml --tags installdbca --skip-tags runinstallergrid
+}
 
 common_heatrun(){
 for i in `seq 1 $2`
