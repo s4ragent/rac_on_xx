@@ -29,7 +29,7 @@
     become: yes
     become_user: oracle
     git:
-      repo: 'https://github.com/sh2/jdbcrunner.git'
+      repo: https://github.com/sh2/jdbcrunner.git
       dest: /home/oracle/jdbcrunner
     tags:
       - jdbcrunner
