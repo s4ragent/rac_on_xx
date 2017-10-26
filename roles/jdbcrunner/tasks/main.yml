@@ -8,6 +8,7 @@
       - ant
 --- 
 - name: "create user"
+    became: oracle
     shell: |
     sqlplus /nolog <<EOF
     conn /as sysdba
