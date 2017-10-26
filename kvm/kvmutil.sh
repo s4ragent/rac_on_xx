@@ -72,7 +72,7 @@ runonly(){
 		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,dbserver"
 	done
 
-	if [ "isCLIENT" = "on" ]; then
+	if [ "$isCLIENT" = "on" ]; then
 	 nodenum=`expr $nodecount + 1`
 		NODEIP=`get_External_IP $nodenum`
 		NODENAME="client"
