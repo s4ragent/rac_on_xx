@@ -38,7 +38,7 @@
       - { role: dbcaserial, when: "dbca == 'serial'" }
       - { role: dbca, when: "dbca == 'paralell'" }
 
- - hosts: client
+ - hosts: all:!storage
    any_errors_fatal: true
    roles:
       - { role: jdbcrunner, when: "jdbcrunner is defined" }
