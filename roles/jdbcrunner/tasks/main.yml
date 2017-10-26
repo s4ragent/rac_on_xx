@@ -61,6 +61,12 @@
     args:
       chdir: /home/oracle/jdbcrunner
     when: inventory_hostname == groups["client"][0]
+    register: tpccload_result
     tags:
       - jdbcrunner
 
+
+  - debug: var=register: tpccload_result.stdout_lines
+    when: inventory_hostname == groups["client"][0]
+    tags:
+      - jdbcrunner
