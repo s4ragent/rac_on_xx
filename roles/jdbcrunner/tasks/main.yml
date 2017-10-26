@@ -66,7 +66,7 @@
       - jdbcrunner
 
 
-  - debug: var=register: tpccload_result.stdout_lines
+  - debug: var=tpccload_result.stdout_lines
     when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
@@ -82,7 +82,7 @@
     tags:
       - jdbcrunner
 
-  - debug: var=register: tpcc_result.stdout_lines
+  - debug: var=tpcc_result.stdout_lines
     when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
