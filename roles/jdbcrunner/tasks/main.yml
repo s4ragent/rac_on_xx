@@ -1,7 +1,17 @@
-  - name: "install jdbcrunner dependency library"
+---
+- name: "install jdbcrunner dependency library"
     become: yes
     yum: name="{{ item }}" state=present
     with_items:
       - git
       - java-1.7.0-openjdk-devel
       - ant
+--- 
+- name: "create user"
+    shell: |
+    sqlplus /nolog <<EOF
+    conn /as sysdba
+    CREATE USER tpcc IDENTIFIED BY tpcc;
+    GRANT connect, resource TO tpcc;
+    exit
+    EOF
