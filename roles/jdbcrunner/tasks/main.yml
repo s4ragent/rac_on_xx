@@ -70,3 +70,19 @@
     when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
+
+  - name: exec tpcc
+    become: yes
+    become_user: oracle
+    shell: "/usr/bin/java -cp jdbcrunner-1.3.jar:lib/* JR scripts/tpcc.js -jdbcUrl jdbc:oracle:thin:@{{ hostvars[groups['dbserver'][0]]["ansible_vxlan0"]['ipv4']['address'] }}:1521:{{ SIDNAME }}"
+    args:
+      chdir: /home/oracle/jdbcrunner
+    when: inventory_hostname == groups["client"][0]
+    register: tpcc_result
+    tags:
+      - jdbcrunner
+
+  - debug: var=register: tpcc_result.stdout_lines
+    when: inventory_hostname == groups["client"][0]
+    tags:
+      - jdbcrunner
