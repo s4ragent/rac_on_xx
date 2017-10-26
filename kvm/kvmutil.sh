@@ -71,6 +71,14 @@ runonly(){
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,dbserver"
 	done
+
+	if [ "isCLIENT" = "on" ]; then
+	 nodenum=`expr $nodecount + 1`
+		NODEIP=`get_External_IP $nodenum`
+		NODENAME="client"
+		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$nodenum,client"
+	fi
+
 	
 	common_create_inventry "STORAGE_SERVER: $STORAGEIP" "$arg_string"
 
@@ -91,11 +99,14 @@ runonly(){
 }
 
 deleteall(){
-   	common_deleteall $*
+ 	common_deleteall $*
 	
 	virsh destroy storage
 	virsh undefine storage
 	rm -rf /var/lib/libvirt/images/storage.img
+	virsh destroy client
+	virsh undefine client
+	rm -rf /var/lib/libvirt/images/client.img
 	for i in `seq 1 100`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
