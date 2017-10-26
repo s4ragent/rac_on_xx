@@ -1,18 +1,26 @@
 ---
-- name: "install jdbcrunner dependency library"
+  - name: "install jdbcrunner dependency library"
     become: yes
     yum: name="{{ item }}" state=present
     with_items:
       - git
       - java-1.7.0-openjdk-devel
       - ant
---- 
-- name: "create user"
-    became: oracle
+    when: inventory_hostname == groups["client"][0]
+
+  - name: "create user"
+    become: yes
+    become_user: oracle
     shell: |
-    sqlplus /nolog <<EOF
-    conn /as sysdba
-    CREATE USER tpcc IDENTIFIED BY tpcc;
-    GRANT connect, resource TO tpcc;
-    exit
-    EOF
+      sqlplus /nolog <<EOF
+      conn /as sysdba
+      CREATE USER tpcc IDENTIFIED BY tpcc;
+      GRANT connect, resource TO tpcc;
+      exit
+      EOF
+    when: inventory_hostname == groups["dbserver"][0]
+---    
+  - name:
+    git:
+      repo: 'https://foosball.example.org/path/to/repo.git'
+      dest: /srv/checkout
