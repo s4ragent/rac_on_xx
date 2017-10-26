@@ -20,6 +20,7 @@
       GRANT connect, resource TO tpcc;
       exit
       EOF
+      
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - jdbcrunner   
