@@ -7,6 +7,7 @@ case "$1" in
   "preinstall" ) shift;common_preinstall $*;;
   "after_runonly" ) shift;common_after_runonly $*;;
   "install_dbca" ) shift;common_install_dbca $*;;
+  "gridrootsh" ) shift;common_gridrootsh $*;;
   "startall" ) shift;common_startall $*;;
   "start" ) shift;common_start $*;;
   "stop" ) shift;common_stop $*;;
