@@ -31,5 +31,6 @@
     git:
       repo: https://github.com/sh2/jdbcrunner.git
       dest: /home/oracle/jdbcrunner
+    when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
