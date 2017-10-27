@@ -42,7 +42,7 @@
     args:
       chdir: /home/oracle/jdbcrunner
       creates: ant.txt
-    when: inventory_hostname == groups["dbserver"][0]
+    when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
   
