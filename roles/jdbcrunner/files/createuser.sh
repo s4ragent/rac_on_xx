@@ -10,6 +10,6 @@ CREATE USER tpcc IDENTIFIED BY tpcc
 DEFAULT TABLESPACE USERS
 QUOTA UNLIMITED ON USERS
 TEMPORARY TABLESPACE TEMP;
-GRANT connect, resource,create table,create index TO tpcc;
+GRANT connect, resource TO tpcc;
 exit
 EOF
