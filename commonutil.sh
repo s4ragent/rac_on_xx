@@ -45,6 +45,10 @@ common_jdbcrunner(){
 	common_execansible rac.yml --extra-vars "jdbcrunner=on"
 }
 
+common_jdbcrunner_only(){
+	common_execansible rac.yml --tags jdbcrunner --extra-vars "jdbcrunner=on"
+}
+
 common_cvu(){
 	runonly $*
 	common_execansible centos2oel.yml
