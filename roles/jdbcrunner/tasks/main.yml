@@ -81,8 +81,10 @@
     register: tpcc_result
     tags:
       - jdbcrunner
+      - tpcc_exec
 
   - debug: var=tpcc_result.stdout_lines
     when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
+      - tpcc_exec
