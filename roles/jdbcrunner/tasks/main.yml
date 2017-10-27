@@ -74,7 +74,7 @@
   - name: exec tpcc
     become: yes
     become_user: oracle
-    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3.jar:lib/* JR scripts/tpcc.js -trace -debug -nAgents 1 -measurementTime 60 -warmupTime 10 -jdbcUrl jdbc:oracle:thin:@(DESCRIPTION=(LOAD_BALANCE=yes)(ADDRESS=(PROTOCOL=TCP)(HOST=NODE1-VIP)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=NODE2-VIP)(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST=NODE2-VIP)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME={{ SIDNAME }})))"
+    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3.jar:lib/* JR scripts/tpcc.js -trace -debug -nAgents 1 -measurementTime 60 -warmupTime 10 -jdbcUrl jdbc:oracle:thin:@(DESCRIPTION=(LOAD_BALANCE=yes)(ADDRESS=(PROTOCOL=TCP)(HOST={{ scan0_IP }})(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST={{ scan1_IP }})(PORT=1521))(ADDRESS=(PROTOCOL=TCP)(HOST={{ scan2_IP }})(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME={{ SIDNAME }})))"
     args:
       chdir: /home/oracle/jdbcrunner
     when: inventory_hostname == groups["client"][0]
