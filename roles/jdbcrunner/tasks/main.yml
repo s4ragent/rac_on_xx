@@ -49,7 +49,7 @@
   - name: copy jdbc driver
     become: yes
     become_user: oracle
-    shell: scp {{ ORA_ORACLE_HOME }}/jdbc/lib/ojdbc8.jar oracle@{{ hostvars[groups['client'][0]]["ansible_vxlan0"]['ipv4']['address'] }}:/home/oracle/jdbcrunner/libjdbc
+    shell: scp {{ ORA_ORACLE_HOME }}/jdbc/lib/ojdbc8.jar oracle@{{ hostvars[groups['client'][0]]["ansible_vxlan0"]['ipv4']['address'] }}:/home/oracle/jdbcrunner/lib
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - jdbcrunner
