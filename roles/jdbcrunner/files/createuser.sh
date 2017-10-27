@@ -5,7 +5,11 @@ echo "SID:$ORACLE_SID"
 echo ""
 sqlplus /nolog <<EOF
 conn /as sysdba
-CREATE USER tpcc IDENTIFIED BY tpcc;
-GRANT connect, resource TO tpcc;
+DROP USER tpcc cascade;
+CREATE USER tpcc IDENTIFIED BY tpcc
+DEFAULT TABLESPACE USERS
+QUOTA UNLIMITED ON USERS
+TEMPORARY TABLESPACE TEMP
+GRANT connect, resource,create table,create index TO tpcc;
 exit
 EOF
