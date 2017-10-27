@@ -6,9 +6,10 @@
       - git
 #      - java-1.7.0-openjdk-devel
       - ant
-    when: inventory_hostname == groups["client"][0]
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - jdbcrunner
+      - installjdbcrunner
 
   - name: "create user"
     become: yes
@@ -31,9 +32,10 @@
     git:
       repo: https://github.com/sh2/jdbcrunner.git
       dest: /home/oracle/jdbcrunner
-    when: inventory_hostname == groups["client"][0]
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - jdbcrunner
+      - installjdbcrunner
 
   - name: ant
     become: yes
@@ -42,9 +44,10 @@
     args:
       chdir: /home/oracle/jdbcrunner
       creates: ant.txt
-    when: inventory_hostname == groups["client"][0]
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - jdbcrunner
+      - installjdbcrunner
   
   - name: copy jdbc driver
     become: yes
@@ -53,14 +56,15 @@
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - jdbcrunner
+      - installjdbcrunner
 
   - name: load tpcc data
     become: yes
     become_user: oracle
-    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3.jar:lib/* JR scripts/tpcc_load.js -jdbcUrl jdbc:oracle:thin:@{{ hostvars[groups['dbserver'][0]]['ansible_vxlan0']['ipv4']['address'] }}:1521:{{ SIDNAME }}1"
+    shell: "{{ ORA_ORACLE_HOME }}/jdk/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3.jar:lib/* JR scripts/tpcc_load.js -jdbcUrl jdbc:oracle:thin:@{{ hostvars[groups['dbserver'][0]]['ansible_vxlan0']['ipv4']['address'] }}:1521:{{ SIDNAME }}1"
     args:
       chdir: /home/oracle/jdbcrunner
-    when: inventory_hostname == groups["client"][0]
+    when: inventory_hostname == groups["dbserver"][0]
     register: tpccload_result
     tags:
       - jdbcrunner
