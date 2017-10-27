@@ -78,7 +78,7 @@
     args:
       chdir: /home/oracle/jdbcrunner
     when: inventory_hostname == groups["client"][0]
-    async: 1800
+    async: 180
     poll: 10
     register: tpcc_result
     tags:
