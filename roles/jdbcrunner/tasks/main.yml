@@ -6,7 +6,7 @@
       - git
 #      - java-1.7.0-openjdk-devel
       - ant
-    when: inventory_hostname == groups["dbserver"][0]
+    when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
       - installjdbcrunner
@@ -32,7 +32,7 @@
     git:
       repo: https://github.com/sh2/jdbcrunner.git
       dest: /home/oracle/jdbcrunner
-    when: inventory_hostname == groups["dbserver"][0]
+    when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
       - installjdbcrunner
@@ -44,7 +44,7 @@
     args:
       chdir: /home/oracle/jdbcrunner
       creates: ant.txt
-    when: inventory_hostname == groups["dbserver"][0]
+    when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
       - installjdbcrunner
