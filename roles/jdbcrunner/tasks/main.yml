@@ -52,6 +52,8 @@
     when: inventory_hostname == groups["client"][0] 
     with_items:
       - "{{ DB_MEDIA1 }}"
+    args:
+      creates: {{ MEDIA_PATH }}/database/runInstaller
     tags:
       - client
 
