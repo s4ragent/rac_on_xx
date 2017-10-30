@@ -62,6 +62,16 @@
     tags:
       - client
 
+  - name: "create orainventry"
+    become: yes
+    file: path={{ item.path }} state=directory owner={{ item.name }} group=oinstall mode=0755
+    with_items:
+      - { name: 'oracle', path: "{{ ORAINVENTORY }}" }
+      - { name: 'oracle', path: "{{ ORA_ORACLE_BASE }}" }
+      - { name: 'oracle', path: "{{ ORA_ORACLE_HOME }}" }
+    tags:
+      - client
+
   - name: "runInstaller(db)"
     become: yes
     become_user: oracle
