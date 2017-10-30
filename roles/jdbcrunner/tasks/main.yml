@@ -5,7 +5,7 @@
     when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     ignore_errors: true
     tags:
-      - download
+      - client
       
   - name: "yum clean all"
     become: yes
@@ -13,7 +13,7 @@
     when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     ignore_errors: true
     tags:
-      - download
+      - client
 
   - name: "dummy yum command (GPGKEY INSTALL)"
     become: yes
@@ -21,21 +21,21 @@
     when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     ignore_errors: true
     tags:
-      - download
+      - client
       
   - name: "install unzip"
     become: yes
     yum: name=unzip state=present
     when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
-      - download
+      - client
       
   - name: "crete directory"
     become: yes
     file: path={{ MEDIA_PATH }} state=directory mode=0755 group=root owner=root
     when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
-      - download
+      - client
       
   - name: "copy media"
     become: yes
@@ -44,7 +44,7 @@
     with_items:
       - "{{ DB_MEDIA1 }}"
     tags:
-      - download
+      - client
       
   - name: "unzip oracle media & delete"
     become: yes
@@ -53,8 +53,43 @@
     with_items:
       - "{{ DB_MEDIA1 }}"
     tags:
-      - download
-  
+      - client
+
+  - name: "create dbclient.rsp"
+    become: yes
+    template: src=dbclient.rsp.j2 dest=/home/oracle/dbclient.rsp owner=oracle group=oinstall mode=0644
+    when: inventory_hostname == groups["client"][0]
+    tags:
+      - client
+
+  - name: "runInstaller(db)"
+    become: yes
+    become_user: oracle
+    shell: "{{ MEDIA_PATH }}/database/runInstaller -silent -responseFile /home/oracle/dbclient.rsp -waitforcompletion {{ INSTALL_OPS }}"
+    when: inventory_hostname == groups["client"][0]
+    ignore_errors: True
+    register: runinstallerdb_result
+    tags:
+      - client
+
+  - debug: var=runinstallerdb_result.stdout_lines
+    when: inventory_hostname == groups["client"][0]
+    failed_when: runinstallerdb_result.rc !=0 and runinstallerdb_result.rc != 250
+    tags:
+      - client
+
+  - name: "db root.sh"
+    become: yes
+    shell: "{{ ORA_ORACLE_HOME }}/root.sh -silent"
+    when: inventory_hostname == groups["client"][0]
+    register: dbrootsh_result
+    tags:
+      - client
+
+  - debug: var=orainstrootsh_result.stdout_lines
+    tags:
+      - client
+
   - name: "install jdbcrunner dependency library"
     become: yes
     yum: name="{{ item }}" state=present
@@ -76,12 +111,11 @@
     tags:
       - jdbcrunner   
 
-
   - debug: var=createuser_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - jdbcrunner
-
+      
   - name:
     become: yes
     become_user: oracle
