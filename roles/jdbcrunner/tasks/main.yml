@@ -138,15 +138,6 @@
     tags:
       - jdbcrunner
       - installjdbcrunner
-  
-  - name: copy jdbc driver
-    become: yes
-    become_user: oracle
-    shell: scp {{ ORA_ORACLE_HOME }}/jdbc/lib/ojdbc8.jar oracle@{{ hostvars[groups['client'][0]]["ansible_vxlan0"]['ipv4']['address'] }}:/home/oracle/jdbcrunner/lib
-    when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - jdbcrunner
-      - installjdbcrunner
 
   - name: load tpcc data
     become: yes
@@ -168,7 +159,7 @@
   - name: exec tpcc
     become: yes
     become_user: oracle
-    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3.jar:lib/* JR scripts/tpcc.js -trace -debug -nAgents 1 -measurementTime 60 -warmupTime 10 -jdbcUrl jdbc:oracle:thin:@{{ hostvars[groups['dbserver'][0]]['ansible_vxlan0']['ipv4']['address'] }}:1521:{{ SIDNAME }}1"
+    shell: "{{ ORA_ORACLE_HOME }}/jdk/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3.jar:lib/*:{{ ORA_ORACLE_HOME }}/jdbc/lib/* JR scripts/tpcc.js -trace -debug -nAgents 1 -measurementTime 60 -warmupTime 10 -jdbcUrl jdbc:oracle:thin:@{{ SCAN_NAME }}:1521/{{ SIDNAME }}"
     args:
       chdir: /home/oracle/jdbcrunner
     when: inventory_hostname == groups["client"][0]
