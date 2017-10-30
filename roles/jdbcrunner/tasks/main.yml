@@ -53,7 +53,7 @@
     with_items:
       - "{{ DB_MEDIA1 }}"
     args:
-      creates: {{ MEDIA_PATH }}/database/runInstaller
+      creates: "{{ MEDIA_PATH }}/database/runInstaller"
     tags:
       - client
 
