@@ -98,7 +98,7 @@
     tags:
       - client
 
-  - debug: var=orainstrootsh_result.stdout_lines
+  - debug: var=dbrootsh_result.stdout_lines
     tags:
       - client
 
