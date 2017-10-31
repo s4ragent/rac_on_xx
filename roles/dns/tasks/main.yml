@@ -43,6 +43,13 @@
       - setresolvconf
       - sethost    
       - dnsmasq
+      
+  - name: "restart and  enable dnsmasq.service"
+    become: yes
+    service: name=dnsmasq.service state=restarted enabled=yes
+    when: inventory_hostname == groups["client"][0]
+    tags:
+      - addclient 
 
 ###### set resolvconf
 
