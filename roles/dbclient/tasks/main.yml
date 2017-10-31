@@ -1,0 +1,104 @@
+---
+  - name: "disable fastestmirror"
+    become: yes
+    shell: sed -i 's/enabled=1/enabled=0/' /etc/yum/pluginconf.d/fastestmirror.conf
+    when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    ignore_errors: true
+    tags:
+      - client
+      
+  - name: "yum clean all"
+    become: yes
+    shell: yum -y clean all
+    when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    ignore_errors: true
+    tags:
+      - client
+
+  - name: "dummy yum command (GPGKEY INSTALL)"
+    become: yes
+    shell: yum -y search nfs-utils
+    when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    ignore_errors: true
+    tags:
+      - client
+      
+  - name: "install unzip"
+    become: yes
+    yum: name=unzip state=present
+    when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    tags:
+      - client
+      
+  - name: "crete directory"
+    become: yes
+    file: path={{ MEDIA_PATH }} state=directory mode=0755 group=root owner=root
+    when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    tags:
+      - client
+      
+  - name: "copy media"
+    become: yes
+    copy: src="/media/{{ item }}" dest="{{ MEDIA_PATH }}/{{ item }}"
+    when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    with_items:
+      - "{{ DB_MEDIA1 }}"
+    tags:
+      - client
+      
+  - name: "unzip oracle media & delete"
+    become: yes
+    shell: "unzip {{ MEDIA_PATH }}/{{ item }} -d {{ MEDIA_PATH }} && rm -f {{ MEDIA_PATH }}/{{ item }}"
+    when: inventory_hostname == groups["client"][0] 
+    with_items:
+      - "{{ DB_MEDIA1 }}"
+    args:
+      creates: "{{ MEDIA_PATH }}/database/runInstaller"
+    tags:
+      - client
+
+  - name: "create dbclient.rsp"
+    become: yes
+    template: src=dbclient.rsp.j2 dest=/home/oracle/dbclient.rsp owner=oracle group=oinstall mode=0644
+    when: inventory_hostname == groups["client"][0]
+    tags:
+      - client
+
+  - name: "create orainventry"
+    become: yes
+    file: path={{ item.path }} state=directory owner={{ item.name }} group=oinstall mode=0755
+    with_items:
+      - { name: 'oracle', path: "{{ ORAINVENTORY }}" }
+      - { name: 'oracle', path: "{{ ORA_ORACLE_BASE }}" }
+      - { name: 'oracle', path: "{{ ORA_ORACLE_HOME }}" }
+    tags:
+      - client
+
+  - name: "runInstaller(db)"
+    become: yes
+    become_user: oracle
+    shell: "{{ MEDIA_PATH }}/database/runInstaller -silent -responseFile /home/oracle/dbclient.rsp -waitforcompletion {{ INSTALL_OPS }}"
+    when: inventory_hostname == groups["client"][0]
+    ignore_errors: True
+    register: runinstallerdb_result
+    tags:
+      - client
+
+  - debug: var=runinstallerdb_result.stdout_lines
+    when: inventory_hostname == groups["client"][0]
+    failed_when: runinstallerdb_result.rc !=0 and runinstallerdb_result.rc != 250
+    tags:
+      - client
+
+  - name: "db root.sh"
+    become: yes
+    shell: "{{ ORA_ORACLE_HOME }}/root.sh -silent"
+    when: inventory_hostname == groups["client"][0]
+    register: dbrootsh_result
+    tags:
+      - client
+
+  - debug: var=dbrootsh_result.stdout_lines
+    tags:
+      - client
+
