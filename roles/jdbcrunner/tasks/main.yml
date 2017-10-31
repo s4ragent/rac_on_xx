@@ -5,7 +5,7 @@
     when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     ignore_errors: true
     tags:
-      - client
+      - jdbcrunner
       
   - name: "yum clean all"
     become: yes
@@ -13,7 +13,7 @@
     when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     ignore_errors: true
     tags:
-      - client
+      - jdbcrunner
 
   - name: "dummy yum command (GPGKEY INSTALL)"
     become: yes
@@ -21,7 +21,7 @@
     when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     ignore_errors: true
     tags:
-      - client
+      - jdbcrunner
       
 
       
@@ -32,7 +32,7 @@
     with_items:
       - ojdbc7.jar
     tags:
-      - client
+      - jdbcrunner
       
 
   - name: "install jdbcrunner dependency library"
