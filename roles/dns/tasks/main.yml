@@ -4,18 +4,21 @@
     yum: name=dnsmasq state=present
     tags:
       - dnsmasq
+      - addclient
 
   - name: "create addn-hosts"
     become: yes
     template: src=addn-hosts.j2 dest=/etc/addn-hosts owner=root group=root mode=0644
     tags:
       - dnsmasq
-
+      - addclient
+      
   - name: "copy dnsmasq.conf"
     become: yes
     template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.conf owner=root group=root mode=0644
     tags:
       - dnsmasq
+      - addclient
 
   - name: "copy resolv.dnsmasq.conf from /etc/resolv.conf"
     become: yes
@@ -23,6 +26,7 @@
       creates=/etc/resolv.dnsmasq.conf
     tags:
       - dnsmasq
+      - addclient
 
   - name: "add  resolv.dnsmasq.conf"
     become: yes
@@ -30,6 +34,7 @@
     when: ADD_NAMESERVER is defined
     tags:
       - dnsmasq
+      - addclient
 
   - name: "restart and  enable dnsmasq.service"
     become: yes
