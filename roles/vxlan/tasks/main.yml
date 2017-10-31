@@ -49,10 +49,3 @@
     tags:
       - vxlan_init
       - vxlan_conf
-      
-  - name: "reload vxlan(Without NetworkManager)"
-    become: yes
-    shell: bash /usr/local/bin/vxlan.init reload
-    tags:
-      - vxlan_reload
-      - vxlan_conf
