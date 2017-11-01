@@ -80,18 +80,20 @@ runonly(){
 		run $NODENAME $NODEIP $i "dbserver"
 	done
 
-	if [ "$isCLIENT" = "on" ]; then
-	 nodenum=`expr $nodecount + 1`
-		NODEIP=`get_External_IP $nodenum`
-		NODENAME="client"
-		run $NODENAME $NODEIP $nodenum "client"
-	fi
+
 	
 #	CLIENTNUM=70
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
 #	CLIENTIP="${SEGMENT}$NUM"	
 #	run "client01" $CLIENTIP $CLIENTNUM "client"
 	
+}
+
+addclient(){
+	 nodenum=70
+		NODEIP=`get_External_IP $nodenum`
+		NODENAME="client"
+		run $NODENAME $NODEIP $nodenum "client"
 }
 
 deleteall(){
