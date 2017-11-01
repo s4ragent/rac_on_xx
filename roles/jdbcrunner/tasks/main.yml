@@ -51,11 +51,9 @@
       - jdbcrunner
       
   - name:
-    become: yes
-    become_user: oracle
     git:
       repo: https://github.com/sh2/jdbcrunner.git
-      dest: /home/oracle/jdbcrunner
+      dest: "~/jdbcrunner"
     when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
@@ -71,8 +69,6 @@
       
 
   - name: ant
-    become: yes
-    become_user: oracle
     shell: /usr/bin/ant && touch ant.txt
     args:
       chdir: "~/jdbcrunner"
