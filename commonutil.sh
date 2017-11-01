@@ -40,7 +40,7 @@ common_runall(){
 common_jdbcrunner(){
  addclient
  	common_execansible rac.yml --tags addclient
-	common_execansible rac.yml --extra-vars "jdbcrunner=on"
+	common_execansible rac.yml --tags jdbcrunner --extra-vars "jdbcrunner=on"
 }
 
 common_jdbcrunner_only(){
