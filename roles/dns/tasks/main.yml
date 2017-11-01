@@ -38,19 +38,13 @@
 
   - name: "restart and  enable dnsmasq.service"
     become: yes
-    service: name=dnsmasq.service state=restarted enabled=yes
+    service: name=dnsmasq.service state=started enabled=yes
     tags:
       - setresolvconf
       - sethost    
       - dnsmasq
+      - addclient
       
-  - name: "restart and  enable dnsmasq.service"
-    become: yes
-    service: name=dnsmasq.service state=restarted enabled=yes
-    when: inventory_hostname == groups["client"][0]
-    tags:
-      - addclient 
-
 ###### set resolvconf
 
   - name: "copy setresolvconf.init"
