@@ -52,19 +52,21 @@
     template: src=setresolvconf.init.j2 dest=/usr/local/bin/setresolvconf.init owner=root group=root mode=0700
     tags:
       - setresolvconf
-
+      - addclient
+      
   - name: "copy setresolvconf.service"
     become: yes
     copy: src=setresolvconf.service dest=/etc/systemd/system/setresolvconf.service owner=root group=root mode=0700
     tags:
       - setresolvconf
-
+      - addclient
+      
   - name: "start_enable setresolvconf.service"
     become: yes
     service: name=setresolvconf.service state=started enabled=yes
     tags:
       - setresolvconf
-
+      - addclient
       
 ###### for dhclient enable environment (e.g. gce/ec2)
   - name: "check dhclient"
@@ -74,7 +76,8 @@
     register: dhclient_rerult
     tags:
       - setresolvconf
-
+      - addclient
+      
 #  - name: "edit dhclient.conf"
 #    become: yes
 #    lineinfile: state=present create=yes insertafter=EOF line="{{ item }}" dest="{{ DHCPCLIENT }}"
@@ -94,7 +97,7 @@
     tags:
       - setresolvconf
       - sethost
-
+      - addclient
 
   - name: "disable dns via dhcp(no nmcli)"
     become: yes
@@ -104,7 +107,8 @@
     tags:
       - setresolvconf
       - sethost
-
+      - addclient
+      
   - name: "delete /etc/dhcp/dhclient.d/google_hostname.sh(for google)"
     become: yes
     file: state=present path=/etc/dhcp/dhclient.d/google_hostname.sh state=absent
