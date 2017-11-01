@@ -38,10 +38,8 @@ common_runall(){
 }
 
 common_jdbcrunner(){
-	isCLIENT="on"
-	runonly $*
-	common_execansible centos2oel.yml
- 	sleep 180s
+ addclient
+ 	common_execansible rac.yml --tags addclient
 	common_execansible rac.yml --extra-vars "jdbcrunner=on"
 }
 
