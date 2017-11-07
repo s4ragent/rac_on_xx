@@ -8,6 +8,7 @@
       - { role: dns, when: "dns == 'dnsmasq'" }
       - common
       - { role: vnc, when: "vnc_pass is defined" }
+      - { role: xrdp, when: "xrdp_pass is defined" }
 
  - hosts: storage
    any_errors_fatal: true
