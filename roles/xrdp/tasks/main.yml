@@ -8,7 +8,6 @@
   - name: "dummy yum command (GPGKEY INSTALL)"
     become: yes
     shell: yum -y search nfs-utils
-    when: xrdp_pass is defined and xrdp_pass !=""
     ignore_errors: true
     tags:
       - xrdp
@@ -38,6 +37,7 @@
   - name: "chcon"
     become: yes
     shell: chcon -t bin_t /usr/sbin/xrdp /usr/sbin/xrdp-sesman
+    ignore_errors: yes
     tags:
       - xrdp
 
