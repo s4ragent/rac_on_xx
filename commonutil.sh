@@ -69,6 +69,13 @@ common_preinstall(){
 	common_execansible rac.yml --skip-tags installdbca
 }
 
+common_preinstall_with_gui(){
+	runonly $*
+	common_execansible centos2oel.yml
+	sleep 180s
+	common_execansible rac.yml --skip-tags installdbca --extra-vars "vncpass=Moracle123!"
+}
+
 common_after_runonly(){
 	common_execansible centos2oel.yml
 	sleep 180s
