@@ -6,6 +6,7 @@ case "$1" in
   "jdbcrunner" ) shift;common_jdbcrunner $*;;
   "jdbcrunner_only" ) shift;common_jdbcrunner_only $*;;
   "preinstall" ) shift;common_preinstall $*;;
+  "preinstall_with_gui" ) shift;common_preinstall_with_gui $*;;
   "after_runonly" ) shift;common_after_runonly $*;;
   "install_dbca" ) shift;common_install_dbca $*;;
   "gridrootsh" ) shift;common_gridrootsh $*;;
