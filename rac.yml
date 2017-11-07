@@ -4,8 +4,11 @@
    roles:
       - security
       - vxlan
+      - { role: iperf, when: "IPERF_DEV is defined" }
       - { role: dns, when: "dns == 'dnsmasq'" }
       - common
+      - { role: vnc, when: "vnc_pass is defined" }
+      - { role: xrdp, when: "xrdp_pass is defined" }
 
  - hosts: storage
    any_errors_fatal: true
@@ -18,6 +21,7 @@
    roles:
       - download
       - { role: nfsclient, when: "storage_type == 'nfs'" }
+      - { role: cvu, when: "cvu is defined" }
 #      - { role: nfsclient, when: "storage_type == 'efs'" }
       
  - hosts: dbserver
@@ -35,3 +39,8 @@
  #     - dbcaserial
       - { role: dbcaserial, when: "dbca == 'serial'" }
       - { role: dbca, when: "dbca == 'paralell'" }
+
+ - hosts: all:!storage
+   any_errors_fatal: true
+   roles:
+      - { role: jdbcrunner, when: "jdbcrunner is defined" }

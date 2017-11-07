@@ -1,0 +1,34 @@
+---
+  - name: "install epel"
+    become: yes
+    yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
+    tags:
+      - iperf
+
+  - name: "install iperf3"
+    become: yes
+    yum: name="iperf3" state=present
+    tags:
+      - iperf
+
+  - name: start server iperf
+    become: yes
+    shell: iperf3 --server --one-off --daemon
+    when: inventory_hostname == groups["storage"][0]
+    tags:
+      - iperf
+
+  - name: client iperf
+    become: yes
+    shell: iperf3 --client {{ hostvars[groups['storage'][0]]["ansible_" + IPERF_DEV]['ipv4']['address'] }} --time 60
+    when: inventory_hostname == groups["dbserver"][0]
+    register: iperf_result
+    tags:
+      - iperf
+
+  - debug: var=iperf_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - iperf
+
+

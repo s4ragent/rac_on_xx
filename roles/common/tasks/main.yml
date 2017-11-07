@@ -244,7 +244,7 @@
     shell: dd if=/dev/zero of=/swap bs=1M count={{ SWAP_SIZE }} && mkswap /swap
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
-    when: ansible_swaptotal_mb < 1
+    when: ansible_swaptotal_mb < SWAP_SIZE
     tags:
       - ddswap
       - swap
@@ -252,7 +252,7 @@
   - name: "create swap(swapon)"
     become: yes
     shell: swapon /swap
-    when: ansible_swaptotal_mb < 1
+    when: ansible_swaptotal_mb < SWAP_SIZE
     tags:
       - swapon
       - swap
@@ -260,7 +260,7 @@
   - name: "mount swap(fstab)"
     become: yes
     mount: name=swap src=/swap fstype=swap opts=defaults passno=0 dump=0 state=present
-    when: ansible_swaptotal_mb < 1
+    when: ansible_swaptotal_mb < SWAP_SIZE
     tags:
       - fstabswap
       - swap
@@ -272,18 +272,21 @@
       executable: /bin/bash
       chdir: /tmp
     run_once: true
+    when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
       
   - name: "copy cvuqdisk"
     become: yes
     copy: src="/tmp/{{ CVUQDISK }}" dest=/tmp/cvuqdisk.rpm
+    when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
       
   - name: "install cvuqdisk"
     become: yes
     yum: name=/tmp/cvuqdisk.rpm state=present
+    when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
 

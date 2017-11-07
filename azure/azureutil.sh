@@ -22,7 +22,7 @@ run(){
 	HOSTGROUP=$4
 	INSTANCE_ID=$NODENAME
 	
-	result=$(az vm create --location $ZONE $INSTANCE_TYPE_OPS $INSTANCE_OPS --os-type Linux --resource-group $RG_NAME --name $NODENAME --admin-username ${ansible_ssh_user}  --ssh-key-value ./${ansible_ssh_private_key_file}.pub --public-ip-address ip_${NODENAME} --vnet-name $VNET_NAME --subnet $SNET_NAME --storage-sku Standard_LRS)
+	result=$(az vm create --location $ZONE $INSTANCE_TYPE_OPS $INSTANCE_OPS  --resource-group $RG_NAME --name $NODENAME --admin-username ${ansible_ssh_user}  --ssh-key-value ./${ansible_ssh_private_key_file}.pub --public-ip-address ip_${NODENAME} --vnet-name $VNET_NAME --subnet $SNET_NAME --storage-sku Standard_LRS)
 
 	External_IP=`get_External_IP $INSTANCE_ID`
 	Internal_IP=`get_Internal_IP $INSTANCE_ID`
@@ -64,7 +64,6 @@ runonly(){
 
 	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
-	fi
    
 	for i in `seq 1 $nodecount`;
 	do

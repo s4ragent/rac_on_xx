@@ -79,12 +79,21 @@ runonly(){
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		run $NODENAME $NODEIP $i "dbserver"
 	done
+
+
 	
 #	CLIENTNUM=70
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
 #	CLIENTIP="${SEGMENT}$NUM"	
 #	run "client01" $CLIENTIP $CLIENTNUM "client"
 	
+}
+
+addclient(){
+	 nodenum=70
+		NODEIP=`get_External_IP $nodenum`
+		NODENAME="client"
+		run $NODENAME $NODEIP $nodenum "client"
 }
 
 deleteall(){

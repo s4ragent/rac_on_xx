@@ -3,38 +3,36 @@
 #xrdp_pass: Xrdp123!
 ####################################################
 ####################################################
-#### k8s user specific value  ###################
+#### kvm user specific value  ###################
 VXLAN_DEV: "eth0"
+KVMPASS: kvmpass
+KVMBRNAME: "virbr0"
+KVM_IMAGE_PATH: "/rac_on_docker"
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
-NAMESPACE: raconxx
-SUBDOMAIN: sub
-CLUSTERDOMAIN: cluster.local
+#OS_URL: http://ftp.riken.jp/Linux/centos/7/os/x86_64/
+OS_URL: http://ftp.riken.jp/Linux/centos/7/isos/x86_64/
+OS_IMAGE: CentOS-7-x86_64-Minimal-1708.iso
+MEMSIZE: 6G
+CPUCOUNT: 1
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: ""
-DELETE_CMD: "kubectl --namespace {{ NAMESPACE }} delete pod "
-START_CMD: ""
+DELETE_CMD: "virsh undefine {{ DELETE_CMD_OPS }}"
+START_CMD: "virsh start"
 START_CMD_OPS: ""
-STOP_CMD: ""
+STOP_CMD: "virsh destroy"
 STOP_CMD_OPS: ""
 INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: ""
 ####################################################
-####docker system  specific value ##################
-IMAGE: "s4ragent/rac_on_xx:OEL7"
-#CAP_OPS: "--cap-add=NET_ADMIN"
-DOCKER_CAPS: "--privileged=true --security-opt seccomp=unconfined"
-#DOCKER_CAPS: "--cap-add=ALL --security-opt=seccomp=unconfined"
-DOCKER_START_OPS: "--restart=always"
-TMPFS_OPS: "--shm-size=1200m"
 ####################################################
 #WindowManager: "xfce"
 ####ansible specific
 ansible_ssh_user: opc
-ansible_ssh_private_key_file: raconxx
+ansible_ssh_private_key_file: kvmraconxx
 dns: dnsmasq
 #####for NFS option values
 ##### device size = base_size + multi_size * node count

@@ -48,6 +48,7 @@
   - name: "dummy yum command (GPGKEY INSTALL)"
     become: yes
     shell: yum -y search nfs-utils
+    when: SWITCH_KERNEL is defined and SWITCH_KERNEL !=""
     ignore_errors: true
     tags:
       - centos2oel
@@ -69,20 +70,20 @@
       - centos2oel
       - switchkernel
 
-  - name: "edit dhclient.conf"
-    become: yes
-    lineinfile: state=present create=yes insertafter=EOF line="{{ item }}" dest="/etc/dhcp/dhclient.conf"
-    with_items:
-      - "supersede interface-mtu 1500;"
-    when: MTU is defined
-    tags:
-      - centos2oel
-      - reboot
+#  - name: "edit dhclient.conf"
+#    become: yes
+#    lineinfile: state=present create=yes insertafter=EOF line="{{ item }}" dest="/etc/dhcp/dhclient.conf"
+#    with_items:
+#      - "supersede interface-mtu {{ MTU }};"
+#    when: MTU is defined
+#    tags:
+#      - centos2oel
+#      - reboot
 
   - name: reboot
     become: yes
     shell: sleep 2 && reboot &
-    when: centos2oel_rerult.rc != 0 or ( SWITCH_KERNEL is defined and SWITCH_KERNEL !="" ) or MTU is defined
+    when: centos2oel_rerult.rc != 0 or ( SWITCH_KERNEL is defined and SWITCH_KERNEL !="" ) 
     async: 1
     poll: 0
     ignore_errors: true

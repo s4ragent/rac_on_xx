@@ -120,7 +120,7 @@ vxlan_start(){
 			getvxlanconf
 			fdb_append
 		done	
-		sleep 30s
+		sleep 60s
 	done
 	
 	touch /var/lock/subsys/vxlan

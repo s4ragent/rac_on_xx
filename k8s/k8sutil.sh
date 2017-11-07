@@ -200,8 +200,9 @@ get_Internal_IP(){
 }
 
 install(){
-	common_execansible rac.yml --tags security,vxlan_conf,dnsmasq,setresolvconf
-	common_execansible rac.yml --skip-tags security,dnsmasq,vxlan_conf
+#	common_execansible rac.yml --tags security,vxlan_conf,dnsmasq,setresolvconf
+#	common_execansible rac.yml --skip-tags security,dnsmasq,vxlan_conf
+	common_execansible rac.yml
 }
 
 case "$1" in
