@@ -7,6 +7,7 @@
       - { role: iperf, when: "IPERF_DEV is defined" }
       - { role: dns, when: "dns == 'dnsmasq'" }
       - common
+      - { role: vnc, when: "vncpass is defined" }
 
  - hosts: storage
    any_errors_fatal: true
