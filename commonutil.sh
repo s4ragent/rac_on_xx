@@ -69,11 +69,24 @@ common_preinstall(){
 	common_execansible rac.yml --skip-tags installdbca
 }
 
-common_preinstall_with_gui(){
+common_preinstall_with_vnc(){
+ if [ "$vnc_pass" = "" ]; then
+    vnc_pass="Moracle123!"
+ fi
 	runonly $*
 	common_execansible centos2oel.yml
 	sleep 180s
-	common_execansible rac.yml --skip-tags installdbca --extra-vars "vnc_pass=Moracle123!"
+	common_execansible rac.yml --skip-tags installdbca --extra-vars "vnc_pass=$vnc_pass"
+}
+
+common_preinstall_with_xrdp(){
+ if [ "$xrdp_pass" = "" ]; then
+    vnc_pass="Moracle123!"
+ fi
+	runonly $*
+	common_execansible centos2oel.yml
+	sleep 180s
+	common_execansible rac.yml --skip-tags installdbca --extra-vars "xrdp_pass=$xrdp_pass"
 }
 
 common_after_runonly(){
