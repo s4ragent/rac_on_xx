@@ -209,12 +209,19 @@ get_Internal_IP(){
 install(){
 #	common_execansible rac.yml --tags security,vxlan_conf,dnsmasq,setresolvconf
 #	common_execansible rac.yml --skip-tags security,dnsmasq,vxlan_conf
-	common_execansible rac.yml
+ 	NODE1="$NODEPREFIX"`printf "%.3d" 1`
+	kubectl --namespace $NAMESPACE exec ${NODE1} 'cd /root/rac_on_xx/k8s && bash k8sutil.sh after_runonly'
+}
+
+runall_k8s(){
+	runonly $*
+	install
 }
 
 case "$1" in
   "runpod" ) shift;runonly $*;;
   "install" ) shift;install $*;;
+  "runall_k8s" ) shift;runall_k8s $*;;
 esac
 
 source ./common_menu.sh
