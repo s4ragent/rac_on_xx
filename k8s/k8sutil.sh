@@ -159,7 +159,7 @@ EOF
 	done
 
 	NODE1="$NODEPREFIX"`printf "%.3d" 1`
-	kubectl --namespace $NAMESPACE exec ${NODE1} mkdir -p $MEDIA_PATH                                                                                                          
+	kubectl --namespace $NAMESPACE exec ${NODE1} -- mkdir -p $MEDIA_PATH                                                                                                          
 
 #	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$DB_MEDIA1
 
