@@ -1,4 +1,11 @@
 ---
+  - set_fact: INSTALL_DB_OPS=""
+    when: INSTALL_DB_OPS is undefined
+    tags:
+      - runinstallerdb
+      - dbinstall
+      - installdbca
+      
   - name: "create db.rsp"
     become: yes
     template: src=db.rsp.j2 dest=/home/oracle/db.rsp owner=oracle group=oinstall mode=0644
@@ -11,7 +18,7 @@
   - name: "runInstaller(db)"
     become: yes
     become_user: oracle
-    shell: "{{ MEDIA_PATH }}/database/runInstaller -silent -responseFile /home/oracle/db.rsp -waitforcompletion {{ INSTALL_OPS }}"
+    shell: "{{ MEDIA_PATH }}/database/runInstaller -silent -responseFile /home/oracle/db.rsp -waitforcompletion {{ INSTALL_OPS }} {{ INSTALL_DB_OPS }}"
     when: inventory_hostname == groups["dbserver"][0]
     ignore_errors: True
     register: runinstallerdb_result
