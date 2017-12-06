@@ -21,6 +21,7 @@ START_CMD_OPS: ""
 STOP_CMD: ""
 STOP_CMD_OPS: ""
 INSTALL_OPS: "-ignorePrereqFailure"
+INSTALL_DB_OPS: "-ignoreSysPrereqs"
 DHCPCLIENT: ""
 ####################################################
 ####docker system  specific value ##################
