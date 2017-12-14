@@ -39,16 +39,10 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
-        - name: u01
-          mountPath: /u01
-          readOnly: false
   volumes:
     - hostPath:
         path: /sys/fs/cgroup
       name: cgroups
-    - hostPath:
-        path: /mnt/$INSTANCE_ID/u01
-      name: u01
 EOF
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
