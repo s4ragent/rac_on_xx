@@ -164,7 +164,7 @@ provisioner: $PROVISIONER
 parameters:
   $PARAMETER_1
   $PARAMETER_2
-  $PARAMETER_3			
+  $PARAMETER_3
 EOF
 
 	fi
