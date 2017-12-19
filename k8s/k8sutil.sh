@@ -162,9 +162,9 @@ metadata:
   namespace: $NAMESPACE
 provisioner: $PROVISIONER
 parameters:
-  $PARAMETER1
-  $PARAMETER2
-  $PARAMETER3			
+  $PARAMETER_1
+  $PARAMETER_2
+  $PARAMETER_3			
 EOF
 
 	fi
