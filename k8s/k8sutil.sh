@@ -30,7 +30,7 @@ spec:
   resources:
     requests:
       storage: 100Gi
-  storageClassName: ${NAMESPACE}StorageClass
+  storageClassName: ${NAMESPACE}storageclass
 EOF
 	
 	cat <<EOF | kubectl create -f -
@@ -158,7 +158,7 @@ EOF
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: ${NAMESPACE}StorageClass
+  name: ${NAMESPACE}storageclass
   namespace: $NAMESPACE
 provisioner: $PROVISIONER
 parameters:
