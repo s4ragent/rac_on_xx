@@ -61,9 +61,12 @@ spec:
           mountPath: /u01
           readOnly: false
   volumes:
-    - hostPath:
+    - name: cgroups
+      hostPath:
         path: /sys/fs/cgroup
-      name: cgroups
+    - name: u01
+      persistentVolumeClaim:
+        claimName: ${NODENAME}claim
 EOF
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
@@ -241,10 +244,11 @@ get_Internal_IP(){
 }
 
 install(){
-#	common_execansible rac.yml --tags security,vxlan_conf,dnsmasq,setresolvconf
-#	common_execansible rac.yml --skip-tags security,dnsmasq,vxlan_conf
- 	NODE1="$NODEPREFIX"`printf "%.3d" 1`
-	kubectl --namespace $NAMESPACE exec ${NODE1} 'cd /root/rac_on_xx/k8s && bash k8sutil.sh after_runonly'
+execansible centos2oel.yml
+execansible rac.yml --tags security,vxlan_conf,dnsmasq,setresolvconf
+execansible rac.yml --skip-tags security,dnsmasq,vxlan_conf
+# 	NODE1="$NODEPREFIX"`printf "%.3d" 1`
+#	kubectl --namespace $NAMESPACE exec ${NODE1} 'cd /root/rac_on_xx/k8s && bash k8sutil.sh after_runonly'
 }
 
 runall_k8s(){
