@@ -12,6 +12,10 @@ GRID_MEDIA1: linuxx64_12201_grid_home.zip
 NAMESPACE: raconxx
 SUBDOMAIN: sub
 CLUSTERDOMAIN: cluster.local
+PROVISIONER: kubernetes.io/gce-pd
+PARAMETER_1: "type: pd-standard" 
+PARAMETER_2: "zones: us-central1-c"
+PARAMETER_3:
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: ""
