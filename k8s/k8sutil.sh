@@ -15,6 +15,24 @@ run(){
 	NODENUMBER=$3
 	HOSTGROUP=$4
 	INSTANCE_ID="${NODENAME}"
+
+
+#create PersistentVolumeClaim
+			cat <<EOF | kubectl create -f -
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: ${NODENAME}claim
+  namespace: $NAMESPACE 
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: ${NAMESPACE}StorageClass
+EOF
 	
 	cat <<EOF | kubectl create -f -
 apiVersion: v1
@@ -39,6 +57,9 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
+        - name: u01
+          mountPath: /u01
+          readOnly: false
   volumes:
     - hostPath:
         path: /sys/fs/cgroup
@@ -109,7 +130,11 @@ runonly(){
 	
 	HasService=`kubectl --namespace $NAMESPACE get services | grep $SUBDOMAIN | wc -l`
 	if [ "$HasService" = "0" ]; then
+
+#create namespace
 	  kubectl create namespace $NAMESPACE
+	  
+#create Service
 			cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Service
@@ -125,6 +150,21 @@ spec:
     port: 80
     targetPort: 80
 EOF
+
+#create StorageClass
+			cat <<EOF | kubectl create -f -
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: ${NAMESPACE}StorageClass
+  namespace: $NAMESPACE
+provisioner: $PROVISIONER
+parameters:
+  $PARAMETER1
+  $PARAMETER2
+  $PARAMETER3			
+EOF
+
 	fi
 	
 	if [  ! -e $ansible_ssh_private_key_file ] ; then
