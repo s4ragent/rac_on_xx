@@ -243,9 +243,9 @@ get_Internal_IP(){
 }
 
 install(){
-execansible centos2oel.yml
-execansible rac.yml --tags security,vxlan_conf,dnsmasq,setresolvconf
-execansible rac.yml --skip-tags security,dnsmasq,vxlan_conf
+common_execansible centos2oel.yml
+common_execansible rac.yml --tags security,vxlan_conf,dnsmasq,setresolvconf
+common_execansible rac.yml --skip-tags security,dnsmasq,vxlan_conf
 # 	NODE1="$NODEPREFIX"`printf "%.3d" 1`
 #	kubectl --namespace $NAMESPACE exec ${NODE1} 'cd /root/rac_on_xx/k8s && bash k8sutil.sh after_runonly'
 }
