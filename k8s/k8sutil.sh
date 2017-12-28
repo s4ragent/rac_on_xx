@@ -113,20 +113,7 @@ kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=a
 kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- chmod 755 /root2
 kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}root
 
-loopcnt=0
-while :
-do
-	status=`kubectl --namespace $NAMESPACE get pods ${INSTANCE_ID}root | grep ${INSTANCE_ID}etc | wc -l`
-	if [ "$status" = "1" ]; then
-		break
-	fi	
-	if [ "$loopcnt" = "30" ]; then
-		break
-	fi	
-	loopcnt=`expr $loopcnt + 1`
-	sleep 30s
-done
-
+sleep 30s
 
 	cat <<EOF | kubectl create -f -
 apiVersion: v1
