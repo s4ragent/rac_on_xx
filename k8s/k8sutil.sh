@@ -17,12 +17,12 @@ run(){
 	INSTANCE_ID="${NODENAME}"
 
 
-#create PersistentVolumeClaim
+#create PersistentVolumeClaim u01
 			cat <<EOF | kubectl create -f -
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: ${NODENAME}claim
+  name: ${NODENAME}u01claim
   namespace: $NAMESPACE 
 spec:
   accessModes:
@@ -32,7 +32,75 @@ spec:
       storage: 100Gi
   storageClassName: ${NAMESPACE}storageclass
 EOF
-	
+
+#create PersistentVolumeClaim etc
+			cat <<EOF | kubectl create -f -
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: ${NODENAME}etcclaim
+  namespace: $NAMESPACE 
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: ${NAMESPACE}storageclass
+EOF
+
+	cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ${INSTANCE_ID}etc
+  namespace: $NAMESPACE
+  labels:
+    name: rac
+spec:
+  hostname: ${INSTANCE_ID}etc
+  subdomain: $SUBDOMAIN
+  containers:
+    - name: ${INSTANCE_ID}etc
+      image: s4ragent/rac_on_xx:OEL7
+      ports:
+        - containerPort: 80
+          hostPort: 80
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: cgroups
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+        - name: etc
+          mountPath: /etc2
+          readOnly: false
+  volumes:
+    - name: cgroups
+      hostPath:
+        path: /sys/fs/cgroup
+    - name: etc
+      persistentVolumeClaim:
+        claimName: ${NODENAME}etcclaim
+EOF
+
+loopcnt=0
+while :
+do
+	status=`kubectl --namespace $NAMESPACE get pods ${INSTANCE_ID}etc | grep Running | wc -l`
+	if [ "$status" = "1" ]; then
+		break
+	fi	
+	if [ "$loopcnt" = "30" ]; then
+		break
+	fi	
+	loopcnt=`expr $loopcnt + 1`
+	sleep 30s
+done
+
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}etc  -- cp -d -R --preserve=all /etc /etc2
+kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}etc
+
 	cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Pod
@@ -56,6 +124,9 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
+        - name: etc
+          mountPath: /etc
+          readOnly: false
         - name: u01
           mountPath: /u01
           readOnly: false
@@ -63,9 +134,12 @@ spec:
     - name: cgroups
       hostPath:
         path: /sys/fs/cgroup
+    - name: etc
+      persistentVolumeClaim:
+        claimName: ${NODENAME}etcclaim
     - name: u01
       persistentVolumeClaim:
-        claimName: ${NODENAME}claim
+        claimName: ${NODENAME}u01claim
 EOF
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
