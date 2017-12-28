@@ -98,7 +98,8 @@ do
 	sleep 30s
 done
 
-kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}etc  -- cp -d -R --preserve=all /etc /etc2
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}etc  -- cp -d -R --preserve=all /etc/* /etc2
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}etc  -- chmod 755 /etc2
 kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}etc
 
 loopcnt=0
