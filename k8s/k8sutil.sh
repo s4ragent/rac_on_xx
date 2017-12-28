@@ -30,19 +30,19 @@ spec:
   storageClassName: ${NAMESPACE}storageclass
 EOF
 
-#create PersistentVolumeClaim etc
+#create PersistentVolumeClaim root
 			cat <<EOF | kubectl create -f -
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: ${NODENAME}etcclaim
+  name: ${NODENAME}rootclaim
   namespace: $NAMESPACE 
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 5Gi
+      storage: 15Gi
   storageClassName: ${NAMESPACE}storageclass
 EOF
 
@@ -50,15 +50,15 @@ EOF
 apiVersion: v1
 kind: Pod
 metadata:
-  name: ${INSTANCE_ID}etc
+  name: ${INSTANCE_ID}root
   namespace: $NAMESPACE
   labels:
     name: rac
 spec:
-  hostname: ${INSTANCE_ID}etc
+  hostname: ${INSTANCE_ID}root
   subdomain: $SUBDOMAIN
   containers:
-    - name: ${INSTANCE_ID}etc
+    - name: ${INSTANCE_ID}root
       image: s4ragent/rac_on_xx:OEL7
       ports:
         - containerPort: 80
@@ -69,16 +69,16 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
-        - name: etc
-          mountPath: /etc2
+        - name: root
+          mountPath: /root2
           readOnly: false
   volumes:
     - name: cgroups
       hostPath:
         path: /sys/fs/cgroup
-    - name: etc
+    - name: root
       persistentVolumeClaim:
-        claimName: ${NODENAME}etcclaim
+        claimName: ${NODENAME}rootclaim
 EOF
 }
 
@@ -96,7 +96,7 @@ run(){
 loopcnt=0
 while :
 do
-	status=`kubectl --namespace $NAMESPACE get pods ${INSTANCE_ID}etc | grep Running | wc -l`
+	status=`kubectl --namespace $NAMESPACE get pods ${INSTANCE_ID}root | grep Running | wc -l`
 	if [ "$status" = "1" ]; then
 		break
 	fi	
@@ -107,14 +107,14 @@ do
 	sleep 30s
 done
 
-kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}etc  -- cp -d -R --preserve=all /etc/* /etc2
-kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}etc  -- chmod 755 /etc2
-kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}etc
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=all /* /root2
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- chmod 755 /root2
+kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}root
 
 loopcnt=0
 while :
 do
-	status=`kubectl --namespace $NAMESPACE get pods ${INSTANCE_ID}etc | grep ${INSTANCE_ID}etc | wc -l`
+	status=`kubectl --namespace $NAMESPACE get pods ${INSTANCE_ID}root | grep ${INSTANCE_ID}etc | wc -l`
 	if [ "$status" = "1" ]; then
 		break
 	fi	
@@ -149,8 +149,8 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
-        - name: etc
-          mountPath: /etc
+        - name: root
+          mountPath: /
           readOnly: false
         - name: u01
           mountPath: /u01
@@ -159,9 +159,9 @@ spec:
     - name: cgroups
       hostPath:
         path: /sys/fs/cgroup
-    - name: etc
+    - name: root
       persistentVolumeClaim:
-        claimName: ${NODENAME}etcclaim
+        claimName: ${NODENAME}rootclaim
     - name: u01
       persistentVolumeClaim:
         claimName: ${NODENAME}u01claim
