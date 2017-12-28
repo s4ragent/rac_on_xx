@@ -107,7 +107,10 @@ do
 	sleep 30s
 done
 
-kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=all /* /root2
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=all /bin
+/etc /home /lib /lib64 /opt /root /run /sbin /usr /var /root2
+
+
 kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- chmod 755 /root2
 kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}root
 
