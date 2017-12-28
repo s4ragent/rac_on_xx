@@ -8,12 +8,9 @@ source ./commonutil.sh
 
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 ip $3 nodenumber $4 hostgroup#####
-run(){
+run_pre(){
 
 	NODENAME=$1
-	IP=$2
-	NODENUMBER=$3
-	HOSTGROUP=$4
 	INSTANCE_ID="${NODENAME}"
 
 
@@ -83,6 +80,18 @@ spec:
       persistentVolumeClaim:
         claimName: ${NODENAME}etcclaim
 EOF
+}
+
+
+#### VIRT_TYPE specific processing  (must define)###
+#$1 nodename $2 ip $3 nodenumber $4 hostgroup#####
+run(){
+
+	NODENAME=$1
+	IP=$2
+	NODENUMBER=$3
+	HOSTGROUP=$4
+	INSTANCE_ID="${NODENAME}"
 
 loopcnt=0
 while :
@@ -167,7 +176,7 @@ EOF
 
 }
 
-run_init(){
+run_after(){
 	NODENAME=$1
  loopcnt=0
 	while :
@@ -264,6 +273,13 @@ EOF
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
+	run_pre "storage"
+	for i in `seq 1 $nodecount`;
+	do
+		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		run_pre $NODENAME
+	done
+
 	STORAGEIP=`get_Internal_IP storage`
 	run "storage" $STORAGEIP 0 "storage"
 	
@@ -277,11 +293,11 @@ EOF
 	done
 
 	
-	run_init "storage"
+	run_after "storage"
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		run_init $NODENAME
+		run_after $NODENAME
 	done
 
 	NODE1="$NODEPREFIX"`printf "%.3d" 1`
