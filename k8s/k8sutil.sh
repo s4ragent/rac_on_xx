@@ -30,22 +30,6 @@ spec:
   storageClassName: ${NAMESPACE}storageclass
 EOF
 
-#create PersistentVolumeClaim root
-			cat <<EOF | kubectl create -f -
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: ${NODENAME}rootclaim
-  namespace: $NAMESPACE 
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 15Gi
-  storageClassName: ${NAMESPACE}storageclass
-EOF
-
 	cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Pod
@@ -69,16 +53,16 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
-        - name: root
-          mountPath: /root2
+        - name: u01
+          mountPath: /u01
           readOnly: false
   volumes:
     - name: cgroups
       hostPath:
         path: /sys/fs/cgroup
-    - name: root
+    - name: u01
       persistentVolumeClaim:
-        claimName: ${NODENAME}rootclaim
+        claimName: ${NODENAME}u01claim
 EOF
 }
 
@@ -107,10 +91,10 @@ do
 	sleep 30s
 done
 
-kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=all /bin /etc /home /lib /lib64 /opt /root /run /sbin /usr /var /root2
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=all /bin /etc /home /lib /lib64 /opt /run /sbin /usr /var /u01
 
 
-kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- chmod 755 /root2
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- chmod 755 /u01
 kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}root
 
 sleep 30s
@@ -129,6 +113,10 @@ spec:
   containers:
     - name: $INSTANCE_ID
       image: s4ragent/rac_on_xx:OEL7
+      args:
+        - /bin/bash
+        - -c
+        - mount --bind /u01/etc /etc; mount --bind /u01/home /home; mount --bind /u01/usr /usr
       ports:
         - containerPort: 80
           hostPort: 80
@@ -138,9 +126,6 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
-        - name: root
-          mountPath: /
-          readOnly: false
         - name: u01
           mountPath: /u01
           readOnly: false
@@ -148,9 +133,6 @@ spec:
     - name: cgroups
       hostPath:
         path: /sys/fs/cgroup
-    - name: root
-      persistentVolumeClaim:
-        claimName: ${NODENAME}rootclaim
     - name: u01
       persistentVolumeClaim:
         claimName: ${NODENAME}u01claim
