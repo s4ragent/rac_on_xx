@@ -117,7 +117,7 @@ spec:
       args:
         - /bin/bash
         - -c
-        - mount --bind /u01/etc /etc; mount --bind /u01/home /home; mount --bind /u01/usr /usr; /sbin/init
+        - mount --bind /u01/etc /etc; mount --bind /u01/home /home; mount --bind /u01/usr /usr; exec /sbin/init
       ports:
         - containerPort: 80
           hostPort: 80
