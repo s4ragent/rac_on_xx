@@ -91,8 +91,9 @@ do
 	sleep 30s
 done
 
-kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=all /bin /etc /home /lib /lib64 /opt /run /sbin /usr /var /u01
+#kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=all /bin /etc /home /lib /lib64 /opt /run /sbin /usr /var /u01
 
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=all /etc /home /usr /u01
 
 kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- chmod 755 /u01
 kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}root
@@ -116,7 +117,7 @@ spec:
       args:
         - /bin/bash
         - -c
-        - mount --bind /u01/etc /etc; mount --bind /u01/home /home; mount --bind /u01/usr /usr
+        - mount --bind /u01/etc /etc; mount --bind /u01/home /home; mount --bind /u01/usr /usr; /sbin/init
       ports:
         - containerPort: 80
           hostPort: 80
