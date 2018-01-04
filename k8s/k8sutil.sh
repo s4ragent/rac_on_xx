@@ -190,6 +190,8 @@ run_after(){
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start retmpfs
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable retmpfs
 
+	kubectl --namespace $NAMESPACE exec ${NODENAME} --  sed -i 's/^#Port 22/Port $SSHPORT/' /etc/ssh/sshd_config
+
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start sshd
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable sshd
 }
