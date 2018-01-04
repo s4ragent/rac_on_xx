@@ -41,8 +41,6 @@ metadata:
 spec:
   hostname: ${INSTANCE_ID}root
   subdomain: $SUBDOMAIN
-  hostNetwork: true
-  dnsPolicy: ClusterFirstWithHostNet
   containers:
     - name: ${INSTANCE_ID}root
       image: s4ragent/rac_on_xx:OEL7
@@ -113,6 +111,8 @@ metadata:
 spec:
   hostname: $INSTANCE_ID
   subdomain: $SUBDOMAIN
+  hostNetwork: true
+  dnsPolicy: ClusterFirstWithHostNet
   containers:
     - name: $INSTANCE_ID
       image: s4ragent/rac_on_xx:OEL7
