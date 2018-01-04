@@ -113,6 +113,7 @@
     with_items:
       - oracle
       - grid
+    when: SSHPORT is defined and SSHPORT !=""
     tags:
       - sshkey
 
