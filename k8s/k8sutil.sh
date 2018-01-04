@@ -298,6 +298,7 @@ deleteall(){
 	
 	kubectl --namespace $NAMESPACE delete service $SUBDOMAIN
  kubectl delete namespace $NAMESPACE
+ 	kubectl --namespace $NAMESPACE delete storageclass ${NAMESPACE}storageclass 
 	rm -rf /tmp/$CVUQDISK
 }
 
