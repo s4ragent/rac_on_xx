@@ -30,6 +30,8 @@ spec:
   storageClassName: ${NAMESPACE}storageclass
 EOF
 
+sleep 30s
+
 	cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Pod
