@@ -113,8 +113,6 @@ metadata:
 spec:
   hostname: $INSTANCE_ID
   subdomain: $SUBDOMAIN
-  hostNetwork: true
-  dnsPolicy: ClusterFirstWithHostNet
   containers:
     - name: $INSTANCE_ID
       image: s4ragent/rac_on_xx:OEL7
@@ -144,7 +142,7 @@ spec:
 EOF
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
-	common_update_ansible_inventory $NODENAME $IP:$SSHPORT $INSTANCE_ID $NODENUMBER $HOSTGROUP
+	common_update_ansible_inventory $NODENAME  $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
 cat >> $VIRT_TYPE/host_vars/$1 <<EOF
 VXLAN_NODENAME: "${NODENAME}.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
@@ -178,7 +176,7 @@ run_after(){
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.sh /usr/local/bin/retmpfs.sh
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod +x /usr/local/bin/retmpfs.sh
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME} cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.service /etc/systemd/system
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.service /etc/systemd/system
 
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- mkdir /home/$ansible_ssh_user/.ssh
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- cp /root/rac_on_xx/${ansible_ssh_private_key_file}.pub /home/$ansible_ssh_user/.ssh/authorized_keys
@@ -192,7 +190,7 @@ run_after(){
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start retmpfs
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable retmpfs
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME} --  sed -i "s/^#Port 22/Port $SSHPORT/" /etc/ssh/sshd_config
+#	kubectl --namespace $NAMESPACE exec ${NODENAME} --  sed -i "s/^#Port 22/Port $SSHPORT/" /etc/ssh/sshd_config
 
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start sshd
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable sshd
