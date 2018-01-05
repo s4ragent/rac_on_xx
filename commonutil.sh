@@ -1,6 +1,6 @@
 #!/bin/bash
-export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no"
-#export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30"
+#export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no"
+export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30"
 export  ANSIBLE_INVENTORY_IGNORE="~, .orig, .bak, .ini, .cfg, .retry, .pyc, .pyo, .yml, .md, .sh, images, .log, .service,Vagrantfile"
 export ANSIBLE_LOG_PATH="./ansible-`date +%Y%m%d%H%M%S`.log"
 
