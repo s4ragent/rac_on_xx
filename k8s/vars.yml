@@ -12,7 +12,7 @@ GRID_MEDIA1: linuxx64_12201_grid_home.zip
 NAMESPACE: raconxx
 SUBDOMAIN: sub
 CLUSTERDOMAIN: cluster.local
-SSHPORT: 2022
+#SSHPORT: 2022
 #### for gke
 #PROVISIONER: kubernetes.io/gce-pd
 #PARAMETER_1: "type: pd-standard" 
