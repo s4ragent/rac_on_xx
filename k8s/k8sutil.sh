@@ -142,7 +142,7 @@ spec:
 EOF
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
-	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
+	common_update_ansible_inventory $NODENAME $IP:$SSHPORT $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
 cat >> $VIRT_TYPE/host_vars/$1 <<EOF
 VXLAN_NODENAME: "${NODENAME}.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
@@ -190,7 +190,7 @@ run_after(){
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start retmpfs
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable retmpfs
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME} --  sed -i 's/^#Port 22/Port $SSHPORT/' /etc/ssh/sshd_config
+	kubectl --namespace $NAMESPACE exec ${NODENAME} --  sed -i "s/^#Port 22/Port $SSHPORT/" /etc/ssh/sshd_config
 
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start sshd
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable sshd
