@@ -116,10 +116,6 @@ spec:
   containers:
     - name: $INSTANCE_ID
       image: s4ragent/rac_on_xx:OEL7
-      args:
-        - /bin/bash
-        - -c
-        - mount --bind /u01/etc /etc; mount --bind /u01/home /home; mount --bind /u01/usr /usr; exec /sbin/init
       ports:
         - containerPort: 80
           hostPort: 80
@@ -131,6 +127,19 @@ spec:
           readOnly: true
         - name: u01
           mountPath: /u01
+          subPath: u01
+          readOnly: false
+        - name: u01
+          mountPath: /etc
+          subPath: etc
+          readOnly: false
+        - name: u01
+          mountPath: /home
+          subPath: home
+          readOnly: false
+        - name: u01
+          mountPath: /usr
+          subPath: usr
           readOnly: false
   volumes:
     - name: cgroups
