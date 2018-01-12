@@ -14,15 +14,15 @@ SUBDOMAIN: sub
 CLUSTERDOMAIN: cluster.local
 #SSHPORT: 2022
 #### for gke
-#PROVISIONER: kubernetes.io/gce-pd
-#PARAMETER_1: "type: pd-standard" 
-#PARAMETER_2: "zones: us-central1-c"
-#PARAMETER_3:
-### for acs
-PROVISIONER: kubernetes.io/azure-disk
-PARAMETER_1: "storageaccounttype: Standard_LRS"
-PARAMETER_2:
+PROVISIONER: kubernetes.io/gce-pd
+PARAMETER_1: "type: pd-standard" 
+PARAMETER_2: "zones: us-central1-c"
 PARAMETER_3:
+### for acs
+#PROVISIONER: kubernetes.io/azure-disk
+#PARAMETER_1: "storageaccounttype: Standard_LRS"
+#PARAMETER_2:
+#PARAMETER_3:
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: ""
