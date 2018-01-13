@@ -12,6 +12,7 @@ case "$1" in
     /bin/sleep $SLEEP >>$PRELOG 2>&1
     /bin/umount /dev/shm >>$PRELOG 2>&1
     /bin/mount -t tmpfs -o rw,nosuid,nodev,noexec,relatime,size=$MEMSIZE tmpfs /dev/shm >>$PRELOG 2>&1
+    /bin/mount -a >>$PRELOG 2>&1
     exit 0
     ;;
   stop)
