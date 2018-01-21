@@ -1,7 +1,7 @@
-rac_on_xx/docker
+rac_on_xx/kubernetes
 ====
 
- Oracle RAC on docker
+ Oracle RAC on kubernetes
 
 ## Description
 - basic infomation
@@ -11,16 +11,16 @@ rac_on_xx/docker
 |OS|Oracle Linux 7.x|
 |Storage|NFS4 with Flex ASM|
 |L2 Network emulation|vxlan|
-|DNS|dnsmasq on each container|
+|DNS|dnsmasq on each pod|
 
 - Network infomation (e.g. 3-nodes RAC)
 
-|hostname/container name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
+|pod name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
 |--------|--------|-------|-------|-------|
-|storage|10.153.0.50|-|-|-|
-|node001|10.153.0.51|192.168.0.51|192.168.100.51|192.168.200.51|
-|node002|10.153.0.52|192.168.0.52|192.168.100.52|192.168.200.52|
-|node003|10.153.0.53|192.168.0.53|192.168.100.53|192.168.200.53|
+|storage|10.x.x.x|-|-|-|
+|node001|10.x.x.x|192.168.0.51|192.168.100.51|192.168.200.51|
+|node002|10.x.x.x|192.168.0.52|192.168.100.52|192.168.200.52|
+|node003|10.x.x.x|192.168.0.53|192.168.100.53|192.168.200.53|
 |node001.vip|-|192.168.0.151|-|-|
 |node002.vip|-|192.168.0.152|-|-|
 |node003.vip|-|192.168.0.152|-|-|
@@ -37,26 +37,16 @@ rac_on_xx/docker
 |DATA|Database files|/u01/oradata/data.img|external| 5120 + ( num_of_nodes * 1024 ) |8192|
 |FRA|flash recovery area|/u01/oradata/fra.img|external|25600|25600|
 
-## Demo (12-nodes RAC on ubuntu docker)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker01.png)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker02.png)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker03.png)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker04.png)
+## Demo (3-nodes RAC on kubernetes)
+![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/k8s/Screenshot_20171207-175650_1_1.jpg)
+![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/k8s/Screenshot_20171207-175654_1.jpg)
+
 
 ## Requirement
-- ubuntu/debian(Kernel 3.18 or later), CentOS/RHEL/OEL 7.2 or later
-- docker 1.12 or later
-- /boot/symvers-\`uname -r\`.gz on docker host
-- ansible 2.2.1 or later
+- Kubernetes environment (Master/Node/kubectl host)
 - Oracle 12c Release 2 (12.2) Clusterware and Database software 
-- 1core CPU per container and  4GB Memory per container
+- 2core CPU per Node and 8GB Memory per Node
 
-
-
-## Attention
-Each container run with privileged flag (Each container enables to access to all devices on the Docker host ). 
-
-It may be dangerous.
 
 
 ## Setup
