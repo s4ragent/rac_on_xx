@@ -13,6 +13,15 @@ rac_on_xx/kubernetes
 |L2 Network emulation|vxlan|
 |DNS|dnsmasq on each pod|
 
+- kubernetes infomation
+
+|||
+|-----|-----|
+|namespace|raconxx|
+|clusterdomain|cluster.local|
+|subdomain|sub|
+|Volume|Dynamic Volume Provisioning|
+
 - Network infomation (e.g. 3-nodes RAC)
 
 |pod name/vip|eth0|vxlan0(public)|vxlan1(internal)|vxlan2(asm)|
@@ -43,83 +52,50 @@ rac_on_xx/kubernetes
 
 
 ## Requirement
-- Kubernetes environment (Master/Node/kubectl host)
-- Oracle 12c Release 2 (12.2) Clusterware and Database software 
-- 2core CPU per Node and 8GB Memory per Node
+- GKE(Google Kubernetes Engine) or ACS(Azure Container Service) 
+- Google Cloud SDK(GKE) or Azure CLI 2.0(ACS) 
+- Oracle 12c Release 2 (12.2) Clusterware and Database software
+- 4 worker nodes　 
+- 2core CPU per node and 8GB Memory per node
 
 
 
 ## Setup
-### 1. create swap (unless your server has 4GB or more of memory )
-    #dd if=/dev/zero of=/swapfile bs=4096 count=1M
-    #mkswap /swapfile
-    #echo "/swapfile none swap sw 0 0" >> /etc/fstab
-    #swapon -a
-### 2. install prerequisite packages
-    ##CentOS 7.3
-    #yum install -y epel-release
-    #yum install -y python-pip openssl-devel gcc python-devel git unzip --enablerepo=epel
+### 1. Deploy Kubernetes cluster
+    ##GKE
+    see https://cloud.google.com/kubernetes-engine/docs/quickstart?hl=en 
     
-    ##ubuntu 16.04 
-    #apt-get update
-    #apt-get install -y git python-dev python-pip libssl-dev unzip
-### 3. install ansible
-    #pip install pip --upgrade
-    #pip install ansible    
-### 4. install docker
-    #curl -fsSL https://get.docker.com/ | sh
-### 5. enable docker service
-    ### CentOS7 / ubuntu 16.04
-    #systemctl start docker 
-    #systemctl enable docker
-### 6. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate them on /media
+    ##ACS 
+    see https://docs.microsoft.com/en-us/azure/container-service/kubernetes/container-service-kubernetes-walkthrough
+### 2. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate them on /media
     # ls -al  /media
     total 6297260
     -rw-r--r-- 1 root root 3453696911 Mar 28 12:30 linuxx64_12201_database.zip
     -rw-r--r-- 1 root root 2994687209 Mar 28 12:31 linuxx64_12201_grid_home.zip
-### 7. cloning an Repository
+### 3. cloning an Repository
     #git clone https://github.com/s4ragent/rac_on_xx
 
+### 4. edit k8s/vars.yml (for GKE)
+
 ## Usage
-execute dockerun.til.sh   (dockerutil.sh execute ansible-playbook and build RAC cluster. no option create 3-nodes RAC)
+execute k8s.utilsh   (k8s.sh execute kubectl command)
 
-    ##create 3-nodes RAC#
-    #cd rac_on_xx/docker
-    #bash dockerunil.sh runall
-
-if you want to build 5-nodes RAC
-
-    ##create 5-nodes RAC#
-    #cd rac_on_xx/docker
-    #bash dockerutil.sh runall 5
-
-if you want to log in node001
-
-    #docker exec -ti node001 /bin/bash
-
-if you want to execute oracle commands on node001 (ex. crsctl status res -t)
-
-    #docker exec -ti node001 /u01/app/12.1.0/grid/bin/crsctl status res -t
-
-if you want to stop first container
-
-    #bash dockerutil.sh stop 1
-
-if you want to stop storage container
-
-    #bash dockerutil.sh stop storage
-
-and restart first container
-
-    #bash dockerunil.sh start 1
+    ##create pod (nfs/dbserber)
+    #cd rac_on_xx/k8s
+    #bash k8s.sh runpod
     
-if you want to start all containers
+    ##Copy Database software
+    #bash k8s.sh copymedia
 
-    #bash dockerutil.sh startall
+    ##log in node001 and install Clusterware and Database
+    #kubectl exec --namespace raconxx -ti node001 /bin/bash
+    #cd /root/rac_on_xx/k8s
+    #bash k8sutil.sh install 
 
-if you want to delete all containers
 
-    #bash dockerutil.sh deleteall
+if you want to delete all pod and volumes
+
+    #bash k8s.sh deleteall
 
 ## Licence
 [MIT]
