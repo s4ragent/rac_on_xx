@@ -334,6 +334,15 @@ get_Internal_IP(){
 	fi	
 }
 
+copymedia(){
+	NODE1="$NODEPREFIX"`printf "%.3d" 1`
+	kubectl --namespace $NAMESPACE exec ${NODE1} -- mkdir -p $MEDIA_PATH                                                                                                          
+
+	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$DB_MEDIA1
+
+	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$GRID_MEDIA1
+}
+
 install(){
 common_execansible centos2oel.yml
 common_execansible rac.yml --tags security,vxlan_conf,dnsmasq,setresolvconf
@@ -351,6 +360,7 @@ case "$1" in
   "runpod" ) shift;runonly $*;;
   "install" ) shift;install $*;;
   "runall_k8s" ) shift;runall_k8s $*;;
+  "copymedia" ) shift;copymedia $*;;
 esac
 
 source ./common_menu.sh
