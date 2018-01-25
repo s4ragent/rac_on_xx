@@ -46,8 +46,8 @@ spec:
   containers:
     - name: ${INSTANCE_ID}root
       image: s4ragent/rac_on_xx:OEL7
-      command:
-        - /bin/bash
+      command: ["/bin/sh"]
+      args: ["-c", "while true; do echo hello; sleep 10;done"]
       ports:
         - containerPort: 80
           hostPort: 80
@@ -310,8 +310,8 @@ spec:
   containers:
     - name: ansible
       image: s4ragent/rac_on_xx:OEL7
-      command:
-        - /bin/bash
+      command: ["/bin/sh"]
+      args: ["-c", "while true; do echo hello; sleep 10;done"]
 EOF
 
 	kubectl cp ../rac_on_xx $NAMESPACE/ansible:/root/
