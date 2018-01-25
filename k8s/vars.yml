@@ -12,7 +12,7 @@ PARAMETER_3:
 #PARAMETER_3:
 VXLAN_DEV: "eth0"
 MEDIA_PATH: /u01/downloadmedia
-#MEDIA_COPY: "true"
+MEDIA_COPY: "true"
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
 NAMESPACE: raconxx
