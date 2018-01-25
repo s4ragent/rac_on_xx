@@ -112,7 +112,7 @@ done
 
 	kubectl cp ../rac_on_xx/${ansible_ssh_private_key_file}.pub $NAMESPACE/${NODENAME}root:/home/$ansible_ssh_user/${ansible_ssh_private_key_file}.pub
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- mv /home/$ansible_ssh_user/${ansible_ssh_private_key_file}.pub /home/$ansible_ssh_user/.ssh	
+	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- mv /home/$ansible_ssh_user/${ansible_ssh_private_key_file}.pub /home/$ansible_ssh_user/.ssh/authorized_keys
 	
 	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh
 	        
