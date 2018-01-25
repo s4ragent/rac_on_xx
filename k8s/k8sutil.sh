@@ -100,9 +100,11 @@ done
 
 	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.sh $NAMESPACE/${NODENAME}:/usr/local/bin/retmpfs.sh
 
-	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}:/etc/systemd/system/retmpfs.service
+#	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}:/etc/systemd/system/retmpfs.service
 	
 	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}:/usr/lib/systemd/system/retmpfs.service	
+
+	kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- cp --remove-destination /usr/lib/systemd/system/retmpfs.service /etc/systemd/system/multi-user.target.wants/retmpfs.service
 
 	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod +x /usr/local/bin/retmpfs.sh
 	
