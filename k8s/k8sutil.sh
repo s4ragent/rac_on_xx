@@ -83,7 +83,7 @@ run(){
 loopcnt=0
 while :
 do
-	status=`kubectl --namespace $NAMESPACE get pods ${INSTANCE_ID}root | grep Running | wc -l`
+	status=`kubectl --namespace $NAMESPACE get pods ${INSTANCE_ID} | grep Running | wc -l`
 	if [ "$status" = "1" ]; then
 		break
 	fi	
