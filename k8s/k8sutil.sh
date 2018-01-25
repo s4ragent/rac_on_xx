@@ -136,11 +136,11 @@ kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- chmod 755 /u01
 	fi	
 
 
-#kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}root
+	kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}
 
-#sleep 30s
+sleep 60s
 
-	cat <<EOF | kubectl replace -f -
+	cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Pod
 metadata:
