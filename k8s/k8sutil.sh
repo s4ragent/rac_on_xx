@@ -110,7 +110,7 @@ done
 
 	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- mkdir /home/$ansible_ssh_user/.ssh
 
-	kubectl cp ../rac_on_xx/{ansible_ssh_private_key_file}.pub ${NODENAME}root:/home/$ansible_ssh_user/.ssh/authorized_keys
+	kubectl cp ../rac_on_xx/{ansible_ssh_private_key_file}.pub $NAMESPACE/${NODENAME}root:/home/$ansible_ssh_user/.ssh/authorized_keys
 	
 	
 	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh
@@ -270,6 +270,24 @@ EOF
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
+	cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ansible
+  namespace: $NAMESPACE
+  labels:
+    name: rac
+spec:
+  hostname: ansible
+  subdomain: $SUBDOMAIN
+  containers:
+    - name: ansible
+      image: s4ragent/rac_on_xx:OEL7
+      command: ["/bin/sh"]
+      args: ["-c", "while true; do echo hello; sleep 10;done"]
+EOF
+
 	run_pre "storage"
 	for i in `seq 1 $nodecount`;
 	do
@@ -296,23 +314,6 @@ EOF
 		run_after $NODENAME
 	done
 
-	cat <<EOF | kubectl create -f -
-apiVersion: v1
-kind: Pod
-metadata:
-  name: ansible
-  namespace: $NAMESPACE
-  labels:
-    name: rac
-spec:
-  hostname: ansible
-  subdomain: $SUBDOMAIN
-  containers:
-    - name: ansible
-      image: s4ragent/rac_on_xx:OEL7
-      command: ["/bin/sh"]
-      args: ["-c", "while true; do echo hello; sleep 10;done"]
-EOF
 
 	kubectl cp ../rac_on_xx $NAMESPACE/ansible:/root/
                                                                                                          
