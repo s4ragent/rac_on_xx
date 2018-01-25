@@ -80,14 +80,6 @@ run(){
 	INSTANCE_ID="${NODENAME}"
 
 
-	if [ "$HOSTGROUP" = "ansible" ]; then
-		privileged="false"
-		containerPort=3333
-	elif
-		privileged="true"
-		containerPort=2222
-	fi	
-
 loopcnt=0
 while :
 do
@@ -114,15 +106,12 @@ done
 
 	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chmod +x /usr/local/bin/retmpfs.sh
 	
-	kubectl cp $NAMESPACE exec ${NODENAME}root -- cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.sh /usr/local/bin/retmpfs.sh
 
-
-	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.service /etc/systemd/system
-
-	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.service /usr/lib/systemd/system
 
 	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- mkdir /home/$ansible_ssh_user/.ssh
-	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- cp /root/rac_on_xx/${ansible_ssh_private_key_file}.pub /home/$ansible_ssh_user/.ssh/authorized_keys
+
+	kubectl cp ../rac_on_xx/{ansible_ssh_private_key_file}.pub ${NODENAME}root:/home/$ansible_ssh_user/.ssh/authorized_keys
+	
 	
 	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh
 	        
@@ -159,10 +148,10 @@ spec:
     - name: $INSTANCE_ID
       image: s4ragent/rac_on_xx:OEL7
       ports:
-        - containerPort: $containerPort
-          hostPort: $containerPort
+        - containerPort: 80
+          hostPort: 80
       securityContext:
-        privileged: $privileged
+        privileged: true
       volumeMounts:
         - name: cgroups
           mountPath: /sys/fs/cgroup
@@ -300,11 +289,6 @@ EOF
 		run $NODENAME $NODEIP $i "dbserver"
 	done
 
-	CLIENTNUM=70
-	NUM=`expr $BASE_IP + $CLIENTNUM`
-	CLIENTIP="${SEGMENT}$NUM"	
-	run "ansible01" $CLIENTIP $CLIENTNUM "ansible"
-	
 	run_after "storage"
 	for i in `seq 1 $nodecount`;
 	do
@@ -312,6 +296,25 @@ EOF
 		run_after $NODENAME
 	done
 
+	cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ansible
+  namespace: $NAMESPACE
+  labels:
+    name: rac
+spec:
+  hostname: ansible
+  subdomain: $SUBDOMAIN
+  containers:
+    - name: ansible
+      image: s4ragent/rac_on_xx:OEL7
+      args:
+        - /bin/bash
+EOF
+
+	kubectl cp ../rac_on_xx $NAMESPACE/ansible:/root/
                                                                                                          
 #	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$DB_MEDIA1
 
