@@ -310,7 +310,7 @@ spec:
   containers:
     - name: ansible
       image: s4ragent/rac_on_xx:OEL7
-      args:
+      command:
         - /bin/bash
 EOF
 
