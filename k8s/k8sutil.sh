@@ -46,8 +46,8 @@ spec:
   containers:
     - name: ${INSTANCE_ID}root
       image: s4ragent/rac_on_xx:OEL7
-      args:
-            - /bin/bash
+      command:
+        - /bin/bash
       ports:
         - containerPort: 80
           hostPort: 80
