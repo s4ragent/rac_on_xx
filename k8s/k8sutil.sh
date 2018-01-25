@@ -36,15 +36,15 @@ sleep 30s
 apiVersion: v1
 kind: Pod
 metadata:
-  name: ${INSTANCE_ID}root
+  name: ${INSTANCE_ID}
   namespace: $NAMESPACE
   labels:
     name: rac
 spec:
-  hostname: ${INSTANCE_ID}root
+  hostname: ${INSTANCE_ID}
   subdomain: $SUBDOMAIN
   containers:
-    - name: ${INSTANCE_ID}root
+    - name: ${INSTANCE_ID}
       image: s4ragent/rac_on_xx:OEL7
       command: ["/bin/sh"]
       args: ["-c", "while true; do echo hello; sleep 10;done"]
@@ -94,53 +94,53 @@ do
 	sleep 30s
 done
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME}root useradd $ansible_ssh_user                                                                                                          
-	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
+	kubectl --namespace $NAMESPACE exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
 
 
-	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.sh $NAMESPACE/${NODENAME}root:/usr/local/bin/retmpfs.sh
+	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.sh $NAMESPACE/${NODENAME}:/usr/local/bin/retmpfs.sh
 
-	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}root:/etc/systemd/system/retmpfs.service
+	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}:/etc/systemd/system/retmpfs.service
 	
-	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}root:/usr/lib/systemd/system/retmpfs.service	
+	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}:/usr/lib/systemd/system/retmpfs.service	
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chmod +x /usr/local/bin/retmpfs.sh
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod +x /usr/local/bin/retmpfs.sh
 	
-	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- mkdir /home/$ansible_ssh_user/.ssh
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- mkdir /home/$ansible_ssh_user/.ssh
 
-	kubectl cp ../rac_on_xx/${ansible_ssh_private_key_file}.pub $NAMESPACE/${NODENAME}root:/home/$ansible_ssh_user/${ansible_ssh_private_key_file}.pub
+	kubectl cp ../rac_on_xx/${ansible_ssh_private_key_file}.pub $NAMESPACE/${NODENAME}:/home/$ansible_ssh_user/${ansible_ssh_private_key_file}.pub
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- mv /home/$ansible_ssh_user/${ansible_ssh_private_key_file}.pub /home/$ansible_ssh_user/.ssh/authorized_keys
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- mv /home/$ansible_ssh_user/${ansible_ssh_private_key_file}.pub /home/$ansible_ssh_user/.ssh/authorized_keys
 	
-	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh
 	        
-	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chmod 700 /home/$ansible_ssh_user/.ssh
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 700 /home/$ansible_ssh_user/.ssh
 	
-	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chmod 600 /home/$ansible_ssh_user/.ssh/authorized_keys
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 600 /home/$ansible_ssh_user/.ssh/authorized_keys
 
 #kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=all /bin /etc /home /lib /lib64 /opt /run /sbin /usr /var /u01
 
-kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=all /etc /home /usr /u01
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- cp -d -R --preserve=all /etc /home /usr /u01
 
-kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp --remove-destination /u01/usr/lib/systemd/system/sshd.service /u01/etc/systemd/system/multi-user.target.wants/sshd.service
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- cp --remove-destination /u01/usr/lib/systemd/system/sshd.service /u01/etc/systemd/system/multi-user.target.wants/sshd.service
 
-kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- chmod 755 /u01
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- chmod 755 /u01
 
 
 	if [ "$NODENUMBER" = "1" ]; then
-			kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root -- mkdir -p $MEDIA_PATH 
+			kubectl --namespace $NAMESPACE exec ${INSTANCE_ID} -- mkdir -p $MEDIA_PATH 
 
-	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${INSTANCE_ID}root:$MEDIA_PATH/$DB_MEDIA1
+	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${INSTANCE_ID}:$MEDIA_PATH/$DB_MEDIA1
 
-	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/${INSTANCE_ID}root:$MEDIA_PATH/$GRID_MEDIA1
+	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/${INSTANCE_ID}:$MEDIA_PATH/$GRID_MEDIA1
 	fi	
 
 
-kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}root
+#kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}root
 
-sleep 30s
+#sleep 30s
 
-	cat <<EOF | kubectl create -f -
+	cat <<EOF | kubectl replace -f -
 apiVersion: v1
 kind: Pod
 metadata:
