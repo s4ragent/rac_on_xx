@@ -100,9 +100,6 @@ if you want to delete all pod and volumes
 ## Licence
 [MIT]
 
-## Todo
-- Docker container run without privileged flags
-- docker save
 
 ## Author
 @s4r_agent

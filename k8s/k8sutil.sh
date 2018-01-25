@@ -46,11 +46,11 @@ spec:
   containers:
     - name: ${INSTANCE_ID}root
       image: s4ragent/rac_on_xx:OEL7
+      args:
+            - /bin/bash
       ports:
         - containerPort: 80
           hostPort: 80
-      securityContext:
-        privileged: true
       volumeMounts:
         - name: cgroups
           mountPath: /sys/fs/cgroup
@@ -79,6 +79,15 @@ run(){
 	HOSTGROUP=$4
 	INSTANCE_ID="${NODENAME}"
 
+
+	if [ "$HOSTGROUP" = "ansible" ]; then
+		privileged="false"
+		containerPort=3333
+	elif
+		privileged="true"
+		containerPort=2222
+	fi	
+
 loopcnt=0
 while :
 do
@@ -93,11 +102,44 @@ do
 	sleep 30s
 done
 
+	kubectl --namespace $NAMESPACE exec ${NODENAME}root useradd $ansible_ssh_user                                                                                                          
+	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
+
+
+	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.sh $NAMESPACE/${NODENAME}root:/usr/local/bin/retmpfs.sh
+
+	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}root:/etc/systemd/system
+	
+	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}root:/usr/lib/systemd/system	
+
+	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chmod +x /usr/local/bin/retmpfs.sh
+	
+	kubectl cp $NAMESPACE exec ${NODENAME}root -- cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.sh /usr/local/bin/retmpfs.sh
+
+
+	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.service /etc/systemd/system
+
+	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.service /usr/lib/systemd/system
+
+	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- mkdir /home/$ansible_ssh_user/.ssh
+	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- cp /root/rac_on_xx/${ansible_ssh_private_key_file}.pub /home/$ansible_ssh_user/.ssh/authorized_keys
+	
+	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh
+	        
+	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chmod 700 /home/$ansible_ssh_user/.ssh
+	
+	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chmod 600 /home/$ansible_ssh_user/.ssh/authorized_keys
+
 #kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=all /bin /etc /home /lib /lib64 /opt /run /sbin /usr /var /u01
 
 kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp -d -R --preserve=all /etc /home /usr /u01
 
+kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- cp --remove-destination /u01/usr/lib/systemd/system/sshd.service /u01/etc/systemd/system/multi-user.target.wants/sshd.service
+
 kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root  -- chmod 755 /u01
+
+	kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}root -- mkdir -p $MEDIA_PATH 
+
 kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}root
 
 sleep 30s
@@ -117,10 +159,10 @@ spec:
     - name: $INSTANCE_ID
       image: s4ragent/rac_on_xx:OEL7
       ports:
-        - containerPort: 80
-          hostPort: 80
+        - containerPort: $containerPort
+          hostPort: $containerPort
       securityContext:
-        privileged: true
+        privileged: $privileged
       volumeMounts:
         - name: cgroups
           mountPath: /sys/fs/cgroup
@@ -175,34 +217,15 @@ run_after(){
 		sleep 30s
 	done
 	
-	kubectl --namespace $NAMESPACE exec ${NODENAME} useradd $ansible_ssh_user                                                                                                          
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- bash -c "echo \"$ansible_ssh_user ALL=(ALL) NOPASSWD:ALL\" > /etc/sudoers.d/$ansible_ssh_user"
 
-
-
-	kubectl cp ../rac_on_xx $NAMESPACE/${NODENAME}:/root/
-
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.sh /usr/local/bin/retmpfs.sh
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod +x /usr/local/bin/retmpfs.sh
-
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- cp /root/rac_on_xx/$VIRT_TYPE/retmpfs.service /etc/systemd/system
-
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- mkdir /home/$ansible_ssh_user/.ssh
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- cp /root/rac_on_xx/${ansible_ssh_private_key_file}.pub /home/$ansible_ssh_user/.ssh/authorized_keys
 	
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chown -R ${ansible_ssh_user} /home/$ansible_ssh_user/.ssh
-	        
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 700 /home/$ansible_ssh_user/.ssh
-	
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- chmod 600 /home/$ansible_ssh_user/.ssh/authorized_keys
-	
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start retmpfs
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable retmpfs
+#	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start retmpfs
+#	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable retmpfs
 
 #	kubectl --namespace $NAMESPACE exec ${NODENAME} --  sed -i "s/^#Port 22/Port $SSHPORT/" /etc/ssh/sshd_config
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start sshd
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable sshd
+#	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start sshd
+#	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable sshd
 }
 
 #### VIRT_TYPE specific processing  (must define)###
@@ -277,6 +300,10 @@ EOF
 		run $NODENAME $NODEIP $i "dbserver"
 	done
 
+	CLIENTNUM=70
+	NUM=`expr $BASE_IP + $CLIENTNUM`
+	CLIENTIP="${SEGMENT}$NUM"	
+	run "ansible01" $CLIENTIP $CLIENTNUM "ansible"
 	
 	run_after "storage"
 	for i in `seq 1 $nodecount`;
@@ -285,9 +312,7 @@ EOF
 		run_after $NODENAME
 	done
 
-	NODE1="$NODEPREFIX"`printf "%.3d" 1`
-	kubectl --namespace $NAMESPACE exec ${NODE1} -- mkdir -p $MEDIA_PATH                                                                                                          
-
+                                                                                                         
 #	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$DB_MEDIA1
 
 #	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$GRID_MEDIA1
