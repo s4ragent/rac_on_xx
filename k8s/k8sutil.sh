@@ -100,14 +100,12 @@ done
 
 	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.sh $NAMESPACE/${NODENAME}root:/usr/local/bin/retmpfs.sh
 
-	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}root:/etc/systemd/system
+	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}root:/etc/systemd/system/retmpfs.service
 	
-	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}root:/usr/lib/systemd/system	
+	kubectl cp ../rac_on_xx/$VIRT_TYPE/retmpfs.service $NAMESPACE/${NODENAME}root:/usr/lib/systemd/system/retmpfs.service	
 
 	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- chmod +x /usr/local/bin/retmpfs.sh
 	
-
-
 	kubectl --namespace $NAMESPACE exec ${NODENAME}root -- mkdir /home/$ansible_ssh_user/.ssh
 
 	kubectl cp ../rac_on_xx/${ansible_ssh_private_key_file}.pub $NAMESPACE/${NODENAME}root:/home/$ansible_ssh_user/${ansible_ssh_private_key_file}.pub
@@ -366,11 +364,11 @@ get_Internal_IP(){
 
 copymedia(){
 	NODE1="$NODEPREFIX"`printf "%.3d" 1`
-	kubectl --namespace $NAMESPACE exec ${NODE1} -- mkdir -p $MEDIA_PATH                                                                                                          
+	kubectl --namespace $NAMESPACE exec ansible -- mkdir -p /media                                                                                                        
 
-	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$DB_MEDIA1
+	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/ansible:/media/$DB_MEDIA1
 
-	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$GRID_MEDIA1
+	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/ansible:/media/$GRID_MEDIA1
 }
 
 install(){
