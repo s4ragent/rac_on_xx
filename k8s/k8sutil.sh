@@ -279,6 +279,8 @@ EOF
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
+	sleep 60s
+
 	cat <<EOF | kubectl create -f -
 apiVersion: v1
 kind: Pod
