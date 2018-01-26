@@ -132,9 +132,9 @@ kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- chmod 755 /u01
 	if [ "$NODENUMBER" = "1" ]; then
 			kubectl --namespace $NAMESPACE exec ${INSTANCE_ID} -- mkdir -p /u01$MEDIA_PATH 
 
-	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${INSTANCE_ID}:/u01$MEDIA_PATH/$DB_MEDIA1
+	kubectl cp $FROM_MEDIA_PATH/$DB_MEDIA1 $NAMESPACE/${INSTANCE_ID}:/u01$MEDIA_PATH/$DB_MEDIA1
 
-	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/${INSTANCE_ID}:/u01$MEDIA_PATH/$GRID_MEDIA1
+	kubectl cp $FROM_MEDIA_PATH/$GRID_MEDIA1 $NAMESPACE/${INSTANCE_ID}:/u01$MEDIA_PATH/$GRID_MEDIA1
 	fi	
 
 
