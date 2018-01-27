@@ -274,8 +274,6 @@ EOF
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
-	sleep 60s
-
 
 	run_pre "storage"
 	for i in `seq 1 $nodecount`;
