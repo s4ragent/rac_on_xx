@@ -1,15 +1,15 @@
 ####################################################
 #### k8s user specific value  ###################
 ### for acs
-#PROVISIONER: kubernetes.io/azure-disk
-#PARAMETER_1: "storageaccounttype: Standard_LRS"
-#PARAMETER_2:
-#PARAMETER_3:
-#### for gke
-PROVISIONER: kubernetes.io/gce-pd
-PARAMETER_1: "type: pd-standard" 
-PARAMETER_2: "zones: us-central1-c"
+PROVISIONER: kubernetes.io/azure-disk
+PARAMETER_1: "storageaccounttype: Standard_LRS"
+PARAMETER_2:
 PARAMETER_3:
+#### for gke
+#PROVISIONER: kubernetes.io/gce-pd
+#PARAMETER_1: "type: pd-standard" 
+#PARAMETER_2: "zones: us-central1-c"
+#PARAMETER_3:
 VXLAN_DEV: "eth0"
 MEDIA_PATH: /u01/downloadmedia
 FROM_MEDIA_PATH: /media
