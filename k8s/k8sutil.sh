@@ -47,7 +47,7 @@ spec:
     - name: ${INSTANCE_ID}
       image: s4ragent/rac_on_xx:OEL7
       command: ["/bin/sh"]
-      args: ["-c", "while true; do echo hello; sleep 10;done"]
+      args: ["-c", "while true; sleep 10;done"]
       ports:
         - containerPort: 80
           hostPort: 80
@@ -128,16 +128,6 @@ kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- cp --remove-destination /
 
 kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- chmod 755 /u01
 
-
-	if [ "$NODENUMBER" = "1" ]; then
-			kubectl --namespace $NAMESPACE exec ${INSTANCE_ID} -- mkdir -p /u01$MEDIA_PATH 
-
-	kubectl cp $FROM_MEDIA_PATH/$DB_MEDIA1 $NAMESPACE/${INSTANCE_ID}:/u01$MEDIA_PATH/$DB_MEDIA1
-
-	kubectl cp $FROM_MEDIA_PATH/$GRID_MEDIA1 $NAMESPACE/${INSTANCE_ID}:/u01$MEDIA_PATH/$GRID_MEDIA1
-	fi	
-
-
 	kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}
 
 sleep 60s
@@ -154,6 +144,10 @@ spec:
   hostname: $INSTANCE_ID
   subdomain: $SUBDOMAIN
   containers:
+    - name: ansible
+      image: s4ragent/rac_on_xx:OEL7
+      command: ["/bin/sh"]
+      args: ["-c", "while true; sleep 10;done"]
     - name: $INSTANCE_ID
       image: s4ragent/rac_on_xx:OEL7
       ports:
@@ -215,6 +209,7 @@ run_after(){
 		sleep 30s
 	done
 	
+	kubectl cp ../rac_on_xx $NAMESPACE/$NODENAME:/root/ -c ansible
 
 	
 #	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start retmpfs
@@ -281,23 +276,6 @@ EOF
 
 	sleep 60s
 
-	cat <<EOF | kubectl create -f -
-apiVersion: v1
-kind: Pod
-metadata:
-  name: ansible
-  namespace: $NAMESPACE
-  labels:
-    name: rac
-spec:
-  hostname: ansible
-  subdomain: $SUBDOMAIN
-  containers:
-    - name: ansible
-      image: s4ragent/rac_on_xx:OEL7
-      command: ["/bin/sh"]
-      args: ["-c", "while true; do echo hello; sleep 10;done"]
-EOF
 
 	run_pre "storage"
 	for i in `seq 1 $nodecount`;
@@ -326,7 +304,7 @@ EOF
 	done
 
 
-	kubectl cp ../rac_on_xx $NAMESPACE/ansible:/root/
+	
                                                                                                          
 #	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$DB_MEDIA1
 
@@ -350,7 +328,7 @@ deleteall(){
 		kubectl --namespace $NAMESPACE delete pod storage
 		kubectl --namespace $NAMESPACE delete pvc storageu01claim
 		
-	for i in `seq 1 $nodecount`;
+	for i in `seq 1 10`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		kubectl --namespace $NAMESPACE delete pod $NODENAME
@@ -379,18 +357,18 @@ get_Internal_IP(){
 	if [ "$1" = "storage" ]; then
 		echo "storage.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
 	else
-		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		NODENAME="$NODEPREFIX"`printf "%.3d" $1`
 		echo "${NODENAME}.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
 	fi	
 }
 
 copymedia(){
-	NODE1="$NODEPREFIX"`printf "%.3d" 1`
-	kubectl --namespace $NAMESPACE exec ansible -- mkdir -p /media                                                                                                        
+	NODE1="$NODEPREFIX"`printf "%.3d" 1`                                                                                  
 
-	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/ansible:/media/$DB_MEDIA1
+	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/$NODE1:/media/$DB_MEDIA1 -c ansible
 
-	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/ansible:/media/$GRID_MEDIA1
+	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/$NODE1:/media/$GRID_MEDIA1 -c ansible
+	
 }
 
 install(){
