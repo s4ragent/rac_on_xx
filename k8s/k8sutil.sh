@@ -47,7 +47,7 @@ spec:
     - name: ${INSTANCE_ID}
       image: s4ragent/rac_on_xx:OEL7
       command: ["/bin/sh"]
-      args: ["-c", "while true; sleep 10;done"]
+      args: ["-c", "while true; do sleep 10;done"]
       ports:
         - containerPort: 80
           hostPort: 80
@@ -147,7 +147,7 @@ spec:
     - name: ansible
       image: s4ragent/rac_on_xx:OEL7
       command: ["/bin/sh"]
-      args: ["-c", "while true; sleep 10;done"]
+      args: ["-c", "while true; do sleep 10;done"]
     - name: $INSTANCE_ID
       image: s4ragent/rac_on_xx:OEL7
       ports:
