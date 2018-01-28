@@ -1,12 +1,18 @@
 ####################################################
-#guac_pass: Guac123!
-#xrdp_pass: Xrdp123!
-####################################################
-####################################################
 #### k8s user specific value  ###################
+### for acs
+PROVISIONER: kubernetes.io/azure-disk
+PARAMETER_1: "storageaccounttype: Standard_LRS"
+PARAMETER_2:
+PARAMETER_3:
+#### for gke
+#PROVISIONER: kubernetes.io/gce-pd
+#PARAMETER_1: "type: pd-standard" 
+#PARAMETER_2: "zones: us-central1-c"
+#PARAMETER_3:
 VXLAN_DEV: "eth0"
 MEDIA_PATH: /u01/downloadmedia
-#MEDIA_COPY: "true"
+MEDIA_COPY: "true"
 DB_MEDIA1: linuxx64_12201_database.zip
 GRID_MEDIA1: linuxx64_12201_grid_home.zip
 NAMESPACE: raconxx
@@ -20,7 +26,8 @@ START_CMD: ""
 START_CMD_OPS: ""
 STOP_CMD: ""
 STOP_CMD_OPS: ""
-INSTALL_OPS: "-ignoreSysPrereqs -ignorePrereqFailure"
+INSTALL_OPS: "-ignorePrereqFailure"
+INSTALL_DB_OPS: "-ignoreSysPrereqs"
 DHCPCLIENT: ""
 ####################################################
 ####docker system  specific value ##################

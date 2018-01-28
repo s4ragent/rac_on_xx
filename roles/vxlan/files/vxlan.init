@@ -80,11 +80,11 @@ fdb_append(){
   { 
     for ip in  `cat $iplist`
     do
-    		ipcalc -c $ip
+    		ipcalc -c $ip >/dev/null 2>&1
     		if [ $? -ne 0 ]; then
 						ip=`$pythoncmd -c "import socket;import sys; 
 print socket.gethostbyname('$ip')"`
-						ipcalc -c $ip
+						ipcalc -c $ip >/dev/null 2>&1
 						if [ $? -ne 0 ]; then
 							continue
 						fi	

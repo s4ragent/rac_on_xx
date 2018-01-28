@@ -1,8 +1,9 @@
 rac_on_xx
 ====
-Oracle RAC on Docker /systemd-nspawn /Azure /EC2 /GCE 
+Oracle RAC on Docker /Kubernetes /systemd-nspawn /Azure /EC2 /GCE 
 
 - [docker](https://github.com/s4ragent/rac_on_xx/tree/master/docker "RAC on Docker")  Oracle RAC on docker 
+- [Kubernetes](https://github.com/s4ragent/rac_on_xx/tree/master/k8s "RAC on Kubernetes")  Oracle RAC on Kubernetes 
 - [nspawn](https://github.com/s4ragent/rac_on_xx/tree/master/nspawn "RAC on Docker")  Oracle RAC on systemd-nspawn 
 - [Microsoft Azure](https://github.com/s4ragent/rac_on_xx/tree/master/azure "RAC on Azure")  Oracle RAC on Azure
 - [Amazon EC2](https://github.com/s4ragent/rac_on_xx/tree/master/ec2 "RAC on EC2")  Oracle RAC on EC2
