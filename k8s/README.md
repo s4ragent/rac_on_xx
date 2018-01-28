@@ -87,15 +87,15 @@ execute k8sutil.sh   (k8s.sh execute kubectl command)
     #kubectl exec --namespace raconxx -ti ansible /bin/bash
     #cd /root/rac_on_xx/k8s
     #bash k8sutil.sh install 
-
-if you want to log in node001 ssh via ansible_container
+    
+    if you want to log in node001 ssh via ansible_container
     ##on kubectl host
     #kubectl exec --namespace raconxx -ti ansible /bin/bash
     ##on ansible_container    
     #cd /root/rac_on_xx/k8s
     #bash k8sutil.sh ssh 1
-
-if you want to delete all pod and volumes
+    
+    if you want to delete all pod and volumes
     ##on kubectl host
     #bash k8sutil.sh deleteall
 
