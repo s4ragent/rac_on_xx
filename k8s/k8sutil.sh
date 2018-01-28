@@ -296,6 +296,25 @@ EOF
 	done
 
 
+	cat <<EOI | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ansible
+  namespace: $NAMESPACE
+  labels:
+    name: rac
+spec:
+  hostname: ansible
+  subdomain: $SUBDOMAIN
+  containers:
+    - name: ansible
+      image: s4ragent/rac_on_xx:OEL7
+      command: ["/bin/sh"]
+      args: ["-c", "while true; do sleep 10;done"]
+
+EOI
+
                                                                                                      
 #	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$DB_MEDIA1
 
