@@ -78,24 +78,30 @@ rac_on_xx/kubernetes
 ### 4. edit k8s/vars.yml (for GKE)
 
 ## Usage
-execute k8s.utilsh   (k8s.sh execute kubectl command)
+execute k8sutil.sh   (k8s.sh execute kubectl command)
 
     ##create pod (nfs/dbserber)
     #cd rac_on_xx/k8s
-    #bash k8s.sh runpod
+    #bash k8sutil.sh runpod
     
     ##Copy Database software
-    #bash k8s.sh copymedia
+    #bash k8sutil.sh copymedia
 
-    ##log in node001 and install Clusterware and Database
-    #kubectl exec --namespace raconxx -ti node001 /bin/bash
+    ##log in ansible_container and install Clusterware and Database
+    #kubectl exec --namespace raconxx -ti ansible /bin/bash
     #cd /root/rac_on_xx/k8s
     #bash k8sutil.sh install 
 
+if you want to log in node001 ssh via ansible_container
+    ##on kubectl host
+    #kubectl exec --namespace raconxx -ti ansible /bin/bash
+    ##on ansible_container    
+    #cd /root/rac_on_xx/k8s
+    #bash k8sutil.sh ssh 1
 
 if you want to delete all pod and volumes
-
-    #bash k8s.sh deleteall
+    ##on kubectl host
+    #bash k8sutil.sh deleteall
 
 ## Licence
 [MIT]
