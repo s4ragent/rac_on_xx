@@ -311,7 +311,6 @@ spec:
       image: s4ragent/rac_on_xx:OEL7
       command: ["/bin/sh"]
       args: ["-c", "while true; do sleep 10;done"]
-
 EOF	
 
                                                                                                      
