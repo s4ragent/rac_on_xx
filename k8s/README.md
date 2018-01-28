@@ -46,10 +46,6 @@ rac_on_xx/kubernetes
 |DATA|Database files|/u01/oradata/data.img|external| 5120 + ( num_of_nodes * 1024 ) |8192|
 |FRA|flash recovery area|/u01/oradata/fra.img|external|25600|25600|
 
-## Demo (3-nodes RAC on kubernetes)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/k8s/Screenshot_20171207-175650_1_1.jpg)
-![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/k8s/Screenshot_20171207-175654_1.jpg)
-
 
 ## Requirement
 - GKE(Google Kubernetes Engine) or ACS(Azure Container Service) 
