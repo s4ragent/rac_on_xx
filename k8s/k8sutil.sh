@@ -311,8 +311,10 @@ spec:
       image: s4ragent/rac_on_xx:OEL7
       command: ["/bin/sh"]
       args: ["-c", "while true; do sleep 10;done"]
+
 EOF	
-                                                                                                         
+
+                                                                                                     
 #	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$DB_MEDIA1
 
 #	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$GRID_MEDIA1
