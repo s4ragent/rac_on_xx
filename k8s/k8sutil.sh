@@ -144,10 +144,6 @@ spec:
   hostname: $INSTANCE_ID
   subdomain: $SUBDOMAIN
   containers:
-    - name: ansible
-      image: s4ragent/rac_on_xx:OEL7
-      command: ["/bin/sh"]
-      args: ["-c", "while true; do sleep 10;done"]
     - name: $INSTANCE_ID
       image: s4ragent/rac_on_xx:OEL7
       ports:
@@ -209,8 +205,6 @@ run_after(){
 		sleep 30s
 	done
 	
-	kubectl cp ../rac_on_xx $NAMESPACE/$NODENAME:/root/ -c ansible
-
 	
 #	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl start retmpfs
 #	kubectl --namespace $NAMESPACE exec ${NODENAME} -- systemctl enable retmpfs
@@ -301,8 +295,23 @@ EOF
 		run_after $NODENAME
 	done
 
-
-	
+	cat <<EOF | kubectl create -f -
+apiVersion: v1
+kind: Pod
+metadata:
+  name: ansible
+  namespace: $NAMESPACE
+  labels:
+    name: rac
+spec:
+  hostname: ansible
+  subdomain: $SUBDOMAIN
+  containers:
+    - name: ansible
+      image: s4ragent/rac_on_xx:OEL7
+      command: ["/bin/sh"]
+      args: ["-c", "while true; do sleep 10;done"]
+EOF	
                                                                                                          
 #	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$DB_MEDIA1
 
@@ -361,11 +370,12 @@ get_Internal_IP(){
 }
 
 copymedia(){
-	NODE1="$NODEPREFIX"`printf "%.3d" 1`                                                                                  
+	#NODE1="$NODEPREFIX"`printf "%.3d" 1`                                                                                  
+	kubectl cp ../rac_on_xx $NAMESPACE/ansible:/root/
 
-	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/$NODE1:/media/$DB_MEDIA1 -c ansible
+	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/ansible:/media/$DB_MEDIA1
 
-	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/$NODE1:/media/$GRID_MEDIA1 -c ansible
+	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/ansible:/media/$GRID_MEDIA1
 	
 }
 
