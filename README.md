@@ -50,6 +50,17 @@ Oracle RAC on Docker /Kubernetes /systemd-nspawn /Azure /EC2 /GCE
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker03.png)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker04.png)
 
+- Tested Environment(Docker,Kubernets etc)
+12.2
+
+||Docker(on ubuntu)|Docker(on Centos)|Kubernetes(ACS)|Kubernetes(GKE)|systemd-nspawn|Azure|EC2|GCE|
+|--------|--------|-------|-------|-------|-------|--------|-------|-------|-------|
+|Environment version|
+|OS version|
+|Other|
+|Tested Date|
+
+
 
 ## Licence
 MIT
