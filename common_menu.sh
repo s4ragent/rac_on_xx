@@ -1,5 +1,6 @@
 #!/bin/bash
 case "$1" in
+  "crsctl" ) shift;common_crsctl $*;;
   "execansible" ) shift;common_execansible $*;;
   "iperf" ) shift;common_iperf $*;;
   "cvu" ) shift;common_cvu $*;;  
