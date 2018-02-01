@@ -1,8 +1,8 @@
 #### azure user specific value  ###################
 PREFIX: "raconxx"
 RG_NAME: "rg_raconxx"
-#ZONE: "westus2"
-ZONE: "japanwest"
+ZONE: "westus2"
+#ZONE: "japanwest"
 VNET_ADDR: "10.153.0.0/16"
 SNET_ADDR: "10.153.1.0/24"
 VXLAN_DEV: "eth0"
