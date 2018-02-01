@@ -262,6 +262,7 @@
   - name: "create swap(swapon)"
     become: yes
     shell: swapon /swap
+    ignore_errors: yes
     when: ansible_swaptotal_mb < SWAP_SIZE -1
     tags:
       - swapon
