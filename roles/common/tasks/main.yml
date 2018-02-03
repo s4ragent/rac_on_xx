@@ -190,9 +190,9 @@
 
   - name: "mv chronyd.conf"
     become: yes
-    shell: mv /etc/chronyd.conf /etc/chronyd.conf.original
+    shell: mv /etc/chrony.conf /etc/chrony.conf.original
     args:
-      creates: /etc/chronyd.conf.original
+      creates: /etc/chrony.conf.original
     ignore_errors: yes
     tags:
       - ntp
