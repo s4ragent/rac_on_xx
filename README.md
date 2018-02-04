@@ -57,7 +57,7 @@ Oracle RAC on Docker /Kubernetes /systemd-nspawn /Azure /EC2 /GCE
 |--------|--------|-------|-------|-------|-------|--------|-------|-------|
 |Environment version|18.01.0-ce|18.01.0-ce|-------|-------|systemd-229-4ubuntu|N/A|-------|N/A|
 |OS(kernel) version|ubuntu 16.04.1 LTS(4.4.0-47-generic)|CentOS 7.4.1708(3.10.0-693.17.1.el7.x86_64)|-------|-------|ubuntu 16.04.1 LTS(4.4.0-47-generic)|Oracle Linux 7.3(4.1.12-112.14.13.el7uek.x86_64)|-------|Oracle Linux 7.4(4.1.12-112.14.13.el7uek.x86_64)|
-|Other info(region etc)|--------|-------|-------|-------|-------|uswest2|-------|us-west1-b|
+|Other info(region etc)|--------|-------|-------|-------|-------|westus2|-------|us-west1-b|
 |Tested Date|2018/01/31|2018/02/01|-------|-------|2018/02/01|2018/02/02|-------|2018/02/04|
 
 
