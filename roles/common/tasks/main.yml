@@ -13,8 +13,15 @@
     tags:
       - sethost
 
-  - pause:
-      seconds: 5
+  - name: "start_enable sethost.service"
+    become: yes
+    service: name=sethost.service state=started enabled=yes
+    ignore_errors: True
+    tags:
+      - sethost
+
+#  - pause:
+#      seconds: 5
 
   - name: "start_enable sethost.service"
     become: yes
