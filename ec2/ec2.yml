@@ -153,7 +153,7 @@
           - delete 
           
       - name: "get instanceids"         
-        ec2_instance_facts:
+        ec2_remote_facts:
           region: "{{ REGION }}"
           filters:
             vpc-id: "{{ vpc_facts['vpcs'][0]['id'] }}"
