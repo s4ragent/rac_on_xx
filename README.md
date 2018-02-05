@@ -62,7 +62,7 @@ Oracle RAC on Docker /Kubernetes /systemd-nspawn /Azure /EC2 /GCE
 
 - Cloud Environment
 
-|Azure|EC2|GCE||
+||Azure|EC2|GCE|
 |--------|--------|-------|-------|
 |Environment version|N/A|N/A|N/A|
 |OS(kernel) version|Oracle Linux 7.3(4.1.12-112.14.13.el7uek.x86_64)|Oracle Linux 7.4(4.1.12-112.14.13.el7uek.x86_64)|Oracle Linux 7.4(4.1.12-112.14.13.el7uek.x86_64)|
