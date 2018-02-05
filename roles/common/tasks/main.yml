@@ -13,9 +13,9 @@
     tags:
       - sethost
 
-  - name: "start_enable sethost.service"
+  - name: "daemon_reload"
     become: yes
-    service: name=sethost.service state=started enabled=yes
+    systemd: daemon_reload=yes
     ignore_errors: True
     tags:
       - sethost
