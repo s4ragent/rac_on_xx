@@ -1,15 +1,15 @@
 #### azure user specific value  ###################
 PREFIX: "raconxx"
 RG_NAME: "rg_raconxx"
-#ZONE: "westus2"
-ZONE: "japanwest"
+ZONE: "westus2"
+#ZONE: "japanwest"
 VNET_ADDR: "10.153.0.0/16"
 SNET_ADDR: "10.153.1.0/24"
 VXLAN_DEV: "eth0"
 INSTANCE_TYPE_OPS: "--size Standard_A2m_v2"
 #INSTANCE_TYPE_OPS: "--size Standard_A2m_v2"
 #INSTANCE_TYPE_OPS: "--size Standard_A0"
-INSTANCE_OPS: "--image Oracle:Oracle-Linux:7.2:latest"
+INSTANCE_OPS: "--image Oracle:Oracle-Linux:7.3:latest"
 NODE_DISK_SIZE: "60"
 STORAGE_DISK_SIZE: "100"
 ######## common user specific value  ###############

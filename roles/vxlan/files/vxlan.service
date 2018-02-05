@@ -1,7 +1,7 @@
 [Unit]
 Description=vxlan auto start
 Requires=network.target
-After=network.target
+After=network.target sethost.service
 Before=remote-fs.target
 
 [Service]

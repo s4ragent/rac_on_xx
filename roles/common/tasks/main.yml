@@ -13,6 +13,16 @@
     tags:
       - sethost
 
+  - name: "daemon_reload"
+    become: yes
+    systemd: daemon_reload=yes
+    ignore_errors: True
+    tags:
+      - sethost
+
+#  - pause:
+#      seconds: 5
+
   - name: "start_enable sethost.service"
     become: yes
     service: name=sethost.service state=started enabled=yes
@@ -152,6 +162,12 @@
     tags:
       - kernel
 
+  - name: "restart vxlan"
+    become: yes
+    service: name=vxlan.service state=restarted
+    tags:
+      - kernel
+
   - name: "disable ntpd"
     become: yes
     service: name=ntpd.service state=stopped enabled=no
@@ -171,6 +187,22 @@
   - name: "rm  ntpd.pid"
     become: yes
     file: path=/var/run/ntpd.pid state=absent
+    ignore_errors: yes
+    tags:
+      - ntp
+
+  - name: "disable chronyd"
+    become: yes
+    service: name=chronyd.service state=stopped enabled=no
+    ignore_errors: yes
+    tags:
+      - ntp
+
+  - name: "mv chronyd.conf"
+    become: yes
+    shell: mv /etc/chrony.conf /etc/chrony.conf.original
+    args:
+      creates: /etc/chrony.conf.original
     ignore_errors: yes
     tags:
       - ntp
@@ -251,7 +283,7 @@
 
   - name: "create swap(dd)"
     become: yes
-    shell: dd if=/dev/zero of=/swap bs=1M count={{ SWAP_SIZE }} && mkswap /swap
+    shell: dd if=/dev/zero of=/u01/swap bs=1M count={{ SWAP_SIZE }} && mkswap /u01/swap
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
     when: ansible_swaptotal_mb < SWAP_SIZE -1
@@ -261,7 +293,8 @@
 
   - name: "create swap(swapon)"
     become: yes
-    shell: swapon /swap
+    shell: swapon /u01/swap
+    ignore_errors: yes
     when: ansible_swaptotal_mb < SWAP_SIZE -1
     tags:
       - swapon
@@ -269,7 +302,7 @@
       
   - name: "mount swap(fstab)"
     become: yes
-    mount: name=swap src=/swap fstype=swap opts=defaults passno=0 dump=0 state=present
+    mount: name=swap src=/u01/swap fstype=swap opts=defaults passno=0 dump=0 state=present
     when: ansible_swaptotal_mb < SWAP_SIZE -1
     tags:
       - fstabswap

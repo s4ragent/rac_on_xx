@@ -49,6 +49,15 @@
       - vxlan_init
       - vxlan_conf
       - addclient
+
+  - name: "daemon_reload"
+    become: yes
+    systemd: daemon_reload=yes
+    ignore_errors: True
+    tags:
+      - vxlan_init
+      - vxlan_conf
+      - addclient
       
   - name: "start_enable vxlan.service(Without NetworkManager)"
     become: yes

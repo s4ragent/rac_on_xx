@@ -50,16 +50,24 @@ Oracle RAC on Docker /Kubernetes /systemd-nspawn /Azure /EC2 /GCE
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker03.png)
 ![crsctl](https://github.com/s4ragent/misc/blob/master/rac_on_xx/docker/docker04.png)
 
-## Tested Environment(Docker,Kubernets etc)
-- 12.2.0.1
+## Tested Environment(12.2.0.1)
+- Container Environment
 
-||Docker(ubuntu host)|Docker(Centos host)|Kubernetes(ACS)|Kubernetes(GKE)|systemd-nspawn|Azure|EC2|GCE|
-|--------|--------|-------|-------|-------|-------|--------|-------|-------|
-|Environment version|18.01.0-ce|18.01.0-ce|-------|-------|systemd-229-4ubuntu|--------|-------|-------|
-|OS version|ubuntu 16.04.1 LTS|CentOS 7.4.1708|-------|-------|ubuntu 16.04.1 LTS|--------|-------|-------|
-|Other info(region etc)|--------|-------|-------|-------|-------|--------|-------|-------|
-|Tested Date|2018/01/31|2018/02/01|-------|-------|2018/02/01|--------|-------|-------|
+||Docker(ubuntu host)|Docker(Centos host)|Kubernetes(ACS)|Kubernetes(GKE)|systemd-nspawn|
+|--------|--------|-------|-------|-------|-------|
+|Environment version|18.01.0-ce|18.01.0-ce|kubernetes 1.7.9|-------|systemd-229-4ubuntu|
+|OS(kernel) version|ubuntu 16.04.1 LTS(4.4.0-47-generic)|CentOS 7.4.1708(3.10.0-693.17.1.el7.x86_64)|(4.11.0-1016-azure)|-------|ubuntu 16.04.1 LTS(4.4.0-47-generic)|
+|Other info(region etc)|N/A|N/A|westus2|-------|N/A|
+|Last Update Date|2018/01/31|2018/02/01|2018/02/04|-------|2018/02/01|
 
+- Cloud Environment
+
+||Azure|EC2|GCE|
+|--------|--------|-------|-------|
+|Environment version|N/A|N/A|N/A|
+|OS(kernel) version|Oracle Linux 7.3(4.1.12-112.14.13.el7uek.x86_64)|Oracle Linux 7.4(4.1.12-112.14.13.el7uek.x86_64)|Oracle Linux 7.4(4.1.12-112.14.13.el7uek.x86_64)|
+|Other info(region etc)|westus2|us-west-2|us-west1-b|
+|Last Update Date|2018/02/02|2018/02/06|2018/02/04|
 
 
 ## Licence
