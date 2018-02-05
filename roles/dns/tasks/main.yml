@@ -60,6 +60,14 @@
     tags:
       - setresolvconf
       - addclient
+
+  - name: "daemon_reload"
+    become: yes
+    systemd: daemon_reload=yes
+    ignore_errors: True
+    tags:
+      - setresolvconf
+      - addclient
       
   - name: "start_enable setresolvconf.service"
     become: yes
