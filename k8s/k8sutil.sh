@@ -87,8 +87,9 @@ do
 	if [ "$status" = "1" ]; then
 		break
 	fi	
-	if [ "$loopcnt" = "30" ]; then
-		break
+	if [ "$loopcnt" = "40" ]; then
+	 echo "pod creation failed"
+		exit
 	fi	
 	loopcnt=`expr $loopcnt + 1`
 	sleep 30s
