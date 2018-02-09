@@ -49,7 +49,7 @@ rac_on_xx/kubernetes
 
 ## Requirement
 - GKE(Google Kubernetes Engine) or ACS(Azure Container Service) 
-- Google Cloud SDK(GKE) or Azure CLI 2.0(ACS) 
+- Google Cloud SDK(GKE) or Azure CLI 2.0(AKS) 
 - Oracle 12c Release 2 (12.2) Clusterware and Database software
 - 4 worker nodes　 
 - 2core CPU per node and 8GB Memory per node
@@ -61,7 +61,7 @@ rac_on_xx/kubernetes
     ##GKE
     see https://cloud.google.com/kubernetes-engine/docs/quickstart?hl=en 
     
-    ##ACS 
+    ##AKS 
     see https://docs.microsoft.com/en-us/azure/container-service/kubernetes/container-service-kubernetes-walkthrough
 ### 2. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate them on /media
     # ls -al  /media
