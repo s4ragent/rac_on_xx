@@ -316,7 +316,7 @@ spec:
 
 EOI
 
-                                                                                                     
+sleep 30s                                                                                                     
 #	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$DB_MEDIA1
 
 #	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$GRID_MEDIA1
@@ -392,8 +392,9 @@ common_execansible rac.yml --skip-tags security,dnsmasq,vxlan_conf
 }
 
 runall_k8s(){
-	runonly $*
-	install
+	runpod $*
+	copymedia
+	kubectl exec --namespace raconxx -ti ansible /bin/bash -c "cd /root/rac_on_xx/k8s;nohup bash k8sutil.sh install"
 }
 
 case "$1" in
