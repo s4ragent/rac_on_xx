@@ -57,7 +57,7 @@
       - download
             
   - name: "unzip grid media"
-    become: yes
+#    become: yes
     become_user: grid
     shell: "unzip {{ MEDIA_PATH }}/{{ item }} -d {{ GRID_ORACLE_HOME }}"
     when: inventory_hostname == groups["dbserver"][0] 
