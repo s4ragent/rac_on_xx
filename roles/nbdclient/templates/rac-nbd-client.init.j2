@@ -1,21 +1,22 @@
 #!/bin/bash
-/sbin/ndb-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nb1
+/sbin/modprobe nbd
+/sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nb1
 
-/sbin/ndb-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nb2
+/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nb2
 
-/sbin/ndb-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nb3
+/sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nb3
 
-/sbin/ndb-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nb4
+/sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nb4
 
-/sbin/ndb-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nb5
+/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nb5
 
-/sbin/ndb-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nb6
+/sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nb6
 
-/sbin/ndb-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nb7
+/sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nb7
 
-/sbin/ndb-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nb8
+/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nb8
 
-/sbin/ndb-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nb9
+/sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nb9
 
 chmod 0660 /dev/nb*
 chown grid:asmadmin /dev/nb*
