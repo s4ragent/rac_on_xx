@@ -1,2 +1,4 @@
 #!/bin/bash
-hostnamectl set-hostname {{ NODENAME }}.{{ DOMAIN_NAME }}
+nbd-server 4101 {{ VOTE_DEV }}
+nbd-server 4102 {{ DATA_DEV }}
+nbd-server 4103 {{ FRA_DEV }}
