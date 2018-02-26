@@ -6,13 +6,13 @@
       - nbd
       - qemu-img
     tags:
-      - ndbserver
+      - nbdserver
       
-  - name: "create nfs root directory"
+  - name: "create nbd directory"
     become: yes
     file: path={{ ORA_DATA }} state=directory owner=root group=root mode=0755
     tags:
-      - ndbserver
+      - nbdserver
 
   - name: "create asm device vote(qemu-img)"
     become: yes
@@ -25,30 +25,30 @@
       - { name: "{{ DATA_DEV }}", size: "{{ DATA_BASE_SIZE + DATA_MULTI_SIZE * groups['dbserver'] | length }}" }
       - { name: "{{ FRA_DEV }}", size: "{{ FRA_BASE_SIZE + FRA_MULTI_SIZE * groups['dbserver'] | length }}" }
     tags:
-      - ndbserver
+      - nbdserver
 
 
   - name: "copy rac-nbd-server.init"
     become: yes
-    copy: src=rac-nbd-server.init dest=/usr/local/bin/rac-nbd-server.init owner=root group=root mode=0700
+    template: src=rac-nbd-server.init.j2 dest=/usr/local/bin/rac-nbd-server.init owner=root group=root mode=0700
     tags:
-      - ndbserver
+      - nbdserver
       
   - name: "copy nbd-server.service"
     become: yes
     copy: src=rac-nbd-server.service dest=/etc/systemd/system/rac-nbd-server.service owner=root group=root mode=0700
     tags:
-      - ndbserver
+      - nbdserver
 
   - name: "daemon_reload"
     become: yes
     systemd: daemon_reload=yes
     ignore_errors: True
     tags:
-      - ndbserver
+      - nbdserver
       
   - name: "start_enable vxlan.service(Without NetworkManager)"
     become: yes
     service: name=rac-nbd-server.service state=started enabled=yes
     tags:
-      - ndbserver
+      - nbdserver
