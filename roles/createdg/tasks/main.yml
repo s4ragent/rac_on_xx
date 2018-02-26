@@ -15,12 +15,19 @@
   - name: "create diskgroup" 
     become: yes
     become_user: grid
-    shell : "{{ GRID_ORACLE_HOME }}/bin/asmca -silent -createDiskGroup  -diskGroupName {{ item.name }} -redundancy HIGH -au_size 1 {% for host in groups['storage']  %} -disk {{ ORA_DATA }}/{{ hostvars[host]['NODENAME'] }}/{{ item.path }}  {% endfor %}"
-    when: inventory_hostname == groups["dbserver"][0] and storage_type == 'nfsmulti'
+    shell : "{{ GRID_ORACLE_HOME }}/bin/asmca -silent -createDiskGroup  -diskGroupName {{ DATA_DISKGROUP_NAME }} -redundancy HIGH -au_size 1  -disk /dev/nbd4 -disk /dev/nbd5 -disk /dev/nbd6"
+    when: inventory_hostname == groups["dbserver"][0] and storage_type == 'nbd'
     register: createdg_result
-    with_items:
-      - { name: "{{ DATA_DISKGROUP_NAME }}", path: "{{ DATA_FILE }}" }
-      - { name: "{{ FRA_DISKGROUP_NAME }}", path: "{{ FRA_FILE }}" }
     tags:
       - createdg
       - installdbca   
+
+  - name: "create diskgroup" 
+    become: yes
+    become_user: grid
+    shell : "{{ GRID_ORACLE_HOME }}/bin/asmca -silent -createDiskGroup  -diskGroupName {{ FRA_DISKGROUP_NAME }} -redundancy HIGH -au_size 1  -disk /dev/nbd7 -disk /dev/nbd8 -disk /dev/nbd9"
+    when: inventory_hostname == groups["dbserver"][0] and storage_type == 'nbd'
+    register: createdg_result
+    tags:
+      - createdg
+      - installdbca
