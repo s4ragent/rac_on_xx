@@ -10,7 +10,7 @@
 
   - name: "copy rac-nbd-client.init"
     become: yes
-    copy: src=rac-nbd-client.init dest=/usr/local/bin/rac-nbd-client.init owner=root group=root mode=0700
+    template: src=rac-nbd-client.init.j2 dest=/usr/local/bin/rac-nbd-client.init owner=root group=root mode=0700
     tags:
       - ndbclient
       
