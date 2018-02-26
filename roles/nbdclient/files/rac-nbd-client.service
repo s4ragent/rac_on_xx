@@ -9,7 +9,6 @@ Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/local/bin/sethost.init start
 ExecReload=/usr/local/bin/sethost.init reload
-ExecStop=/usr/local/bin/sethost.init stop
 User=root
 Group=root
 
