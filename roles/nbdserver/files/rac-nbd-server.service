@@ -7,9 +7,7 @@ Before=remote-fs.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/local/bin/sethost.init start
-ExecReload=/usr/local/bin/sethost.init reload
-ExecStop=/usr/local/bin/sethost.init stop
+ExecStart=/usr/local/bin/rac-nbd-server.init start
 User=root
 Group=root
 
