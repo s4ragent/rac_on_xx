@@ -1,14 +1,13 @@
 [Unit]
 Description=sethost auto start
 Requires=network.target
-After=network.target
+After=rac-nbd-server.service
 Before=remote-fs.target
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/local/bin/sethost.init start
-ExecReload=/usr/local/bin/sethost.init reload
+ExecStart=/usr/local/bin/rac-nbd-client.init start
 User=root
 Group=root
 
