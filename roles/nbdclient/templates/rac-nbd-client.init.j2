@@ -5,63 +5,63 @@ fdisk -l /dev/nbd1
 if [ $? = 0 ]; then
   echo "nbd mounted"
 else
-  /sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd1 -p
+  /sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd1
 fi
 
 fdisk -l /dev/nbd4
 if [ $? = 0 ]; then
   echo "nbd mounted"
 else
-  /sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd4 -p
+  /sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd4
 fi
 
 fdisk -l /dev/nbd7
 if [ $? = 0 ]; then
   echo "nbd mounted"
 else
-  /sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd7 -p
+  /sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd7
 fi
 
 fdisk -l /dev/nbd2
 if [ $? = 0 ]; then
   echo "nbd mounted"
 else
-  /sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd2 -p
+  /sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd2
 fi
 
 fdisk -l /dev/nbd5
 if [ $? = 0 ]; then
   echo "nbd mounted"
 else
-  /sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd5 -p
+  /sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd5
 fi
 
 fdisk -l /dev/nbd8
 if [ $? = 0 ]; then
   echo "nbd mounted"
 else
-  /sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd8 -p
+  /sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd8
 fi
 
 fdisk -l /dev/nbd3
 if [ $? = 0 ]; then
   echo "nbd mounted"
 else
-  /sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd3 -p
+  /sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd3
 fi
 
 fdisk -l /dev/nbd6
 if [ $? = 0 ]; then
   echo "nbd mounted"
 else
-  /sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd6 -p
+  /sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd6
 fi
 
 fdisk -l /dev/nbd9
 if [ $? = 0 ]; then
   echo "nbd mounted"
 else
-  /sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd9 -p
+  /sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd9
 fi
 
 chmod 0660 /dev/nbd*
