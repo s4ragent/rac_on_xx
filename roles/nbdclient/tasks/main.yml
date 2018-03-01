@@ -27,7 +27,7 @@
     tags:
       - nbdclient
       
-  - name: "start_enable vxlan.service(Without NetworkManager)"
+  - name: "start_enable nbd-client.service"
     become: yes
     service: name=rac-nbd-client.service state=started enabled=yes
     tags:
