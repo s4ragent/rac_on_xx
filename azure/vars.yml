@@ -11,7 +11,7 @@ INSTANCE_TYPE_OPS: "--size Standard_A2m_v2"
 #INSTANCE_TYPE_OPS: "--size Standard_A0"
 INSTANCE_OPS: "--image Oracle:Oracle-Linux:7.3:latest"
 NODE_DISK_SIZE: "60"
-STORAGE_DISK_SIZE: "100"
+STORAGE_DISK_SIZE: "200"
 ######## common user specific value  ###############
 #xrdp_pass: Xrdp123!
 #guac_pass: Guac123!
@@ -40,13 +40,13 @@ ansible_ssh_user: azureuser
 ansible_ssh_private_key_file: raconxx
 dns: dnsmasq
 #####for NFS option values
-storage_type: "nfs"
+storage_type: "nbd"
 ##### device size = base_size + multi_size * node count
 ####
 NFS_ROOT: /
 ORA_DATA: /u01/oradata
 VOTE_DEV: /u01/oradata/vote.img
-VOTE_BASE_SIZE: 40960
+VOTE_BASE_SIZE: 81920
 VOTE_MULTI_SIZE: 2048
 VOTE_DISKGROUP_NAME: VOTE
 DATA_DEV: /u01/oradata/data.img
