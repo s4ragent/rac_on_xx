@@ -2,7 +2,7 @@
 /sbin/rmmod nbd
 
 InMOD=`lsmod | grep nbd | wc -l`
-if [ "InMOD" = "0" ]; then
+if [ "$InMOD" = "0" ]; then
 
 /sbin/modprobe nbd
 
