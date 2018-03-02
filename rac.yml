@@ -22,15 +22,11 @@
       - download
       - { role: nfsclient, when: "storage_type == 'nfs'" }
       - { role: nbdserver, when: "storage_type == 'nbd'" }
-#      - { role: nfsclient, when: "storage_type == 'efs'" }
-
- - hosts: dbserver
-   any_errors_fatal: true
-   serial: 1
-   roles:
       - { role: nbdclient, when: "storage_type == 'nbd'" }
       - { role: cvu, when: "cvu is defined" }
-      
+#      - { role: nfsclient, when: "storage_type == 'efs'" }
+
+
  - hosts: dbserver
    any_errors_fatal: true
    serial: 1
