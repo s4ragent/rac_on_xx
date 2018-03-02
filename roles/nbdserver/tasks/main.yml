@@ -1,7 +1,7 @@
 ---
   - name: "install ndb packages"
     become: yes
-    yum: name={{ item }} state=present
+    yum: name={{ item }} state=present  enablerepo=ol7_developer_EPEL
     with_items:
       - nbd
       - qemu-img
