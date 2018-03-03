@@ -1,31 +1,23 @@
 #!/bin/bash
-/sbin/rmmod nbd
 
-InMOD=`lsmod | grep nbd | wc -l`
-if [ "$InMOD" = "0" ]; then
+/sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd1 -c -b 512
 
-/sbin/modprobe nbd
+/sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd4 -c -b 512
 
-/sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd1
+/sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd7 -c -b 512
 
-/sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd4
+/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd2 -c -b 512
 
-/sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd7
+/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd5 -c -b 512
 
-/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd2
+/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd8 -c -b 512
 
-/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd5
+/sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd3 -c -b 512
 
-/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd8
+/sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd6 -c -b 512
 
-/sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd3
-
-/sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd6
-
-/sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd9
+/sbin/nbd-client {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd9 -c -b 512
 
 
 chmod 0660 /dev/nbd*
 chown grid:asmadmin /dev/nb*
-
-fi
