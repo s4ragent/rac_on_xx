@@ -2,6 +2,7 @@
 /sbin/rmmod nbd 
 InMOD=`lsmod | grep nbd | wc -l`
 if [ "$InMOD" = "0" ]; then
+/sbin/modprobe nbd 
 /sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd1 -c -b 512
 
 /sbin/nbd-client {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd4 -c -b 512
