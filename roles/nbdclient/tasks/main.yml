@@ -8,7 +8,7 @@
     tags:
       - nbdclient
 
-  - name: "copy rac-nbd-client.init"
+  - name: "copy rac-nbd-client-n.init"
     become: yes
     template: src="rac-nbd-client-{{ item }}.init.j2" dest="/usr/local/bin/rac-nbd-client-{{ item }}.init" owner=root group=root mode=0700
     with_items:
@@ -18,7 +18,7 @@
     tags:
       - nbdclient
       
-  - name: "copy nbd-client.service"
+  - name: "copy nbd-client-n.service"
     become: yes
     copy: src="rac-nbd-client-{{ item }}.service" dest="/etc/systemd/system/rac-nbd-client-{{ item }}.service" owner=root group=root mode=0700
     with_items:
@@ -35,10 +35,10 @@
     tags:
       - nbdclient
       
-  - name: "start_enable nbd-client.service(not local docker)"
+  - name: "start_enable nbd-client-n.service(not local docker)"
     become: yes
     service: name="rac-nbd-client-{{ item }}.service" state=started enabled=yes
-    when: nbd-docker is not defined
+    when: nbd-local-container is not defined
     with_items:
       - 1
       - 2
@@ -46,23 +46,23 @@
     tags:
       - nbdclient
 
-  - name: "start_enable nbd-client.service(local docker)"
+  - name: "start_enable nbd-client-3.service(local docker)"
     become: yes
     service: name="rac-nbd-client-1.service" state=started enabled=yes
-    when: inventory_hostname == groups["dbserver"][0] and nbd-docker is defined
+    when: inventory_hostname == groups["dbserver"][0] and nbd-local-container is defined
     tags:
       - nbdclient
 
-  - name: "start_enable nbd-client.service(local docker)"
+  - name: "start_enable nbd-client-3.service(local docker)"
     become: yes
     service: name="rac-nbd-client-2.service" state=started enabled=yes
-    when: inventory_hostname == groups["dbserver"][1] and nbd-docker is defined
+    when: inventory_hostname == groups["dbserver"][1] and nbd-local-container is defined
     tags:
       - nbdclient
 
-  - name: "start_enable nbd-client.service(local docker)"
+  - name: "start_enable nbd-client-3.service(local docker)"
     become: yes
     service: name="rac-nbd-client-3.service" state=started enabled=yes
-    when: inventory_hostname == groups["dbserver"][2] and nbd-docker is defined
+    when: inventory_hostname == groups["dbserver"][2] and nbd-local-container is defined
     tags:
       - nbdclient
