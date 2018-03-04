@@ -38,7 +38,7 @@
   - name: "start_enable nbd-client-n.service(not local docker)"
     become: yes
     service: name="rac-nbd-client-{{ item }}.service" state=started enabled=yes
-    when: nbd-local-container is not defined
+    when: nbd_local_container is not defined
     with_items:
       - 1
       - 2
@@ -49,20 +49,20 @@
   - name: "start_enable nbd-client-3.service(local docker)"
     become: yes
     service: name="rac-nbd-client-1.service" state=started enabled=yes
-    when: inventory_hostname == groups["dbserver"][0] and nbd-local-container is defined
+    when: inventory_hostname == groups["dbserver"][0] and nbd_local_container is defined
     tags:
       - nbdclient
 
   - name: "start_enable nbd-client-3.service(local docker)"
     become: yes
     service: name="rac-nbd-client-2.service" state=started enabled=yes
-    when: inventory_hostname == groups["dbserver"][1] and nbd-local-container is defined
+    when: inventory_hostname == groups["dbserver"][1] and nbd_local_container is defined
     tags:
       - nbdclient
 
   - name: "start_enable nbd-client-3.service(local docker)"
     become: yes
     service: name="rac-nbd-client-3.service" state=started enabled=yes
-    when: inventory_hostname == groups["dbserver"][2] and nbd-local-container is defined
+    when: inventory_hostname == groups["dbserver"][2] and nbd_local_container is defined
     tags:
       - nbdclient
