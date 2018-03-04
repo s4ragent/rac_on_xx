@@ -1,0 +1,22 @@
+#!/bin/bash
+
+
+/sbin/modprobe nbd 
+{% if VXLAN_NODENAME is defined %}
+/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]['VXLAN_NODENAME'] }} 4101 /dev/nbd2 -b 512
+
+/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]['VXLAN_NODENAME'] }} 4102 /dev/nbd5 -b 512
+
+/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]['VXLAN_NODENAME'] }} 4103 /dev/nbd8 -b 512
+{% else %}
+/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4101 /dev/nbd2 -b 512
+
+/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4102 /dev/nbd5 -b 512
+
+/sbin/nbd-client {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 4103 /dev/nbd8 -b 512
+{% endif %}
+
+chmod 0660 /dev/nbd*
+chown grid:asmadmin /dev/nb*
+
+
