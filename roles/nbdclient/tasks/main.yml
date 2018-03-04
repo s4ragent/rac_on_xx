@@ -38,7 +38,7 @@
   - name: "start_enable nbd-client.service(not local docker)"
     become: yes
     service: name="rac-nbd-client-{{ item }}.service" state=started enabled=yes
-    when: nbd-docker not defined
+    when: nbd-docker is not defined
     with_items:
       - 1
       - 2
