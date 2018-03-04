@@ -1,0 +1,15 @@
+[Unit]
+Description=rac-nbd-client-1 start
+Requires=network.target
+After=rac-nbd-server.service
+Before=remote-fs.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/rac-nbd-client-1.init start
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
