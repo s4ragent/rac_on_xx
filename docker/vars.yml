@@ -38,12 +38,12 @@ ansible_ssh_private_key_file: raconxx
 dns: dnsmasq
 #####for NFS option values
 ##### device size = base_size + multi_size * node count
-storage_type: "nbd"
-nbd_local_container: "true"
+storage_type: "nfs"
+#nbd_local_container: "true"
 NFS_OPS:  "rw,bg,hard,nointr,rsize=1048576,wsize=1048576,tcp,vers=4.1,timeo=600,actimeo=0"
 ORA_DATA: /u01/oradata
 VOTE_DEV: /u01/oradata/vote.img
-VOTE_BASE_SIZE: 81920
+VOTE_BASE_SIZE: 40960
 VOTE_MULTI_SIZE: 2048
 VOTE_DISKGROUP_NAME: VOTE
 DATA_DEV: /u01/oradata/data.img
