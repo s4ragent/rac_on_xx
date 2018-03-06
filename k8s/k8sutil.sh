@@ -156,6 +156,12 @@ spec:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
+        - name: modules
+          mountPath: /lib/modules
+          readOnly: true
+        - name: dev
+          mountPath: /dev
+          readOnly: false          
         - name: u01
           mountPath: /u01
           subPath: u01
@@ -176,9 +182,16 @@ spec:
     - name: cgroups
       hostPath:
         path: /sys/fs/cgroup
+    - name: dev
+      hostPath:
+        path: /dev
+    - name: modules
+      hostPath:
+        path: /lib/modules
     - name: u01
       persistentVolumeClaim:
         claimName: ${NODENAME}u01claim
+        
 EOF
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
