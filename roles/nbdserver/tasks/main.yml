@@ -27,19 +27,12 @@
     tags:
       - nbdserver
 
-
-  - name: "copy rac-nbd-server.init"
+  - name: "copy /etc/nbd-server/config"
     become: yes
-    template: src=rac-nbd-server.init.j2 dest=/usr/local/bin/rac-nbd-server.init owner=root group=root mode=0700
+    template: src=config.j2 dest=/etc/nbd-server/config owner=root group=root mode=0700
     tags:
       - nbdserver
       
-  - name: "copy nbd-server.service"
-    become: yes
-    copy: src=rac-nbd-server.service dest=/etc/systemd/system/rac-nbd-server.service owner=root group=root mode=0700
-    tags:
-      - nbdserver
-
   - name: "daemon_reload"
     become: yes
     systemd: daemon_reload=yes
@@ -47,8 +40,8 @@
     tags:
       - nbdserver
       
-  - name: "start_enable vxlan.service(Without NetworkManager)"
+  - name: "start_enable nbd-server.service"
     become: yes
-    service: name=rac-nbd-server.service state=started enabled=yes
+    service: name=nbd-server.service state=started enabled=yes
     tags:
       - nbdserver
