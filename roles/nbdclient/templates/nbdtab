@@ -1,21 +1,21 @@
 {% if VXLAN_NODENAME is defined %}
 nbd0 {{ hostvars[groups['dbserver'][0]]['VXLAN_NODENAME'] }} vote bs=512
-nbd1 {{ hostvars[groups['dbserver'][1]]['VXLAN_NODENAME'] }} vote bs=512
-nbd2 {{ hostvars[groups['dbserver'][2]]['VXLAN_NODENAME'] }} vote bs=512
-nbd3 {{ hostvars[groups['dbserver'][0]]['VXLAN_NODENAME'] }} data bs=512
+nbd1 {{ hostvars[groups['dbserver'][0]]['VXLAN_NODENAME'] }} data bs=512
+nbd2 {{ hostvars[groups['dbserver'][0]]['VXLAN_NODENAME'] }} fra bs=512
+nbd3 {{ hostvars[groups['dbserver'][1]]['VXLAN_NODENAME'] }} vote bs=512
 nbd4 {{ hostvars[groups['dbserver'][1]]['VXLAN_NODENAME'] }} data bs=512
-nbd5 {{ hostvars[groups['dbserver'][2]]['VXLAN_NODENAME'] }} data bs=512
-nbd6 {{ hostvars[groups['dbserver'][0]]['VXLAN_NODENAME'] }} fra bs=512
-nbd7 {{ hostvars[groups['dbserver'][1]]['VXLAN_NODENAME'] }} fra bs=512
+nbd5 {{ hostvars[groups['dbserver'][1]]['VXLAN_NODENAME'] }} fra bs=512
+nbd6 {{ hostvars[groups['dbserver'][2]]['VXLAN_NODENAME'] }} vote bs=512
+nbd7 {{ hostvars[groups['dbserver'][2]]['VXLAN_NODENAME'] }} data bs=512
 nbd8 {{ hostvars[groups['dbserver'][2]]['VXLAN_NODENAME'] }} fra bs=512
 {% else %}
 nbd0 {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} vote bs=512
-nbd1 {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} vote bs=512
-nbd2 {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} vote bs=512
-nbd3 {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} data bs=512
+nbd1 {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} data bs=512
+nbd2 {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} fra bs=512
+nbd3 {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} vote bs=512
 nbd4 {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} data bs=512
-nbd5 {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} data bs=512
-nbd6 {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} fra bs=512
-nbd7 {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} fra bs=512
+nbd5 {{ hostvars[groups['dbserver'][1]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} fra bs=512
+nbd6 {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} vote bs=512
+nbd7 {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} data bs=512
 nbd8 {{ hostvars[groups['dbserver'][2]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} fra bs=512
 {% endif %}
