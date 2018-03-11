@@ -8,23 +8,16 @@
     tags:
       - nbdclient
 
-  - name: "copy rac-nbd-client-n.init"
+  - name: "copy nbdtab"
     become: yes
-    template: src="rac-nbd-client-{{ item }}.init.j2" dest="/usr/local/bin/rac-nbd-client-{{ item }}.init" owner=root group=root mode=0700
-    with_items:
-      - 1
-      - 2
-      - 3  
+    template: src="nbdtab.j2" dest="/etc/nbdtab" owner=root group=root mode=0700
     tags:
       - nbdclient
       
-  - name: "copy nbd-client-n.service"
+  - name: "copy racnbd@nbdX.service"
     become: yes
-    copy: src="rac-nbd-client-{{ item }}.service" dest="/etc/systemd/system/rac-nbd-client-{{ item }}.service" owner=root group=root mode=0700
-    with_items:
-      - 1
-      - 2
-      - 3
+    copy: src="racnbd@.service" dest="/etc/systemd/system/racnbd@nbd{{ item }}.service" owner=root group=root mode=0700
+    with_sequence: start=0 end=8
     tags:
       - nbdclient
 
@@ -35,34 +28,34 @@
     tags:
       - nbdclient
       
-  - name: "start_enable nbd-client-n.service(not local docker)"
+  - name: "start_enable racnbd@nbdX.service"
     become: yes
-    service: name="rac-nbd-client-{{ item }}.service" state=started enabled=yes
+    service: name="racnbd@nbd{{ item }}.service" state=started enabled=yes
     when: nbd_local_container is not defined
-    with_items:
-      - 1
-      - 2
-      - 3
+    with_sequence: start=0 end=8
     tags:
       - nbdclient
 
-  - name: "start_enable nbd-client-3.service(local docker)"
+  - name: "start_enable racnbd@nbdX.service for localcontainer1"
     become: yes
-    service: name="rac-nbd-client-1.service" state=started enabled=yes
+    service: name="racnbd@nbd{{ item }}.service" state=started enabled=yes
+    with_sequence: start=0 end=2
     when: inventory_hostname == groups["dbserver"][0] and nbd_local_container is defined
     tags:
       - nbdclient
 
-  - name: "start_enable nbd-client-3.service(local docker)"
+  - name: "start_enable racnbd@nbdX.service for localcontainer2"
     become: yes
-    service: name="rac-nbd-client-2.service" state=started enabled=yes
+    service: name="racnbd@nbd{{ item }}.service" state=started enabled=yes
+    with_sequence: start=3 end=5
     when: inventory_hostname == groups["dbserver"][1] and nbd_local_container is defined
     tags:
       - nbdclient
 
-  - name: "start_enable nbd-client-3.service(local docker)"
+  - name: "start_enable racnbd@nbdX.service for localcontainer3"
     become: yes
-    service: name="rac-nbd-client-3.service" state=started enabled=yes
+    service: name="racnbd@nbd{{ item }}.service" state=started enabled=yes
+    with_sequence: start=6 end=8
     when: inventory_hostname == groups["dbserver"][2] and nbd_local_container is defined
     tags:
       - nbdclient
