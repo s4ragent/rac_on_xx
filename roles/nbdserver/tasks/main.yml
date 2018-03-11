@@ -27,6 +27,12 @@
     tags:
       - nbdserver
 
+  - name: "create nbd directory"
+    become: yes
+    file: path=/etc/nbd-server state=directory owner=root group=root mode=0770
+    tags:
+      - nbdserver
+
   - name: "copy /etc/nbd-server/config"
     become: yes
     template: src=config.j2 dest=/etc/nbd-server/config owner=root group=root mode=0700
