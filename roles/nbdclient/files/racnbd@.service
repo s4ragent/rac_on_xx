@@ -4,10 +4,12 @@ After=racnbd-server.service
 Before=remote-fs.target
 [Service]
 Type=forking
-ExecStartPre=/sbin/modprobe nbd
+ExecStartPre=-/sbin/modprobe nbd
 ExecStart=/usr/sbin/nbd-client %i
-ExecStartPost=/bin/chmod 0660 /dev/nbd*
-ExecStartPost=/bin/chown grid:asmadmin /dev/nb*
-
+ExecStartPost=-/bin/chmod 0660 /dev/nbd*
+ExecStartPost=-/bin/chown grid:asmadmin /dev/nb*
+Restart=on-failure
+RestartSec=30
+StartLimiBurst = 0
 [Install]
 WantedBy=multi-user.target
