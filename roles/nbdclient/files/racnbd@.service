@@ -8,6 +8,7 @@ ExecStartPre=-/sbin/modprobe nbd
 ExecStart=/usr/sbin/nbd-client %i
 ExecStartPost=-/bin/sh -c '/bin/chmod 0660 /dev/nbd*'
 ExecStartPost=-/bin/sh -c '/bin/chown grid:asmadmin /dev/nbd*'
+Restart=always
 RestartSec=30
 StartLimitInterval=600
 StartLimitBurst=15
