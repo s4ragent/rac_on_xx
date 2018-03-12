@@ -9,7 +9,5 @@ ExecStart=/usr/sbin/nbd-client %i
 ExecStartPost=-/bin/sh -c '/bin/chmod 0660 /dev/nbd*'
 ExecStartPost=-/bin/sh -c '/bin/chown grid:asmadmin /dev/nbd*'
 Restart=on-failure
-RestartSec=30
-StartLimitBurst=0
 [Install]
 WantedBy=multi-user.target
