@@ -1,11 +1,11 @@
+{% for host in play_hosts %}
+{% if inventory_hostname != host %}
 {% if VXLAN_NODENAME is defined %}
-{% for host in play_hosts %}
 {{ hostvars[host]['VXLAN_NODENAME'] }} 
-{% endfor %}
 {% else %}
-{% for host in play_hosts %}
 {{ hostvars[host]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 
-{% endfor %}
 {% endif %}
+{% endif %}
+{% endfor %}
 
 
