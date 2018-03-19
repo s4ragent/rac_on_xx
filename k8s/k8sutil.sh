@@ -140,21 +140,21 @@ metadata:
   name: Deployment_${INSTANCE_ID}
   namespace: $NAMESPACE
 spec:
-  replicas: 1
+  replicas:1
   template:
     metadata:
       labels:
         app: $INSTANCE_ID
-	    spec:
-       containers:
-	      - name: $INSTANCE_ID
-	        image: s4ragent/rac_on_xx:OEL7
-	        ports:
+    spec:
+      containers:
+	     - name: $INSTANCE_ID
+        image: s4ragent/rac_on_xx:OEL7
+        ports:
 	        - containerPort: 80
 	          hostPort: 80
-	        securityContext:
-	          privileged: true
-	        volumeMounts:
+	       securityContext:
+	         privileged: true
+	       volumeMounts:
 	        - name: cgroups
 	          mountPath: /sys/fs/cgroup
 	          readOnly: true
@@ -192,7 +192,7 @@ spec:
 	          path: /lib/modules
 	      - name: u01
 	        persistentVolumeClaim:
-	          claimName: ${NODENAME}u01claim
+           claimName: ${NODENAME}u01claim
 ---
 apiVersion: v1
 kind: Service
@@ -319,7 +319,6 @@ metadata:
     name: rac
 spec:
   hostname: ansible
-  subdomain: $SUBDOMAIN
   containers:
     - name: ansible
       image: s4ragent/rac_on_xx:OEL7
