@@ -8,7 +8,7 @@
 #### for gke
 PROVISIONER: kubernetes.io/gce-pd
 PARAMETER_1: "type: pd-standard" 
-PARAMETER_2: "zones: us-central1-c"
+PARAMETER_2: "zones: us-west1-c"
 PARAMETER_3:
 VXLAN_DEV: "eth0"
 MEDIA_PATH: /u01/downloadmedia
