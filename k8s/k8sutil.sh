@@ -177,7 +177,7 @@ spec:
           subPath: home
           readOnly: false
         - name: u01
-	         mountPath: /usr
+          mountPath: /usr
           subPath: usr
           readOnly: false
         volumes:
