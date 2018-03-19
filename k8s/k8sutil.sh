@@ -180,19 +180,19 @@ spec:
           mountPath: /usr
           subPath: usr
           readOnly: false
-        volumes:
-        - name: cgroups
-          hostPath:
-            path: /sys/fs/cgroup
-        - name: dev
-          hostPath:
-            path: /dev
-        - name: modules
-          hostPath:
-            path: /lib/modules
-        - name: u01
-          persistentVolumeClaim:
-            claimName: ${NODENAME}u01claim
+      volumes:
+      - name: cgroups
+        hostPath:
+          path: /sys/fs/cgroup
+      - name: dev
+        hostPath:
+          path: /dev
+      - name: modules
+        hostPath:
+          path: /lib/modules
+      - name: u01
+        persistentVolumeClaim:
+          claimName: ${NODENAME}u01claim
 ---
 apiVersion: v1
 kind: Service
