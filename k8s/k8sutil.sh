@@ -140,7 +140,7 @@ metadata:
   name: Deployment_${INSTANCE_ID}
   namespace: $NAMESPACE
 spec:
-  replicas:1
+  replicas: 1
   template:
     metadata:
       labels:
