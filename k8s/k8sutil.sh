@@ -150,49 +150,49 @@ spec:
       - name: $INSTANCE_ID
         image: s4ragent/rac_on_xx:OEL7
         ports:
-	        - containerPort: 80
-	          hostPort: 80
-	       securityContext:
-	         privileged: true
-	       volumeMounts:
-	        - name: cgroups
-	          mountPath: /sys/fs/cgroup
-	          readOnly: true
-	        - name: modules
-	          mountPath: /lib/modules
-	          readOnly: true
-	        - name: dev
-	          mountPath: /dev
-	          readOnly: false          
-	        - name: u01
-	          mountPath: /u01
-	          subPath: u01
-	          readOnly: false
-	        - name: u01
-	          mountPath: /etc
-	          subPath: etc
-	          readOnly: false
-	        - name: u01
-	          mountPath: /home
-	          subPath: home
-	          readOnly: false
-	        - name: u01
-	          mountPath: /usr
-	          subPath: usr
-	          readOnly: false
-       volumes:
-	      - name: cgroups
-	        hostPath:
-	          path: /sys/fs/cgroup
-	      - name: dev
-	        hostPath:
-	          path: /dev
-	      - name: modules
-	        hostPath:
-	          path: /lib/modules
-	      - name: u01
-	        persistentVolumeClaim:
-           claimName: ${NODENAME}u01claim
+        - containerPort: 80
+          hostPort: 80
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: cgroups
+          mountPath: /sys/fs/cgroup
+          readOnly: true
+        - name: modules
+          mountPath: /lib/modules
+          readOnly: true
+        - name: dev
+          mountPath: /dev
+          readOnly: false          
+        - name: u01
+          mountPath: /u01
+          subPath: u01
+          readOnly: false
+        - name: u01
+          mountPath: /etc
+          subPath: etc
+          readOnly: false
+        - name: u01
+          mountPath: /home
+          subPath: home
+          readOnly: false
+        - name: u01
+	         mountPath: /usr
+          subPath: usr
+          readOnly: false
+        volumes:
+        - name: cgroups
+          hostPath:
+            path: /sys/fs/cgroup
+        - name: dev
+          hostPath:
+            path: /dev
+        - name: modules
+          hostPath:
+            path: /lib/modules
+        - name: u01
+          persistentVolumeClaim:
+            claimName: ${NODENAME}u01claim
 ---
 apiVersion: v1
 kind: Service
