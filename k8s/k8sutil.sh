@@ -134,71 +134,86 @@ kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- chmod 755 /u01
 sleep 60s
 
 	cat <<EOF | kubectl create -f -
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1beta1
+kind: Deployment
 metadata:
-  name: $INSTANCE_ID
+  name: Deployment_${INSTANCE_ID}
   namespace: $NAMESPACE
-  labels:
-    name: rac
 spec:
-  hostname: $INSTANCE_ID
-  subdomain: $SUBDOMAIN
-  containers:
-    - name: $INSTANCE_ID
-      image: s4ragent/rac_on_xx:OEL7
-      ports:
-        - containerPort: 80
-          hostPort: 80
-      securityContext:
-        privileged: true
-      volumeMounts:
-        - name: cgroups
-          mountPath: /sys/fs/cgroup
-          readOnly: true
-        - name: modules
-          mountPath: /lib/modules
-          readOnly: true
-        - name: dev
-          mountPath: /dev
-          readOnly: false          
-        - name: u01
-          mountPath: /u01
-          subPath: u01
-          readOnly: false
-        - name: u01
-          mountPath: /etc
-          subPath: etc
-          readOnly: false
-        - name: u01
-          mountPath: /home
-          subPath: home
-          readOnly: false
-        - name: u01
-          mountPath: /usr
-          subPath: usr
-          readOnly: false
-  volumes:
-    - name: cgroups
-      hostPath:
-        path: /sys/fs/cgroup
-    - name: dev
-      hostPath:
-        path: /dev
-    - name: modules
-      hostPath:
-        path: /lib/modules
-    - name: u01
-      persistentVolumeClaim:
-        claimName: ${NODENAME}u01claim
-        
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: $INSTANCE_ID
+	    spec:
+       containers:
+	      - name: $INSTANCE_ID
+	        image: s4ragent/rac_on_xx:OEL7
+	        ports:
+	        - containerPort: 80
+	          hostPort: 80
+	        securityContext:
+	          privileged: true
+	        volumeMounts:
+	        - name: cgroups
+	          mountPath: /sys/fs/cgroup
+	          readOnly: true
+	        - name: modules
+	          mountPath: /lib/modules
+	          readOnly: true
+	        - name: dev
+	          mountPath: /dev
+	          readOnly: false          
+	        - name: u01
+	          mountPath: /u01
+	          subPath: u01
+	          readOnly: false
+	        - name: u01
+	          mountPath: /etc
+	          subPath: etc
+	          readOnly: false
+	        - name: u01
+	          mountPath: /home
+	          subPath: home
+	          readOnly: false
+	        - name: u01
+	          mountPath: /usr
+	          subPath: usr
+	          readOnly: false
+       volumes:
+	      - name: cgroups
+	        hostPath:
+	          path: /sys/fs/cgroup
+	      - name: dev
+	        hostPath:
+	          path: /dev
+	      - name: modules
+	        hostPath:
+	          path: /lib/modules
+	      - name: u01
+	        persistentVolumeClaim:
+	          claimName: ${NODENAME}u01claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${INSTANCE_ID}
+  namespace: $NAMESPACE
+spec:
+  selector:
+    app: $INSTANCE_ID
+  clusterIP: None
+  ports:
+  - name: foo
+    port: 80
+    targetPort: 80        
 EOF
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
 cat >> $VIRT_TYPE/host_vars/$1 <<EOF
-VXLAN_NODENAME: "${NODENAME}.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
+VXLAN_NODENAME: "${INSTANCE_ID}.$NAMESPACE.svc.$CLUSTERDOMAIN"
 EOF
 
 }
@@ -243,23 +258,7 @@ runonly(){
 
 #create namespace
 	  kubectl create namespace $NAMESPACE
-	  
-#create Service
-			cat <<EOF | kubectl create -f -
-apiVersion: v1
-kind: Service
-metadata:
-  name: $SUBDOMAIN
-  namespace: $NAMESPACE
-spec:
-  selector:
-    name: rac
-  clusterIP: None
-  ports:
-  - name: foo
-    port: 80
-    targetPort: 80
-EOF
+
 
 #create StorageClass
 			cat <<EOF | kubectl create -f -
