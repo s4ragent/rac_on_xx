@@ -378,10 +378,10 @@ get_External_IP(){
 
 get_Internal_IP(){
 	if [ "$1" = "storage" ]; then
-		echo "storage.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
+		echo "storage.$NAMESPACE.svc.$CLUSTERDOMAIN"
 	else
 		NODENAME="$NODEPREFIX"`printf "%.3d" $1`
-		echo "${NODENAME}.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
+		echo "${NODENAME}.$NAMESPACE.svc.$CLUSTERDOMAIN"
 	fi	
 }
 
