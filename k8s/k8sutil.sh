@@ -137,7 +137,7 @@ sleep 60s
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: Deployment${INSTANCE_ID}
+  name: deployment${INSTANCE_ID}
   namespace: $NAMESPACE
 spec:
   replicas: 1
