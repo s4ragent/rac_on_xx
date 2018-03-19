@@ -223,7 +223,7 @@ run_after(){
  loopcnt=0
 	while :
 	do
-		status=`kubectl --namespace $NAMESPACE get pods $NODENAME | grep Running | wc -l`
+		status=`kubectl --namespace $NAMESPACE get pods | grep $NODENAME | grep Running | wc -l`
 		if [ "$status" = "1" ]; then
 			break
 		fi	
