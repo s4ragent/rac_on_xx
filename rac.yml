@@ -21,10 +21,10 @@
    roles:
       - download
       - { role: nfsclient, when: "storage_type == 'nfs'" }
-      - { role: nbdserver, when: "storage_type == 'nbd'" }
-      - { role: nbdclient, when: "storage_type == 'nbd'" }
+#      - { role: nbdserver, when: "storage_type == 'nbd'" }
+#      - { role: nbdclient, when: "storage_type == 'nbd'" }
       - { role: cvu, when: "cvu is defined" }
-#      - { role: nfsclient, when: "storage_type == 'efs'" }
+      - { role: nfsclient, when: "storage_type == 'efs'" }
 
 
  - hosts: dbserver
