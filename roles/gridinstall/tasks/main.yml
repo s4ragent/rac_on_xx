@@ -137,7 +137,7 @@
 
   - name: "change css misscount"
     become: yes
-    shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl set css misscount 180"
+    shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl set css misscount 360"
     when: inventory_hostname == groups["dbserver"][-1]
     tags:
       - runinstallergrid
