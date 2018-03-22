@@ -148,6 +148,7 @@ spec:
     spec:
       containers:
       - name: $INSTANCE_ID
+        image: s4ragent/rac_on_xx:OEL7
         env: 
         - name: SYSTEMD_IGNORE_CHROOT
           value: "1"
