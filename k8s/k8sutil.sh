@@ -151,7 +151,7 @@ spec:
         image: s4ragent/rac_on_xx:OEL7
         command: ["/bin/sh"]
 #        args: ["-c", "/sbin/init;while true; do sleep 10;done"]
-        args: ["-c", "/sbin/init;while true; do sleep 10;done"]
+        args: ["-c", "/sbin/init"]
         ports:
         - containerPort: 80
           hostPort: 80
