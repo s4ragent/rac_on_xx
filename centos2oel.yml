@@ -1,5 +1,7 @@
 ---
  - hosts: all
+   environment:
+     SYSTEMD_IGNORE_CHROOT: 1 
    roles:
       - ssh
       - centos2oel
