@@ -1,6 +1,8 @@
 ---
  - hosts: all
    any_errors_fatal: true
+   environment:
+     SYSTEMD_IGNORE_CHROOT: 1
    roles:
       - security
       - vxlan
@@ -12,11 +14,15 @@
 
  - hosts: storage
    any_errors_fatal: true
+   environment:
+     SYSTEMD_IGNORE_CHROOT: 1
    roles:
       - { role: nfsserver, when: "storage_type == 'nfs'" }
 #      - { role: efs, when: "storage_type == 'efs'" }
 
  - hosts: dbserver
+   environment:
+     SYSTEMD_IGNORE_CHROOT: 1
    any_errors_fatal: true
    roles:
       - download
@@ -29,6 +35,8 @@
 
  - hosts: dbserver
    any_errors_fatal: true
+   environment:
+     SYSTEMD_IGNORE_CHROOT: 1   
    serial: 1
    roles:
       - gridinstall
@@ -45,5 +53,7 @@
 
  - hosts: all:!storage
    any_errors_fatal: true
+   environment:
+     SYSTEMD_IGNORE_CHROOT: 1
    roles:
       - { role: jdbcrunner, when: "jdbcrunner is defined" }
