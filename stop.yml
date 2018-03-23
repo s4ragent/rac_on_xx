@@ -7,6 +7,8 @@
      - stop
 
  - hosts: storage
+   environment:
+     SYSTEMD_IGNORE_CHROOT: 1 
    roles:
      - stop-storage-service
  
