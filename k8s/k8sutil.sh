@@ -129,7 +129,7 @@ kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- cp --remove-destination /
 
 kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- chmod 755 /u01
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- bash -c "echo \"export SYSTEMD_IGNORE_CHROOT=1\" >> /etc/profile"
+	kubectl --namespace $NAMESPACE exec ${NODENAME} -- bash -c "echo \"export SYSTEMD_IGNORE_CHROOT=1\" >> /u01/etc/profile"
 
 
 	kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}
