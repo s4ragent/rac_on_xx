@@ -6,4 +6,4 @@
       SYSTEMD_IGNORE_CHROOT: 1
     become: yes
     tasks:
-      - service: name=network.service state=restarted
+      - service: name=network.service state=enabled
