@@ -1,6 +1,6 @@
 ---
   - hosts: 
-      - storage
+      - localhost
     connection: local
     environment:
       SYSTEMD_IGNORE_CHROOT: 1
