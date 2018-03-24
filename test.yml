@@ -1,9 +1,9 @@
 ---
   - hosts: 
-      - all
+      - storage
 #    connection: local
     environment:
       SYSTEMD_IGNORE_CHROOT: 1
     become: yes
     tasks:
-      - shell : "systemctl status"
+      - service: name=network.service state=restarted
