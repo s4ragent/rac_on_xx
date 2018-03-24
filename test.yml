@@ -8,4 +8,4 @@
     strategy: debug
     tasks:
       - pause: 
-      - service: name=network.service state=enabled
+      - systemd: name=network.service state=enabled
