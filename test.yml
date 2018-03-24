@@ -2,6 +2,8 @@
   - hosts: 
       - all
 #    connection: local
+    environment:
+      SYSTEMD_IGNORE_CHROOT: 1
+    become: yes
     tasks:
-      - pause
-          minutes: 1
+      - shell : "systemctl status"
