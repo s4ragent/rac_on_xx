@@ -48,6 +48,6 @@
       
   - name: "start_enable nbd-server.service"
     become: yes
-    service: name=nbd-server.service state=started enabled=yes
+    systemd: name=nbd-server.service state=started enabled=yes
     tags:
       - nbdserver

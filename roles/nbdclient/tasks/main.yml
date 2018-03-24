@@ -30,7 +30,7 @@
       
   - name: "start_enable racnbd@nbdX.service"
     become: yes
-    service: name="racnbd@nbd{{ item }}.service" state=started enabled=yes
+    systemd: name="racnbd@nbd{{ item }}.service" state=started enabled=yes
     when: nbd_local_container is not defined
     with_sequence: start=0 end=8
     tags:
@@ -38,7 +38,7 @@
 
   - name: "start_enable racnbd@nbdX.service for localcontainer1"
     become: yes
-    service: name="racnbd@nbd{{ item }}.service" state=started enabled=yes
+    systemd: name="racnbd@nbd{{ item }}.service" state=started enabled=yes
     with_sequence: start=0 end=2
     when: inventory_hostname == groups["dbserver"][0] and nbd_local_container is defined
     tags:
@@ -46,7 +46,7 @@
 
   - name: "start_enable racnbd@nbdX.service for localcontainer2"
     become: yes
-    service: name="racnbd@nbd{{ item }}.service" state=started enabled=yes
+    systemd: name="racnbd@nbd{{ item }}.service" state=started enabled=yes
     with_sequence: start=3 end=5
     when: inventory_hostname == groups["dbserver"][1] and nbd_local_container is defined
     tags:
@@ -54,7 +54,7 @@
 
   - name: "start_enable racnbd@nbdX.service for localcontainer3"
     become: yes
-    service: name="racnbd@nbd{{ item }}.service" state=started enabled=yes
+    systemd: name="racnbd@nbd{{ item }}.service" state=started enabled=yes
     with_sequence: start=6 end=8
     when: inventory_hostname == groups["dbserver"][2] and nbd_local_container is defined
     tags:

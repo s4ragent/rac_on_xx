@@ -38,7 +38,7 @@
 
   - name: "restart and  enable dnsmasq.service"
     become: yes
-    service: name=dnsmasq.service state=started enabled=yes
+    systemd: name=dnsmasq.service state=started enabled=yes
     tags:
       - setresolvconf
       - sethost    
@@ -71,7 +71,7 @@
       
   - name: "start_enable setresolvconf.service"
     become: yes
-    service: name=setresolvconf.service state=started enabled=yes
+    systemd: name=setresolvconf.service state=started enabled=yes
     tags:
       - setresolvconf
       - addclient
@@ -127,7 +127,7 @@
 ##### at last restart dnsmasq.service & network.service & setresolvconf.service
   - name: "restart and  enable dnsmasq.service"
     become: yes
-    service: name=dnsmasq.service state=restarted enabled=yes
+    systemd: name=dnsmasq.service state=restarted enabled=yes
     tags:
       - setresolvconf
       - sethost    
@@ -135,7 +135,7 @@
 
   - name: "restart network.service"
     become: yes
-    service: name=network.service state=restarted
+    systemd: name=network.service state=restarted
     tags:
       - setresolvconf
       - sethost  
@@ -143,7 +143,7 @@
 
   - name: "restart setresolvconf.service"
     become: yes
-    service: name=setresolvconf.service state=restarted
+    systemd: name=setresolvconf.service state=restarted
     tags:
       - setresolvconf
       - sethost  

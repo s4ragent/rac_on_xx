@@ -61,7 +61,7 @@
       
   - name: "start_enable vxlan.service(Without NetworkManager)"
     become: yes
-    service: name=vxlan.service state=started enabled=yes
+    systemd: name=vxlan.service state=started enabled=yes
     tags:
       - vxlan_init
       - vxlan_conf
