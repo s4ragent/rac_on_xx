@@ -7,4 +7,5 @@
     become: yes
     strategy: debug
     tasks:
+      - pause: 
       - service: name=network.service state=enabled
