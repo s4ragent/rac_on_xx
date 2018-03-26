@@ -158,9 +158,9 @@ spec:
         command:
         - /usr/lib/systemd/systemd
         - --system
-        ports:
-        - containerPort: 80
-          hostPort: 80
+#        ports:
+#        - containerPort: 80
+#          hostPort: 80
         securityContext:
           privileged: true
         volumeMounts:
@@ -212,10 +212,10 @@ spec:
   selector:
     app: $INSTANCE_ID
   clusterIP: None
-  ports:
-  - name: foo
-    port: 80
-    targetPort: 80        
+#  ports:
+#  - name: foo
+#    port: 80
+#    targetPort: 80        
 EOF
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
