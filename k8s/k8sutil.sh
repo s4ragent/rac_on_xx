@@ -48,9 +48,9 @@ spec:
       image: s4ragent/rac_on_xx:OEL7
       command: ["/bin/sh"]
       args: ["-c", "while true; do sleep 10;done"]
-      ports:
-        - containerPort: 80
-          hostPort: 80
+#      ports:
+#        - containerPort: 80
+#          hostPort: 80
       volumeMounts:
         - name: cgroups
           mountPath: /sys/fs/cgroup
