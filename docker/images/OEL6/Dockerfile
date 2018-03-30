@@ -4,6 +4,7 @@ MAINTAINER MASAKI OOSHIMA s4ragent
 RUN rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
 #installpackages
 RUN yum -y install git\
+                   gcc\
                    make\
                    traceroute\
                    unzip\
