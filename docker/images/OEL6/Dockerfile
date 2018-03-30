@@ -5,6 +5,10 @@ RUN rpm -ivh http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noar
 #installpackages
 RUN yum -y install git\
                    gcc\
+                   bison\
+                   flex\
+                   libdb-devel\
+                   db4-devel\
                    make\
                    traceroute\
                    unzip\
