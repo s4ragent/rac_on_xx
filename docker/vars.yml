@@ -26,8 +26,8 @@ DHCPCLIENT: ""
 ####docker system  specific value ##################
 IMAGE: "s4ragent/rac_on_xx:OEL7"
 #CAP_OPS: "--cap-add=NET_ADMIN"
-DOCKER_CAPS: "--privileged=true --security-opt seccomp=unconfined"
-#DOCKER_CAPS: "--cap-add=ALL --security-opt=seccomp=unconfined"
+#DOCKER_CAPS: "--privileged=true --security-opt seccomp=unconfined"
+DOCKER_CAPS: "--privileged=false --security-opt seccomp=unconfined --cap-add=SYS_ADMIN --cap-add=SYS_NICE  --cap-add=SYS_RESOURCE --cap-add=NET_ADMIN -v /boot/:/boot:ro --tmpfs=/run -v /sys/fs/cgroup:/sys/fs/cgroup:ro --cpu-rt-runtime=95000 --ulimit rtprio=99"
 DOCKER_START_OPS: "--restart=always"
 TMPFS_OPS: "--shm-size=1200m"
 ####################################################
