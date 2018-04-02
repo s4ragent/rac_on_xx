@@ -32,7 +32,7 @@ run(){
 #    	INSTANCE_ID=$(docker run $DOCKER_START_OPS $DOCKER_CAPS -d -h ${NODENAME}.${DOMAIN_NAME} --name $NODENAME --net=$BRNAME --ip=$2 $TMPFS_OPS  -v /dev:/dev -v /lib/modules:/lib/modules:ro -v /sys/fs/cgroup:/sys/fs/cgroup:ro $StorageOps $IMAGE /sbin/init)
 
 if [ "$NODENUMBER" != "0" ]; then
- PRIVILEGED="--privileged=false"
+ PRIVILEGED="--privileged=true"
 else
 	PRIVILEGED="--privileged=true"
 fi
