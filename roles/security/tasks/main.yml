@@ -43,5 +43,6 @@
     become: yes
     service: name=iptables state=stopped enabled=no
     when: ansible_distribution_version|int == 6
+    ignore_errors: yes
     tags:
       - security
