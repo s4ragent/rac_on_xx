@@ -57,10 +57,19 @@
   - name: "copy setresolvconf.service"
     become: yes
     copy: src=setresolvconf.service dest=/etc/systemd/system/setresolvconf.service owner=root group=root mode=0700
+    when: ansible_distribution_version|int == 7
     tags:
       - setresolvconf
       - addclient
 
+  - name: "install setresolvconf.init"
+    become: yes
+    shell: chdir=/usr/local/bin install -o root -g root -m 755 setresolvconf.init /etc/init.d/setresolvconf
+    when: ansible_distribution_version|int == 6
+tags:
+      - setresolvconf
+      - addclient
+      
   - name: "daemon_reload"
     become: yes
     service: daemon_reload=yes
@@ -71,7 +80,7 @@
       
   - name: "start_enable setresolvconf.service"
     become: yes
-    service: name=setresolvconf.service state=started enabled=yes
+    service: name=setresolvconf state=started enabled=yes
     tags:
       - setresolvconf
       - addclient
@@ -127,7 +136,7 @@
 ##### at last restart dnsmasq.service & network.service & setresolvconf.service
   - name: "restart and  enable dnsmasq.service"
     become: yes
-    service: name=dnsmasq.service state=restarted enabled=yes
+    service: name=dnsmasq state=restarted enabled=yes
     tags:
       - setresolvconf
       - sethost    
@@ -135,7 +144,7 @@
 
   - name: "restart network.service"
     become: yes
-    service: name=network.service state=restarted
+    service: name=network state=restarted
     tags:
       - setresolvconf
       - sethost  
@@ -143,7 +152,7 @@
 
   - name: "restart setresolvconf.service"
     become: yes
-    service: name=setresolvconf.service state=restarted
+    service: name=setresolvconf state=restarted
     tags:
       - setresolvconf
       - sethost  
