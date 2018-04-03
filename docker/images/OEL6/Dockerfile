@@ -21,6 +21,7 @@ RUN yum -y install git\
                    net-tools\
                    expect\
                    bind-utils\
+                   sudo\
                    qemu-img
 RUN yum -y reinstall glibc-common
 RUN yum -y clean all
