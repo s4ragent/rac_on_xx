@@ -40,6 +40,6 @@
     register: ssh_config  
   - name: Restart ssh
     become: yes
-    systemd:
+    service:
       name: sshd
       state: restarted
