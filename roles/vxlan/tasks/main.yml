@@ -90,7 +90,7 @@
       
   - name: "start_enable vxlan.service(Without NetworkManager)"
     become: yes
-    service: name=vxlan state=started enabled=yes
+    service: name=vxlan state=restarted enabled=yes
     tags:
       - vxlan_init
       - vxlan_conf
