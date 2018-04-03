@@ -3,13 +3,6 @@
 
   - name: set hostnamectl
     set_fact:
-      hostnamectl: "hostnamectl"
-    when: ansible_distribution_version|int == 7
-    tags:
-      - sethost
-
-  - name: set hostnamectl
-    set_fact:
       hostnamectl: "hostname"
     when: ansible_distribution_version|int == 6
     tags:
