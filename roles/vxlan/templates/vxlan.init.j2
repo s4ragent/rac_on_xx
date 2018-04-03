@@ -113,7 +113,7 @@ vxlan_start(){
 		init_vxlan
 	done
 	
-	while true;
+	(while true;
 	do
 		for conf in $VCONF/*.conf 
 		do
@@ -121,7 +121,7 @@ vxlan_start(){
 			fdb_append
 		done	
 		sleep 60s
-	done
+	done) &
 	
 	touch /var/lock/subsys/vxlan
 }
