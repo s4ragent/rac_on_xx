@@ -50,6 +50,10 @@
       - vxlan_conf
       - addclient
 
+
+  - name: "install vxlan.init"
+    shell: chdir=/usr/local/bin install -o root -g root -m 755 vxlan.init /etc/init.d/vxlan
+
   - name: "daemon_reload"
     become: yes
     systemd: daemon_reload=yes
