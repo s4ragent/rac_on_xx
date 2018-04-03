@@ -25,7 +25,7 @@
 
   - name: "start_enable sethost.service"
     become: yes
-    systemd: name=sethost.service state=started enabled=yes
+    service: name=sethost.service state=started enabled=yes
     ignore_errors: True
     tags:
       - sethost
@@ -158,19 +158,19 @@
 
   - name: "restart network"
     become: yes
-    systemd: name=network.service state=restarted
+    service: name=network.service state=restarted
     tags:
       - kernel
 
   - name: "restart vxlan"
     become: yes
-    systemd: name=vxlan.service state=restarted
+    service: name=vxlan.service state=restarted
     tags:
       - kernel
 
   - name: "disable ntpd"
     become: yes
-    systemd: name=ntpd.service state=stopped enabled=no
+    service: name=ntpd.service state=stopped enabled=no
     ignore_errors: yes
     tags:
       - ntp
@@ -193,7 +193,7 @@
 
   - name: "disable chronyd"
     become: yes
-    systemd: name=chronyd.service state=stopped enabled=no
+    service: name=chronyd.service state=stopped enabled=no
     ignore_errors: yes
     tags:
       - ntp
