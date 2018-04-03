@@ -38,7 +38,7 @@
 
   - name: "restart and  enable dnsmasq.service"
     become: yes
-    service: name=dnsmasq.service state=started enabled=yes
+    service: name=dnsmasq state=started enabled=yes
     tags:
       - setresolvconf
       - sethost    
