@@ -5,6 +5,17 @@
     with_items:
       - selinux-policy
       - firewalld
+    when: ansible_distribution_version|int == 7
+    tags:
+      - security
+
+  - name: "install selinux,firewalld"
+    become: yes
+    yum: name="{{ item }}" state=present
+    with_items:
+      - selinux-policy
+      - iptables
+    when: ansible_distribution_version|int == 6
     tags:
       - security
 
@@ -23,6 +34,14 @@
 
   - name: "disable firewalld"
     become: yes
-    systemd: name=firewalld.service state=stopped enabled=no
+    service: name=firewalld.service state=stopped enabled=no
+    when: ansible_distribution_version|int == 7
+    tags:
+      - security
+
+  - name: "disable firewalld"
+    become: yes
+    service: name=iptables state=stopped enabled=no
+    when: ansible_distribution_version|int == 6
     tags:
       - security
