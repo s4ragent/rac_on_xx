@@ -1,4 +1,9 @@
 #!/bin/bash
+#!/bin/sh
+# sethost       sethost init configuration
+# chkconfig:    2345 30 80
+# version:      0.1
+# author:       knopp
 #echo "domain-name {{ DOMAIN_NAME }}" > /etc/resolv.conf
 echo "nameserver 127.0.0.1" > /etc/resolv.conf
 cp /etc/hosts /tmp/hosts
