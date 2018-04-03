@@ -1,4 +1,22 @@
 ---
+  - name: set ipcmd
+    set_fact:
+      ipcmd: "/sbin/ip"
+      bridgecmd: "/sbin/bridge"
+    when: ansible_distribution_version|int == 7
+    tags:
+      - vxlan_conf
+      - addclient
+
+  - name: set ipcmd
+    set_fact:
+      ipcmd: "/usr/share/sbin/ip"
+      bridgecmd: "/usr/share/sbin/bridge"
+    when: ansible_distribution_version|int == 6
+    tags:
+      - vxlan_conf
+      - addclient
+      
   - name: "create /etc/vxlan"
     become: yes
     file: path=/etc/vxlan state=directory owner=root group=root mode=0755
@@ -36,7 +54,7 @@
       
   - name: "copy vxlan.init(Without NetworkManager)"
     become: yes
-    copy: src=vxlan.init dest=/usr/local/bin/vxlan.init owner=root group=root mode=0700
+    template: src=vxlan.init.j2 dest=/usr/local/bin/vxlan.init owner=root group=root mode=0700
     tags:
       - vxlan_init
       - vxlan_conf
