@@ -53,6 +53,7 @@
 
 
   - name: "install vxlan.init"
+    become: yes
     shell: chdir=/usr/local/bin install -o root -g root -m 755 vxlan.init /etc/init.d/vxlan
     when: ansible_distribution_version|int == 6
     tags:
