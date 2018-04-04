@@ -13,7 +13,7 @@ RUN yum -y install git\
                    traceroute\
                    unzip\
                    iperf\
-                   oracle-rdbms-server-12cR2-preinstall\
+                   oracle-database-server-12cR2-preinstall\
                    screen\
                    nfs-utils\
                    dnsmasq\
