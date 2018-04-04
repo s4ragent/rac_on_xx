@@ -15,22 +15,25 @@
     become: yes
     template: src=exports.j2 dest=/etc/exports owner=root group=root mode=0644
     tags:
-       - nfsserver
+      - nfsserver
 
-  - name: "restart rpcbind"
+  - name: "restart nfs"
     become: yes
-    systemd: name=rpcbind.service state=restarted enabled=yes
+    service: name={{ item }} state=restarted enabled=yes
+    with_items:
+      - rpcbind
+      - nfs-server
+      - nfs-idmap
+    when: ansible_distribution_version|int == 7
     tags:
       - nfsserver
 
-  - name: "restart nfs-server"
+  - name: "restart nfs"
     become: yes
-    systemd: name=nfs-server.service state=restarted enabled=yes
-    tags:
-      - nfsserver
-
-  - name: "nfs-idmap start"
-    become: yes
-    systemd: name=nfs-idmap.service state=started
+    shell: "chkconfig {{ item }} on;service restart {{ item }}"
+    when: ansible_distribution_version|int == 6
+    with_items:
+      - rpcbind
+      - nfs
     tags:
       - nfsserver

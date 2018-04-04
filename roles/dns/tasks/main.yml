@@ -39,11 +39,24 @@
   - name: "restart and  enable dnsmasq.service"
     become: yes
     service: name=dnsmasq state=started enabled=yes
+    when: ansible_distribution_version|int == 7
     tags:
       - setresolvconf
       - sethost    
       - dnsmasq
       - addclient
+
+  - name: "start_enable dnsmasq"
+    become: yes
+    shell: "chkconfig dnsmasq on;service restart dnsmasq"
+    when: ansible_distribution_version|int == 6
+    ignore_errors: True
+    tags:
+      - setresolvconf
+      - sethost    
+      - dnsmasq
+      - addclient
+
       
 ###### set resolvconf
 
@@ -73,6 +86,7 @@
   - name: "daemon_reload"
     become: yes
     service: daemon_reload=yes
+    when: ansible_distribution_version|int == 7
     ignore_errors: True
     tags:
       - setresolvconf
@@ -81,9 +95,20 @@
   - name: "start_enable setresolvconf.service"
     become: yes
     service: name=setresolvconf state=started enabled=yes
+    when: ansible_distribution_version|int == 7
     tags:
       - setresolvconf
       - addclient
+
+  - name: "start_enable sethost.service"
+    become: yes
+    shell: "chkconfig setresolvconf on;service restart setresolvconf"
+    when: ansible_distribution_version|int == 6
+    ignore_errors: True
+    tags:
+      - setresolvconf
+      - addclient
+
       
 ###### for dhclient enable environment (e.g. gce/ec2)
   - name: "check dhclient"
@@ -134,26 +159,28 @@
       - sethost
 
 ##### at last restart dnsmasq.service & network.service & setresolvconf.service
-  - name: "restart and  enable dnsmasq.service"
+  - name: "restart start_enable dnsmasq,network,setresolvconf"
     become: yes
-    service: name=dnsmasq state=restarted enabled=yes
+    service: name={{ item }} state=restarted enabled=yes
+    with_items:
+      - dnsmasq
+      - network
+      - setresolvconf
+    when: ansible_distribution_version|int == 7
     tags:
       - setresolvconf
       - sethost    
       - dnsmasq
 
-  - name: "restart network.service"
+  - name: "start_enable dnsmasq,network,setresolvconf"
     become: yes
-    service: name=network state=restarted
-    tags:
-      - setresolvconf
-      - sethost  
+    shell: "chkconfig {{ item }} on;service restart {{ item }}"
+    when: ansible_distribution_version|int == 6
+    with_items:
       - dnsmasq
-
-  - name: "restart setresolvconf.service"
-    become: yes
-    service: name=setresolvconf state=restarted
+      - network
+      - setresolvconf
     tags:
       - setresolvconf
-      - sethost  
+      - sethost    
       - dnsmasq

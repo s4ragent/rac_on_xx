@@ -24,6 +24,7 @@
   - name: "daemon_reload"
     become: yes
     systemd: daemon_reload=yes
+    when: ansible_distribution_version|int == 7
     ignore_errors: True
     tags:
       - sethost
@@ -34,6 +35,15 @@
   - name: "start_enable sethost.service"
     become: yes
     service: name=sethost state=restarted enabled=yes
+    when: ansible_distribution_version|int == 7
+    ignore_errors: True
+    tags:
+      - sethost
+
+  - name: "start_enable sethost.service"
+    become: yes
+    shell: "chkconfig sethost on;service restart sethost"
+    when: ansible_distribution_version|int == 6
     ignore_errors: True
     tags:
       - sethost
@@ -167,18 +177,35 @@
   - name: "restart network"
     become: yes
     service: name=network state=restarted
+    when: ansible_distribution_version|int == 7
+    tags:
+      - kernel
+
+  - name: "restart network"
+    become: yes
+    shell: "service restart network"
+    when: ansible_distribution_version|int == 6
     tags:
       - kernel
 
   - name: "restart vxlan"
     become: yes
     service: name=vxlan state=restarted
+    when: ansible_distribution_version|int == 7
+    tags:
+      - kernel
+
+  - name: "restart vxlan"
+    become: yes
+    shell: "service restart vxlan"
+    when: ansible_distribution_version|int == 6
     tags:
       - kernel
 
   - name: "disable ntpd"
     become: yes
     service: name=ntpd state=stopped enabled=no
+    when: ansible_distribution_version|int == 7
     ignore_errors: yes
     tags:
       - ntp
@@ -202,6 +229,7 @@
   - name: "disable chronyd"
     become: yes
     service: name=chronyd.service state=stopped enabled=no
+    when: ansible_distribution_version|int == 7
     ignore_errors: yes
     tags:
       - ntp
