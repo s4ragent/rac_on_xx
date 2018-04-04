@@ -21,8 +21,13 @@
 
 VCONF=/etc/vxlan
 LOG=/var/log/vxlan
-ipcmd={{ ipcmd }}
-bridgecmd={{ bridgecmd }}
+{% if ansible_distribution_version|int == 7 %}
+ipcmd=/sbin/ip
+bridgecmd=/sbin/bridge
+{% else %}
+ipcmd=/usr/share/sbin/ip
+bridgecmd=/usr/share/sbin/bridge
+{% endif %}
 pythoncmd=/usr/bin/python
 # Check the configuration directory                                                                                      
 if [ ! -d $VCONF ]; then
