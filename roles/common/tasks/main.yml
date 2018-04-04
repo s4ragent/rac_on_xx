@@ -42,7 +42,7 @@
 
   - name: "start_enable sethost.service"
     become: yes
-    shell: "chkconfig sethost on;service restart sethost"
+    shell: "chkconfig sethost on;service sethost restart"
     when: ansible_distribution_version|int == 6
     ignore_errors: True
     tags:
@@ -183,7 +183,7 @@
 
   - name: "restart network"
     become: yes
-    shell: "service restart network"
+    shell: "service network restart"
     when: ansible_distribution_version|int == 6
     tags:
       - kernel
@@ -197,7 +197,7 @@
 
   - name: "restart vxlan"
     become: yes
-    shell: "service restart vxlan"
+    shell: "service vxlan restart"
     when: ansible_distribution_version|int == 6
     tags:
       - kernel

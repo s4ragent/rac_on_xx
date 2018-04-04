@@ -30,7 +30,7 @@
 
   - name: "restart nfs"
     become: yes
-    shell: "chkconfig {{ item }} on;service restart {{ item }}"
+    shell: "chkconfig {{ item }} on;service  {{ item }} restart"
     when: ansible_distribution_version|int == 6
     with_items:
       - rpcbind

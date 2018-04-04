@@ -1,22 +1,4 @@
 ---
-  - name: set ipcmd
-    set_fact:
-      ipcmd: "/sbin/ip"
-      bridgecmd: "/sbin/bridge"
-    when: ansible_distribution_version|int == 7
-    tags:
-      - vxlan_conf
-      - addclient
-
-  - name: set ipcmd
-    set_fact:
-      ipcmd: "/usr/share/sbin/ip"
-      bridgecmd: "/usr/share/sbin/bridge"
-    when: ansible_distribution_version|int == 6
-    tags:
-      - vxlan_conf
-      - addclient
-      
   - name: "create /etc/vxlan"
     become: yes
     file: path=/etc/vxlan state=directory owner=root group=root mode=0755
@@ -91,7 +73,18 @@
   - name: "start_enable vxlan.service(Without NetworkManager)"
     become: yes
     service: name=vxlan state=restarted enabled=yes
+    when: ansible_distribution_version|int == 7
     tags:
       - vxlan_init
       - vxlan_conf
       - addclient
+      
+  - name: "restart vxlan"
+    become: yes
+    shell: "chkconfig vxlan on;service vxlan restart"
+    when: ansible_distribution_version|int == 6
+    tags:
+      - vxlan_init
+      - vxlan_conf
+      - addclient
+      

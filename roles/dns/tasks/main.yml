@@ -48,7 +48,7 @@
 
   - name: "start_enable dnsmasq"
     become: yes
-    shell: "chkconfig dnsmasq on;service restart dnsmasq"
+    shell: "chkconfig dnsmasq on;service dnsmasq restart"
     when: ansible_distribution_version|int == 6
     ignore_errors: True
     tags:
@@ -102,7 +102,7 @@
 
   - name: "start_enable sethost.service"
     become: yes
-    shell: "chkconfig setresolvconf on;service restart setresolvconf"
+    shell: "chkconfig setresolvconf on;service  setresolvconf restart"
     when: ansible_distribution_version|int == 6
     ignore_errors: True
     tags:
@@ -174,7 +174,7 @@
 
   - name: "start_enable dnsmasq,network,setresolvconf"
     become: yes
-    shell: "chkconfig {{ item }} on;service restart {{ item }}"
+    shell: "chkconfig {{ item }} on;service {{ item }} restart"
     when: ansible_distribution_version|int == 6
     with_items:
       - dnsmasq
