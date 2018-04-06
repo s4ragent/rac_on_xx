@@ -17,6 +17,18 @@
     tags:
       - nfsserver
 
+  - name: Update the /etc/idmapd.conf
+    become: yes
+    lineinfile:
+      dest: /etc/idmapd.conf
+      regexp: "^Domain ="
+      line: "Domain = public"
+      insertafter: EOF
+      state: present
+    when: ansible_distribution_version|int == 6
+    tags:
+      - nfsserver  
+
   - name: "restart nfs"
     become: yes
     service: name={{ item }} state=restarted enabled=yes
@@ -34,6 +46,7 @@
     when: ansible_distribution_version|int == 6
     with_items:
       - rpcbind
+      - rpcidmapd
       - nfs
     tags:
       - nfsserver

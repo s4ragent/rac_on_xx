@@ -17,7 +17,28 @@
     tags:
       - nfsclient
 
+  - name: Update the /etc/idmapd.conf
+    become: yes
+    lineinfile:
+      dest: /etc/idmapd.conf
+      regexp: "^Domain ="
+      line: "Domain = public"
+      insertafter: EOF
+      state: present
+    when: ansible_distribution_version|int == 6
+    tags:
+      - nfsclient  
 
+  - name: "restart rpcpind"
+    become: yes
+    shell: "chkconfig {{ item }} on;service  {{ item }} restart"
+    when: ansible_distribution_version|int == 6
+    with_items:
+      - rpcbind
+      - rpcidmapd
+    tags:
+      - nfsclient
+      
   - name: "mount oradata"
     become: yes
     mount: name={{ ORA_DATA }} src="{{ STORAGE_SERVER }}:/" fstype=nfs opts="{{ NFS_OPS }}" state=mounted
