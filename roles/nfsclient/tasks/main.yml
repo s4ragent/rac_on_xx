@@ -21,7 +21,7 @@
     become: yes
     lineinfile:
       dest: /etc/idmapd.conf
-      regexp: "^Domain ="
+      regexp: "^#Domain ="
       line: "Domain = public"
       insertafter: EOF
       state: present
