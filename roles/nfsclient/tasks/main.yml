@@ -24,7 +24,6 @@
     when: ansible_distribution_version|int == 6
     with_items:
       - rpcbind
-      - rpcidmapd
     tags:
       - nfsclient
       
