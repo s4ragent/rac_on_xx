@@ -72,7 +72,7 @@
       
   - name: "start_enable vxlan.service(Without NetworkManager)"
     become: yes
-    service: name=vxlan state=restarted enabled=yes
+    service: name=vxlan state=started enabled=yes
     when: ansible_distribution_version|int == 7
     tags:
       - vxlan_init
