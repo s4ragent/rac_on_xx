@@ -1,0 +1,9 @@
+{% if VXLAN_NODENAME is defined %}
+nbd0 {{ hostvars[groups['storage'][0]]['VXLAN_NODENAME'] }} vote bs=512
+nbd1 {{ hostvars[groups['storage'][0]]['VXLAN_NODENAME'] }} data bs=512
+nbd2 {{ hostvars[groups['storage'][0]]['VXLAN_NODENAME'] }} fra bs=512
+{% else %}
+nbd0 {{ hostvars[groups['storage'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} vote bs=512
+nbd1 {{ hostvars[groups['storage'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} data bs=512
+nbd2 {{ hostvars[groups['storage'][0]]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} fra bs=512
+{% endif %}
