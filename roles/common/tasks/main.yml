@@ -188,19 +188,6 @@
     tags:
       - kernel
 
-  - name: "restart vxlan"
-    become: yes
-    service: name=vxlan state=restarted
-    when: ansible_distribution_version|int == 7
-    tags:
-      - kernel
-
-  - name: "restart vxlan"
-    become: yes
-    shell: "service vxlan restart"
-    when: ansible_distribution_version|int == 6
-    tags:
-      - kernel
 
   - name: "disable ntpd"
     become: yes
