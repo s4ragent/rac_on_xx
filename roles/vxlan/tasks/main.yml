@@ -37,6 +37,16 @@
   - name: "copy vxlan.init(Without NetworkManager)"
     become: yes
     template: src=vxlan.init.j2 dest=/usr/local/bin/vxlan.init owner=root group=root mode=0700
+    when: ansible_distribution_version|int == 6
+    tags:
+      - vxlan_init
+      - vxlan_conf
+      - addclient
+
+  - name: "copy vxlan.init(Without NetworkManager)"
+    become: yes
+    copy: src=vxlan.init dest=/usr/local/bin/vxlan.init owner=root group=root mode=0700
+    when: ansible_distribution_version|int == 7
     tags:
       - vxlan_init
       - vxlan_conf
