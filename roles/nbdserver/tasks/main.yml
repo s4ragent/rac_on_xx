@@ -42,6 +42,7 @@
   - name: "daemon_reload"
     become: yes
     systemd: daemon_reload=yes
+    when: ansible_distribution_version|int == 7
     ignore_errors: True
     tags:
       - nbdserver
@@ -49,5 +50,15 @@
   - name: "start_enable nbd-server.service"
     become: yes
     systemd: name=nbd-server.service state=started enabled=yes
+    when: ansible_distribution_version|int == 7
     tags:
       - nbdserver
+
+  - name: "restart nbd"
+    become: yes
+    shell: "chkconfig {{ item }} on;service  {{ item }} restart"
+    when: ansible_distribution_version|int == 6
+    with_items:
+      - nbd
+    tags:
+      - nfsserver
