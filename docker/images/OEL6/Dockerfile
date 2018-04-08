@@ -22,7 +22,8 @@ RUN yum -y install git\
                    expect\
                    bind-utils\
                    sudo\
-                   qemu-img
+                   qemu-img\
+                   nbd
 RUN yum -y reinstall glibc-common
 RUN yum -y clean all
 RUN chkconfig NetworkManager off ; chkconfig iptables off
