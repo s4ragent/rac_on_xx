@@ -14,6 +14,7 @@
    any_errors_fatal: true
    roles:
       - { role: nfsserver, when: "storage_type == 'nfs'" }
+      - { role: nbdserver, when: "storage_type == 'nbd'" }
 #      - { role: efs, when: "storage_type == 'efs'" }
 
  - hosts: dbserver
@@ -22,7 +23,7 @@
       - download
       - { role: nfsclient, when: "storage_type == 'nfs'" }
 #      - { role: nbdserver, when: "storage_type == 'nbd'" }
-#      - { role: nbdclient, when: "storage_type == 'nbd'" }
+      - { role: nbdclient, when: "storage_type == 'nbd'" }
       - { role: cvu, when: "cvu is defined" }
       - { role: nfsclient, when: "storage_type == 'efs'" }
 
