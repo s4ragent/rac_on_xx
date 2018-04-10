@@ -1,7 +1,7 @@
 ---
   - name: "install ndb packages"
     become: yes
-    yum: name={{ item }} state=present  enablerepo=*
+    yum: name={{ item }} state=present 
     with_items:
       - nbd
       - qemu-img
