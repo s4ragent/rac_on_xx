@@ -79,7 +79,7 @@
   - name: "start nbd-client"
     become: yes
     shell: "nbd-client {{ STORAGE_SERVER }}  {{ item.path }} -b 512 -N {{ item.name }}"
-    when: when: nbd_local_container is not defined and ansible_distribution_version|int == 6
+    when: nbd_local_container is not defined and ansible_distribution_version|int == 6
     with_items:
       - { name: 'vote', path: '/dev/nbd0' }
       - { name: 'data', path: '/dev/nbd1' }
@@ -90,7 +90,7 @@
   - name: "start nbd-client"
     become: yes
     shell: "nbd-client {{ STORAGE_SERVER }} 10809 {{ item.path }} -b 512 -N {{ item.path }}"
-    when: when: nbd_local_container is defined and inventory_hostname == groups["dbserver"][0] and  ansible_distribution_version|int == 6
+    when: nbd_local_container is defined and inventory_hostname == groups["dbserver"][0] and  ansible_distribution_version|int == 6
     with_items:
       - { name: 'vote', path: '/dev/nbd0' }
       - { name: 'data', path: '/dev/nbd1' }
