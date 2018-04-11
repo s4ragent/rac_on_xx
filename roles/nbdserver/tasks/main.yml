@@ -56,7 +56,7 @@
 
   - name: "restart nbd"
     become: yes
-    shell: "chkconfig {{ item }} on;service  {{ item }} restart"
+    shell: "nbd-server"
     when: ansible_distribution_version|int == 6
     with_items:
       - nbd-server
