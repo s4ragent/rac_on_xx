@@ -71,18 +71,14 @@
 
   - name: "start nbd-client"
     become: yes
-    shell: "nbd-client {{ item }}"
+    shell: "chmod 0660 /dev/nbd*;chown grid:asmadmin /dev/nbd*"
     when: ansible_distribution_version|int == 6
-    with_items:
-      - nbd0
-      - nbd1
-      - nbd2
     tags:
       - nbdclient
 
   - name: "start nbd-client"
     become: yes
-    shell: "chmod 0660 /dev/nbd*;chown grid:asmadmin /dev/nbd*"
+    shell: "nbd-client -d {{ item }}"
     when: ansible_distribution_version|int == 6
     with_items:
       - nbd0
