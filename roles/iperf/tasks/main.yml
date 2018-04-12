@@ -2,6 +2,7 @@
   - name: "install epel"
     become: yes
     yum: name="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" state=present
+    when: ansible_distribution_version|int == 7
     tags:
       - iperf
 
