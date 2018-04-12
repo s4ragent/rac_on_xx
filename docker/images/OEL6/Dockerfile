@@ -12,7 +12,7 @@ RUN yum -y install git\
                    make\
                    traceroute\
                    unzip\
-                   iperf\
+                   iperf3\
                    oracle-database-server-12cR2-preinstall\
                    screen\
                    nfs-utils\
