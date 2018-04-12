@@ -27,6 +27,11 @@
       - { role: cvu, when: "cvu is defined" }
       - { role: nfsclient, when: "storage_type == 'efs'" }
 
+ - hosts: all
+   any_errors_fatal: true
+   roles:
+      - { role: iperf, when: "iperf2 is defined" }
+
 
  - hosts: dbserver
    any_errors_fatal: true
