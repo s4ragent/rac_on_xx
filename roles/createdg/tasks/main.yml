@@ -16,7 +16,7 @@
     become: yes
     become_user: grid
 #    shell : "{{ GRID_ORACLE_HOME }}/bin/asmca -silent -createDiskGroup  -diskGroupName {{ DATA_DISKGROUP_NAME }} -redundancy HIGH -au_size 1  -disk /dev/nbd1 -disk /dev/nbd4 -disk /dev/nbd7"
-    shell : "{{ GRID_ORACLE_HOME }}/bin/asmca -silent -createDiskGroup  -diskGroupName {{ DATA_DISKGROUP_NAME }} -redundancy HIGH -au_size 1  -disk /dev/nbd1"
+    shell : "{{ GRID_ORACLE_HOME }}/bin/asmca -silent -createDiskGroup  -diskGroupName {{ DATA_DISKGROUP_NAME }} -redundancy EXTERNAL -au_size 1  -disk /dev/nbd1"
     when: inventory_hostname == groups["dbserver"][0] and storage_type == 'nbd'
     register: createdg_result
     tags:
@@ -27,7 +27,7 @@
     become: yes
     become_user: grid
 #    shell : "{{ GRID_ORACLE_HOME }}/bin/asmca -silent -createDiskGroup  -diskGroupName {{ FRA_DISKGROUP_NAME }} -redundancy HIGH -au_size 1  -disk /dev/nbd2 -disk /dev/nbd5 -disk /dev/nbd8"
-    shell : "{{ GRID_ORACLE_HOME }}/bin/asmca -silent -createDiskGroup  -diskGroupName {{ FRA_DISKGROUP_NAME }} -redundancy HIGH -au_size 1  -disk /dev/nbd2"
+    shell : "{{ GRID_ORACLE_HOME }}/bin/asmca -silent -createDiskGroup  -diskGroupName {{ FRA_DISKGROUP_NAME }} -redundancy EXTERNAL -au_size 1  -disk /dev/nbd2"
     when: inventory_hostname == groups["dbserver"][0] and storage_type == 'nbd'
     register: createdg_result
     tags:
