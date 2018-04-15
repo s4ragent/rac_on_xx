@@ -34,8 +34,9 @@
 
   - name: "disable firewalld"
     become: yes
-    systemd: name=firewalld.service state=stopped enabled=no
+    systemd: name=firewalld state=stopped enabled=no
     when: ansible_distribution_version|int == 7
+    ignore_errors: yes
     tags:
       - security
 
