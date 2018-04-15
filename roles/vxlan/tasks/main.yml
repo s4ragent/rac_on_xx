@@ -74,7 +74,7 @@
   - name: "daemon_reload"
     become: yes
     systemd: daemon_reload=yes
-    ignore_errors: True
+    when: ansible_distribution_version|int == 7
     tags:
       - vxlan_init
       - vxlan_conf
