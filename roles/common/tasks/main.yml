@@ -34,7 +34,7 @@
 
   - name: "start_enable sethost.service"
     become: yes
-    service: name=sethost state=restarted enabled=yes
+    systemd: name=sethost state=restarted enabled=yes
     when: ansible_distribution_version|int == 7
     ignore_errors: True
     tags:
@@ -176,7 +176,7 @@
 
   - name: "restart network"
     become: yes
-    service: name=network state=restarted
+    systemd: name=network state=restarted
     when: ansible_distribution_version|int == 7
     tags:
       - kernel
@@ -191,7 +191,7 @@
 
   - name: "disable ntpd"
     become: yes
-    service: name=ntpd state=stopped enabled=no
+    systemd: name=ntpd state=stopped enabled=no
     when: ansible_distribution_version|int == 7
     ignore_errors: yes
     tags:
@@ -215,7 +215,7 @@
 
   - name: "disable chronyd"
     become: yes
-    service: name=chronyd.service state=stopped enabled=no
+    systemd: name=chronyd.service state=stopped enabled=no
     when: ansible_distribution_version|int == 7
     ignore_errors: yes
     tags:

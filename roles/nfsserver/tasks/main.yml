@@ -19,7 +19,7 @@
 
   - name: "restart nfs"
     become: yes
-    service: name={{ item }} state=restarted enabled=yes
+    systemd: name={{ item }} state=restarted enabled=yes
     with_items:
       - rpcbind
       - nfs-server

@@ -38,7 +38,7 @@
 
   - name: "restart and  enable dnsmasq.service"
     become: yes
-    service: name=dnsmasq state=started enabled=yes
+    systemd: name=dnsmasq state=started enabled=yes
     when: ansible_distribution_version|int == 7
     tags:
       - setresolvconf
@@ -85,7 +85,7 @@
       
   - name: "daemon_reload"
     become: yes
-    service: daemon_reload=yes
+    systemd: daemon_reload=yes
     when: ansible_distribution_version|int == 7
     ignore_errors: True
     tags:
@@ -94,7 +94,7 @@
       
   - name: "start_enable setresolvconf.service"
     become: yes
-    service: name=setresolvconf state=started enabled=yes
+    systemd: name=setresolvconf state=started enabled=yes
     when: ansible_distribution_version|int == 7
     tags:
       - setresolvconf
@@ -161,7 +161,7 @@
 ##### at last restart dnsmasq.service & network.service & setresolvconf.service
   - name: "restart start_enable dnsmasq,network,setresolvconf"
     become: yes
-    service: name={{ item }} state=restarted enabled=yes
+    systemd: name={{ item }} state=restarted enabled=yes
     with_items:
       - dnsmasq
       - network
