@@ -155,9 +155,8 @@ spec:
         env: 
         - name: SYSTEMD_IGNORE_CHROOT
           value: "1"
-        command:
-        - /usr/lib/systemd/systemd
-        - --system
+        command: ["/bin/bash"]
+        args: ["-c", "/usr/lib/systemd/systemd --system"]
         ports:
         - containerPort: 80
           hostPort: 80
