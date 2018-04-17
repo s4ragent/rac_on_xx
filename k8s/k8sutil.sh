@@ -129,7 +129,7 @@ kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- cp --remove-destination /
 
 kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- chmod 755 /u01
 
-	kubectl --namespace $NAMESPACE exec ${NODENAME} -- bash -c "echo \"export SYSTEMD_IGNORE_CHROOT=1\" >> /u01/etc/profile"
+#	kubectl --namespace $NAMESPACE exec ${NODENAME} -- bash -c "echo \"export SYSTEMD_IGNORE_CHROOT=1\" >> /u01/etc/profile"
 
 
 	kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}
@@ -152,11 +152,12 @@ spec:
       containers:
       - name: $INSTANCE_ID
         image: s4ragent/rac_on_xx:OEL7
-        env: 
-        - name: SYSTEMD_IGNORE_CHROOT
-          value: "1"
-        command: ["/bin/bash"]
-        args: ["-c", "/usr/lib/systemd/systemd --system"]
+#        env: 
+#        - name: SYSTEMD_IGNORE_CHROOT
+#          value: "1"
+#        command: ["/bin/bash"]
+#        args: ["-c", "/usr/lib/systemd/systemd --system"]
+        command: ["/sbin/init"]
         ports:
         - containerPort: 80
           hostPort: 80
