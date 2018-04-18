@@ -55,7 +55,7 @@ spec:
       args: ["-c", "while true; do sleep 10;done"]
       ports:
         - containerPort: $VXLANPORT
-          hostPort: 80
+          hostPort: $HOSTPORT
       volumeMounts:
         - name: cgroups
           mountPath: /sys/fs/cgroup
@@ -170,8 +170,8 @@ spec:
 #        args: ["-c", "/usr/lib/systemd/systemd --system"]
         command: ["/sbin/init"]
         ports:
-        - containerPort: 80
-          hostPort: 80
+        - containerPort: $VXLANPORT
+          hostPort: $HOSTPORT
         securityContext:
           privileged: true
         volumeMounts:
@@ -318,7 +318,7 @@ EOF
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		run_pre $NODENAME
+		run_pre $NODENAME $NODEIP $i
 	done
 
 	STORAGEIP=`get_Internal_IP storage`
