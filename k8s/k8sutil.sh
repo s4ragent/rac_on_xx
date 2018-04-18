@@ -13,6 +13,11 @@ run_pre(){
 	NODENAME=$1
 	INSTANCE_ID="${NODENAME}"
 
+	if [ "$MINIKUBE" = "true" ]; then
+		HOSTPORT=`expr $VXLANPORT + $3`
+	else
+		HOSTPORT=$VXLANPORT
+	fi	
 
 #create PersistentVolumeClaim u01
 			cat <<EOF | kubectl create -f -
@@ -26,7 +31,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Gi
+      storage: 70Gi
   storageClassName: ${NAMESPACE}storageclass
 EOF
 
@@ -49,7 +54,7 @@ spec:
       command: ["/bin/sh"]
       args: ["-c", "while true; do sleep 10;done"]
       ports:
-        - containerPort: 80
+        - containerPort: $VXLANPORT
           hostPort: 80
       volumeMounts:
         - name: cgroups
@@ -78,6 +83,12 @@ run(){
 	NODENUMBER=$3
 	HOSTGROUP=$4
 	INSTANCE_ID="${NODENAME}"
+
+	if [ "$MINIKUBE" = "true" ]; then
+		HOSTPORT=`expr $VXLANPORT + $3`
+	else
+		HOSTPORT=$VXLANPORT
+	fi	
 
 
 loopcnt=0
@@ -270,6 +281,16 @@ runonly(){
 
 
 #create StorageClass
+	if [ "$MINIKUBE" = "true" ]; then
+			cat <<EOF | kubectl create -f -
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: ${NAMESPACE}storageclass
+  namespace: $NAMESPACE
+provisioner: kubernetes.io/host-path
+EOF
+	else
 			cat <<EOF | kubectl create -f -
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -282,6 +303,8 @@ parameters:
   $PARAMETER_2
   $PARAMETER_3
 EOF
+	fi	
+
 
 	fi
 	
