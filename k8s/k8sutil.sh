@@ -313,15 +313,17 @@ EOF
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
-
-	run_pre "storage"
+	STORAGEIP=`get_Internal_IP storage`
+	
+	run_pre "storage" $STORAGEIP 0 "storage"
 	for i in `seq 1 $nodecount`;
 	do
+		NODEIP=`get_Internal_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		run_pre $NODENAME $NODEIP $i
+		run_pre $NODENAME $NODEIP $i "dbserver"
 	done
 
-	STORAGEIP=`get_Internal_IP storage`
+	
 	run "storage" $STORAGEIP 0 "storage"
 	
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
