@@ -15,9 +15,36 @@ run_pre(){
 
 	if [ "$MINIKUBE" = "true" ]; then
 		HOSTPORT=`expr $VXLANPORT + $3`
+		
+			cat <<EOF | kubectl create -f -
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: ${NODENAME}u01pv
+spec:
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 70Gi
+  hostPath:
+    path: /k8s/${NODENAME}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ${NODENAME}u01claim
+  namespace: $NAMESPACE 
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 70Gi
+  volumeName: ${NODENAME}u01pv
+EOF
 	else
 		HOSTPORT=$VXLANPORT
-	fi	
 
 #create PersistentVolumeClaim u01
 			cat <<EOF | kubectl create -f -
@@ -34,6 +61,9 @@ spec:
       storage: 70Gi
   storageClassName: ${NAMESPACE}storageclass
 EOF
+
+	fi	
+
 
 sleep 30s
 
@@ -282,14 +312,7 @@ runonly(){
 
 #create StorageClass
 	if [ "$MINIKUBE" = "true" ]; then
-			cat <<EOF | kubectl create -f -
-kind: StorageClass
-apiVersion: storage.k8s.io/v1
-metadata:
-  name: ${NAMESPACE}storageclass
-  namespace: $NAMESPACE
-provisioner: kubernetes.io/host-path
-EOF
+		:
 	else
 			cat <<EOF | kubectl create -f -
 kind: StorageClass
