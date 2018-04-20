@@ -381,15 +381,14 @@ deleteall(){
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
 
-		kubectl --namespace $NAMESPACE delete pod storage
+		kubectl --namespace $NAMESPACE delete deployment deploymentstorage
 		kubectl --namespace $NAMESPACE delete pvc storageu01claim
 		
 	for i in `seq 1 10`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		kubectl --namespace $NAMESPACE delete pod $NODENAME
+		kubectl --namespace $NAMESPACE delete deployment deployment$NODENAME
 		kubectl --namespace $NAMESPACE delete pvc ${NODENAME}u01claim
-		kubectl --namespace $NAMESPACE delete pv ${NODENAME}u01pv
 	done
 	
 	kubectl --namespace $NAMESPACE delete service $SUBDOMAIN
