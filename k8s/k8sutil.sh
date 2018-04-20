@@ -415,6 +415,7 @@ deleteall(){
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		kubectl --namespace $NAMESPACE delete pod $NODENAME
 		kubectl --namespace $NAMESPACE delete pvc ${NODENAME}u01claim
+		kubectl --namespace $NAMESPACE delete pv ${NODENAME}u01pv
 	done
 	
 	kubectl --namespace $NAMESPACE delete service $SUBDOMAIN
