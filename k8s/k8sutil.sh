@@ -15,6 +15,8 @@ run_pre(){
 
 	if [ "$MINIKUBE" = "true" ]; then
 		HOSTPORT=`expr $VXLANPORT + $3`
+			
+			mkdir -p /k8s/${NODENAME}
 		
 			cat <<EOF | kubectl create -f -
 ---
