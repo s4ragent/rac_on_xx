@@ -56,6 +56,7 @@ spec:
       ports:
         - containerPort: $VXLANPORT
           hostPort: $HOSTPORT
+          protocol: UDP
       volumeMounts:
         - name: cgroups
           mountPath: /sys/fs/cgroup
@@ -172,6 +173,7 @@ spec:
         ports:
         - containerPort: $VXLANPORT
           hostPort: $HOSTPORT
+          protocol: UDP
         securityContext:
           privileged: true
         volumeMounts:
@@ -224,9 +226,10 @@ spec:
     app: $INSTANCE_ID
   clusterIP: None
   ports:
-  - name: foo
-    port: 80
-    targetPort: 80        
+  - name: vxlan
+    port: $VXLANPORT
+    targetPort: $HOSTPORT
+    protocol: UDP        
 EOF
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
