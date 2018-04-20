@@ -24,6 +24,7 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: ${NODENAME}u01pv
+  namespace: $NAMESPACE
 spec:
   accessModes:
     - ReadWriteOnce
