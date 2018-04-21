@@ -53,17 +53,18 @@ Oracle RAC on Docker /Kubernetes /systemd-nspawn /Azure /EC2 /GCE
 ## Tested Environment(12.2.0.1)
 - Docker/nspawn Environment
 
-||Docker(ubuntu host)|Docker(Centos host)||systemd-nspawn|
-|-------|-------|-------|
-|Environment version|18.01.0-ce|18.01.0-ce|1.8.7|1.7.12-gke|1.10|systemd-229-4ubuntu|
+||Docker(ubuntu host)|Docker(Centos host)|systemd-nspawn|
+|-------|-------|-------|	-------|
+|Environment version|18.01.0-ce|18.01.0-ce|systemd-229-4ubuntu|
 |OS(kernel) version|ubuntu 16.04.1 LTS(4.4.0-47-generic)|CentOS 7.4.1708(3.10.0-693.17.1.el7.x86_64)|ubuntu 16.04.1 LTS(4.4.0-47-generic)|
 |Other info(region etc)|N/A|N/A|N/A|
 |Last Update Date|2018/01/31|2018/02/01|2018/02/01|
 
 - Kubernets Environment
+
 ||Kubernetes(AKS)|Kubernetes(GKE)|Kubernetes(minikube(local docker cluster))|
 |--------|--------|-------|-------|
-|Environment version|ubuntu(4.11.0-1016-azure)|ubuntu(4.4.0-1027-gke)|ubuntu(4.13.0-1012-gcp)
+|Environment version|ubuntu(4.11.0-1016-azure)|ubuntu(4.4.0-1027-gke)|ubuntu(4.13.0-1012-gcp)|
 |Other info(region etc)|eastus|us-central1-c|N/A|
 |Last Update Date|2018/04/19|2018/02/06|2018/04/20|
 
