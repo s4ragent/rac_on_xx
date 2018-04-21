@@ -53,12 +53,12 @@ Oracle RAC on Docker /Kubernetes /systemd-nspawn /Azure /EC2 /GCE
 ## Tested Environment(12.2.0.1)
 - Container Environment
 
-||Docker(ubuntu host)|Docker(Centos host)|Kubernetes(AKS)|Kubernetes(GKE)|systemd-nspawn|
+||Docker(ubuntu host)|Docker(Centos host)|Kubernetes(AKS)|Kubernetes(GKE)|Kubernetes(minikube(local cluster))|systemd-nspawn|
 |--------|--------|-------|-------|-------|-------|
-|Environment version|18.01.0-ce|18.01.0-ce|1.7.7|1.7.12-gke|systemd-229-4ubuntu|
-|OS(kernel) version|ubuntu 16.04.1 LTS(4.4.0-47-generic)|CentOS 7.4.1708(3.10.0-693.17.1.el7.x86_64)|ubuntu(4.11.0-1016-azure)|ubuntu(4.4.0-1027-gke)|ubuntu 16.04.1 LTS(4.4.0-47-generic)|
-|Other info(region etc)|N/A|N/A|eastus|us-central1-c|N/A|
-|Last Update Date|2018/01/31|2018/02/01|2018/02/09|2018/02/06|2018/02/01|
+|Environment version|18.01.0-ce|18.01.0-ce|1.8.7|1.7.12-gke|1.10|systemd-229-4ubuntu|
+|OS(kernel) version|ubuntu 16.04.1 LTS(4.4.0-47-generic)|CentOS 7.4.1708(3.10.0-693.17.1.el7.x86_64)|ubuntu(4.11.0-1016-azure)|ubuntu(4.4.0-1027-gke)|ubuntu(4.13.0-1012-gcp)|ubuntu 16.04.1 LTS(4.4.0-47-generic)|
+|Other info(region etc)|N/A|N/A|eastus|us-central1-c|us-central1-c|N/A|
+|Last Update Date|2018/01/31|2018/02/01|2018/04/19|2018/02/06|2018/04/20|2018/02/01|
 
 - Cloud Environment
 
