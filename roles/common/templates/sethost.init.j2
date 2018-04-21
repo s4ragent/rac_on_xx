@@ -1,2 +1,11 @@
-#!/bin/bash
+#!/bin/sh
+# sethost       sethost init configuration
+# chkconfig:    2345 20 90
+# version:      0.1
+# author:       knopp
+{% if ansible_distribution_version|int == 7 %}
 hostnamectl set-hostname {{ NODENAME }}.{{ DOMAIN_NAME }}
+{% else %}
+hostname {{ NODENAME }}.{{ DOMAIN_NAME }}
+{% endif %}
+

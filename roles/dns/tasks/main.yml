@@ -38,12 +38,25 @@
 
   - name: "restart and  enable dnsmasq.service"
     become: yes
-    service: name=dnsmasq.service state=started enabled=yes
+    systemd: name=dnsmasq state=started enabled=yes
+    when: ansible_distribution_version|int == 7
     tags:
       - setresolvconf
       - sethost    
       - dnsmasq
       - addclient
+
+  - name: "start_enable dnsmasq"
+    become: yes
+    shell: "chkconfig dnsmasq on;service dnsmasq restart"
+    when: ansible_distribution_version|int == 6
+    ignore_errors: True
+    tags:
+      - setresolvconf
+      - sethost    
+      - dnsmasq
+      - addclient
+
       
 ###### set resolvconf
 
@@ -57,13 +70,23 @@
   - name: "copy setresolvconf.service"
     become: yes
     copy: src=setresolvconf.service dest=/etc/systemd/system/setresolvconf.service owner=root group=root mode=0700
+    when: ansible_distribution_version|int == 7
     tags:
       - setresolvconf
       - addclient
 
+  - name: "install setresolvconf.init"
+    become: yes
+    shell: chdir=/usr/local/bin install -o root -g root -m 755 setresolvconf.init /etc/init.d/setresolvconf
+    when: ansible_distribution_version|int == 6
+    tags:
+      - setresolvconf
+      - addclient
+      
   - name: "daemon_reload"
     become: yes
     systemd: daemon_reload=yes
+    when: ansible_distribution_version|int == 7
     ignore_errors: True
     tags:
       - setresolvconf
@@ -71,10 +94,21 @@
       
   - name: "start_enable setresolvconf.service"
     become: yes
-    service: name=setresolvconf.service state=started enabled=yes
+    systemd: name=setresolvconf state=started enabled=yes
+    when: ansible_distribution_version|int == 7
     tags:
       - setresolvconf
       - addclient
+
+  - name: "start_enable sethost.service"
+    become: yes
+    shell: "chkconfig setresolvconf on;service  setresolvconf restart"
+    when: ansible_distribution_version|int == 6
+    ignore_errors: True
+    tags:
+      - setresolvconf
+      - addclient
+
       
 ###### for dhclient enable environment (e.g. gce/ec2)
   - name: "check dhclient"
@@ -125,26 +159,28 @@
       - sethost
 
 ##### at last restart dnsmasq.service & network.service & setresolvconf.service
-  - name: "restart and  enable dnsmasq.service"
+  - name: "restart start_enable dnsmasq,network,setresolvconf"
     become: yes
-    service: name=dnsmasq.service state=restarted enabled=yes
+    systemd: name={{ item }} state=restarted enabled=yes
+    with_items:
+      - dnsmasq
+      - network
+      - setresolvconf
+    when: ansible_distribution_version|int == 7
     tags:
       - setresolvconf
       - sethost    
       - dnsmasq
 
-  - name: "restart network.service"
+  - name: "start_enable dnsmasq,network,setresolvconf"
     become: yes
-    service: name=network.service state=restarted
-    tags:
-      - setresolvconf
-      - sethost  
+    shell: "chkconfig {{ item }} on;service {{ item }} restart"
+    when: ansible_distribution_version|int == 6
+    with_items:
       - dnsmasq
-
-  - name: "restart setresolvconf.service"
-    become: yes
-    service: name=setresolvconf.service state=restarted
+      - network
+      - setresolvconf
     tags:
       - setresolvconf
-      - sethost  
+      - sethost    
       - dnsmasq

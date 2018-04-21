@@ -13,6 +13,11 @@ run_pre(){
 	NODENAME=$1
 	INSTANCE_ID="${NODENAME}"
 
+	if [ "$MINIKUBE" = "true" ]; then
+		HOSTPORT=`expr $VXLANPORT + $3`
+	else
+		HOSTPORT=$VXLANPORT
+	fi	
 
 #create PersistentVolumeClaim u01
 			cat <<EOF | kubectl create -f -
@@ -26,7 +31,7 @@ spec:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 100Gi
+      storage: 70Gi
   storageClassName: ${NAMESPACE}storageclass
 EOF
 
@@ -49,8 +54,9 @@ spec:
       command: ["/bin/sh"]
       args: ["-c", "while true; do sleep 10;done"]
       ports:
-        - containerPort: 80
-          hostPort: 80
+        - containerPort: $VXLANPORT
+          hostPort: $HOSTPORT
+          protocol: UDP
       volumeMounts:
         - name: cgroups
           mountPath: /sys/fs/cgroup
@@ -79,6 +85,12 @@ run(){
 	HOSTGROUP=$4
 	INSTANCE_ID="${NODENAME}"
 
+	if [ "$MINIKUBE" = "true" ]; then
+		HOSTPORT=`expr $VXLANPORT + $3`
+	else
+		HOSTPORT=$VXLANPORT
+	fi	
+
 
 loopcnt=0
 while :
@@ -87,8 +99,9 @@ do
 	if [ "$status" = "1" ]; then
 		break
 	fi	
-	if [ "$loopcnt" = "30" ]; then
-		break
+	if [ "$loopcnt" = "40" ]; then
+	 echo "pod creation failed"
+		exit
 	fi	
 	loopcnt=`expr $loopcnt + 1`
 	sleep 30s
@@ -128,33 +141,51 @@ kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- cp --remove-destination /
 
 kubectl --namespace $NAMESPACE exec ${INSTANCE_ID}  -- chmod 755 /u01
 
+#	kubectl --namespace $NAMESPACE exec ${NODENAME} -- bash -c "echo \"export SYSTEMD_IGNORE_CHROOT=1\" >> /u01/etc/profile"
+
+
 	kubectl --namespace $NAMESPACE delete pod ${INSTANCE_ID}
 
 sleep 60s
 
 	cat <<EOF | kubectl create -f -
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1beta1
+kind: Deployment
 metadata:
-  name: $INSTANCE_ID
+  name: deployment${INSTANCE_ID}
   namespace: $NAMESPACE
-  labels:
-    name: rac
 spec:
-  hostname: $INSTANCE_ID
-  subdomain: $SUBDOMAIN
-  containers:
-    - name: $INSTANCE_ID
-      image: s4ragent/rac_on_xx:OEL7
-      ports:
-        - containerPort: 80
-          hostPort: 80
-      securityContext:
-        privileged: true
-      volumeMounts:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: $INSTANCE_ID
+    spec:
+      containers:
+      - name: $INSTANCE_ID
+        image: s4ragent/rac_on_xx:OEL7
+#        env: 
+#        - name: SYSTEMD_IGNORE_CHROOT
+#          value: "1"
+#        command: ["/bin/bash"]
+#        args: ["-c", "/usr/lib/systemd/systemd --system"]
+        command: ["/sbin/init"]
+        ports:
+        - containerPort: $VXLANPORT
+          hostPort: $HOSTPORT
+          protocol: UDP
+        securityContext:
+          privileged: true
+        volumeMounts:
         - name: cgroups
           mountPath: /sys/fs/cgroup
           readOnly: true
+        - name: modules
+          mountPath: /lib/modules
+          readOnly: true
+        - name: dev
+          mountPath: /dev
+          readOnly: false          
         - name: u01
           mountPath: /u01
           subPath: u01
@@ -171,20 +202,41 @@ spec:
           mountPath: /usr
           subPath: usr
           readOnly: false
-  volumes:
-    - name: cgroups
-      hostPath:
-        path: /sys/fs/cgroup
-    - name: u01
-      persistentVolumeClaim:
-        claimName: ${NODENAME}u01claim
+      volumes:
+      - name: cgroups
+        hostPath:
+          path: /sys/fs/cgroup
+      - name: dev
+        hostPath:
+          path: /dev
+      - name: modules
+        hostPath:
+          path: /lib/modules
+      - name: u01
+        persistentVolumeClaim:
+          claimName: ${NODENAME}u01claim
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${INSTANCE_ID}
+  namespace: $NAMESPACE
+spec:
+  selector:
+    app: $INSTANCE_ID
+  clusterIP: None
+  ports:
+  - name: vxlan
+    port: $VXLANPORT
+    targetPort: $HOSTPORT
+    protocol: UDP        
 EOF
 
 	#$NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 	common_update_ansible_inventory $NODENAME $IP $INSTANCE_ID $NODENUMBER $HOSTGROUP
 
 cat >> $VIRT_TYPE/host_vars/$1 <<EOF
-VXLAN_NODENAME: "${NODENAME}.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
+VXLAN_NODENAME: "${INSTANCE_ID}.$NAMESPACE.svc.$CLUSTERDOMAIN"
 EOF
 
 }
@@ -194,7 +246,7 @@ run_after(){
  loopcnt=0
 	while :
 	do
-		status=`kubectl --namespace $NAMESPACE get pods $NODENAME | grep Running | wc -l`
+		status=`kubectl --namespace $NAMESPACE get pods | grep $NODENAME | grep Running | wc -l`
 		if [ "$status" = "1" ]; then
 			break
 		fi	
@@ -229,25 +281,19 @@ runonly(){
 
 #create namespace
 	  kubectl create namespace $NAMESPACE
-	  
-#create Service
-			cat <<EOF | kubectl create -f -
-apiVersion: v1
-kind: Service
-metadata:
-  name: $SUBDOMAIN
-  namespace: $NAMESPACE
-spec:
-  selector:
-    name: rac
-  clusterIP: None
-  ports:
-  - name: foo
-    port: 80
-    targetPort: 80
-EOF
+
 
 #create StorageClass
+	if [ "$MINIKUBE" = "true" ]; then
+			cat <<EOF | kubectl create -f -
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: ${NAMESPACE}storageclass
+  namespace: $NAMESPACE
+provisioner: k8s.io/minikube-hostpath
+EOF
+	else
 			cat <<EOF | kubectl create -f -
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
@@ -260,6 +306,8 @@ parameters:
   $PARAMETER_2
   $PARAMETER_3
 EOF
+	fi	
+
 
 	fi
 	
@@ -268,15 +316,17 @@ EOF
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
-
-	run_pre "storage"
+	STORAGEIP=`get_Internal_IP storage`
+	
+	run_pre "storage" $STORAGEIP 0 "storage"
 	for i in `seq 1 $nodecount`;
 	do
+		NODEIP=`get_Internal_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		run_pre $NODENAME
+		run_pre $NODENAME $NODEIP $i "dbserver"
 	done
 
-	STORAGEIP=`get_Internal_IP storage`
+	
 	run "storage" $STORAGEIP 0 "storage"
 	
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
@@ -306,7 +356,6 @@ metadata:
     name: rac
 spec:
   hostname: ansible
-  subdomain: $SUBDOMAIN
   containers:
     - name: ansible
       image: s4ragent/rac_on_xx:OEL7
@@ -315,7 +364,7 @@ spec:
 
 EOI
 
-                                                                                                     
+sleep 30s                                                                                                     
 #	kubectl cp /media/$DB_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$DB_MEDIA1
 
 #	kubectl cp /media/$GRID_MEDIA1 $NAMESPACE/${NODE1}:$MEDIA_PATH/$GRID_MEDIA1
@@ -335,13 +384,13 @@ deleteall(){
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
 
-		kubectl --namespace $NAMESPACE delete pod storage
+		kubectl --namespace $NAMESPACE delete deployment deploymentstorage
 		kubectl --namespace $NAMESPACE delete pvc storageu01claim
 		
 	for i in `seq 1 10`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		kubectl --namespace $NAMESPACE delete pod $NODENAME
+		kubectl --namespace $NAMESPACE delete deployment deployment$NODENAME
 		kubectl --namespace $NAMESPACE delete pvc ${NODENAME}u01claim
 	done
 	
@@ -365,10 +414,10 @@ get_External_IP(){
 
 get_Internal_IP(){
 	if [ "$1" = "storage" ]; then
-		echo "storage.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
+		echo "storage.$NAMESPACE.svc.$CLUSTERDOMAIN"
 	else
 		NODENAME="$NODEPREFIX"`printf "%.3d" $1`
-		echo "${NODENAME}.$SUBDOMAIN.$NAMESPACE.svc.$CLUSTERDOMAIN"
+		echo "${NODENAME}.$NAMESPACE.svc.$CLUSTERDOMAIN"
 	fi	
 }
 
@@ -384,15 +433,16 @@ copymedia(){
 
 install(){
 common_execansible centos2oel.yml
-common_execansible rac.yml --tags security,vxlan_conf,dnsmasq,setresolvconf
-common_execansible rac.yml --skip-tags security,dnsmasq,vxlan_conf
+common_execansible k8s_rac.yml --tags security,vxlan_conf,dnsmasq,setresolvconf
+common_execansible k8s_rac.yml --skip-tags security,dnsmasq,vxlan_conf
 # 	NODE1="$NODEPREFIX"`printf "%.3d" 1`
 #	kubectl --namespace $NAMESPACE exec ${NODE1} 'cd /root/rac_on_xx/k8s && bash k8sutil.sh after_runonly'
 }
 
 runall_k8s(){
 	runonly $*
-	install
+	copymedia
+	kubectl exec --namespace raconxx -ti ansible -- /bin/bash -c "cd /root/rac_on_xx/k8s;nohup bash k8sutil.sh install"
 }
 
 case "$1" in

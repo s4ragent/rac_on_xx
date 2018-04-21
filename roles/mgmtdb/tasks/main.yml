@@ -26,9 +26,3 @@
       - mgmtdb
       - gridinstall
       - installdbca
-
-  - debug: var=crsctl_result.stdout_lines
-    tags:
-      - mgmtdb
-      - gridinstall
-      - installdbca

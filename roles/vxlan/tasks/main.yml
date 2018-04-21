@@ -36,7 +36,17 @@
       
   - name: "copy vxlan.init(Without NetworkManager)"
     become: yes
+    template: src=vxlan.init.j2 dest=/usr/local/bin/vxlan.init owner=root group=root mode=0700
+    when: ansible_distribution_version|int == 6
+    tags:
+      - vxlan_init
+      - vxlan_conf
+      - addclient
+
+  - name: "copy vxlan.init(Without NetworkManager)"
+    become: yes
     copy: src=vxlan.init dest=/usr/local/bin/vxlan.init owner=root group=root mode=0700
+    when: ansible_distribution_version|int == 7
     tags:
       - vxlan_init
       - vxlan_conf
@@ -45,6 +55,17 @@
   - name: "copy vxlan.service(Without NetworkManager)"
     become: yes
     copy: src=vxlan.service dest=/etc/systemd/system/vxlan.service owner=root group=root mode=0700
+    when: ansible_distribution_version|int == 7
+    tags:
+      - vxlan_init
+      - vxlan_conf
+      - addclient
+
+
+  - name: "install vxlan.init"
+    become: yes
+    shell: chdir=/usr/local/bin install -o root -g root -m 755 vxlan.init /etc/init.d/vxlan
+    when: ansible_distribution_version|int == 6
     tags:
       - vxlan_init
       - vxlan_conf
@@ -53,7 +74,7 @@
   - name: "daemon_reload"
     become: yes
     systemd: daemon_reload=yes
-    ignore_errors: True
+    when: ansible_distribution_version|int == 7
     tags:
       - vxlan_init
       - vxlan_conf
@@ -61,8 +82,19 @@
       
   - name: "start_enable vxlan.service(Without NetworkManager)"
     become: yes
-    service: name=vxlan.service state=started enabled=yes
+    systemd: name=vxlan.service state=started enabled=yes
+    when: ansible_distribution_version|int == 7
     tags:
       - vxlan_init
       - vxlan_conf
       - addclient
+      
+  - name: "restart vxlan"
+    become: yes
+    shell: "chkconfig vxlan on;service vxlan restart"
+    when: ansible_distribution_version|int == 6
+    tags:
+      - vxlan_init
+      - vxlan_conf
+      - addclient
+      

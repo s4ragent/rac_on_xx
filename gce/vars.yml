@@ -2,10 +2,10 @@
 ZONE: "us-west1-b"
 #ZONE: "asia-east1-c"
 VXLAN_DEV: "eth0"
-INSTANCE_TYPE_OPS: "--machine-type n1-highmem-2"
-#INSTANCE_TYPE_OPS: "--custom-cpu 2 --custom-memory 8 --preemptible --maintenance-policy TERMINATE"
-NODE_DISK_SIZE: "50GB"
-STORAGE_DISK_SIZE: "100GB"
+#INSTANCE_TYPE_OPS: "--machine-type n1-highmem-2"
+INSTANCE_TYPE_OPS: "--custom-cpu 2 --custom-memory 8 --preemptible --maintenance-policy TERMINATE"
+NODE_DISK_SIZE: "200GB"
+STORAGE_DISK_SIZE: "200GB"
 ######## common user specific value  ###############
 MEDIA_COPY: "true"
 MEDIA_PATH: /downloadmedia
@@ -16,11 +16,11 @@ SWITCH_KERNEL: "0"
 #guac_pass: Guac123!
 #WindowManager: "xfce"
 ####common VIRT_TYPE specific value ################
-DELETE_CMD: "~/google-cloud-sdk/bin/gcloud compute instances delete"
+DELETE_CMD: "/usr/bin/gcloud compute instances delete"
 DELETE_CMD_OPS: "--zone {{ ZONE }} -q"
-START_CMD: "~/google-cloud-sdk/bin/gcloud compute instances start"
+START_CMD: "/usr/bin/gcloud compute instances start"
 START_CMD_OPS: "--zone {{ ZONE }} -q"
-STOP_CMD: "~/google-cloud-sdk/bin/gcloud compute instances stop"
+STOP_CMD: "/usr/bin/gcloud compute instances stop"
 STOP_CMD_OPS: "--zone {{ ZONE }} -q"
 INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: "/etc/dhclient.conf"
@@ -37,12 +37,14 @@ dns: dnsmasq
 #storage_type: "nfs"
 ####for nfslocal option values
 storage_type: "nfs"
+#storage_type: "nbd"
 DNFS: enable
 #####
 NFS_OPS:  "rw,bg,hard,nointr,rsize=1048576,wsize=1048576,tcp,vers=4.1,timeo=600,actimeo=0"
 ORA_DATA: /u01/oradata
 VOTE_DEV: /u01/oradata/vote.img
 VOTE_BASE_SIZE: 40960
+#VOTE_BASE_SIZE: 81920
 VOTE_MULTI_SIZE: 2048
 VOTE_DISKGROUP_NAME: VOTE
 DATA_DEV: /u01/oradata/data.img

@@ -49,7 +49,7 @@
 
   - name: "start and enable xrdp"
     become: yes
-    service: name=xrdp state=started enabled=yes
+    systemd: name=xrdp state=started enabled=yes
     tags:
       - xrdp
 

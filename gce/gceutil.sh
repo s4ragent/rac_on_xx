@@ -14,7 +14,7 @@ run(){
 	NODENUMBER=$3
 	HOSTGROUP=$4
 	INSTANCE_ID=$NODENAME
-	CREATE_RESULT=$(gcloud compute instances create $NODENAME $INSTANCE_TYPE_OPS --can-ip-forward --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" $INSTANCE_OPS --boot-disk-type "pd-ssd" --boot-disk-device-name $NODENAME --boot-disk-size $DISKSIZE --zone $ZONE | tail -n 1)
+	CREATE_RESULT=$(gcloud compute instances create $NODENAME $INSTANCE_TYPE_OPS --can-ip-forward --scopes "https://www.googleapis.com/auth/devstorage.read_write,https://www.googleapis.com/auth/logging.write" $INSTANCE_OPS --boot-disk-type "pd-standard" --boot-disk-device-name $NODENAME --boot-disk-size $DISKSIZE --zone $ZONE | tail -n 1)
 
 	External_IP=`get_External_IP $INSTANCE_ID`
 	Internal_IP=`get_Internal_IP $INSTANCE_ID`
@@ -55,10 +55,8 @@ runonly(){
 		gcloud compute firewall-rules create default-allow-internal --network default --allow tcp:0-65535,udp:0-65535,icmp --source-ranges 10.0.0.0/8
 	fi
 
-	if [ "${storage_type}" = "nfsmulti" ] ; then
-				run storage01 $STORAGE_DISK_SIZE 70 storage
-				run storage02 $STORAGE_DISK_SIZE 71 storage
-				run storage03 $STORAGE_DISK_SIZE 72 storage
+	if [ "${storage_type}" = "nbd" ] ; then
+		echo "nostorage"
 	else
 		STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
 	fi

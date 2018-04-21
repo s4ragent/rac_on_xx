@@ -135,3 +135,11 @@
       - gridinstall
       - installdbca
 
+  - name: "change css misscount"
+    become: yes
+    shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl set css misscount 360"
+    when: inventory_hostname == groups["dbserver"][-1]
+    tags:
+      - runinstallergrid
+      - gridinstall
+      - installdbca

@@ -37,9 +37,10 @@
       line: "AddressFamily inet"
       insertafter: EOF
       state: present
-    register: ssh_config  
+    register: ssh_config
+  
   - name: Restart ssh
     become: yes
-    service:
+    systemd:
       name: sshd
       state: restarted

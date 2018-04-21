@@ -26,8 +26,8 @@ DHCPCLIENT: ""
 ####docker system  specific value ##################
 IMAGE: "s4ragent/rac_on_xx:OEL7"
 #CAP_OPS: "--cap-add=NET_ADMIN"
-DOCKER_CAPS: "--privileged=true --security-opt seccomp=unconfined"
-#DOCKER_CAPS: "--cap-add=ALL --security-opt=seccomp=unconfined"
+DOCKER_CAPS: "--privileged=true --security-opt seccomp=unconfined -v /boot/:/boot:ro --tmpfs=/run -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /dev:/dev -v /lib/modules:/lib/modules:ro"
+#DOCKER_CAPS: "--security-opt seccomp=unconfined --cap-add=SYS_ADMIN --cap-add=SYS_NICE  --cap-add=SYS_RESOURCE --cap-add=NET_ADMIN -v /boot/:/boot:ro --tmpfs=/run -v /sys/fs/cgroup:/sys/fs/cgroup:ro -v /dev:/dev"
 DOCKER_START_OPS: "--restart=always"
 TMPFS_OPS: "--shm-size=1200m"
 ####################################################
@@ -39,10 +39,12 @@ dns: dnsmasq
 #####for NFS option values
 ##### device size = base_size + multi_size * node count
 storage_type: "nfs"
-NFS_OPS:  "rw,bg,hard,nointr,rsize=1048576,wsize=1048576,tcp,vers=4.1,timeo=600,actimeo=0"
+#nbd_local_container: "true"
+NFS_OPS:  "rw,bg,hard,nointr,rsize=1048576,wsize=1048576,tcp,vers=4,timeo=600,actimeo=0"
 ORA_DATA: /u01/oradata
 VOTE_DEV: /u01/oradata/vote.img
 VOTE_BASE_SIZE: 40960
+#VOTE_BASE_SIZE: 81920
 VOTE_MULTI_SIZE: 2048
 VOTE_DISKGROUP_NAME: VOTE
 DATA_DEV: /u01/oradata/data.img

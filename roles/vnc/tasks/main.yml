@@ -124,7 +124,7 @@
 
   - name: start vnc service
     become: yes
-    service: name="vncserver@:{{item.0 + 1}}.service" state=restarted enabled=yes
+    systemd: name="vncserver@:{{item.0 + 1}}.service" state=restarted enabled=yes
     with_indexed_items:
       - oracle
       - grid

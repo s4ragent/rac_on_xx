@@ -8,16 +8,20 @@ PARAMETER_3:
 #### for gke
 #PROVISIONER: kubernetes.io/gce-pd
 #PARAMETER_1: "type: pd-standard" 
-#PARAMETER_2: "zones: us-central1-c"
+#PARAMETER_2: "zones: us-west1-c"
 #PARAMETER_3:
 VXLAN_DEV: "eth0"
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
-DB_MEDIA1: V839960-01.zip
-GRID_MEDIA1: V840012-01.zip
+DB_MEDIA1: linuxx64_12201_database.zip
+GRID_MEDIA1: linuxx64_12201_grid_home.zip
+#DB_MEDIA1: V839960-01.zip
+#GRID_MEDIA1: V840012-01.zip
 NAMESPACE: raconxx
 SUBDOMAIN: sub
 CLUSTERDOMAIN: cluster.local
+MINIKUBE: true
+VXLANPORT: 8472
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: ""

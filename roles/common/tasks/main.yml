@@ -10,12 +10,21 @@
   - name: "copy sethost.service"
     become: yes
     copy: src=sethost.service dest=/etc/systemd/system/sethost.service owner=root group=root mode=0700
+    when: ansible_distribution_version|int == 7
+    tags:
+      - sethost
+
+  - name: "install vxlan.init"
+    become: yes
+    shell: chdir=/usr/local/bin install -o root -g root -m 755 sethost.init /etc/init.d/sethost
+    when: ansible_distribution_version|int == 6
     tags:
       - sethost
 
   - name: "daemon_reload"
     become: yes
     systemd: daemon_reload=yes
+    when: ansible_distribution_version|int == 7
     ignore_errors: True
     tags:
       - sethost
@@ -25,7 +34,16 @@
 
   - name: "start_enable sethost.service"
     become: yes
-    service: name=sethost.service state=started enabled=yes
+    systemd: name=sethost state=restarted enabled=yes
+    when: ansible_distribution_version|int == 7
+    ignore_errors: True
+    tags:
+      - sethost
+
+  - name: "start_enable sethost.service"
+    become: yes
+    shell: "chkconfig sethost on;service sethost restart"
+    when: ansible_distribution_version|int == 6
     ignore_errors: True
     tags:
       - sethost
@@ -158,19 +176,23 @@
 
   - name: "restart network"
     become: yes
-    service: name=network.service state=restarted
+    systemd: name=network state=restarted
+    when: ansible_distribution_version|int == 7
     tags:
       - kernel
 
-  - name: "restart vxlan"
+  - name: "restart network"
     become: yes
-    service: name=vxlan.service state=restarted
+    shell: "service network restart"
+    when: ansible_distribution_version|int == 6
     tags:
       - kernel
+
 
   - name: "disable ntpd"
     become: yes
-    service: name=ntpd.service state=stopped enabled=no
+    systemd: name=ntpd state=stopped enabled=no
+    when: ansible_distribution_version|int == 7
     ignore_errors: yes
     tags:
       - ntp
@@ -193,7 +215,8 @@
 
   - name: "disable chronyd"
     become: yes
-    service: name=chronyd.service state=stopped enabled=no
+    systemd: name=chronyd.service state=stopped enabled=no
+    when: ansible_distribution_version|int == 7
     ignore_errors: yes
     tags:
       - ntp
@@ -278,8 +301,19 @@
     yum: name={{ PreInstallRPM }} state=present enablerepo=ol7_optional_latest
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
+    when: ansible_distribution_version|int == 7
     tags:
       - preinstallpackages
+
+  - name: "install preinstall packages"
+    become: yes
+    yum: name={{ PreInstallRPM }} state=present
+    async: "{{ ASYNC }}"
+    poll: "{{ POLL }}"
+    when: ansible_distribution_version|int == 6
+    tags:
+      - preinstallpackages
+
 
   - name: "create swap(dd)"
     become: yes

@@ -18,12 +18,30 @@
       - nfsclient
 
 
+  - name: "restart rpcpind"
+    become: yes
+    shell: "chkconfig {{ item }} on;service  {{ item }} restart"
+    when: ansible_distribution_version|int == 6
+    with_items:
+      - rpcbind
+    tags:
+      - nfsclient
+      
   - name: "mount oradata"
     become: yes
     mount: name={{ ORA_DATA }} src="{{ STORAGE_SERVER }}:/" fstype=nfs opts="{{ NFS_OPS }}" state=mounted
-    when: storage_type == 'nfs'
+    when: storage_type == 'nfs' and  ansible_distribution_version|int == 7
     tags:
       - nfsclient
+
+  - name: "mount oradata"
+    become: yes
+    mount: name={{ ORA_DATA }} src="{{ STORAGE_SERVER }}:{{ STORAGE_ROOT }}" fstype=nfs opts="{{ NFS_OPS }}" state=mounted
+    when: storage_type == 'nfs' and  ansible_distribution_version|int == 6
+    tags:
+      - nfsclient
+
+
 
   - name: "chown oradata"
     become: yes
@@ -69,6 +87,6 @@
 
   - name: "enable remote-fs.target"
     become: yes
-    service: name=remote-fs.target enabled=yes
+    systemd: name=remote-fs.target enabled=yes
     tags:
       - nfsclient
