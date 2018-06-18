@@ -96,6 +96,7 @@
     become: yes
     systemd: name=setresolvconf state=started enabled=yes
     when: ansible_distribution_version|int == 7
+    ignore_errors: True
     tags:
       - setresolvconf
       - addclient
