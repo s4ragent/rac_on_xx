@@ -22,23 +22,6 @@ replaceinventory(){
 	echo ""
 }
 
-get_External_IP(){
-	get_Internal_IP $*	
-}
-
-get_Internal_IP(){
-	if [ "$1" = "storage" ]; then
-		NUM=`expr $BASE_IP`
-	else
-		NUM=`expr $BASE_IP + $1`
-	fi
-	SEGMENT=`echo $KVMSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
-	Internal_IP="${SEGMENT}$NUM"
-
-	echo $Internal_IP	
-}
-
-
 source ./common_menu.sh
 
 
