@@ -106,8 +106,8 @@
   - name: "sleep 180s"
     local_action: shell sleep 180s
     run_once: true
-    when: centos2oel_rerult.rc != 0 or ( SWITCH_KERNEL is defined and SWITCH_KERNEL !="" )
-or ( NOZEROCONF is defined and NOZEROCONF !="" )    tags:
+    when: centos2oel_rerult.rc != 0 or ( SWITCH_KERNEL is defined and SWITCH_KERNEL !="" ) or ( NOZEROCONF is defined and NOZEROCONF !="" )  
+    tags:
       - centos2oel
       - reboot
 
