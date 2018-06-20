@@ -12,8 +12,8 @@ ansible_ssh_private_key_file: oci.pem
 NODELIST: "node001,129.153.0.51,1,dbserver node002,129.153.0.52,2,dbserver node003,129.153.0.53,3,dbserver" 
 STORAGE_SERVER: 10.0.0.11
 VXLAN_DEV: "ens3"
-data_disk_dev: "/dev/sdb"
-data_disk_mountpoint: "/u01"
+#data_disk_dev: "/dev/sdb"
+#data_disk_mountpoint: "/u01"
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
 DB_MEDIA1: V839960-01.zip
