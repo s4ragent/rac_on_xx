@@ -18,6 +18,7 @@ MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
 DB_MEDIA1: V839960-01.zip
 GRID_MEDIA1: V840012-01.zip
+NOZEROCONF: yes
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: ""
