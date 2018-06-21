@@ -40,10 +40,6 @@ get_External_IP(){
 	echo $External_IP	
 }
 
-get_Internal_IP(){
-	
-}
-
 source ./common_menu.sh
 
 
