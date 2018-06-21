@@ -9,8 +9,7 @@ ansible_ssh_private_key_file: oci.pem
 #ansible_ssh_pass: kvmpass
 #### oci user specific value  ###################
 #  "NODENAME,IP,nodenumber,hostgroup NODENAME,IP,nodenumber,hostgroup"
-NODELIST: "node001,129.213.19.165,1,dbserver node002,
-129.213.30.216,2,dbserver" 
+NODELIST: "node001,129.213.19.165,1,dbserver node002,129.213.30.216,2,dbserver" 
 STORAGE_SERVER: 10.0.0.11
 VXLAN_DEV: "ens3"
 #data_disk_dev: "/dev/sdb"
