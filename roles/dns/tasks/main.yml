@@ -133,7 +133,7 @@
   - name: "copy dhclient.conf"
     become: yes
     template: src=dhclient-ens3.conf.j2 dest=/etc/dhclient-ens3.conf owner=root group=root mode=0644
-    when: link_local is defined
+    when: oci is defined
     tags:
       - dnsmasq
       - addclient
