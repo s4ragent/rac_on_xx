@@ -96,6 +96,7 @@
     become: yes
     systemd: name=setresolvconf state=started enabled=yes
     when: ansible_distribution_version|int == 7
+    ignore_errors: True
     tags:
       - setresolvconf
       - addclient
@@ -176,6 +177,7 @@
       - network
       - setresolvconf
     when: ansible_distribution_version|int == 7
+    ignore_errors: True
     tags:
       - setresolvconf
       - sethost    
@@ -185,6 +187,7 @@
     become: yes
     shell: "chkconfig {{ item }} on;service {{ item }} restart"
     when: ansible_distribution_version|int == 6
+    ignore_errors: True
     with_items:
       - dnsmasq
       - network

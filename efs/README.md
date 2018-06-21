@@ -61,9 +61,9 @@ rac_on_xx/ec2-efs
 
 ### 3. install ansible
     #pip install pip --upgrade
-    #pip install ansible    
+    #python -m pip install ansible    
 ### 4. install AWS CLI
-    #pip install awscli boto3
+    #python -m pip install awscli boto boto3
 ### 5. Configuring the AWS Command Line Interface
     see http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
 ### 6. download Oracle 12c Release 2 (12.2) Clusterware and Database software and locate them on /media

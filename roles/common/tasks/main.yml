@@ -178,6 +178,7 @@
     become: yes
     systemd: name=network state=restarted
     when: ansible_distribution_version|int == 7
+    ignore_errors: True
     tags:
       - kernel
 
@@ -185,6 +186,7 @@
     become: yes
     shell: "service network restart"
     when: ansible_distribution_version|int == 6
+    ignore_errors: True
     tags:
       - kernel
 

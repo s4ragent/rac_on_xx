@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VIRT_TYPE="generic"
+VIRT_TYPE="oci"
 
 cd ..
 source ./commonutil.sh
