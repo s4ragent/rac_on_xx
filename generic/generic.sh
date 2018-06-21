@@ -22,6 +22,24 @@ replaceinventory(){
 	echo ""
 }
 
+get_External_IP(){
+	expr "$1" + 1 >/dev/null 2>&1
+	if [ $? -lt 2 ]
+	then
+    		NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+	else
+    		NODENAME=$1
+	fi
+	
+	if [ "$1" = "storage" ]; then
+		External_IP=`cat $VIRT_TYPE/storage.inventory | grep $NODENAME | awk -F "=" '{print $2}'`
+	else
+		External_IP=`cat $VIRT_TYPE/dbserver.inventory | grep $NODENAME | awk -F "=" '{print $2}'`
+	fi
+	
+	echo $External_IP	
+}
+
 source ./common_menu.sh
 
 
