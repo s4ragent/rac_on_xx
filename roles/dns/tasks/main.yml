@@ -135,7 +135,8 @@
     template: src=dhclient-ens3.conf.j2 dest=/etc/dhclient-ens3.conf owner=root group=root mode=0644
     when: oci is defined
     tags:
-      - dnsmasq
+      - setresolvconf
+      - sethost
       - addclient
 
   - name: "disable dns via dhcp(nmcli)"
@@ -188,6 +189,27 @@
       - dnsmasq
       - network
       - setresolvconf
+    tags:
+      - setresolvconf
+      - sethost    
+      - dnsmasq
+
+  - name: reboot
+    become: yes
+    shell: sleep 2 && reboot &
+    when: oci is defined
+    async: 1
+    poll: 0
+    ignore_errors: true
+    tags:
+      - setresolvconf
+      - sethost    
+      - dnsmasq
+
+  - name: "sleep 180s"
+    local_action: shell sleep 180s
+    run_once: true
+    when: oci is defined
     tags:
       - setresolvconf
       - sethost    
