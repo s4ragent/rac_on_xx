@@ -10,4 +10,8 @@ cp /etc/hosts /tmp/hosts
 myip=`ip addr show {{ VXLAN_DEV }} | grep 'inet ' | awk -F '[/ ]' '{print $6}'`
 sed -i "/$myip/d" /tmp/hosts
 cat /tmp/hosts > /etc/hosts
-#ip route del 169.254.0.0/16 dev {{ VXLAN_DEV }} 
+{% if link_local is defined %}
+ip route del 169.254.0.0/16 dev {{ VXLAN_DEV }} 
+ip route add 169.254.0.0/8 dev {{ VXLAN_DEV }} 
+{% endif %}
+
