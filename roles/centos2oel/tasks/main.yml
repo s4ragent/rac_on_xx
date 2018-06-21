@@ -80,21 +80,10 @@
 #      - centos2oel
 #      - reboot
 
-
-  - name: "NOZEROCONF"
-    become: yes
-    lineinfile: state=present create=yes insertafter=EOF line="{{ item }}" dest="/etc/sysconfig/network"
-    with_items:
-      - "NOZEROCONF=yes"
-    when: NOZEROCONF is defined and NOZEROCONF !=""
-    tags:
-      - centos2oel
-      - reboot
-
   - name: reboot
     become: yes
     shell: sleep 2 && reboot &
-    when: centos2oel_rerult.rc != 0 or ( SWITCH_KERNEL is defined and SWITCH_KERNEL !="" ) or ( NOZEROCONF is defined and NOZEROCONF !="" )
+    when: centos2oel_rerult.rc != 0 or ( SWITCH_KERNEL is defined and SWITCH_KERNEL !="" ) 
     async: 1
     poll: 0
     ignore_errors: true
@@ -106,7 +95,7 @@
   - name: "sleep 180s"
     local_action: shell sleep 180s
     run_once: true
-    when: centos2oel_rerult.rc != 0 or ( SWITCH_KERNEL is defined and SWITCH_KERNEL !="" ) or ( NOZEROCONF is defined and NOZEROCONF !="" )  
+    when: centos2oel_rerult.rc != 0 or ( SWITCH_KERNEL is defined and SWITCH_KERNEL !="" )   
     tags:
       - centos2oel
       - reboot
