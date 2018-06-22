@@ -48,6 +48,7 @@
       - firefox
       - unzip
       - mesa-libGLU-devel
+      - mesa-libEGL
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
     tags:
