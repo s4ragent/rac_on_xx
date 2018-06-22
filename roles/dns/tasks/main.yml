@@ -199,7 +199,7 @@
 
   - name: "disable link_local"
     become: yes
-    shell: /etc/dhcp/dhclient-enter-hooks.d/iproute.sh 
+    shell: /etc/dhcp/dhclient-exit-hooks.d/iproute.sh 
     when: oci is defined
     ignore_errors: true
     tags:
