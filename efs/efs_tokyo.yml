@@ -1,0 +1,524 @@
+---
+  - hosts: 
+      - localhost
+    connection: local
+    vars_files:
+      - ./vars.yml
+      - ../common_vars.yml      
+    tasks:
+      - set_fact:
+          public_subnet: "{{ vxlan0_NETWORK.split('.')[0] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[2] }}."
+          arpa_public_subnet: "{{ vxlan0_NETWORK.split('.')[2] }}.{{ vxlan0_NETWORK.split('.')[1] }}.{{ vxlan0_NETWORK.split('.')[0] }}"
+          PREFIX_PTR: "{{ PREFIX }}-PTR"
+          PREFIX_Private: "{{ PREFIX }}-Private"
+        tags:
+          - create
+          - delete
+          - test
+
+      - set_fact:                    
+          scan0_IP: "{{ public_subnet }}{{ BASE_IP - 20 + 0 }}"
+          scan1_IP: "{{ public_subnet }}{{ BASE_IP - 20 + 1 }}"
+          scan2_IP: "{{ public_subnet }}{{ BASE_IP - 20 + 2 }}"                                                  
+        tags:
+          - create                    
+          - delete
+          - test
+
+      - name: "create VPC"
+        ec2_vpc_net:
+          name: "{{ PREFIX }}-VPC"
+          cidr_block: "{{ VPC_ADDR }}"
+          region: "{{ REGION }}"
+        register: _vpc
+        tags:
+          - create
+ 
+      - ec2_vpc_dhcp_options:
+          domain_name: "{{ DOMAIN_NAME }}"
+          region: "{{ REGION }}"
+          dns_servers: "AmazonProvidedDNS"
+          vpc_id: "{{ _vpc.vpc.id }}"
+          delete_old: True
+          inherit_existing: False
+        tags:
+          - create 
+ 
+      - name: "create Internet gateway"
+        ec2_vpc_igw:
+          vpc_id: "{{ _vpc.vpc.id }}"
+          region: "{{ REGION }}"
+        register: _igw
+        tags:
+          - create
+                  
+      - name: "create Public subnet a"
+        ec2_vpc_subnet:
+          vpc_id: "{{ _vpc.vpc.id }}"
+          az: "{{ REGION }}a"
+          cidr: "{{ SUBNET_A_ADDR }}"
+          resource_tags:
+            Name: "{{ PREFIX }}-SUBNET-A"
+          region: "{{ REGION }}"
+        register: _subnet_a
+        tags:
+          - create
+
+      - name: "create Public subnet d"
+        ec2_vpc_subnet:
+          vpc_id: "{{ _vpc.vpc.id }}"
+          az: "{{ REGION }}d"
+          cidr: "{{ SUBNET_D_ADDR }}"
+          resource_tags:
+            Name: "{{ PREFIX }}-SUBNET-D"
+          region: "{{ REGION }}"
+        register: _subnet_d
+        tags:
+          - create
+                  
+      - name: "create Public subnet c"
+        ec2_vpc_subnet:
+          vpc_id: "{{ _vpc.vpc.id }}"
+          az: "{{ REGION }}c"
+          cidr: "{{ SUBNET_C_ADDR }}"
+          resource_tags:
+            Name: "{{ PREFIX }}-SUBNET-C"
+          region: "{{ REGION }}"
+        register: _subnet_c
+        tags:
+          - create
+                  
+      - name: "create Route"
+        ec2_vpc_route_table:
+          vpc_id: "{{ _vpc.vpc.id }}"
+          tags:
+            Name: "{{ PREFIX }}-RT"
+          subnets:
+            - "{{ _subnet_a.subnet.id }}"
+            - "{{ _subnet_d.subnet.id }}"
+            - "{{ _subnet_c.subnet.id }}"
+          routes:
+            - dest: 0.0.0.0/0
+              gateway_id: "{{ _igw.gateway_id  }}"
+          region: "{{ REGION }}"
+        register: _route
+        tags:
+          - create        
+        
+      - name: "create security group"
+        ec2_group:
+          name: "{{PREFIX}}-SG"
+          description: "{{PREFIX}} server security group"
+          vpc_id: "{{ _vpc.vpc.id }}"
+          region: "{{ REGION }}"
+          rules:
+            - proto: tcp
+              from_port: 22
+              to_port: 22
+              cidr_ip: 0.0.0.0/0
+            - proto: all
+              group_name: "{{PREFIX}}-SG"
+          rules_egress:
+            - proto: all
+              from_port: 0
+              to_port: 65535
+              cidr_ip: 0.0.0.0/0
+        register: _sg
+        tags:
+          - create
+
+      - name: "create db instance"
+        ec2:
+          key_name: "{{PREFIX}}"
+          group: "{{PREFIX}}-SG"
+          instance_type: "{{INSTANCE_TYPE}}"
+          image: "{{IMAGE_ID}}"
+          wait: yes
+          volumes:
+            - device_name: "{{data_disk_dev}}"
+              volume_type: gp2
+              volume_size: "{{NODE_DISK_SIZE}}"
+              delete_on_termination: true
+          region: "{{ REGION }}"
+          vpc_subnet_id: "{{ _subnet_a.subnet.id }}"
+          assign_public_ip: yes
+          count_tag:
+            Name: "{{PREFIX}}-dbserver"
+          exact_count: "{{ nodecount }}"
+          spot_price: "{{ SPOT_PRICE }}"
+          instance_tags:
+            Name: "{{PREFIX}}-dbserver"
+        register: ec2
+        tags:
+          - create
+
+      - name: "create efs"
+        efs:
+          state: present
+          name: "{{PREFIX}}-EFS"
+          region: "{{ REGION }}"
+          targets:
+            - subnet_id: "{{ _subnet_a.subnet.id }}"
+              security_groups: [ "{{ _sg.group_id }}" ]
+            - subnet_id: "{{ _subnet_d.subnet.id }}"
+              security_groups: [ "{{ _sg.group_id }}" ]
+            - subnet_id: "{{ _subnet_c.subnet.id }}"
+              security_groups: [ "{{ _sg.group_id }}" ]                            
+        tags:
+          - create
+          
+      - name: Wait for SSH to come up
+        wait_for:
+          host: "{{ item.public_ip }}"
+          port: 22
+          delay: 30
+          timeout: 360
+          state: started
+        with_items: "{{ ec2.instances }}"
+        tags:
+          - create
+
+      - name: "get vpcid"
+        ec2_vpc_net_facts:
+          region: "{{ REGION }}"
+          filters:
+            "tag:Name": "{{ PREFIX }}-VPC"
+        register: vpc_facts 
+        tags:
+          - delete
+          - deleteinstances
+          - create
+          - test
+
+      - name: "create private zone"
+        route53_zone:
+          zone: "{{ DOMAIN_NAME }}"
+          region: "{{ REGION }}"
+          state: present
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          vpc_region: "{{ REGION }}"
+          comment: "{{ PREFIX_Private }}"
+        run_once: true
+        ignore_errors: true
+        tags:
+          - create
+
+
+      - name: "create record"
+        route53:
+          command: create
+          zone: "{{ DOMAIN_NAME }}"
+          record:  "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
+          type: A
+          ttl: 300
+          value: "{{ scan0_IP }},{{ scan1_IP }},{{ scan2_IP }}"
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        tags:
+          - create
+
+
+      - name: "record host dns"
+        route53:
+          command: create
+          zone: "{{ DOMAIN_NAME }}"
+          type: A
+          value: "{{ public_subnet }}{{ BASE_IP + item|int }}"
+          overwrite: yes
+          record: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}.{{ DOMAIN_NAME }}"
+          ttl: 300
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_sequence: start=1 end="{{ nodecount }}" 
+        tags:
+          - create
+
+      - name: "record host dns vip"
+        route53:
+          command: create
+          zone: "{{ DOMAIN_NAME }}"
+          type: A
+          value: "{{ public_subnet }}{{ BASE_IP + item|int +100 }}"
+          overwrite: yes
+          record: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}-vip.{{ DOMAIN_NAME }}"
+          ttl: 300
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_sequence: start=1 end="{{ nodecount }}" 
+        tags:
+          - create
+
+
+      - name: "create PTR zone"
+        route53_zone:
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          region: "{{ REGION }}"
+          state: present
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          vpc_region: "{{ REGION }}"
+          comment: "{{ PREFIX_PTR }}"
+        run_once: true
+        ignore_errors: true
+        tags:
+          - create
+
+
+      - name: "create ptr record scan"
+        route53:
+          command: create
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          record:  "{{ BASE_IP - 20 + item|int }}.{{ arpa_public_subnet }}.in-addr.arpa"
+          type: PTR
+          ttl: 300
+          value: "{{ SCAN_NAME }}.{{ DOMAIN_NAME }}"
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_sequence: start=0 end=2
+        tags:
+          - create
+
+
+      - name: "record ptr host"
+        route53:
+          command: create
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          type: PTR
+          record: "{{ BASE_IP + item|int }}.{{ arpa_public_subnet }}.in-addr.arpa"
+          overwrite: yes
+          value: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}.{{ DOMAIN_NAME }}"
+          ttl: 300
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_sequence: start=1 end="{{ nodecount }}" 
+        tags:
+          - create
+
+      - name: "record ptr host vip"
+        route53:
+          command: create
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          type: PTR
+          record: "{{ BASE_IP + item|int + 100 }}.{{ arpa_public_subnet }}.in-addr.arpa"
+          overwrite: yes
+          value: "{{ NODEPREFIX }}{{ '%.3d'|format(item|int) }}-vip.{{ DOMAIN_NAME }}"
+          ttl: 300
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_sequence: start=1 end="{{ nodecount }}" 
+        tags:
+          - create
+
+      - name: List all hosted zones 
+        route53_facts: 
+          query: hosted_zone 
+        register: hosted_zones 
+        tags: 
+          - delete 
+     
+      - name: List all record 
+        route53_facts: 
+          query: record_sets 
+          hosted_zone_id: "{{ item.Id[12:30] }}"    
+        with_items: "{{ hosted_zones.HostedZones }}"
+#        when: item.Config.Comment == PREFIX_Private
+#        when: item.Config.Comment == PREFIX_PTR
+        register: record_sets
+        tags: 
+          - delete 
+
+
+      - debug:
+          msg: "{% for ResourceRecord in item.1.ResourceRecords  %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
+        with_subelements: 
+          - "{{ record_sets.results }}"
+          - ResourceRecordSets
+        when: item.0.item.Config.Comment == PREFIX_Private and item.1.Type == "A"
+        tags: 
+          - delete
+
+      - name: "delete record"
+        route53:
+          command: delete
+          zone: "{{ DOMAIN_NAME }}"
+          record:  "{{ item.1.Name }}"
+          type: A
+          ttl: "{{ item.1.TTL }}"
+          value: "{% for ResourceRecord in item.1.ResourceRecords  %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_subelements: 
+          - "{{ record_sets.results }}"
+          - ResourceRecordSets
+        when: item.0.item.Config.Comment == PREFIX_Private and item.1.Type == "A"          
+        tags:
+          - delete
+
+      - debug:
+          msg: "{% for ResourceRecord in item.1.ResourceRecords  %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
+        with_subelements: 
+          - "{{ record_sets.results }}"
+          - ResourceRecordSets
+        when: item.0.item.Config.Comment == PREFIX_PTR and item.1.Type == "PTR"
+        tags: 
+          - delete
+          
+      - name: "delete ptr record"
+        route53:
+          command: delete
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          record:  "{{ item.1.Name }}"
+          type: PTR
+          ttl: "{{ item.1.TTL }}"
+          value: "{% for ResourceRecord in item.1.ResourceRecords  %}{{ ResourceRecord.Value }} {% if not loop.last %},{% endif %}{% endfor %}"
+          wait: yes
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          private_zone: yes
+        with_subelements: 
+          - "{{ record_sets.results }}"
+          - ResourceRecordSets
+        when: item.0.item.Config.Comment == PREFIX_PTR and item.1.Type == "PTR"         
+        tags:
+          - delete
+
+      - name: "delete private zone"
+        route53_zone:
+          zone: "{{ DOMAIN_NAME }}"
+          region: "{{ REGION }}"
+          state: absent
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          vpc_region: "{{ REGION }}"
+          comment: "{{ PREFIX }}-Private"
+        run_once: true
+        ignore_errors: true
+        tags:
+          - delete
+          
+      - name: "delete PTR zone"
+        route53_zone:
+          zone: "{{ arpa_public_subnet }}.in-addr.arpa"
+          region: "{{ REGION }}"
+          state: absent
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          vpc_region: "{{ REGION }}"
+          comment: "{{ PREFIX }}-PTR"
+        run_once: true
+        ignore_errors: true
+        tags:
+          - delete
+                                
+      - name: "get instanceids"         
+        ec2_remote_facts:
+          region: "{{ REGION }}"
+          filters:
+            vpc-id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+        register: ec2_facts
+        tags:
+          - delete
+          - deleteinstances
+
+      - name: "delete instance"
+        ec2:
+          instance_ids: "{{ item.id }}"
+          state: absent
+          region: "{{ REGION }}"
+        with_items: "{{ ec2_facts.instances }}"
+        tags:
+          - delete
+          - deleteinstances
+
+      - name: "delete efs"
+        efs:
+          state: absent
+          name: "{{PREFIX}}-EFS"
+          region: "{{ REGION }}"                         
+        tags:
+          - delete
+          - deleteinstances
+
+      - pause:
+          minutes: 1
+        tags:
+          - delete
+
+      - name: "delete SG"
+        ec2_group:
+          name: "{{PREFIX}}-SG"
+          description: "{{PREFIX}} server security group"
+          state: absent
+          region: "{{ REGION }}"
+        tags:
+          - delete
+                   
+      - name: "Remove Subnet a"
+        ec2_vpc_subnet:
+          state: absent
+          cidr: "{{ SUBNET_A_ADDR }}"
+          region: "{{ REGION }}"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+        tags:
+          - delete
+
+      - name: "Remove Subnet d"
+        ec2_vpc_subnet:
+          state: absent
+          cidr: "{{ SUBNET_D_ADDR }}"
+          region: "{{ REGION }}"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+        tags:
+          - delete
+
+      - name: "Remove Subnet c"
+        ec2_vpc_subnet:
+          state: absent
+          cidr: "{{ SUBNET_C_ADDR }}"
+          region: "{{ REGION }}"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+        tags:
+          - delete
+          
+      - name: "delete internet gateway"    
+        ec2_vpc_igw:
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          state: absent
+          region: "{{ REGION }}"
+        tags:
+          - delete
+
+      - name: "delete dhcp option"
+        ec2_vpc_dhcp_options:
+          domain_name: "{{ DOMAIN_NAME }}"
+          region: "{{ REGION }}"
+          dns_servers: "AmazonProvidedDNS"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+          delete_old: True
+          inherit_existing: False
+          state: absent
+        tags:
+          - delete
+
+      - name: "Remove route table"
+        ec2_vpc_route_table:
+          region: "{{ REGION }}"
+          state: absent
+          tags:
+            Name: "{{ PREFIX }}-RT"
+          vpc_id: "{{ vpc_facts['vpcs'][0]['id'] }}"
+        tags:
+          - delete
+                     
+      - name: "delete VPC"
+        ec2_vpc_net:
+          name: "{{ PREFIX }}-VPC"
+          state: absent
+          cidr_block: "{{ VPC_ADDR }}"
+          region: "{{ REGION }}"
+        tags:
+          - delete
+
