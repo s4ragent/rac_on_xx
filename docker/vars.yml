@@ -10,8 +10,8 @@ BRNAME: "raconxx"
 DOCKER_VOLUME_PATH: "/rac_on_docker"
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
-DB_MEDIA1: linuxx64_12201_database.zip
-GRID_MEDIA1: linuxx64_12201_grid_home.zip
+DB_MEDIA1: LINUX.X64_180000_db_home.zip
+GRID_MEDIA1: LINUX.X64_180000_grid_home.zip
 ####################################################
 ####common VIRT_TYPE specific value ################
 DELETE_CMD_OPS: "-f"
