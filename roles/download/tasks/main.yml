@@ -47,9 +47,19 @@
     tags:
       - download
       
-  - name: "unzip oracle media & delete"
+#  - name: "unzip oracle media & delete"
+#    become: yes
+#    shell: "unzip {{ MEDIA_PATH }}/{{ item }} -d {{ MEDIA_PATH }} && rm -f {{ MEDIA_PATH }}/{{ item }}"
+#    when: inventory_hostname == groups["dbserver"][0] 
+#    with_items:
+#      - "{{ DB_MEDIA1 }}"
+#    tags:
+#      - download
+
+  - name: "unzip database media"
     become: yes
-    shell: "unzip {{ MEDIA_PATH }}/{{ item }} -d {{ MEDIA_PATH }} && rm -f {{ MEDIA_PATH }}/{{ item }}"
+    become_user: oracle
+    shell: "unzip {{ MEDIA_PATH }}/{{ item }} -d {{ ORA_ORACLE_HOME }}"
     when: inventory_hostname == groups["dbserver"][0] 
     with_items:
       - "{{ DB_MEDIA1 }}"
@@ -65,4 +75,13 @@
       - "{{ GRID_MEDIA1 }}"
     tags:
       - download
-  
+
+  - name: "delete media"
+    become: yes
+    shell: "rm -f {{ MEDIA_PATH }}/{{ item }}"
+    when: inventory_hostname == groups["dbserver"][0] 
+    with_items:
+      - "{{ DB_MEDIA1 }}"
+      - "{{ GRID_MEDIA1 }}"
+    tags:
+      - download  
