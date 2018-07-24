@@ -9,7 +9,7 @@ GRID_ORACLE_BASE: /u01/app/grid
 ORA_ORACLE_HOME: /u01/app/oracle/product/12.2.0/dbhome_1
 GRID_ORACLE_HOME: /u01/app/12.2.0/grid
 ORAINVENTORY: /u01/app/oraInventory
-PreInstallRPM: oracle-database-server-12cR2-preinstall
+PreInstallRPM: oracle-database-preinstall-18c.x86_64
 CVUQDISK: cv/rpm/cvuqdisk-1.0.10-1.rpm
 UNZIP: /usr/bin/unzip
 ####ansible specific
