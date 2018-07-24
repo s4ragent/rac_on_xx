@@ -54,11 +54,11 @@ init_vxlan(){
   { 
   	for i in `seq 1 10`;
 	do
+		[ $($ipcmd addr show | grep $addr | wc -l ) -gt 0 ] && break
     		exe_log "$ipcmd link add $vdev type vxlan id $id dev $rdev" 
     		exe_log "$ipcmd addr add $addr broadcast $BROADCAST dev $vdev" 
     		exe_log "$ipcmd link set $vdev up"
-		sleep 3s
-		[ $($ipcmd addr show | grep $addr | wc -l ) -gt 0 ] && break
+		sleep 1s
 	done
   }
 }
@@ -107,17 +107,12 @@ exe_log(){
 
 
 vxlan_start(){
-	for conf in $VCONF/*.conf 
-	do
-		getvxlanconf
-		init_vxlan
-	done
-	
 	while true;
 	do
 		for conf in $VCONF/*.conf 
 		do
 			getvxlanconf
+			init_vxlan
 			fdb_append
 		done	
 		sleep 60s
