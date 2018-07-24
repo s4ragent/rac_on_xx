@@ -57,7 +57,7 @@ init_vxlan(){
     		exe_log "$ipcmd link add $vdev type vxlan id $id dev $rdev" 
     		exe_log "$ipcmd addr add $addr broadcast $BROADCAST dev $vdev" 
     		exe_log "$ipcmd link set $vdev up"
-		sleep 3s
+		sleep 1s
 		[ $($ipcmd addr show | grep $addr | wc -l ) -gt 0 ] && break
 	done
   }
