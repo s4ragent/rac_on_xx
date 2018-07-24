@@ -36,7 +36,7 @@ common_runall(){
 	runonly $*
 	common_execansible centos2oel.yml
  	sleep 180s
-	common_execansible rac.yml
+	common_execansible rac.yml -vvv
 }
 
 common_jdbcrunner(){
