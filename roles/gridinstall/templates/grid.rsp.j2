@@ -1,10 +1,12 @@
-oracle.install.responseFileVersion=/oracle/install/rspfmt_crsinstall_response_schema_v12.2.0
+oracle.install.responseFileVersion=/oracle/install/rspfmt_crsinstall_response_schema_v18.0.0
 INVENTORY_LOCATION={{ ORAINVENTORY }} 
 oracle.install.option=CRS_CONFIG
 ORACLE_BASE={{ GRID_ORACLE_BASE }} 
 oracle.install.asm.OSDBA=asmdba
 oracle.install.asm.OSOPER=asmoper
 oracle.install.asm.OSASM=asmadmin
+oracle.install.crs.config.scanType=LOCAL_SCAN
+oracle.install.crs.config.SCANClientDataFile=
 oracle.install.crs.config.gpnp.scanName={{ SCAN_NAME }}.{{ DOMAIN_NAME }} 
 oracle.install.crs.config.gpnp.scanPort=1521
 oracle.install.crs.config.ClusterConfiguration=STANDALONE
@@ -72,4 +74,6 @@ oracle.install.crs.rootconfig.sudoPath=
 oracle.install.crs.rootconfig.sudoUserName=
 oracle.install.crs.config.batchinfo=
 oracle.install.crs.app.applicationAddress=
+oracle.install.crs.deleteNode.nodes=
+
 
