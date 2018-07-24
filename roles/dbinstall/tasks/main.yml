@@ -29,7 +29,7 @@
 
   - debug: var=runinstallerdb_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
-    failed_when: runinstallerdb_result.rc !=0 and runinstallerdb_result.rc != 250
+    failed_when: runinstallerdb_result.rc !=0 and runinstallerdb_result.rc != 250 and runinstallerdb_result.rc != 6
     tags:
       - runinstallerdb
       - dbinstall
