@@ -106,15 +106,18 @@ common_gridrootsh(){
 }
 
 common_heatrun(){
+LOG="`date "+%Y%m%d-%H%M%S"`_$VIRT_TYPE.log"
+echo "ALLSTART `date "+%Y%m%d-%H%M%S"`" >>$LOG
 for i in `seq 1 $2`
 do
-    LOG="`date "+%Y%m%d-%H%M%S"`_$VIRT_TYPE.log"
     deleteall >$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
     common_runall $1 >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
+deleteall >$LOG  2>&1
+echo "ALLEND `date "+%Y%m%d-%H%M%S"`" >>$LOG
 }
 
 common_heatrun_full(){
