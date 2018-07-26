@@ -371,7 +371,7 @@
 
   - name: "sysctl ipfrag"
     become: yes
-    sysctl: name="{{ item.name}}"  value="{{ item.value}}" sysctl_set=yes state=present reload=yes
+    sysctl: name="{{ item.name}}"  value="{{ item.value}}" sysctl_set=yes state=present reload=yes1
     ignore_errors: yes
     with_items:
       - { name: 'net.ipv4.ipfrag_high_thresh', value: '10388608'}
@@ -394,3 +394,23 @@
     when: setcap is defined and setcap !=""
     tags:
       - ping
+      
+  - name: "disable NetworkManager"
+    become: yes
+    systemd: name="{{ item }}" state=stopped enabled=no
+    with_items:
+      - NetworkManager.service
+    when: ansible_distribution_version|int == 7
+    ignore_errors: yes
+    tags:
+      - networkmanager
+
+  - name: "disable NetworkManager"
+    become: yes
+    service: name="{{ item }}" state=stopped enabled=no
+    with_items:
+      - NetworkManager
+    when: ansible_distribution_version|int == 6
+    ignore_errors: yes
+    tags:
+      - networkmanager
