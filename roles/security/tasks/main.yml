@@ -32,7 +32,7 @@
     tags:
       - security
 
-  - name: "disable firewalld NetworkManager"
+  - name: "disable firewalld"
     become: yes
     systemd: name="{{ item }}" state=stopped enabled=no
     with_items:
@@ -42,11 +42,10 @@
     tags:
       - security
 
-  - name: "disable firewalld NetworkManager"
+  - name: "disable firewalld"
     become: yes
     service: name="{{ item }}" state=stopped enabled=no
     with_items:
-      - NetworkManager
       - iptables
     when: ansible_distribution_version|int == 6
     ignore_errors: yes
