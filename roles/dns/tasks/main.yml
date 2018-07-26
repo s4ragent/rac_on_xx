@@ -133,8 +133,8 @@
 
   - name: "copy iproute.sh"
     become: yes
-    copy: src=iproute.sh dest=/etc/dhcp/dhclient-exit-hooks.d/iproute.sh owner=root group=root mode=0755
-    when: oci is defined
+    template: src=iproute.sh.j2 dest=/etc/dhcp/dhclient-exit-hooks.d/iproute.sh owner=root group=root mode=0755
+    when: link_local is defined
     tags:
       - setresolvconf
       - sethost
