@@ -10,8 +10,8 @@ KVMBRNAME: "virbr0"
 KVM_IMAGE_PATH: "/rac_on_docker"
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
-DB_MEDIA1: linuxx64_12201_database.zip
-GRID_MEDIA1: linuxx64_12201_grid_home.zip
+DB_MEDIA1: LINUX.X64_180000_db_home.zip
+GRID_MEDIA1: LINUX.X64_180000_grid_home.zip
 #OS_URL: http://ftp.riken.jp/Linux/centos/7/os/x86_64/
 OS_URL: http://ftp.riken.jp/Linux/centos/7/isos/x86_64/
 OS_IMAGE: CentOS-7-x86_64-Minimal-1804.iso
