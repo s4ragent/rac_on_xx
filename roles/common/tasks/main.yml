@@ -370,8 +370,8 @@
       - preinstallpackages
 
   - sysctl:
-    name: {{ item.name}}
-    value: {{ item.value}}
+    name: "{{ item.name}}"
+    value: "{{ item.value}}"
     sysctl_set: yes
     state: present
     reload: yes
