@@ -2,8 +2,8 @@
 ZONE: "us-west1-b"
 #ZONE: "asia-east1-c"
 VXLAN_DEV: "eth0"
-INSTANCE_TYPE_OPS: "--machine-type n1-highmem-4"
-#INSTANCE_TYPE_OPS: "--custom-cpu 2 --custom-memory 8 --preemptible --maintenance-policy TERMINATE"
+#INSTANCE_TYPE_OPS: "--machine-type n1-highmem-4"
+INSTANCE_TYPE_OPS: "--custom-cpu 2 --custom-memory 8 --preemptible --maintenance-policy TERMINATE"
 NODE_DISK_SIZE: "200GB"
 STORAGE_DISK_SIZE: "200GB"
 ######## common user specific value  ###############
