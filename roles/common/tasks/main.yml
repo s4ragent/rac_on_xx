@@ -369,6 +369,19 @@
     tags:
       - preinstallpackages
 
+  - sysctl:
+    name: {{ item.name}}
+    value: {{ item.value}}
+    sysctl_set: yes
+    state: present
+    reload: yes
+    with_items:
+      - { name: 'net.ipv4.ipfrag_high_thresh', value: '10388608'}
+      - { name: 'net.ipv4.ipfrag_low_thresh', value: '6291456'}
+      - { name: 'net.ipv4.ipfrag_time', value: '60' }
+    tags:
+      - sysctl
+
   - name: "sysctl"
     become: yes
     shell: /sbin/sysctl -p
