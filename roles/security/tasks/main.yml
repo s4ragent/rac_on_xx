@@ -36,7 +36,6 @@
     become: yes
     systemd: name="{{ item }}" state=stopped enabled=no
     with_items:
-      - NetworkManager.service
       - firewalld.service
     when: ansible_distribution_version|int == 7
     ignore_errors: yes
