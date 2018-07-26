@@ -34,7 +34,7 @@
 
   - name: "disable firewalld NetworkManager"
     become: yes
-    systemd: name=firewalld.service state=stopped enabled=no
+    systemd: name="{{ item }}" state=stopped enabled=no
     with_items:
       - NetworkManager.service
       - firewalld.service
@@ -45,7 +45,7 @@
 
   - name: "disable firewalld NetworkManager"
     become: yes
-    service: name=iptables state=stopped enabled=no
+    service: name="{{ item }}" state=stopped enabled=no
     with_items:
       - NetworkManager
       - iptables
