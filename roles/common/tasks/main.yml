@@ -370,11 +370,13 @@
       - preinstallpackages
 
   - sysctl:
+    become: yes
     name: "{{ item.name}}"
     value: "{{ item.value}}"
     sysctl_set: yes
     state: present
     reload: yes
+    ignore_errors: yes
     with_items:
       - { name: 'net.ipv4.ipfrag_high_thresh', value: '10388608'}
       - { name: 'net.ipv4.ipfrag_low_thresh', value: '6291456'}
