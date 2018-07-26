@@ -37,7 +37,7 @@
     systemd: name=firewalld.service state=stopped enabled=no
     with_items:
       - NetworkManager.service
-      - irewalld.service
+      - firewalld.service
     when: ansible_distribution_version|int == 7
     ignore_errors: yes
     tags:
