@@ -12,6 +12,7 @@ MEDIA_PATH: /downloadmedia
 DB_MEDIA1: V978967-01.zip
 GRID_MEDIA1: V978971-01.zip
 SWITCH_KERNEL: "0"
+ip_fragment: tune
 #xrdp_pass: Xrdp123!
 #guac_pass: Guac123!
 #WindowManager: "xfce"
