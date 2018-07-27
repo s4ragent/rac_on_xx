@@ -377,6 +377,7 @@
       - { name: 'net.ipv4.ipfrag_high_thresh', value: '10388608'}
       - { name: 'net.ipv4.ipfrag_low_thresh', value: '6291456'}
       - { name: 'net.ipv4.ipfrag_time', value: '60' }
+    when: ip_fragment is defined  
     tags:
       - sysctl
 
