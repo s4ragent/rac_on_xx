@@ -4,3 +4,4 @@ myip=`ip addr show {{ VXLAN_DEV }} | grep 'inet ' | awk -F '[/ ]' '{print $6}'`
 #ip route add 169.254.169.254/32 via $myip dev {{ VXLAN_DEV }}
 ip route del 169.254.0.0/16 dev {{ VXLAN_DEV }}
 ip route del 169.254.0.0/16 dev {{ VXLAN_DEV }}
+ip route add 169.254.0.0/16 dev vxlan1
