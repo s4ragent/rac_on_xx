@@ -139,6 +139,7 @@
       - setresolvconf
       - sethost
       - addclient
+      - link_local
 
   - name: "disable dns via dhcp(nmcli)"
     become: yes
@@ -192,16 +193,6 @@
       - dnsmasq
       - network
       - setresolvconf
-    tags:
-      - setresolvconf
-      - sethost    
-      - dnsmasq
-
-  - name: "disable link_local"
-    become: yes
-    shell: /etc/dhcp/dhclient-exit-hooks.d/iproute.sh 
-    when: oci is defined
-    ignore_errors: true
     tags:
       - setresolvconf
       - sethost    
