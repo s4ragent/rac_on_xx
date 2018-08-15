@@ -197,3 +197,15 @@
       - setresolvconf
       - sethost    
       - dnsmasq
+
+
+  - name: "check dhclient"
+    become: yes
+    shell: /etc/dhcp/dhclient-exit-hooks.d/iproute.sh 
+    ignore_errors: true
+    when: link_local is defined
+    tags:
+      - setresolvconf
+      - sethost
+      - addclient
+      - link_local
