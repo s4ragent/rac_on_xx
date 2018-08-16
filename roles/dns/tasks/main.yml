@@ -131,15 +131,6 @@
 #      - setresolvconf
 #      - sethost
 
-  - name: "copy iproute.sh"
-    become: yes
-    template: src=iproute.sh.j2 dest=/etc/dhcp/dhclient-exit-hooks.d/iproute.sh owner=root group=root mode=0755
-    when: link_local is defined
-    tags:
-      - setresolvconf
-      - sethost
-      - addclient
-      - link_local
 
   - name: "disable dns via dhcp(nmcli)"
     become: yes
@@ -199,13 +190,3 @@
       - dnsmasq
 
 
-  - name: "check dhclient"
-    become: yes
-    shell: /etc/dhcp/dhclient-exit-hooks.d/iproute.sh 
-    ignore_errors: true
-    when: link_local is defined
-    tags:
-      - setresolvconf
-      - sethost
-      - addclient
-      - link_local
