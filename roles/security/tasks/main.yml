@@ -69,3 +69,11 @@
     ignore_errors: yes
     tags:
       - security
+
+  - name: "drop 169.254.169.254"
+    become: yes
+    firewalld: zone=drop source=169.254.169.254/32 permanent=true state=enabled
+    when: ansible_distribution_version|int == 7 and link_local is defined
+    ignore_errors: yes
+    tags:
+      - security
