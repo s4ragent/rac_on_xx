@@ -98,14 +98,3 @@
       - vxlan_conf
       - addclient
 
-  - name: "firewalld trusted vxlan_dev"
-    become: yes
-    firewalld: zone=trusted interface="{{ itemd }}" permanent=true state=enabled
-    with_items:
-      - vxlan0
-      - vxlan1
-      - vxlan2
-    when: ansible_distribution_version|int == 7 and link_local is defined
-    ignore_errors: yes
-    tags:
-      - security
