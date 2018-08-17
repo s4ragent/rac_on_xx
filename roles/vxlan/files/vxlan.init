@@ -117,10 +117,10 @@ vxlan_start(){
 			init_vxlan
 			fdb_append
 		done
-		exe_log "$ipcmd route del 169.254.0.0/16 dev $rdev"
-		exe_log "$ipcmd route del 169.254.0.0/16 dev $rdev"
-		exe_log "$ipcmd route del 169.254.169.254"
-		exe_log "$ipcmd route add 169.254.0.0/16 dev vxlan1"
+		#exe_log "$ipcmd route del 169.254.0.0/16 dev $rdev"
+		#exe_log "$ipcmd route del 169.254.0.0/16 dev $rdev"
+		#exe_log "$ipcmd route del 169.254.169.254"
+		#exe_log "$ipcmd route add 169.254.0.0/16 dev vxlan1"
 		sleep 10s
 	done
 	
