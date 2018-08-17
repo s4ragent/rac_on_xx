@@ -65,7 +65,7 @@
   - name: "firewalld trusted vxlan_dev"
     become: yes
     firewalld: zone=trusted interface="{{ item }}" permanent=true state=enabled immediate=true
-    with_items
+    with_items:
      - "{{ VXLAN_DEV }}"
      - vxlan0
      - vxlan1
