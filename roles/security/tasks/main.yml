@@ -64,7 +64,7 @@
       
   - name: "firewalld trusted vxlan_dev"
     become: yes
-    firewalld: zone=trusted interface="{{ VXLAN_DEV }}" permanent=true state=enabled
+    firewalld: zone=public interface="{{ VXLAN_DEV }}" permanent=true state=enabled
     when: ansible_distribution_version|int == 7 and link_local is defined
     ignore_errors: yes
     tags:
