@@ -64,7 +64,7 @@
       
   - name: "firewalld trusted vxlan_dev"
     become: yes
-    firewalld: zone=public interface="{{ VXLAN_DEV }}" permanent=true state=enabled
+    firewalld: zone=public interface="{{ VXLAN_DEV }}" permanent=true state=enabled immediate=true
     when: ansible_distribution_version|int == 7 and link_local is defined
     ignore_errors: yes
     tags:
@@ -72,7 +72,7 @@
 
   - name: "drop 169.254.169.254"
     become: yes
-    firewalld: zone=drop source=169.254.169.254/32 permanent=true state=enabled
+    firewalld: zone=drop source=169.254.169.254/32 permanent=true state=enabled immediate=true
     when: ansible_distribution_version|int == 7 and link_local is defined
     ignore_errors: yes
     tags:
