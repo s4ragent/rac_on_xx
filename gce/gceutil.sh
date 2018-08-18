@@ -109,7 +109,7 @@ get_External_IP(){
 	if [ "$MACHINE_TYPE" = "custom" ]; then
 		External_IP=`echo $LIST_RESULT | awk '{print $10}'`
 	else
-		External_IP=`echo $LIST_RESULT | awk '{print $5}'`
+		External_IP=`echo $LIST_RESULT | awk '{print $6}'`
 	fi
 	echo $External_IP	
 }
@@ -128,7 +128,7 @@ get_Internal_IP(){
 	if [ "$MACHINE_TYPE" = "custom" ]; then
 		Internal_IP=`echo $LIST_RESULT | awk '{print $9}'`
 	else
-		Internal_IP=`echo $LIST_RESULT | awk '{print $4}'`
+		Internal_IP=`echo $LIST_RESULT | awk '{print $5}'`
 	fi
 	echo $Internal_IP	
 }
