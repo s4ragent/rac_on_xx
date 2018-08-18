@@ -3,7 +3,7 @@ ZONE: "us-west1-b"
 #ZONE: "asia-east1-c"
 VXLAN_DEV: "eth0"
 #INSTANCE_TYPE_OPS: "--machine-type n1-highmem-4"
-INSTANCE_TYPE_OPS: "--custom-cpu 4 --custom-memory 24 --preemptible --maintenance-policy TERMINATE"
+INSTANCE_TYPE_OPS: "--custom-cpu 4 --custom-memory 26 --preemptible --maintenance-policy TERMINATE"
 NODE_DISK_SIZE: "200GB"
 STORAGE_DISK_SIZE: "200GB"
 link_kocal: disable
