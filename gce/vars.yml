@@ -3,10 +3,10 @@ ZONE: "us-west1-b"
 #ZONE: "asia-east1-c"
 VXLAN_DEV: "eth0"
 #INSTANCE_TYPE_OPS: "--machine-type n1-highmem-4"
-INSTANCE_TYPE_OPS: "--custom-cpu 8 --custom-memory 32 --preemptible --maintenance-policy TERMINATE"
+INSTANCE_TYPE_OPS: "--custom-cpu 4 --custom-memory 32 --preemptible --maintenance-policy TERMINATE"
 NODE_DISK_SIZE: "200GB"
 STORAGE_DISK_SIZE: "200GB"
-ip_fragment: tune
+link_kocal: disable
 ######## common user specific value  ###############
 MEDIA_COPY: "true"
 MEDIA_PATH: /downloadmedia
@@ -41,7 +41,7 @@ storage_type: "nfs"
 #storage_type: "nbd"
 DNFS: enable
 #####
-NFS_OPS:  "rw,bg,hard,nointr,rsize=32768,wsize=32768,tcp,vers=4.1,timeo=600,actimeo=0"
+NFS_OPS:  "rw,bg,hard,nointr,rsize=1048576,wsize=1048576,tcp,vers=4,timeo=600,actimeo=0"
 ORA_DATA: /u01/oradata
 VOTE_DEV: /u01/oradata/vote.img
 VOTE_BASE_SIZE: 40960
@@ -68,12 +68,12 @@ DBNAME: ORCL
 SIDNAME: ORCL
 SYSPASSWORD: oracle123
 SYSTEMPASSWORD: oracle123
-REDOFILESIZE: 10
+REDOFILESIZE: 200
 ASMSYSPASSWORD: oracle123
 ASMMONPASSWORD: oracle123
 CHARSET: AL32UTF8
 NCHAR: AL16UTF16
-MEMORYTARGET: 7200
+MEMORYTARGET: 10240
 TEMPLATENAME: General_Purpose.dbc
 DATABASETYPE: MULTIPURPOSE
 dbca: paralell
