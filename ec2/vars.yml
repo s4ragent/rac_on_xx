@@ -10,7 +10,7 @@ IMAGE_ID: "ami-4a637f2b"
 #REGION: "ap-northeast-1"
 #IMAGE_ID: "ami-65e0c80b"
 #INSTANCE_TYPE: "r4.large"
-INSTANCE_TYPE: "r4.xlarge
+INSTANCE_TYPE: "r4.xlarge"
 #INSTANCE_TYPE: "t2.micro"
 VXLAN_DEV: "eth0"
 NODE_DISK_SIZE: "80"
