@@ -16,9 +16,9 @@ IMAGE_ID: "ami-4a637f2b"
 #INSTANCE_TYPE: "r4.large"
 INSTANCE_TYPE: "r4.xlarge"
 VXLAN_DEV: "eth0"
-NODE_DISK_SIZE: "60"
+NODE_DISK_SIZE: "80"
 STORAGE_DISK_SIZE: "100"
-SPOT_PRICE: 0.08
+SPOT_PRICE: 0.10
 ####common VIRT_TYPE specific value ################
 DELETE_CMD: "aws ec2 terminate-instances --instance-ids"
 DELETE_CMD_OPS: "--region {{ REGION }}"
@@ -28,11 +28,11 @@ STOP_CMD: "aws ec2 stop-instances --instance-ids"
 STOP_CMD_OPS: "--region {{ REGION }}"
 INSTALL_OPS: "-ignorePrereqFailure"
 DHCPCLIENT: "/etc/dhclient-eth0.conf"
-SWITCH_KERNEL: "2"
+SWITCH_KERNEL: "0"
 MEDIA_COPY: "true"
 MEDIA_PATH: /u01/downloadmedia
-DB_MEDIA1: V839960-01.zip
-GRID_MEDIA1: V840012-01.zip
+DB_MEDIA1: V978967-01.zip
+GRID_MEDIA1: V978971-01.zip
 #BUCKET_URL="gs://xxxxxxxxx"
 #WindowManager: "gnome"
 ## for additional disk values
@@ -74,7 +74,7 @@ DBNAME: ORCL
 SIDNAME: ORCL
 SYSPASSWORD: oracle123
 SYSTEMPASSWORD: oracle123
-REDOFILESIZE: 10
+REDOFILESIZE: 200
 ASMSYSPASSWORD: oracle123
 ASMMONPASSWORD: oracle123
 CHARSET: AL32UTF8
