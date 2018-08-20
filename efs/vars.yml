@@ -19,6 +19,7 @@ VXLAN_DEV: "eth0"
 NODE_DISK_SIZE: "80"
 STORAGE_DISK_SIZE: "100"
 SPOT_PRICE: 0.10
+link_local: disable
 ####common VIRT_TYPE specific value ################
 DELETE_CMD: "aws ec2 terminate-instances --instance-ids"
 DELETE_CMD_OPS: "--region {{ REGION }}"
