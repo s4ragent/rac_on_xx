@@ -63,8 +63,8 @@ ASM_STRING: /u01/oradata/*
 RSIZE: 1048576
 WSIZE: 1048576
 #DD_CMD: dd
-DNFS: enable
-#DNFS: disable
+#DNFS: enable
+DNFS: disable
 ###
 NODEPREFIX: node
 DOMAIN_NAME: public
