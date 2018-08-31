@@ -74,7 +74,7 @@ runonly(){
 
  docker rm -f rac_dummy
  
- rt_runtime_us=`expr 95000 + 95000 \* 3`
+ rt_runtime_us=`expr 95000 + 95000 \* $nodecount`
  echo $rt_runtime_us > /sys/fs/cgroup/cpu,cpuacct/docker/cpu.rt_runtime_us
 
 	STORAGEIP=`get_Internal_IP storage`
