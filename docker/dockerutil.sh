@@ -70,6 +70,13 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
 
+ docker run $DOCKER_START_OPS $DOCKER_CAPS -d --name rac_dummy --net=$BRNAME $TMPFS_OPS $PRIVILEGED $IMAGE /sbin/init
+
+ docker rm -f rac_dummy
+ 
+ rt_runtime_us=`expr 95000 + 95000 \* 3`
+ echo $rt_runtime_us > /sys/fs/cgroup/cpu,cpuacct/docker/cpu.rt_runtime_us
+
 	STORAGEIP=`get_Internal_IP storage`
 	run "storage" $STORAGEIP 0 "storage"
 	
