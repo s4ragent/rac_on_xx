@@ -16,8 +16,8 @@ VXLAN_DEV: "ens3"
 #data_disk_mountpoint: "/u01"
 MEDIA_PATH: /u01/downloadmedia
 MEDIA_COPY: "true"
-DB_MEDIA1: V839960-01.zip
-GRID_MEDIA1: V840012-01.zip
+DB_MEDIA1: V978967-01.zip
+GRID_MEDIA1: V978971-01.zip
 oci: yes
 ####################################################
 ####common VIRT_TYPE specific value ################
