@@ -14,7 +14,7 @@ DB_MEDIA1: LINUX.X64_180000_db_home.zip
 GRID_MEDIA1: LINUX.X64_180000_grid_home.zip
 #OS_URL: http://ftp.riken.jp/Linux/centos/7/os/x86_64/
 OS_URL: http://ftp.riken.jp/Linux/centos/7/isos/x86_64/
-OS_IMAGE: CentOS-7-x86_64-Minimal-1804.iso
+OS_IMAGE: CentOS-7-x86_64-Minimal-1810.iso
 MEMSIZE: 8G
 CPUCOUNT: 2
 ####################################################
