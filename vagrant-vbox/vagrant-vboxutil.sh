@@ -143,19 +143,19 @@ add_vagrantfile(){
 		node.disksize.size = "$2"
 		node.vm.network "forwarded_port", guest: 22, host: $6, id: "ssh"
 		node.vm.network "private_network", ip: "$4", virtualbox__intnet: "storage"
-		node.vm.network "private_network", type: "dhcp"
-		node.vm.network "private_network", ip: "$5", virtualbox__intnet: "vxlan"
+#		node.vm.network "private_network", type: "dhcp"
+#		node.vm.network "private_network", ip: "$5", virtualbox__intnet: "vxlan"
 		node.vm.provider "virtualbox" do |vb|
 			vb.memory = "$3"
 			vb.cpus = 2
 			vb.customize ['modifyvm', :id, '--nictype1', '$VBOX_NICTYPE']
 			vb.customize ['modifyvm', :id, '--nictype2', '$VBOX_NICTYPE']
-			vb.customize ['modifyvm', :id, '--nictype3', '$VBOX_NICTYPE']
-			vb.customize ['modifyvm', :id, '--nictype4', '$VBOX_NICTYPE']			
+#			vb.customize ['modifyvm', :id, '--nictype3', '$VBOX_NICTYPE']
+#			vb.customize ['modifyvm', :id, '--nictype4', '$VBOX_NICTYPE']			
 			vb.customize ['modifyvm', :id, '--nicpromisc1', 'allow-all']
 			vb.customize ['modifyvm', :id, '--nicpromisc2', 'allow-all']
-			vb.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']	
-			vb.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']			
+#			vb.customize ['modifyvm', :id, '--nicpromisc3', 'allow-all']	
+#			vb.customize ['modifyvm', :id, '--nicpromisc4', 'allow-all']			
 		end
 	end
 
