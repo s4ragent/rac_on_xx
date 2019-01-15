@@ -153,6 +153,16 @@
 
   - name: "disable dns via dhcp(no nmcli)"
     become: yes
+    lineinfile: state=present create=yes insertafter=EOF line="PEERDNS=no" regexp="PEERDNS="  dest="/etc/sysconfig/network-scripts/ifcfg-eth0"
+    when: dhclient_rerult.stdout != "0" and nmcli_result.rc != "0"
+    ignore_errors: true
+    tags:
+      - setresolvconf
+      - sethost
+      - addclient
+
+  - name: "disable dns via dhcp(no nmcli)"
+    become: yes
     lineinfile: state=present create=yes insertafter=EOF line="PEERDNS=no" regexp="PEERDNS="  dest="/etc/sysconfig/network-scripts/ifcfg-{{ VXLAN_DEV }}"
     when: dhclient_rerult.stdout != "0" and nmcli_result.rc != "0"
     ignore_errors: true
