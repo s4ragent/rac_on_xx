@@ -20,13 +20,6 @@ runonly(){
 	else
 		nodecount=$1
 	fi
-
-	
-	if [  ! -e $ansible_ssh_private_key_file ] ; then
-		cp ~/.vagrant.d/insecure_private_key $ansible_ssh_private_key_file
-		ssh-keygen -y -f $ansible_ssh_private_key_file > ${ansible_ssh_private_key_file}.pub
-		chmod 600 ${ansible_ssh_private_key_file}*
-	fi
 	
 	STORAGEIP=`get_External_IP storage`
 	
@@ -46,7 +39,11 @@ runonly(){
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
 #	CLIENTIP="${SEGMENT}$NUM"	
 #	run "client01" $CLIENTIP $CLIENTNUM "client"
-	
+	if [  ! -e $ansible_ssh_private_key_file ] ; then
+		cp ~/.vagrant.d/insecure_private_key $ansible_ssh_private_key_file
+		ssh-keygen -y -f $ansible_ssh_private_key_file > ${ansible_ssh_private_key_file}.pub
+		chmod 600 ${ansible_ssh_private_key_file}*
+	fi	
 }
 
 deleteall(){
