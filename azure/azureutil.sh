@@ -6,6 +6,12 @@ VIRT_TYPE="azure"
 cd ..
 source ./commonutil.sh
 
+export TF_VAR_suffix=$SUFFIX
+	export TF_VAR_nb_instances=$nodecount
+ 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+	export TF_VAR_admin_username=${ansible_ssh_user}
+	
+	
 
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 disksize $3 nodenumber $4 hostgroup#####
@@ -45,11 +51,6 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
  	
-	export TF_VAR_nb_instances=$nodecount
- 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
-	export TF_VAR_admin_username=${ansible_ssh_user}
-	
-	
 	cd $VIRT_TYPE
 	
 	terraform init
