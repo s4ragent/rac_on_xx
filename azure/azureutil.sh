@@ -6,12 +6,18 @@ VIRT_TYPE="azure"
 cd ..
 source ./commonutil.sh
 
-export TF_VAR_suffix=$SUFFIX
+set_var(){
+	if [ "$1" = "" ]; then
+		nodecount=3
+	else
+		nodecount=$1
+	fi
+	export TF_VAR_vm_hostname=$NODESUFFIX
+	export TF_VAR_suffix=$SUFFIX
 	export TF_VAR_nb_instances=$nodecount
  	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
 	export TF_VAR_admin_username=${ansible_ssh_user}
-	
-	
+}
 
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 disksize $3 nodenumber $4 hostgroup#####
@@ -39,17 +45,13 @@ run(){
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodecount                                  #####
 runonly(){
-	if [ "$1" = "" ]; then
-		nodecount=3
-	else
-		nodecount=$1
-	fi
-	
 
 	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
 		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
+ 	
+ 	set_var
  	
 	cd $VIRT_TYPE
 	
@@ -57,9 +59,17 @@ runonly(){
 	terraform apply -auto-approve
 
 	cd ../
-#	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
+	
+	STORAGEIntIP=`get_Internal_IP storage`
+	STORAGEExtIP=`get_External_IP storage`
+	common_update_all_yml "STORAGE_SERVER: $STORAGEIntIP"
 
-#common_create_inventry "STORAGE_SERVER: $STORAGEIP" "$NODELIST"	
+	common_update_ansible_inventory storage $STORAGEExtIP storage 0 storage
+	for i in `seq 1 $nodecount`;
+	do
+		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		common_update_ansible_inventory $NODENAME $External_IP $NODENAME $i dbserver
+	done
 
 	
 #	sleep 60s
@@ -71,14 +81,17 @@ runonly(){
 }
 
 deleteall(){
+	set_var
+	
 	#### VIRT_TYPE specific processing ###
 	if [ -e "$ansible_ssh_private_key_file" ]; then
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
-   	cd $VIRT_TYPE
+ cd $VIRT_TYPE
 
 	terraform destroy -auto-approve
 	cd ../
+	
 }
 
 replaceinventory(){
