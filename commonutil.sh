@@ -35,7 +35,7 @@ common_execansible(){
 }
 
 common_runall(){
-	runonly $*
+	common_runonly $*
 	common_execansible centos2oel.yml
  	sleep 180s
 	common_execansible rac.yml
@@ -52,13 +52,13 @@ common_jdbcrunner_only(){
 }
 
 common_cvu(){
-	runonly $*
+	common_runonly $*
 	common_execansible centos2oel.yml
 	common_execansible rac.yml --skip-tags installdbca --extra-vars "cvu=on"
 }
 
 common_iperf(){
-	runonly 1
+	common_runonly 1
 	common_execansible centos2oel.yml
 	if [ "$1" = "vxlan0" ]; then
  		common_execansible rac.yml --tags security,vxlan_conf
@@ -67,7 +67,7 @@ common_iperf(){
 }
 
 common_preinstall(){
-	runonly $*
+	common_runonly $*
 	common_execansible centos2oel.yml
 	sleep 180s
 	common_execansible rac.yml --skip-tags installdbca
@@ -77,7 +77,7 @@ common_preinstall_with_vnc(){
  if [ "$vnc_pass" = "" ]; then
     vnc_pass="Moracle123!"
  fi
-	runonly $*
+	common_runonly $*
 	common_execansible centos2oel.yml
 	sleep 180s
 	common_execansible rac.yml --skip-tags installdbca --extra-vars "vnc_pass=$vnc_pass"
@@ -87,7 +87,7 @@ common_preinstall_with_xrdp(){
  if [ "$xrdp_pass" = "" ]; then
     vnc_pass="Moracle123!"
  fi
-	runonly $*
+	common_runonly $*
 	common_execansible centos2oel.yml
 	sleep 180s
 	common_execansible rac.yml --skip-tags installdbca --extra-vars "xrdp_pass=$xrdp_pass"
@@ -112,83 +112,94 @@ LOG="`date "+%Y%m%d-%H%M%S"`_$VIRT_TYPE.log"
 echo "ALLSTART `date "+%Y%m%d-%H%M%S"`" >>$LOG
 for i in `seq 1 $2`
 do
-    deleteall >>$LOG  2>&1
+    common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
     common_runall $1 >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
-deleteall >>$LOG  2>&1
+commom_deleteall >>$LOG  2>&1
 echo "ALLEND `date "+%Y%m%d-%H%M%S"`" >>$LOG
 }
 
-common_heatrun_full(){
-for i in `seq 1 $2`
-do
-    LOG="`date "+%Y%m%d-%H%M%S"`_$VIRT_TYPE.log"
-    deleteall >$LOG  2>&1
-    STARTTIME=`date "+%Y%m%d-%H%M%S"`
-    common_runall $1 >>$LOG  2>&1
-    echo '#########STOP NODE 1################'
-    common_stop 1 >>$LOG  2>&1
-    common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
-    echo '#########START NODE 1################'
-    common_start 1 >>$LOG  2>&1
-    sleep 480s
-    common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
-    echo '#########STOP ALL################'
-    common_stopall >>$LOG  2>&1
-    echo '#########START STORAGE################'
-    common_start storage >>$LOG  2>&1
-    echo '#########STOP STORAGE################'
-    common_stop storage >>$LOG  2>&1
-    echo '#########START ALL################'
-    common_startall >>$LOG  2>&1
-    sleep 480s
-    common_execansible rac.yml --tags crsctl --limit "$NODEPREFIX"`printf "%.3d" 2` >>$LOG  2>&1
-    echo "START $STARTTIME" >>$LOG
-    echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
-done
+common_all_replaceinventory(){
+	for FILE in $VIRT_TYPE/host_vars/*
+	do
+		INSTANCE_ID=`echo $FILE | awk -F '/' '{print $3}'`
+		External_IP=`get_External_IP $INSTANCE_ID`
+		common_replaceinventory $INSTANCE_ID $External_IP
+	done
 }
 
+commmon_setvar(){
+	if [ "$1" = "" ]; then
+		nodecount=3
+	else
+		nodecount=$1
+	fi
+
+	export TF_VAR_nb_instances=$nodecount
+ 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+}
+
+
+common_runonly(){
+
+	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
+		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
+		chmod 600 ${ansible_ssh_private_key_file}*
+	fi
+ 	
+ 	commmon_setvar $*
+ 	
+	cd $VIRT_TYPE
+	
+	terraform init
+	terraform apply -auto-approve
+
+	cd ../
+	
+	STORAGEIntIP=`get_Internal_IP storage`
+	STORAGEExtIP=`get_External_IP storage`
+	common_update_all_yml "STORAGE_SERVER: $STORAGEIntIP"
+
+	common_update_ansible_inventory storage $STORAGEExtIP storage 0 storage
+	for i in `seq 1 $nodecount`;
+	do
+		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		External_IP=`get_External_IP $NODENAME`
+		common_update_ansible_inventory $NODENAME $External_IP $NODENAME $i dbserver
+	done
+
+	
+#	sleep 60s
+#	CLIENTNUM=70
+#	NUM=`expr $BASE_IP + $CLIENTNUM`
+#	CLIENTIP="${SEGMENT}$NUM"	
+#	run "client01" $CLIENTIP $CLIENTNUM "client"
+	
+}
 
 common_deleteall(){
-   common_execansible stop.yml
-   common_execansible delete.yml
+
+ rm -rf $VIRT_TYPE/*.inventory
+ rm -rf $VIRT_TYPE/group_vars
+ rm -rf $VIRT_TYPE/host_vars
+ rm -rf $VIRT_TYPE/terraform.*
+
+	commmon_setvar $*
+	
+	#### VIRT_TYPE specific processing ###
+	if [ -e "$ansible_ssh_private_key_file" ]; then
+   		rm -rf ${ansible_ssh_private_key_file}*
+	fi
+ cd $VIRT_TYPE
+
+	terraform destroy -auto-approve
+	cd ../
    
-   rm -rf $VIRT_TYPE/*.inventory
-   rm -rf $VIRT_TYPE/group_vars
-   rm -rf $VIRT_TYPE/host_vars
-   
 }
 
-common_stop(){ 
-   if [ "$1" = "storage" ]; then
-      NODENAME=storage
-   else
-      NODENAME="$NODEPREFIX"`printf "%.3d" $1`
-   fi
-   common_execansible stop.yml --limit $NODENAME
-}
-
-common_stopall(){
-   common_execansible stop.yml
-}
-
-common_start(){ 
-   if [ "$1" = "storage" ]; then
-      NODENAME=storage
-   else
-      NODENAME="$NODEPREFIX"`printf "%.3d" $1`
-   fi
-   common_execansible start.yml --limit $NODENAME
-   replaceinventory
-}
-
-common_startall(){
-   common_execansible start.yml
-   replaceinventory
-}
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
 common_update_ansible_inventory(){
