@@ -74,12 +74,14 @@ runonly(){
 }
 
 deleteall(){
-   	common_deleteall $*
 	#### VIRT_TYPE specific processing ###
 	if [ -e "$ansible_ssh_private_key_file" ]; then
    		rm -rf ${ansible_ssh_private_key_file}*
 	fi
-   az group delete -n $RG_NAME  -y
+   	cd $VIRT_TYPE
+
+	terraform destory
+	cd ../
 }
 
 replaceinventory(){
