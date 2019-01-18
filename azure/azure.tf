@@ -4,7 +4,7 @@ provider "azurerm" {
 
 # Create a resource group if it doesn’t exist
 resource "azurerm_resource_group" "vm" {
-    name     = "rg-$(var.suffix)"
+    name     = "rg_$(var.suffix)"
     location = "${var.location}"
 }
 
