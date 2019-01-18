@@ -58,7 +58,7 @@ runonly(){
 	cd $VIRT_TYPE
 
 	terraform init
-	terraform apply
+	terraform apply -auto-approve
 
 	cd ../
 #	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
@@ -81,7 +81,7 @@ deleteall(){
 	fi
    	cd $VIRT_TYPE
 
-	terraform destroy
+	terraform destroy -auto-approve
 	cd ../
 }
 
