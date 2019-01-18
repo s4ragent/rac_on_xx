@@ -19,7 +19,7 @@ case "$1" in
   "create_inventry" ) shift;common_create_inventry "$@";;
   "run" ) shift;run $*;;
   "runonly" ) shift;common_runonly $*;;
-  "deleteall" ) shift;deleteall $*;;
+  "deleteall" ) shift;common_deleteall $*;;
   "buildimage" ) shift;buildimage $*;;
   "get_External_IP" ) shift;get_External_IP $*;;
   "get_Internal_IP" ) shift;get_Internal_IP $*;;
