@@ -68,6 +68,7 @@ runonly(){
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		External_IP=`get_External_IP $NODENAME`
 		common_update_ansible_inventory $NODENAME $External_IP $NODENAME $i dbserver
 	done
 
