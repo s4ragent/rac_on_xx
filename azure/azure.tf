@@ -4,13 +4,13 @@ provider "azurerm" {
 
 # Create a resource group if it doesn’t exist
 resource "azurerm_resource_group" "vm" {
-    name     = "rg_$(var.suffix)"
+    name     = "rg-${var.suffix}"
     location = "${var.location}"
 }
 
 # Create virtual network
 resource "azurerm_virtual_network" "vm" {
-    name                = "vnet-$(var.suffix)"
+    name                = "vnet-${var.suffix}"
     address_space       = ["$(var.vnet_addr)"]
     location            = "${var.location}"
     resource_group_name = "${azurerm_resource_group.vm.name}"
@@ -18,7 +18,7 @@ resource "azurerm_virtual_network" "vm" {
 
 # Create subnet
 resource "azurerm_subnet" "vm" {
-    name                 = "subnet-$(var.suffix)"
+    name                 = "subnet-${var.suffix}"
     resource_group_name  = "${azurerm_resource_group.vm.name}"
     virtual_network_name = "${azurerm_virtual_network.vm.name}"
     address_prefix       = "$(var.snet_addr)"
@@ -27,7 +27,7 @@ resource "azurerm_subnet" "vm" {
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "vm" {
-    name                = "nsg-$(var.suffix)"
+    name                = "nsg-${var.suffix}"
     location            = "${var.location}"
     resource_group_name = "${azurerm_resource_group.vm.name}"
 
