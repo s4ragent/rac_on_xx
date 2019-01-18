@@ -2,8 +2,6 @@
 provider "azurerm" {
 }
 
-variable "public_key" {}
-
 # Create a resource group if it doesn’t exist
 resource "azurerm_resource_group" "myterraformgroup" {
     name     = "testResourceGroup"
@@ -34,17 +32,6 @@ resource "azurerm_subnet" "myterraformsubnet" {
     address_prefix       = "10.0.1.0/24"
 }
 
-# Create public IPs
-resource "azurerm_public_ip" "myterraformpublicip" {
-    name                         = "myPublicIP"
-    location                     = "eastus"
-    resource_group_name          = "${azurerm_resource_group.myterraformgroup.name}"
-    public_ip_address_allocation = "dynamic"
-
-    tags {
-        environment = "Terraform Demo"
-    }
-}
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "myterraformnsg" {
@@ -69,67 +56,8 @@ resource "azurerm_network_security_group" "myterraformnsg" {
     }
 }
 
-# Create network interface
-resource "azurerm_network_interface" "myterraformnic" {
-    name                      = "myNIC"
-    location                  = "eastus"
-    resource_group_name       = "${azurerm_resource_group.myterraformgroup.name}"
-    network_security_group_id = "${azurerm_network_security_group.myterraformnsg.id}"
-
-    ip_configuration {
-        name                          = "myNicConfiguration"
-        subnet_id                     = "${azurerm_subnet.myterraformsubnet.id}"
-        private_ip_address_allocation = "dynamic"
-        public_ip_address_id          = "${azurerm_public_ip.myterraformpublicip.id}"
-    }
-
-    tags {
-        environment = "Terraform Demo"
-    }
-}
-
-# Create virtual machine
-resource "azurerm_virtual_machine" "myterraformvm" {
-    name                  = "myVM"
-    location              = "eastus"
-    resource_group_name   = "${azurerm_resource_group.myterraformgroup.name}"
-    network_interface_ids = ["${azurerm_network_interface.myterraformnic.id}"]
-    vm_size               = "Standard_A1_v2"
-
-    storage_os_disk {
-        name              = "myOsDisk"
-        caching           = "ReadWrite"
-        create_option     = "FromImage"
-        managed_disk_type = "Standard_LRS"
-    }
-
-    storage_image_reference {
-        publisher = "Canonical"
-        offer     = "UbuntuServer"
-        sku       = "16.04.0-LTS"
-        version   = "latest"
-    }
-
-    os_profile {
-        computer_name  = "myvm"
-        admin_username = "azureuser"
-    }
-
-    os_profile_linux_config {
-        disable_password_authentication = true
-        ssh_keys {
-            path     = "/home/azureuser/.ssh/authorized_keys"
-            key_data = "${var.public_key}"
-        }
-    }
-
-    tags {
-        environment = "Terraform Demo"
-    }
-}
-
 resource "azurerm_virtual_machine" "vm-linux-with-datadisk" {
-  count                         = "${!contains(list("${var.vm_os_simple}","${var.vm_os_offer}"), "Windows")  && var.is_windows_image != "true"  && var.data_disk == "true" ? var.nb_instances : 0}"
+  count                         = "${var.nb_instances}"
   name                          = "${var.vm_hostname}${count.index}"
   location                      = "${var.location}"
   resource_group_name           = "${azurerm_resource_group.vm.name}"
@@ -139,7 +67,6 @@ resource "azurerm_virtual_machine" "vm-linux-with-datadisk" {
   delete_os_disk_on_termination = "${var.delete_os_disk_on_termination}"
 
   storage_image_reference {
-    id        = "${var.vm_os_id}"
     publisher = "${var.vm_os_id == "" ? coalesce(var.vm_os_publisher, module.os.calculated_value_os_publisher) : ""}"
     offer     = "${var.vm_os_id == "" ? coalesce(var.vm_os_offer, module.os.calculated_value_os_offer) : ""}"
     sku       = "${var.vm_os_id == "" ? coalesce(var.vm_os_sku, module.os.calculated_value_os_sku) : ""}"
