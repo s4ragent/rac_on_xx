@@ -1,10 +1,6 @@
 variable "suffix" {
 }
 
-variable "resource_group_name" {
-  default     = "rg_raconxx"
-}
-
 variable "vnet_addr" {
   default     = "10.153.0.0/16"
 }
