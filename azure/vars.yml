@@ -1,5 +1,5 @@
 #### azure user specific value  ###################
-suffix: "raconxx""
+suffix: "raconxx"
 location: "westus2"
 #ZONE: "japanwest"
 vnet_addr: "10.153.0.0/16"
