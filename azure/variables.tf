@@ -1,12 +1,35 @@
-variable "resource_group_name" {}
 
-variable "location" {}
+ZONE: ""
+#ZONE: ""
+VNET_ADDR: "10.153.0.0/16"
+SNET_ADDR: "10.153.1.0/24"
+#INSTANCE_TYPE_OPS: "--size Standard_D3_v2"
+INSTANCE_TYPE_OPS: "--size Standard_A2m_v2"
+#INSTANCE_TYPE_OPS: "--size Standard_A0"
+INSTANCE_OPS: "--image Oracle:Oracle-Linux:7.4:latest"
+NODE_DISK_SIZE: "80"
+STORAGE_DISK_SIZE: "100"
+link_local: disable
+ip_fragment: tune
+
+variable "resource_group_name" {
+  default     = "rg_raconxx"
+}
+
+variable "location" {
+  default     = "westus2"
+#  default     = "japanwest"
+}
+
+
 
 variable "public_key" {
   default     = ""
 }
 
-variable "admin_username" {}
+variable "admin_username" {
+  default     = ""  
+}
 
 variable "storage_account_type" {
   description = "Defines the type of storage account to be created. Valid options are Standard_LRS, Standard_ZRS, Standard_GRS, Standard_RAGRS, Premium_LRS."
