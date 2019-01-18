@@ -6,6 +6,7 @@ VIRT_TYPE="azure"
 cd ..
 source ./commonutil.sh
 
+
 SUFFIX=`ip a show eth0 | grep ether | awk '{print $2}' | sed -e s/://g`
 
 VNET_NAME=vnet_${PREFIX}
@@ -51,10 +52,14 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
  
+ 
  	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
-	terraform init $VIRT_TYPE
-	terraform apply $VIRT_TYPE
+	cd $VIRT_TYPE
 
+	terraform init
+	terraform apply
+
+	cd ../
 #	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
 
 #common_create_inventry "STORAGE_SERVER: $STORAGEIP" "$NODELIST"	
