@@ -98,6 +98,21 @@ resource "azurerm_public_ip" "node" {
   public_ip_address_allocation = "dynamic"
 }
 
+resource "azurerm_network_interface" "node" {
+  count                     = "${var.nb_instances}"
+  name                      = "nic-${format("${var.NODEPREFIX}%03d", count.index + 1)}"
+  location                  = "${azurerm_resource_group.vm.location}"
+  resource_group_name       = "${azurerm_resource_group.vm.name}"
+  network_security_group_id = "${azurerm_network_security_group.vm.id}"
+
+  ip_configuration {
+    name                          = "ipconfig${count.index}"
+    subnet_id                     = "${azurerm_subnet.vm.id}"
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = "${length(azurerm_public_ip.vm.*.id) > 0 ? element(concat(azurerm_public_ip.node.*.id, list("")), count.index) : ""}"
+  }
+}
+
 resource "azurerm_virtual_machine" "storage" {
   count                         = "1"
   name                          = "storage"
