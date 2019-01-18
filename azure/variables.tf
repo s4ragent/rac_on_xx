@@ -44,7 +44,7 @@ variable "nb_instances" {
 
 variable "vm_hostname" {
   description = "local name of the VM"
-  default     = "node00"
+  default     = "node"
 }
 
 
