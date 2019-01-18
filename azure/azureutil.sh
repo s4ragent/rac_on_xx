@@ -44,7 +44,8 @@ runonly(){
 		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
- 
+ 	
+	export TF_VAR_nb_instances = $nodecount
  	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
 	export TF_VAR_admin_username=${ansible_ssh_user}
 	
