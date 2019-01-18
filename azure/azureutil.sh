@@ -46,32 +46,18 @@ runonly(){
 	fi
 	
 
-	HasRG=`az group list | grep $RG_NAME | wc -l`
-	if [ "$HasRG" = "0" ]; then
-		az group create -n $RG_NAME -l $ZONE
-		az network vnet create -g $RG_NAME -n $VNET_NAME --address-prefix $VNET_ADDR --subnet-name $SNET_NAME --subnet-prefix $SNET_ADDR
-
-		az network nsg create -g $RG_NAME -l $ZONE -n $NSG_NAME
-		az network nsg rule create --resource-group $RG_NAME --nsg-name $NSG_NAME --name RuleSSH --protocol tcp --direction inbound --priority 1000 --source-address-prefix '*' --source-port-range '*' --destination-address-prefix '*' --destination-port-range 22 --access allow
-		az network vnet subnet update --resource-group $RG_NAME --vnet-name $VNET_NAME --name $SNET_NAME --network-security-group $NSG_NAME
-	fi
-
 	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
 		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
    
 
-	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
-	common_update_all_yml "STORAGE_SERVER: $STORAGEIP"
-   
-	for i in `seq 1 $nodecount`;
-	do
-		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		run $NODENAME $NODE_DISK_SIZE $i "dbserver"
-	done
+#	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
+
+#common_create_inventry "STORAGE_SERVER: $STORAGEIP" "$NODELIST"	
+
 	
-	sleep 60s
+#	sleep 60s
 #	CLIENTNUM=70
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
 #	CLIENTIP="${SEGMENT}$NUM"	
