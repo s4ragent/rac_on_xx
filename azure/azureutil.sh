@@ -52,6 +52,7 @@ runonly(){
 	fi
  
  	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+	terraform init $VIRT_TYPE
 	terraform apply $VIRT_TYPE
 
 #	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
