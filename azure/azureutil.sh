@@ -14,6 +14,8 @@ SNET_NAME=snet_${PREFIX}
 SA_NAME=${PREFIX}${SUFFIX}
 NSG_NAME=nsg_${PREFIX}
 
+export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 disksize $3 nodenumber $4 hostgroup#####
 run(){
@@ -53,7 +55,6 @@ runonly(){
 	fi
  
  
- 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
 	cd $VIRT_TYPE
 
 	terraform init
