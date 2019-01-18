@@ -151,7 +151,8 @@ resource "azurerm_public_ip" "storage" {
   resource_group_name          = "${azurerm_resource_group.vm.name}"
   public_ip_address_allocation = "dynamic"
 }
-resource "azurerm_network_interface" "node" {
+
+resource "azurerm_network_interface" "storage" {
   count                         = "${var.nb_instances}"
   name                          = "nic-storage"
   location                      = "${azurerm_resource_group.vm.location}"
