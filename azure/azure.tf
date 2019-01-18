@@ -168,7 +168,7 @@ resource "azurerm_public_ip" "storage" {
 }
 
 resource "azurerm_network_interface" "storage" {
-  count                         = "${var.nb_instances}"
+  count                         = "1"
   name                          = "nic-storage"
   location                      = "${azurerm_resource_group.vm.location}"
   resource_group_name           = "${azurerm_resource_group.vm.name}"
@@ -178,6 +178,6 @@ resource "azurerm_network_interface" "storage" {
     name                          = "ipconfig"
     subnet_id                     = "${azurerm_subnet.vm.id}"
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = "${azurerm_public_ip.node.id}"
+    public_ip_address_id          = "${azurerm_public_ip.storage.id}"
   }
 }
