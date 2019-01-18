@@ -19,8 +19,6 @@ variable "location" {
 #  default     = "japanwest"
 }
 
-
-
 variable "public_key" {
   default     = ""
 }
@@ -91,7 +89,7 @@ variable "nb_public_ip" {
 
 variable "delete_os_disk_on_termination" {
   description = "Delete datadisk when machine is terminated"
-  default     = "yes"
+  default     = "true"
 }
 
 variable "data_sa_type" {
