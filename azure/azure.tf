@@ -3,7 +3,7 @@ provider "azurerm" {
 }
 
 # Create a resource group if it doesn’t exist
-resource "azurerm_resource_group" "myterraformgroup" {
+resource "azurerm_resource_group" "vm" {
     name     = "testResourceGroup"
     location = "eastus"
 
@@ -61,14 +61,13 @@ resource "azurerm_virtual_machine" "vm-linux-with-datadisk" {
   name                          = "${var.vm_hostname}${count.index}"
   location                      = "${var.location}"
   resource_group_name           = "${azurerm_resource_group.vm.name}"
-  availability_set_id           = "${azurerm_availability_set.vm.id}"
   vm_size                       = "${var.vm_size}"
   network_interface_ids         = ["${element(azurerm_network_interface.vm.*.id, count.index)}"]
   delete_os_disk_on_termination = "${var.delete_os_disk_on_termination}"
 
   storage_image_reference {
-    publisher = "${var.vm_os_id == "" ? coalesce(var.vm_os_publisher, module.os.calculated_value_os_publisher) : ""}"
-    offer     = "${var.vm_os_id == "" ? coalesce(var.vm_os_offer, module.os.calculated_value_os_offer) : ""}"
+    publisher = "${var.vm_os_publisher, module.os.calculated_value_os_publisher) : ""}"
+    offer     = "${ar.vm_os_offer, module.os.calculated_value_os_offer) : ""}"
     sku       = "${var.vm_os_id == "" ? coalesce(var.vm_os_sku, module.os.calculated_value_os_sku) : ""}"
     version   = "${var.vm_os_id == "" ? var.vm_os_version : ""}"
   }
@@ -100,6 +99,26 @@ resource "azurerm_virtual_machine" "vm-linux-with-datadisk" {
       path     = "/home/${var.admin_username}/.ssh/authorized_keys"
       key_data = "${var.public_key}"
     }
+  }
+
+  tags = "${var.tags}"
+}
+
+
+
+resource "azurerm_network_interface" "vm" {
+  count                         = "${var.nb_instances}"
+  name                          = "nic-${var.vm_hostname}-${count.index}"
+  location                      = "${azurerm_resource_group.vm.location}"
+  resource_group_name           = "${azurerm_resource_group.vm.name}"
+  network_security_group_id     = "${azurerm_network_security_group.vm.id}"
+  enable_accelerated_networking = "${var.enable_accelerated_networking}"
+
+  ip_configuration {
+    name                          = "ipconfig${count.index}"
+    subnet_id                     = "${var.vnet_subnet_id}"
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = "${length(azurerm_public_ip.vm.*.id) > 0 ? element(concat(azurerm_public_ip.vm.*.id, list("")), count.index) : ""}"
   }
 
   tags = "${var.tags}"
