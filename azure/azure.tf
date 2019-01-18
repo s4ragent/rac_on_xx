@@ -119,7 +119,7 @@ resource "azurerm_virtual_machine" "myterraformvm" {
         disable_password_authentication = true
         ssh_keys {
             path     = "/home/azureuser/.ssh/authorized_keys"
-            key_data = "${public_key}"
+            key_data = "${var.public_key}"
         }
     }
 
