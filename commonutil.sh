@@ -183,10 +183,9 @@ common_runonly(){
 common_deleteall(){
 	commmon_setvar $*
 	
-	#### VIRT_TYPE specific processing ###
-	if [ -e "$ansible_ssh_private_key_file" ]; then
-   		rm -rf ${ansible_ssh_private_key_file}*
-	fi
+	#if [ -e "$ansible_ssh_private_key_file" ]; then
+ #  		rm -rf ${ansible_ssh_private_key_file}*
+	#fi
  cd $VIRT_TYPE
 
 	terraform destroy -auto-approve
@@ -195,7 +194,7 @@ common_deleteall(){
  rm -rf $VIRT_TYPE/*.inventory
  rm -rf $VIRT_TYPE/group_vars
  rm -rf $VIRT_TYPE/host_vars
- rm -rf $VIRT_TYPE/terraform.*
+ #rm -rf $VIRT_TYPE/terraform.*
 
  
 }
