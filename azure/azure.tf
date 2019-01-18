@@ -4,40 +4,32 @@ provider "azurerm" {
 
 # Create a resource group if it doesn’t exist
 resource "azurerm_resource_group" "vm" {
-    name     = "testResourceGroup"
-    location = "eastus"
-
-    tags {
-        environment = "Terraform Demo"
-    }
+    name     = "rg-$(var.suffix)"
+    location = "${var.location}"
 }
 
 # Create virtual network
-resource "azurerm_virtual_network" "myterraformnetwork" {
-    name                = "myVnet"
-    address_space       = ["10.0.0.0/16"]
-    location            = "eastus"
-    resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
-
-    tags {
-        environment = "Terraform Demo"
-    }
+resource "azurerm_virtual_network" "vm" {
+    name                = "vnet-$(var.suffix)"
+    address_space       = ["$(var.vnet_addr)"]
+    location            = "${var.location}"
+    resource_group_name = "${azurerm_resource_group.vm.name}"
 }
 
 # Create subnet
-resource "azurerm_subnet" "myterraformsubnet" {
-    name                 = "mySubnet"
-    resource_group_name  = "${azurerm_resource_group.myterraformgroup.name}"
-    virtual_network_name = "${azurerm_virtual_network.myterraformnetwork.name}"
-    address_prefix       = "10.0.1.0/24"
+resource "azurerm_subnet" "vm" {
+    name                 = "subnet-$(var.suffix)"
+    resource_group_name  = "${azurerm_resource_group.vm.name}"
+    virtual_network_name = "${azurerm_virtual_network.vm.name}"
+    address_prefix       = "$(var.snet_addr)"
 }
 
 
 # Create Network Security Group and rule
-resource "azurerm_network_security_group" "myterraformnsg" {
-    name                = "myNetworkSecurityGroup"
-    location            = "eastus"
-    resource_group_name = "${azurerm_resource_group.myterraformgroup.name}"
+resource "azurerm_network_security_group" "vm" {
+    name                = "nsg-$(var.suffix)"
+    location            = "${var.location}"
+    resource_group_name = "${azurerm_resource_group.vm.name}"
 
     security_rule {
         name                       = "SSH"
@@ -49,10 +41,6 @@ resource "azurerm_network_security_group" "myterraformnsg" {
         destination_port_range     = "22"
         source_address_prefix      = "*"
         destination_address_prefix = "*"
-    }
-
-    tags {
-        environment = "Terraform Demo"
     }
 }
 
@@ -66,10 +54,10 @@ resource "azurerm_virtual_machine" "vm-linux-with-datadisk" {
   delete_os_disk_on_termination = "${var.delete_os_disk_on_termination}"
 
   storage_image_reference {
-    publisher = "${var.vm_os_publisher, module.os.calculated_value_os_publisher) : ""}"
-    offer     = "${ar.vm_os_offer, module.os.calculated_value_os_offer) : ""}"
-    sku       = "${var.vm_os_id == "" ? coalesce(var.vm_os_sku, module.os.calculated_value_os_sku) : ""}"
-    version   = "${var.vm_os_id == "" ? var.vm_os_version : ""}"
+    publisher = "${var.vm_os_publisher}"
+    offer     = "${var.vm_os_offer}"
+    sku       = "${var.vm_os_sku}"
+    version   = "${var.vm_os_version}"
   }
 
   storage_os_disk {
@@ -100,10 +88,15 @@ resource "azurerm_virtual_machine" "vm-linux-with-datadisk" {
       key_data = "${var.public_key}"
     }
   }
-
-  tags = "${var.tags}"
 }
 
+resource "azurerm_public_ip" "vm" {
+  count                        = "${var.nb_public_ip}"
+  name                         = "${var.vm_hostname}-${count.index}-publicIP"
+  location                     = "${var.location}"
+  resource_group_name          = "${azurerm_resource_group.vm.name}"
+  public_ip_address_allocation = "${var.public_ip_address_allocation}"
+}
 
 
 resource "azurerm_network_interface" "vm" {
