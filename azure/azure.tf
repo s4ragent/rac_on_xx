@@ -50,7 +50,7 @@ resource "azurerm_virtual_machine" "node" {
   location                      = "${var.location}"
   resource_group_name           = "${azurerm_resource_group.vm.name}"
   vm_size                       = "${var.vm_size}"
-  network_interface_ids         = ["${element(azurerm_network_interface.vm.*.id, count.index)}"]
+  network_interface_ids         = ["${element(azurerm_network_interface.node.*.id, count.index)}"]
   delete_os_disk_on_termination = "false"
 
   storage_image_reference {
@@ -110,6 +110,6 @@ resource "azurerm_network_interface" "node" {
     name                          = "ipconfig${count.index}"
     subnet_id                     = "${azurerm_subnet.vm.id}"
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = "${length(azurerm_public_ip.vm.*.id) > 0 ? element(concat(azurerm_public_ip.node.*.id, list("")), count.index) : ""}"
+    public_ip_address_id          = "${length(azurerm_public_ip.node.*.id) > 0 ? element(concat(azurerm_public_ip.node.*.id, list("")), count.index) : ""}"
   }
 }
