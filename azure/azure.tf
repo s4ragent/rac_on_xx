@@ -46,7 +46,7 @@ resource "azurerm_network_security_group" "vm" {
 
 resource "azurerm_virtual_machine" "vm-linux-with-datadisk" {
   count                         = "${var.nb_instances}"
-  name                          = "${format("${var.vm_hostname}", count.index + 1)}"
+  name                          = "${format("${var.vm_hostname}%02d", count.index + 1)}"
   location                      = "${var.location}"
   resource_group_name           = "${azurerm_resource_group.vm.name}"
   vm_size                       = "${var.vm_size}"
@@ -61,14 +61,14 @@ resource "azurerm_virtual_machine" "vm-linux-with-datadisk" {
   }
 
   storage_os_disk {
-    name              = "osdisk-${format("${var.vm_hostname}", count.index + 1)}"
+    name              = "osdisk-${format("${var.vm_hostname}%02d", count.index + 1)}"
     create_option     = "FromImage"
     caching           = "ReadWrite"
     managed_disk_type = "${var.storage_account_type}"
   }
 
   storage_data_disk {
-    name              = "datadisk-${format("${var.vm_hostname}", count.index + 1)}"
+    name              = "datadisk-${format("${var.vm_hostname}%02d", count.index + 1)}"
     create_option     = "Empty"
     lun               = 0
     disk_size_gb      = "${var.data_disk_size_gb}"
@@ -92,7 +92,7 @@ resource "azurerm_virtual_machine" "vm-linux-with-datadisk" {
 
 resource "azurerm_public_ip" "vm" {
   count                        = "${var.nb_public_ip}"
-  name                         = "${format("${var.vm_hostname}", count.index + 1)}-publicIP"
+  name                         = "${format("${var.vm_hostname}%02d", count.index + 1)}-publicIP"
   location                     = "${var.location}"
   resource_group_name          = "${azurerm_resource_group.vm.name}"
   public_ip_address_allocation = "${var.public_ip_address_allocation}"
@@ -101,7 +101,7 @@ resource "azurerm_public_ip" "vm" {
 
 resource "azurerm_network_interface" "vm" {
   count                         = "${var.nb_instances}"
-  name                          = "nic-${format("${var.vm_hostname}", count.index + 1)}"
+  name                          = "nic-${format("${var.vm_hostname}%02d", count.index + 1)}"
   location                      = "${azurerm_resource_group.vm.location}"
   resource_group_name           = "${azurerm_resource_group.vm.name}"
   network_security_group_id     = "${azurerm_network_security_group.vm.id}"
