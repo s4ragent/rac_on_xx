@@ -11,7 +11,7 @@ resource "azurerm_resource_group" "vm" {
 # Create virtual network
 resource "azurerm_virtual_network" "vm" {
     name                = "vnet-${var.suffix}"
-    address_space       = ["$(var.vnet_addr)"]
+    address_space       = ["${var.vnet_addr}"]
     location            = "${var.location}"
     resource_group_name = "${azurerm_resource_group.vm.name}"
 }
@@ -21,7 +21,7 @@ resource "azurerm_subnet" "vm" {
     name                 = "subnet-${var.suffix}"
     resource_group_name  = "${azurerm_resource_group.vm.name}"
     virtual_network_name = "${azurerm_virtual_network.vm.name}"
-    address_prefix       = "$(var.snet_addr)"
+    address_prefix       = "${var.snet_addr}"
 }
 
 
