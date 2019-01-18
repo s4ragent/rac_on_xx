@@ -91,7 +91,7 @@ resource "azurerm_virtual_machine" "node" {
 }
 
 resource "azurerm_public_ip" "node" {
-  count                        = "1"
+  count                        = "${var.nb_instances}"
   name                         = "${format("${var.NODEPREFIX}%03d", count.index + 1)}-publicIP"
   location                     = "${var.location}"
   resource_group_name          = "${azurerm_resource_group.vm.name}"
