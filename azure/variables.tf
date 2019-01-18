@@ -41,9 +41,6 @@ variable "vm_os_sku" {
 variable "vm_os_version" {
 }
 
-variable "public_ip_address_allocation" {
-}
-
 variable "data_sa_type" {
 }
 
