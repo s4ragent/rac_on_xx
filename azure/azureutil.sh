@@ -80,7 +80,7 @@ deleteall(){
 	fi
    	cd $VIRT_TYPE
 
-	terraform destory
+	terraform destroy
 	cd ../
 }
 
