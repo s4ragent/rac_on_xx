@@ -39,6 +39,7 @@ variable "vm_size" {
 
 variable "nb_instances" {
   description = "Specify the number of vm instances"
+  default     = "1"
 }
 
 variable "vm_hostname" {
