@@ -1,12 +1,12 @@
 
 ZONE: ""
 #ZONE: ""
-VNET_ADDR: "10.153.0.0/16"
-SNET_ADDR: "10.153.1.0/24"
+VNET_ADDR: ""
+SNET_ADDR: ""
 #INSTANCE_TYPE_OPS: "--size Standard_D3_v2"
-INSTANCE_TYPE_OPS: "--size Standard_A2m_v2"
+INSTANCE_TYPE_OPS: "--size "
 #INSTANCE_TYPE_OPS: "--size Standard_A0"
-INSTANCE_OPS: "--image Oracle:Oracle-Linux:7.4:latest"
+INSTANCE_OPS: "--image :::latest"
 NODE_DISK_SIZE: "80"
 STORAGE_DISK_SIZE: "100"
 link_local: disable
@@ -14,6 +14,14 @@ ip_fragment: tune
 
 variable "resource_group_name" {
   default     = "rg_raconxx"
+}
+
+variable "vnet_addr" {
+  default     = "10.153.0.0/16"
+}
+
+variable "snet_addr" {
+  default     = "10.153.1.0/24"
 }
 
 variable "location" {
@@ -33,12 +41,12 @@ variable "admin_username" {
 
 variable "storage_account_type" {
   description = "Defines the type of storage account to be created. Valid options are Standard_LRS, Standard_ZRS, Standard_GRS, Standard_RAGRS, Premium_LRS."
-  default     = "StandardLRS"
+  default     = "Standard_LRS"
 }
 
 variable "vm_size" {
   description = "Specifies the size of the virtual machine."
-  default     = "Standard_DS1_V2"
+  default     = "Standard_A2m_v2"
 }
 
 variable "nb_instances" {
@@ -48,23 +56,23 @@ variable "nb_instances" {
 
 variable "vm_hostname" {
   description = "local name of the VM"
-  default     = "node"
+  default     = "node00"
 }
 
 
 variable "vm_os_publisher" {
   description = "The name of the publisher of the image that you want to deploy. This is ignored when vm_os_id or vm_os_simple are provided."
-  default     = ""
+  default     = "Oracle"
 }
 
 variable "vm_os_offer" {
   description = "The name of the offer of the image that you want to deploy. This is ignored when vm_os_id or vm_os_simple are provided."
-  default     = ""
+  default     = "Oracle-Linux"
 }
 
 variable "vm_os_sku" {
   description = "The sku of the image that you want to deploy. This is ignored when vm_os_id or vm_os_simple are provided."
-  default     = ""
+  default     = "7.4"
 }
 
 variable "vm_os_version" {
@@ -93,7 +101,7 @@ variable "nb_public_ip" {
 
 variable "delete_os_disk_on_termination" {
   description = "Delete datadisk when machine is terminated"
-  default     = "false"
+  default     = "yes"
 }
 
 variable "data_sa_type" {
@@ -103,5 +111,5 @@ variable "data_sa_type" {
 
 variable "data_disk_size_gb" {
   description = "Storage data disk size size"
-  default     = ""
+  default     = "100"
 }
