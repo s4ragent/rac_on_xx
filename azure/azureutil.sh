@@ -7,15 +7,6 @@ cd ..
 source ./commonutil.sh
 
 
-SUFFIX=`ip a show eth0 | grep ether | awk '{print $2}' | sed -e s/://g`
-
-VNET_NAME=vnet_${PREFIX}
-SNET_NAME=snet_${PREFIX}
-SA_NAME=${PREFIX}${SUFFIX}
-NSG_NAME=nsg_${PREFIX}
-
-
-
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodename $2 disksize $3 nodenumber $4 hostgroup#####
 run(){
@@ -55,6 +46,8 @@ runonly(){
 	fi
  
  	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+	export TF_VAR_admin_username=${ansible_ssh_user}
+	
 	
 	cd $VIRT_TYPE
 	
