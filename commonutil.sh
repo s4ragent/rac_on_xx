@@ -181,12 +181,6 @@ common_runonly(){
 }
 
 common_deleteall(){
-
- rm -rf $VIRT_TYPE/*.inventory
- rm -rf $VIRT_TYPE/group_vars
- rm -rf $VIRT_TYPE/host_vars
- rm -rf $VIRT_TYPE/terraform.*
-
 	commmon_setvar $*
 	
 	#### VIRT_TYPE specific processing ###
@@ -197,7 +191,13 @@ common_deleteall(){
 
 	terraform destroy -auto-approve
 	cd ../
-   
+ 
+ rm -rf $VIRT_TYPE/*.inventory
+ rm -rf $VIRT_TYPE/group_vars
+ rm -rf $VIRT_TYPE/host_vars
+ rm -rf $VIRT_TYPE/terraform.*
+
+ 
 }
 
 
