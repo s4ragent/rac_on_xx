@@ -51,7 +51,8 @@ runonly(){
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
  
- export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`   
+ 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+	terraform apply
 
 #	STORAGEIP=`run storage $STORAGE_DISK_SIZE 0 storage`
 
