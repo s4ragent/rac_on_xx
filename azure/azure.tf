@@ -44,14 +44,14 @@ resource "azurerm_network_security_group" "vm" {
     }
 }
 
-resource "azurerm_virtual_machine" "vm-linux-with-datadisk" {
+resource "azurerm_virtual_machine" "node" {
   count                         = "${var.nb_instances}"
-  name                          = "${format("${var.vm_hostname}%02d", count.index + 1)}"
+  name                          = "${format("${var.NODEPREFIX}%03d", count.index + 1)}"
   location                      = "${var.location}"
   resource_group_name           = "${azurerm_resource_group.vm.name}"
   vm_size                       = "${var.vm_size}"
   network_interface_ids         = ["${element(azurerm_network_interface.vm.*.id, count.index)}"]
-  delete_os_disk_on_termination = "${var.delete_os_disk_on_termination}"
+  delete_os_disk_on_termination = "false"
 
   storage_image_reference {
     publisher = "${var.vm_os_publisher}"
@@ -61,14 +61,14 @@ resource "azurerm_virtual_machine" "vm-linux-with-datadisk" {
   }
 
   storage_os_disk {
-    name              = "osdisk-${format("${var.vm_hostname}%02d", count.index + 1)}"
+    name              = "osdisk-${format("${var.NODEPREFIX}%03d", count.index + 1)}"
     create_option     = "FromImage"
     caching           = "ReadWrite"
     managed_disk_type = "${var.storage_account_type}"
   }
 
   storage_data_disk {
-    name              = "datadisk-${format("${var.vm_hostname}%02d", count.index + 1)}"
+    name              = "datadisk-${format("${var.NODEPREFIX}%03d", count.index + 1)}"
     create_option     = "Empty"
     lun               = 0
     disk_size_gb      = "${var.data_disk_size_gb}"
@@ -76,32 +76,32 @@ resource "azurerm_virtual_machine" "vm-linux-with-datadisk" {
   }
 
   os_profile {
-    computer_name  = "${var.vm_hostname}${count.index}"
-    admin_username = "${var.admin_username}"
+    computer_name  = "${format("${var.NODEPREFIX}%03d", count.index + 1)}"
+    admin_username = "${var.ansible_ssh_user}"
   }
 
   os_profile_linux_config {
     disable_password_authentication = true
 
     ssh_keys {
-      path     = "/home/${var.admin_username}/.ssh/authorized_keys"
+      path     = "/home/${var.ansible_ssh_user}/.ssh/authorized_keys"
       key_data = "${var.public_key}"
     }
   }
 }
 
-resource "azurerm_public_ip" "vm" {
-  count                        = "${var.nb_public_ip}"
-  name                         = "${format("${var.vm_hostname}%02d", count.index + 1)}-publicIP"
+resource "azurerm_public_ip" "node" {
+  count                        = "1"
+  name                         = "${format("${var.NODEPREFIX}%03d", count.index + 1)}-publicIP"
   location                     = "${var.location}"
   resource_group_name          = "${azurerm_resource_group.vm.name}"
-  public_ip_address_allocation = "${var.public_ip_address_allocation}"
+  public_ip_address_allocation = "dynamic"
 }
 
 
-resource "azurerm_network_interface" "vm" {
+resource "azurerm_network_interface" "node" {
   count                         = "${var.nb_instances}"
-  name                          = "nic-${format("${var.vm_hostname}%02d", count.index + 1)}"
+  name                          = "nic-${format("${var.NODEPREFIX}%03d", count.index + 1)}"
   location                      = "${azurerm_resource_group.vm.location}"
   resource_group_name           = "${azurerm_resource_group.vm.name}"
   network_security_group_id     = "${azurerm_network_security_group.vm.id}"
@@ -110,6 +110,6 @@ resource "azurerm_network_interface" "vm" {
     name                          = "ipconfig${count.index}"
     subnet_id                     = "${azurerm_subnet.vm.id}"
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = "${length(azurerm_public_ip.vm.*.id) > 0 ? element(concat(azurerm_public_ip.vm.*.id, list("")), count.index) : ""}"
+    public_ip_address_id          = "${length(azurerm_public_ip.vm.*.id) > 0 ? element(concat(azurerm_public_ip.node.*.id, list("")), count.index) : ""}"
   }
 }

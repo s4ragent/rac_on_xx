@@ -12,11 +12,9 @@ set_var(){
 	else
 		nodecount=$1
 	fi
-	export TF_VAR_vm_hostname=$NODESUFFIX
-	export TF_VAR_suffix=$SUFFIX
+	RG_NAME="rg-${suffix}"
 	export TF_VAR_nb_instances=$nodecount
  	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
-	export TF_VAR_admin_username=${ansible_ssh_user}
 }
 
 #### VIRT_TYPE specific processing  (must define)###
