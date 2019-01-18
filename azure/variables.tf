@@ -1,16 +1,6 @@
-
-ZONE: ""
-#ZONE: ""
-VNET_ADDR: ""
-SNET_ADDR: ""
-#INSTANCE_TYPE_OPS: "--size Standard_D3_v2"
-INSTANCE_TYPE_OPS: "--size "
-#INSTANCE_TYPE_OPS: "--size Standard_A0"
-INSTANCE_OPS: "--image :::latest"
-NODE_DISK_SIZE: "80"
-STORAGE_DISK_SIZE: "100"
-link_local: disable
-ip_fragment: tune
+variable "suffix" {
+  default     = "raconxx"
+}
 
 variable "resource_group_name" {
   default     = "rg_raconxx"
