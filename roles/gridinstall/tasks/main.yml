@@ -77,15 +77,16 @@
       - gridinstall
       - installdbca
 
-  - name: "install strace packages"
-    become: yes
-    yum: name=strace state=present
-    tags:
-      - gridrootsh
+#  - name: "install strace packages"
+#    become: yes
+#    yum: name=strace state=present
+#    tags:
+#      - gridrootsh
 
   - name: "grid 1st root.sh"
     become: yes
-    shell: "strace -f -F -o /tmp/strace.txt {{ GRID_ORACLE_HOME }}/root.sh -silent"
+#    shell: "strace -f -F -o /tmp/strace.txt {{ GRID_ORACLE_HOME }}/root.sh -silent"
+    shell: "{{ GRID_ORACLE_HOME }}/root.sh -silent"
     register: grid1strootsh_result
     when: inventory_hostname == groups["dbserver"][0]
 #    ignore_errors: True
