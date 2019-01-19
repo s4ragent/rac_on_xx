@@ -107,6 +107,26 @@ common_gridrootsh(){
 	common_execansible rac.yml --tags installdbca --skip-tags runinstallergrid
 }
 
+common_deleteall(){
+	export TF_VAR_nb_instances=64
+ 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+	
+	#if [ -e "$ansible_ssh_private_key_file" ]; then
+ #  		rm -rf ${ansible_ssh_private_key_file}*
+	#fi
+ cd $VIRT_TYPE
+
+	terraform destroy -auto-approve
+	cd ../
+ 
+ rm -rf $VIRT_TYPE/*.inventory
+ rm -rf $VIRT_TYPE/group_vars
+ rm -rf $VIRT_TYPE/host_vars
+ #rm -rf $VIRT_TYPE/terraform.*
+
+ 
+}
+
 common_heatrun(){
 LOG="`date "+%Y%m%d-%H%M%S"`_$VIRT_TYPE.log"
 echo "ALLSTART `date "+%Y%m%d-%H%M%S"`" >>$LOG
@@ -173,27 +193,6 @@ common_runonly(){
 #	run "client01" $CLIENTIP $CLIENTNUM "client"
 	
 }
-
-common_deleteall(){
-	export TF_VAR_nb_instances=64
- 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
-	
-	#if [ -e "$ansible_ssh_private_key_file" ]; then
- #  		rm -rf ${ansible_ssh_private_key_file}*
-	#fi
- cd $VIRT_TYPE
-
-	terraform destroy -auto-approve
-	cd ../
- 
- rm -rf $VIRT_TYPE/*.inventory
- rm -rf $VIRT_TYPE/group_vars
- rm -rf $VIRT_TYPE/host_vars
- #rm -rf $VIRT_TYPE/terraform.*
-
- 
-}
-
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
 common_update_ansible_inventory(){
