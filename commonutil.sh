@@ -131,7 +131,13 @@ common_all_replaceinventory(){
 	done
 }
 
-commmon_setvar(){
+common_runonly(){
+
+	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
+		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
+		chmod 600 ${ansible_ssh_private_key_file}*
+	fi
+ 	
 	if [ "$1" = "" ]; then
 		nodecount=3
 	else
@@ -140,18 +146,6 @@ commmon_setvar(){
 
 	export TF_VAR_nb_instances=$nodecount
  	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
-}
-
-
-common_runonly(){
-
-	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
-		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
-		chmod 600 ${ansible_ssh_private_key_file}*
-	fi
- 	
- 	commmon_setvar $*
- 	
 	cd $VIRT_TYPE
 	
 	terraform init
@@ -181,7 +175,8 @@ common_runonly(){
 }
 
 common_deleteall(){
-	commmon_setvar $*
+	export TF_VAR_nb_instances=64
+ 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
 	
 	#if [ -e "$ansible_ssh_private_key_file" ]; then
  #  		rm -rf ${ansible_ssh_private_key_file}*
