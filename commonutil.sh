@@ -138,7 +138,7 @@ do
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
-commom_deleteall >>$LOG  2>&1
+common_deleteall >>$LOG  2>&1
 echo "ALLEND `date "+%Y%m%d-%H%M%S"`" >>$LOG
 }
 
