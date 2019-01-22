@@ -181,3 +181,72 @@ resource "azurerm_network_interface" "storage" {
     public_ip_address_id          = "${azurerm_public_ip.storage.id}"
   }
 }
+
+resource "azurerm_virtual_machine" "client" {
+  count                         = "${var.has_client}"
+  name                          = "client"
+  location                      = "${var.location}"
+  resource_group_name           = "${azurerm_resource_group.vm.name}"
+  vm_size                       = "${var.vm_size}"
+  network_interface_ids         = ["${azurerm_network_interface.client.id}"]
+  delete_os_disk_on_termination = "false"
+
+  storage_image_reference {
+    publisher = "${var.vm_os_publisher}"
+    offer     = "${var.vm_os_offer}"
+    sku       = "${var.vm_os_sku}"
+    version   = "${var.vm_os_version}"
+  }
+
+  storage_os_disk {
+    name              = "osdisk-client"
+    create_option     = "FromImage"
+    caching           = "ReadWrite"
+    managed_disk_type = "${var.storage_account_type}"
+  }
+
+  storage_data_disk {
+    name              = "datadisk-client"
+    create_option     = "Empty"
+    lun               = 0
+    disk_size_gb      = "${var.data_disk_size_gb}"
+    managed_disk_type = "${var.data_sa_type}"
+  }
+
+  os_profile {
+    computer_name  = "client"
+    admin_username = "${var.ansible_ssh_user}"
+  }
+
+  os_profile_linux_config {
+    disable_password_authentication = true
+
+    ssh_keys {
+      path     = "/home/${var.ansible_ssh_user}/.ssh/authorized_keys"
+      key_data = "${var.public_key}"
+    }
+  }
+}
+
+resource "azurerm_public_ip" "client" {
+  count                        = "${var.has_client}"
+  name                         = "client-publicIP"
+  location                     = "${var.location}"
+  resource_group_name          = "${azurerm_resource_group.vm.name}"
+  public_ip_address_allocation = "dynamic"
+}
+
+resource "azurerm_network_interface" "client" {
+  count                         = "${var.has_client}"
+  name                          = "nic-client"
+  location                      = "${azurerm_resource_group.vm.location}"
+  resource_group_name           = "${azurerm_resource_group.vm.name}"
+  network_security_group_id     = "${azurerm_network_security_group.vm.id}"
+
+  ip_configuration {
+    name                          = "ipconfig"
+    subnet_id                     = "${azurerm_subnet.vm.id}"
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = "${azurerm_public_ip.client.id}"
+  }
+}
