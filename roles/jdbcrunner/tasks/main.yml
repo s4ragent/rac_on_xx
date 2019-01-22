@@ -60,9 +60,9 @@
       - installjdbcrunner
 
   - name: "unzip cvuqdisk"
-    local_action: shell {{ UNZIP }} /media/{{ GRID_MEDIA1 }} {{ CVUQDISK }}
+    local_action: shell {{ UNZIP }} /media/{{ GRID_MEDIA1 }} {{ JDBCDRIVER }}
     args:
-      creates: "/tmp/{{ CVUQDISK }}"
+      creates: "/tmp/{{ JDBCDRIVER }}"
       executable: /bin/bash
       chdir: /tmp
     run_once: true
@@ -72,7 +72,7 @@
       
   - name: "copy cvuqdisk"
     become: yes
-    copy: src="/tmp/{{ CVUQDISK }}" dest=/tmp/cvuqdisk.rpm
+    copy: src="/tmp/{{ JDBCDRIVER }}" dest=/tmp/cvuqdisk.rpm
     when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
