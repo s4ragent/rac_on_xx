@@ -25,9 +25,12 @@ variable "vm_size" {
 variable "nb_instances" {
 }
 
-variable "NODEPREFIX" {
+variable "has_client" {
+  default = "0"
 }
 
+variable "NODEPREFIX" {
+}
 
 variable "vm_os_publisher" {
 }
