@@ -42,8 +42,8 @@ common_runall(){
 }
 
 common_jdbcrunner(){
- addclient
- 	common_execansible rac.yml --tags addclient
+	export TF_VAR_has_client=1
+	common_runall $*
 	common_execansible rac.yml --tags jdbcrunner --extra-vars "jdbcrunner=on"
 }
 
@@ -109,6 +109,7 @@ common_gridrootsh(){
 
 common_deleteall(){
 	export TF_VAR_nb_instances=64
+	export TF_VAR_has_client=1
  	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
 	
 	#if [ -e "$ansible_ssh_private_key_file" ]; then
@@ -184,7 +185,11 @@ common_runonly(){
 		External_IP=`get_External_IP $NODENAME`
 		common_update_ansible_inventory $NODENAME $External_IP $NODENAME $i dbserver
 	done
-
+ 	
+	if [ "$TF_VAR_has_client = "1" || "$has_client = "1" ]; then
+    		ClientExtIP=`get_External_IP client`
+		common_update_ansible_inventory client ClientExtIP client 70 client
+ 	fi
 	
 #	sleep 60s
 #	CLIENTNUM=70
