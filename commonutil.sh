@@ -186,7 +186,7 @@ common_runonly(){
 		common_update_ansible_inventory $NODENAME $External_IP $NODENAME $i dbserver
 	done
  	
-	if [ "$TF_VAR_has_client = "1" || "$has_client = "1" ]; then
+	if [ "$TF_VAR_has_client" = "1" || "$has_client" = "1" ]; then
     		ClientExtIP=`get_External_IP client`
 		common_update_ansible_inventory client ClientExtIP client 70 client
  	fi
