@@ -59,33 +59,23 @@
       - jdbcrunner
       - installjdbcrunner
 
-  - name: "unzip cvuqdisk"
+  - name: "unzip jdvcdriver"
     local_action: shell {{ UNZIP }} /media/{{ GRID_MEDIA1 }} {{ JDBCDRIVER }}
     args:
       creates: "/tmp/{{ JDBCDRIVER }}"
       executable: /bin/bash
       chdir: /tmp
     run_once: true
-    when: MEDIA_COPY is defined and MEDIA_COPY !=""
-    tags:
-      - preinstallpackages
-      
-  - name: "copy cvuqdisk"
-    become: yes
-    copy: src="/tmp/{{ JDBCDRIVER }}" dest=/tmp/cvuqdisk.rpm
-    when: MEDIA_COPY is defined and MEDIA_COPY !=""
-    tags:
-      - preinstallpackages
-
-
-  - name: "copy media"
-    copy: src="/media/{{ item }}" dest="~/jdbcrunner/lib/{{ item }}"
     when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
-    with_items:
-      - ojdbc7.jar
     tags:
       - jdbcrunner
       
+  - name: "copy jdvcdriver"
+    become: yes
+    copy: src="/tmp/{{ JDBCDRIVER }}" dest="~/jdbcrunner/lib/ojdbc.jar"
+    when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
+    tags:
+      - jdbcrunner
 
   - name: ant
     shell: /usr/bin/ant && touch ant.txt
@@ -99,7 +89,7 @@
 
   - name: load tpcc data
 #    shell: "{{ ORA_ORACLE_HOME }}/jdk/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/*:{{ ORA_ORACLE_HOME }}/jdbc/lib/* JR scripts/tpcc_load.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ hostvars[groups['dbserver'][0]]['ansible_vxlan0']['ipv4']['address'] }}:1521:{{ SIDNAME }}1"
-    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc7.jar JR scripts/tpcc_load.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin::@{{ SCAN_NAME }}:1521/{{ SIDNAME }}"
+    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc_load.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin::@{{ SCAN_NAME }}:1521/{{ SIDNAME }}"
     args:
       chdir: "~/jdbcrunner"
     when: inventory_hostname == groups["client"][0]
