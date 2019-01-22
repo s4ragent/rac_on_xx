@@ -172,6 +172,11 @@ common_runonly(){
 	terraform init
 	terraform apply -auto-approve
 
+ 	
+	if [ $? != 0 ]; then 
+		exit 255 
+	fi
+
 	cd ../
 	
 	STORAGEIntIP=`get_Internal_IP storage`
