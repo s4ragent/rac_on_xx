@@ -71,7 +71,6 @@
       - jdbcrunner
       
   - name: "copy jdvcdriver"
-    become: yes
     copy: src="/tmp/{{ JDBCDRIVER }}" dest="~/jdbcrunner/lib/ojdbc.jar"
     when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
