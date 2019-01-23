@@ -195,7 +195,7 @@ common_runonly(){
     		ClientExtIP=`get_External_IP client`
 		common_update_ansible_inventory client ClientExtIP client 70 client
  	fi
-	
+exit	
 #	sleep 60s
 #	CLIENTNUM=70
 #	NUM=`expr $BASE_IP + $CLIENTNUM`
