@@ -63,32 +63,25 @@ common_runonly(){
 		buildimage
 	fi
 
-	STORAGEIP=`get_External_IP storage`
-	arg_string="storage,$STORAGEIP,storage,0,storage"
-	for i in `seq 1 $nodecount`;
-	do
-		NODEIP=`get_External_IP $i`
-		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,dbserver"
-	done
-
-	if [ "$isCLIENT" = "on" ]; then
-	 nodenum=`expr $nodecount + 1`
-		NODEIP=`get_External_IP $nodenum`
-		NODENAME="client"
-		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$nodenum,client"
-	fi
-
 	
-	common_create_inventry "STORAGE_SERVER: $STORAGEIP" "$arg_string"
-
-	run "storage" $STORAGEIP 0 "storage"
+	arg_string="storage,`get_Internal_IP storage`,storage,0,storage"
+	run "storage" `get_Internal_IP storage` 0 "storage"
+	
 	for i in `seq 1 $nodecount`;
 	do
 		NODEIP=`get_Internal_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
+		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,dbserver"
 		run $NODENAME $NODEIP $i "dbserver"
 	done
+
+	if [ "$TF_VAR_has_client" = "1" ] || [ "$has_client" = "1" ]; then
+   ClientExtIP=`get_External_IP client`
+  		arg_string="$arg_string client,$ClientExtIP,client,70,client"  		
+		run client $ClientExtIP client 70 client
+ 	fi
+	
+	common_create_inventry "STORAGE_SERVER: $STORAGEIP" "$arg_string"
 	
 	sleep 120s
 #	CLIENTNUM=70
