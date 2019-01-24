@@ -63,25 +63,26 @@ common_runonly(){
 		buildimage
 	fi
 
-	
-	arg_string="storage,`get_Internal_IP storage`,storage,0,storage"
-	run "storage" `get_Internal_IP storage` 0 "storage"
+
+
+	STORAGEExtIP=`get_External_IP storage`
+	common_update_all_yml "STORAGE_SERVER: $STORAGEExtIP"
+	common_update_ansible_inventory storage $STORAGEExtIP storage 0 storage
+	run "storage" $STORAGEIntIP 0 "storage"
 	
 	for i in `seq 1 $nodecount`;
 	do
-		NODEIP=`get_Internal_IP $i`
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		arg_string="$arg_string $NODENAME,$NODEIP,$NODENAME,$i,dbserver"
-		run $NODENAME $NODEIP $i "dbserver"
+		External_IP=`get_External_IP $NODENAME`
+		common_update_ansible_inventory $NODENAME $External_IP $NODENAME $i dbserver
+		run $NODENAME $External_IP $i "dbserver"
 	done
-
+ 	
 	if [ "$TF_VAR_has_client" = "1" ] || [ "$has_client" = "1" ]; then
-   ClientExtIP=`get_External_IP client`
-  		arg_string="$arg_string client,$ClientExtIP,client,70,client"  		
-		run client $ClientExtIP client 70 client
+    		ClientExtIP=`get_External_IP client`
+		common_update_ansible_inventory client $ClientExtIP client 70 client
+		run "client" $ClientExtIP 70 "client"
  	fi
-	
-	common_create_inventry "STORAGE_SERVER: $STORAGEIP" "$arg_string"
 	
 	sleep 120s
 #	CLIENTNUM=70
@@ -91,7 +92,7 @@ common_runonly(){
 	
 }
 
-deleteall(){
+common_deleteall(){
  	common_deleteall $*
 	
 	virsh destroy storage
@@ -116,11 +117,9 @@ deleteall(){
 		rm -rf /var/lib/libvirt/images/rac_template.img
 	fi
 
-	#### VIRT_TYPE specific processing ###
-	#if [ -e "$ansible_ssh_private_key_file" ]; then
-   	#	rm -rf ${ansible_ssh_private_key_file}*
-	#fi
-
+ rm -rf $VIRT_TYPE/*.inventory
+ rm -rf $VIRT_TYPE/group_vars
+ rm -rf $VIRT_TYPE/host_vars
 	rm -rf /tmp/$CVUQDISK
 
 }
@@ -223,7 +222,11 @@ get_Internal_IP(){
 	if [ "$1" = "storage" ]; then
 		NUM=`expr $BASE_IP`
 	else
-		NUM=`expr $BASE_IP + $1`
+		if [ "$1" = "client" ]; then
+			NUM=`expr $BASE_IP + 70`
+		else
+			NUM=`expr $BASE_IP + $1`
+		fi
 	fi
 	SEGMENT=`echo $KVMSUBNET | grep -Po '\d{1,3}\.\d{1,3}\.\d{1,3}\.'`
 	Internal_IP="${SEGMENT}$NUM"
