@@ -46,7 +46,7 @@ virsh start ${NODENAME}
 
 #### VIRT_TYPE specific processing  (must define)###
 #$1 nodecount                                  #####
-runonly(){
+common_runonly(){
 	if [ "$1" = "" ]; then
 		nodecount=3
 	else
