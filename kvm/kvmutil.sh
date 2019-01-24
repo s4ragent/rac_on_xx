@@ -93,8 +93,6 @@ common_runonly(){
 }
 
 common_deleteall(){
- 	common_deleteall $*
-	
 	virsh destroy storage
 	virsh undefine storage
 	rm -rf /var/lib/libvirt/images/storage.img
