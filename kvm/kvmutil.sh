@@ -130,7 +130,7 @@ CODE="$(awk '/_warning_/ {print $NF}' /tmp/cookie)"
 curl -Lb /tmp/cookie "https://drive.google.com/uc?export=download&confirm=${CODE}&id=${FILE_ID}" -o /var/lib/libvirt/images/${OS_IMAGE}
 	
 	
-   		wget ${OS_URL}${OS_IMAGE} -O /var/lib/libvirt/images/${OS_IMAGE}
+#   		wget ${OS_URL}${OS_IMAGE} -O /var/lib/libvirt/images/${OS_IMAGE}
 	fi
 
 qemu-img create -f qcow2 /var/lib/libvirt/images/rac_template.img 100G
