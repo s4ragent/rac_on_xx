@@ -125,6 +125,11 @@ common_deleteall(){
 buildimage(){
 
 	if [ ! -e /var/lib/libvirt/images/${OS_IMAGE} ]; then
+curl -sc /tmp/cookie "https://drive.google.com/uc?export=download&id=${FILE_ID}" > /dev/null
+CODE="$(awk '/_warning_/ {print $NF}' /tmp/cookie)" 
+curl -Lb /tmp/cookie "https://drive.google.com/uc?export=download&confirm=${CODE}&id=${FILE_ID}" -o /var/lib/libvirt/images/${OS_IMAGE}
+	
+	
    		wget ${OS_URL}${OS_IMAGE} -O /var/lib/libvirt/images/${OS_IMAGE}
 	fi
 
