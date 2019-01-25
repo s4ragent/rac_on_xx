@@ -68,12 +68,12 @@ common_runonly(){
 	STORAGEExtIP=`get_External_IP storage`
 	common_update_all_yml "STORAGE_SERVER: $STORAGEExtIP"
 	common_update_ansible_inventory storage $STORAGEExtIP storage 0 storage
-	run "storage" $STORAGEIntIP 0 "storage"
+	run "storage" $STORAGEExtIP 0 "storage"
 	
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
-		External_IP=`get_External_IP $NODENAME`
+		External_IP=`get_External_IP $i`
 		common_update_ansible_inventory $NODENAME $External_IP $NODENAME $i dbserver
 		run $NODENAME $External_IP $i "dbserver"
 	done
