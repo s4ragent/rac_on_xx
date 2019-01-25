@@ -150,6 +150,7 @@ bootloader --location=mbr
 
 clearpart --all --initlabel
 part / --fstype=xfs --grow --size=1 --asprimary --label=root
+part swap  --size 4096
 
 rootpw --plaintext $KVMPASS
 auth --enableshadow --passalgo=sha512
