@@ -27,7 +27,7 @@ resource "azurerm_subnet" "vm" {
     name                 = "subnet-${local.yaml.suffix}"
     resource_group_name  = "${azurerm_resource_group.vm.name}"
     virtual_network_name = "${azurerm_virtual_network.vm.name}"
-    address_prefix       = "(local.yaml.snet_addr)"
+    address_prefixes       = "(local.yaml.snet_addr)"
 }
 
 
