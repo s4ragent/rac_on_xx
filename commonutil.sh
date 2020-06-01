@@ -26,7 +26,6 @@ parse_yaml(){
 eval $(parse_yaml common_vars.yml)
 eval $(parse_yaml $VIRT_TYPE/vars.yml)
 
-parse_yaml $VIRT_TYPE/vars.yml > $VIRT_TYPE/terraform.tfvars
 
 common_execansible(){
 			starttime=`date`
