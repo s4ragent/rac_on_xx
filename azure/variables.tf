@@ -1,4 +1,5 @@
 variable "suffix" {
+a
 }
 
 variable "vnet_addr" {
