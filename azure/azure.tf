@@ -35,7 +35,7 @@ resource "azurerm_subnet" "vm" {
 resource "azurerm_network_security_group" "vm" {
     name                = "nsg-${local.yaml.suffix}"
     location            = "local.yaml.location"
-    resource_group_name = "$azurerm_resource_group.vm.name"
+    resource_group_name = "azurerm_resource_group.vm.name"
 
     security_rule {
         name                       = "SSH"
