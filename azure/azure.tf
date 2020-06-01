@@ -9,8 +9,8 @@ locals{
 
 # Create a resource group if it doesn’t exist
 resource "azurerm_resource_group" "vm" {
-    name     = "rg-${local.yaml.suffix}"
-    location = "${local.yaml.ZONE}"
+    name     = "rg-(local.yaml.suffix)"
+    location = "(local.yaml.ZONE)"
 }
 
 # Create virtual network
