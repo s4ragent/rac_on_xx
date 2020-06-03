@@ -107,7 +107,7 @@ common_gridrootsh(){
 }
 
 common_deleteall(){
-	export TF_VAR_nb_instances=64
+	export TF_VAR_db_servers=64
 	export TF_VAR_has_client=1
  	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
 	
@@ -164,7 +164,7 @@ common_runonly(){
 		nodecount=$1
 	fi
 
-	export TF_VAR_nb_instances=$nodecount
+	export TF_VAR_db_servers=$nodecount
  	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
 	cd $VIRT_TYPE
 	
