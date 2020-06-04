@@ -11,10 +11,6 @@ locals{
 resource "azurerm_resource_group" "racgroup" {
     name     = "rg-${local.yaml.suffix}"
     location = local.yaml.location
-
-    tags = {
-        environment = "rg-${local.yaml.suffix}"
-    }
 }
 
 # Create virtual network
@@ -23,10 +19,6 @@ resource "azurerm_virtual_network" "racnetwork" {
     location = local.yaml.location
     address_space       = [local.yaml.vnet_addr]
     resource_group_name = azurerm_resource_group.racgroup.name
-
-    tags = {
-        environment = "vnet-${local.yaml.suffix}"
-    }
 }
 
 # Create subnet
@@ -55,73 +47,40 @@ resource "azurerm_network_security_group" "racnsg" {
         source_address_prefix      = "*"
         destination_address_prefix = "*"
     }
-
-    tags = {
-        environment = "nsg-${local.yaml.suffix}"
-    }
 }
 
 
 # Create public IPs
-resource "azurerm_public_ip" "racpublicip" {
+resource "azurerm_public_ip" "racdbip" {
     count                        = "${var.db_servers}"
     name                         = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}-publicIP"
     location                     = local.yaml.location
     resource_group_name          = azurerm_resource_group.racgroup.name
     allocation_method            = "Dynamic"
-
-    tags = {
-        environment = "Terraform Demo"
-    }
 }
 
 
 # Create network interface
-resource "azurerm_network_interface" "myterraformnic" {
-    name                      = "myNIC"
-    location                  = "eastus"
-    resource_group_name       = azurerm_resource_group.myterraformgroup.name
+resource "azurerm_network_interface" "racdbnic" {
+    count                     = "${var.db_servers}"
+    name                      = "nic-${format("${var.NODEPREFIX}%03d", count.index + 1)}"
+    location                  = local.yaml.location
+    resource_group_name       = azurerm_resource_group.racgroup.name
 
     ip_configuration {
-        name                          = "myNicConfiguration"
-        subnet_id                     = azurerm_subnet.myterraformsubnet.id
+        name                          = "ipconfigdb${count.index}"
+        subnet_id                     = azurerm_subnet.racsubnet.id
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id          = azurerm_public_ip.myterraformpublicip.id
-    }
-
-    tags = {
-        environment = "Terraform Demo"
+        public_ip_address_id          = public_ip_address_id = "${element(azurerm_public_ip.racdbip.*.id, count.index)}" 
     }
 }
 
 # Connect the security group to the network interface
-resource "azurerm_network_interface_security_group_association" "example" {
-    network_interface_id      = azurerm_network_interface.myterraformnic.id
-    network_security_group_id = azurerm_network_security_group.myterraformnsg.id
+resource "azurerm_network_interface_security_group_association" "racdbassciate" {
+    network_interface_id      = azurerm_network_interface.racdbnic.id
+    network_security_group_id = azurerm_network_security_group.racnsg".id
 }
 
-# Generate random text for a unique storage account name
-resource "random_id" "randomId" {
-    keepers = {
-        # Generate a new ID only when a new resource group is defined
-        resource_group = azurerm_resource_group.myterraformgroup.name
-    }
-    
-    byte_length = 8
-}
-
-# Create storage account for boot diagnostics
-resource "azurerm_storage_account" "mystorageaccount" {
-    name                        = "diag${random_id.randomId.hex}"
-    resource_group_name         = azurerm_resource_group.myterraformgroup.name
-    location                    = "eastus"
-    account_tier                = "Standard"
-    account_replication_type    = "LRS"
-
-    tags = {
-        environment = "Terraform Demo"
-    }
-}
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
