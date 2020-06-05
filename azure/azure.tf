@@ -71,7 +71,7 @@ resource "azurerm_network_interface" "racdbnic" {
         name                          = "ipconfigdb${count.index}"
         subnet_id                     = azurerm_subnet.racsubnet.id
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id          = public_ip_address_id = "${element(azurerm_public_ip.racdbip.*.id, count.index)}" 
+        public_ip_address_id          = "${element(azurerm_public_ip.racdbip.*.id, count.index)}" 
     }
 }
 
@@ -107,13 +107,13 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     }
 
 
-    computer_name  = "myvm"
-    admin_username = "azureuser"
+    computer_name  = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
+    admin_username = local.yaml.ansible_ssh_user
     disable_password_authentication = true
         
     admin_ssh_key {
-        username       = "azureuser"
-        public_key     = file("/home/azureuser/.ssh/authorized_keys")
+        username       = local.yaml.ansible_ssh_user
+        public_key     = file(local.yaml.ansible_ssh_private_key_file)
     }
 
 }
