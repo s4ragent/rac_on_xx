@@ -83,10 +83,11 @@ resource "azurerm_network_interface_security_group_association" "racdbassciate" 
 
 
 # Create virtual machine
-resource "azurerm_linux_virtual_machine" "myterraformvm" {
-    name                  = "myVM"
-    location              = "eastus"
-    resource_group_name   = azurerm_resource_group.myterraformgroup.name
+resource "azurerm_linux_virtual_machine" "dbvm" {
+    count                 = "${var.db_servers}"
+    name                  = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
+    location              = local.yaml.location
+    resource_group_name   = azurerm_resource_group.racgroup.name
     network_interface_ids = [azurerm_network_interface.myterraformnic.id]
     size                  = "Standard_DS1_v2"
 
