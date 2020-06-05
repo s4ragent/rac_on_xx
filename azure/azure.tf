@@ -75,11 +75,13 @@ resource "azurerm_network_interface" "racdbnic" {
     }
 }
 
-# Connect the security group to the network interface
-resource "azurerm_network_interface_security_group_association" "racdbassciate" {
-    network_interface_id      = azurerm_network_interface.racdbnic.id
-    network_security_group_id = azurerm_network_security_group.racnsg".id
+resource "azurerm_network_interface_security_group_association" "attach_Nic_Nsg" {
+    count                     = "${var.db_servers}"
+    network_interface_id      = element(azurerm_network_interface.network_interface.racdbnic.*.id, count.index)
+    network_security_group_id = azurerm_network_security_group.racnsg.id
 }
+
+
 
 
 # Create virtual machine
@@ -88,21 +90,22 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     name                  = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
-    network_interface_ids = [azurerm_network_interface.myterraformnic.id]
-    size                  = "Standard_DS1_v2"
+    network_interface_ids = ["${element(azurerm_network_interface.racdbnic.*.id, count.index)}"]
+    size                  = local.yaml.vm_size
 
     os_disk {
-        name              = "myOsDisk"
+        name              = "osdisk-${format("${var.NODEPREFIX}%03d", count.index + 1)}"
         caching           = "ReadWrite"
-        storage_account_type = "Premium_LRS"
+        storage_account_type = local.yaml.storage_account_type
     }
 
     source_image_reference {
-        publisher = "Canonical"
-        offer     = "UbuntuServer"
-        sku       = "16.04.0-LTS"
-        version   = "latest"
+        publisher = local.yaml.vm_os_publisher
+        offer     = local.yaml.vm_os_offer
+        sku       = local.yaml.vm_os_sku
+        version   = local.yaml.vm_os_version
     }
+
 
     computer_name  = "myvm"
     admin_username = "azureuser"
@@ -113,11 +116,4 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
         public_key     = file("/home/azureuser/.ssh/authorized_keys")
     }
 
-    boot_diagnostics {
-        storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
-    }
-
-    tags = {
-        environment = "Terraform Demo"
-    }
 }
