@@ -165,10 +165,11 @@ common_runonly(){
 	fi
 
 	export TF_VAR_db_servers=$nodecount
- 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
 	cd $VIRT_TYPE
 	
 	terraform init
+	terraform plan
 	terraform apply -auto-approve
 
  	
