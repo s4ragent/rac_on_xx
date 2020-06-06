@@ -169,7 +169,6 @@ common_runonly(){
 	cd $VIRT_TYPE
 	
 	terraform init
-	terraform plan
 	terraform apply -auto-approve
 
  	
