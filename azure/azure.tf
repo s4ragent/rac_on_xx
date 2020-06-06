@@ -3,6 +3,9 @@ provider "azurerm" {
         features {}
 }
 
+variable "db_servers" {
+}
+
 locals{ 
         yaml = yamldecode(file("./vars.yml"))
 }
