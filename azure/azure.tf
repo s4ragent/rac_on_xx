@@ -113,6 +113,6 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
         
     admin_ssh_key {
         username       = local.yaml.ansible_ssh_user
-        public_key     = file(local.yaml.ansible_ssh_private_key_file)
+        public_key     = file(../local.yaml.ansible_ssh_private_key_file)
     }
 }
