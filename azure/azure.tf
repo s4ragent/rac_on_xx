@@ -74,7 +74,7 @@ resource "azurerm_network_interface" "racdbnic" {
         name                          = "ipconfigdb${count.index}"
         subnet_id                     = azurerm_subnet.racsubnet.id
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id          = "${element(azurerm_public_ip.racdbip.*.id, count.index)}" 
+        public_ip_address_id          = element(azurerm_public_ip.racdbip.*.id, count.index) 
     }
 }
 
@@ -91,7 +91,7 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     name                  = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
-    network_interface_ids = ["${element(azurerm_network_interface.racdbnic.*.id, count.index)}"]
+    network_interface_ids = [element(azurerm_network_interface.racdbnic.*.id, count.index)]
     size                  = local.yaml.vm_size
 
     os_disk {
