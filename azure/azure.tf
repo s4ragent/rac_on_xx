@@ -88,7 +88,7 @@ resource "azurerm_network_interface_security_group_association" "attach_dbnic_Ns
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "dbvm" {
     count                 = var.db_servers
-    name                  = format("local.yaml.NODEPREFIX%03d", count.index + 1)
+    name                  = format("${local.yaml.NODEPREFIX}%03d", count.index + 1)
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
     network_interface_ids = [element(azurerm_network_interface.racdbnic.*.id, count.index)]
@@ -107,7 +107,7 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
         version   = local.yaml.vm_os_version
     }
 
-    computer_name  = format("local.yaml.NODEPREFIX%03d", count.index + 1)
+    computer_name  = format("${local.yaml.NODEPREFIX}%03d", count.index + 1)
     admin_username = local.yaml.ansible_ssh_user
     disable_password_authentication = true
         
