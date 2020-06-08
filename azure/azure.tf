@@ -78,13 +78,11 @@ resource "azurerm_network_interface" "racdbnic" {
     }
 }
 
-resource "azurerm_network_interface_security_group_association" "attach_Nic_Nsg" {
+resource "azurerm_network_interface_security_group_association" "attach_dbnic_Nsg" {
     count                     = var.db_servers
-    network_interface_id      = element(azurerm_network_interface.network_interface.racdbnic.*.id, count.index)
+    network_interface_id      = element(azurerm_network_interface.racdbnic.*.id, count.index)
     network_security_group_id = azurerm_network_security_group.racnsg.id
 }
-
-
 
 
 # Create virtual machine
