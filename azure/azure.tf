@@ -56,7 +56,7 @@ resource "azurerm_network_security_group" "racnsg" {
 # Create public IPs
 resource "azurerm_public_ip" "racdbip" {
     count                        = var.db_servers
-    name                         = "format("${local.yaml.NODEPREFIX}%03d", count.index + 1)-publicIP"
+    name                         = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}-publicIP"
     location                     = local.yaml.location
     resource_group_name          = azurerm_resource_group.racgroup.name
     allocation_method            = "Dynamic"
