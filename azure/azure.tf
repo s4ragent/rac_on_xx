@@ -116,3 +116,20 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
         public_key     = file("../${local.yaml.ansible_ssh_private_key_file}.pub")
     }
 }
+
+
+resource "azurerm_managed_disk" "db_data_disk" {
+  name                 = "datadisk-${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
+  location             = local.yaml.location
+  resource_group_name  = azurerm_resource_group.racgroup.name
+  storage_account_type = local.yaml.storage_account_type
+  create_option        = "Empty"
+  disk_size_gb         = 10
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "example" {
+  managed_disk_id    = azurerm_managed_disk.example.id
+  virtual_machine_id = azurerm_virtual_machine.example.id
+  lun                = "10"
+  caching            = "ReadWrite"
+}
