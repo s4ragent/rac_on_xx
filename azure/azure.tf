@@ -65,7 +65,7 @@ resource "azurerm_public_ip" "racdbip" {
 
 # Create network interface
 resource "azurerm_network_interface" "racdbnic" {
-    count                     = "${var.db_servers}"
+    count                     = var.db_servers
     name                      = "nic-${format("${var.NODEPREFIX}%03d", count.index + 1)}"
     location                  = local.yaml.location
     resource_group_name       = azurerm_resource_group.racgroup.name
@@ -79,7 +79,7 @@ resource "azurerm_network_interface" "racdbnic" {
 }
 
 resource "azurerm_network_interface_security_group_association" "attach_Nic_Nsg" {
-    count                     = "${var.db_servers}"
+    count                     = var.db_servers
     network_interface_id      = element(azurerm_network_interface.network_interface.racdbnic.*.id, count.index)
     network_security_group_id = azurerm_network_security_group.racnsg.id
 }
@@ -89,7 +89,7 @@ resource "azurerm_network_interface_security_group_association" "attach_Nic_Nsg"
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "dbvm" {
-    count                 = "${var.db_servers}"
+    count                 = var.db_servers
     name                  = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
