@@ -130,7 +130,7 @@ resource "azurerm_managed_disk" "db_data_disk" {
 resource "azurerm_virtual_machine_data_disk_attachment" "db_data_disk_attach" {
   count              = var.db_servers
   managed_disk_id    = element(azurerm_managed_disk.db_data_disk.*.id, count.index)
-  virtual_machine_id = element(azurerm_virtual_machine.dbvm.*.id, count.index)
+  virtual_machine_id = element(azurerm_linux_virtual_machine.dbvm.*.id, count.index)
   lun                = "10"
   caching            = "ReadWrite"
 }
