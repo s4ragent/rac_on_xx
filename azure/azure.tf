@@ -212,4 +212,79 @@ resource "azurerm_virtual_machine_data_disk_attachment" "storage_data_disk_attac
   caching            = "ReadWrite"
 }
 
-##############
+###client####
+# Create public IPs
+resource "azurerm_public_ip" "racclientip" {
+    name                         = "client-publicIP"
+    location                     = local.yaml.location
+    resource_group_name          = azurerm_resource_group.racgroup.name
+    allocation_method            = "Dynamic"
+}
+
+
+# Create network interface
+resource "azurerm_network_interface" "racclientnic" {
+    name                      = "nic-client"
+    location                  = local.yaml.location
+    resource_group_name       = azurerm_resource_group.racgroup.name
+
+    ip_configuration {
+        name                          = "ipconfigclient"
+        subnet_id                     = azurerm_subnet.racsubnet.id
+        private_ip_address_allocation = "Dynamic"
+        public_ip_address_id          = azurerm_public_ip.racclientip.id
+    }
+}
+
+resource "azurerm_network_interface_security_group_association" "attach_clientnic_Nsg" {
+    network_interface_id      = azurerm_network_interface.racclientnic.id
+    network_security_group_id = azurerm_network_security_group.racnsg.id
+}
+
+
+# Create virtual machine
+resource "azurerm_linux_virtual_machine" "clientvm" {
+    name                  = "client"
+    location              = local.yaml.location
+    resource_group_name   = azurerm_resource_group.racgroup.name
+    network_interface_ids = [azurerm_network_interface.racclientnic.id]
+    size                  = local.yaml.vm_size
+
+    os_disk {
+        name              = "osdisk-client"
+        caching           = "ReadWrite"
+        client_account_type = local.yaml.client_account_type
+    }
+
+    source_image_reference {
+        publisher = local.yaml.vm_os_publisher
+        offer     = local.yaml.vm_os_offer
+        sku       = local.yaml.vm_os_sku
+        version   = local.yaml.vm_os_version
+    }
+
+    computer_name  = "client"
+    admin_username = local.yaml.ansible_ssh_user
+    disable_password_authentication = true
+        
+    admin_ssh_key {
+        username       = local.yaml.ansible_ssh_user
+        public_key     = file("../${local.yaml.ansible_ssh_private_key_file}.pub")
+    }
+}
+
+resource "azurerm_managed_disk" "client_data_disk" {
+    name                  = "datadisk-client"
+    location              = local.yaml.location
+    resource_group_name   = azurerm_resource_group.racgroup.name
+    client_account_type = local.yaml.client_account_type
+    create_option        = "Empty"
+    disk_size_gb         = local.yaml.data_disk_size_gb
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "client_data_disk_attach" {
+  managed_disk_id    = azurerm_managed_disk.client_data_disk.id
+  virtual_machine_id = azurerm_linux_virtual_machine.clientvm.id
+  lun                = "10"
+  caching            = "ReadWrite"
+}
