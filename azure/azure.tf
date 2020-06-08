@@ -66,7 +66,7 @@ resource "azurerm_public_ip" "racdbip" {
 # Create network interface
 resource "azurerm_network_interface" "racdbnic" {
     count                     = var.db_servers
-    name                      = "nic-${format("${var.NODEPREFIX}%03d", count.index + 1)}"
+    name                      = "nic-${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
     location                  = local.yaml.location
     resource_group_name       = azurerm_resource_group.racgroup.name
 
@@ -95,7 +95,7 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     size                  = local.yaml.vm_size
 
     os_disk {
-        name              = "osdisk-${format("${var.NODEPREFIX}%03d", count.index + 1)}"
+        name              = "osdisk-${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
         caching           = "ReadWrite"
         storage_account_type = local.yaml.storage_account_type
     }
@@ -107,7 +107,6 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
         version   = local.yaml.vm_os_version
     }
 
-
     computer_name  = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
     admin_username = local.yaml.ansible_ssh_user
     disable_password_authentication = true
@@ -116,5 +115,4 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
         username       = local.yaml.ansible_ssh_user
         public_key     = file(local.yaml.ansible_ssh_private_key_file)
     }
-
 }
