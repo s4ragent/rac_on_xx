@@ -117,19 +117,20 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     }
 }
 
-
 resource "azurerm_managed_disk" "db_data_disk" {
-  name                 = "datadisk-${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
-  location             = local.yaml.location
-  resource_group_name  = azurerm_resource_group.racgroup.name
-  storage_account_type = local.yaml.storage_account_type
-  create_option        = "Empty"
-  disk_size_gb         = 10
+    count                 = var.db_servers
+    name                  = "datadisk-${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
+    location              = local.yaml.location
+    resource_group_name   = azurerm_resource_group.racgroup.name
+    storage_account_type = local.yaml.storage_account_type
+    create_option        = "Empty"
+    disk_size_gb         = local.yaml.data_disk_size_gb
 }
 
-resource "azurerm_virtual_machine_data_disk_attachment" "example" {
-  managed_disk_id    = azurerm_managed_disk.example.id
-  virtual_machine_id = azurerm_virtual_machine.example.id
+resource "azurerm_virtual_machine_data_disk_attachment" "db_data_disk_attach" {
+  count              = var.db_servers
+  managed_disk_id    = element(azurerm_managed_disk.db_data_disk.*.id, count.index)
+  virtual_machine_id = element(azurerm_virtual_machine.dbvm.*.id, count.index)
   lun                = "10"
   caching            = "ReadWrite"
 }
