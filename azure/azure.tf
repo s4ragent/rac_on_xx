@@ -288,3 +288,4 @@ resource "azurerm_virtual_machine_data_disk_attachment" "client_data_disk_attach
   lun                = "10"
   caching            = "ReadWrite"
 }
+
