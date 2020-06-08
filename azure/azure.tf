@@ -253,7 +253,7 @@ resource "azurerm_linux_virtual_machine" "clientvm" {
     os_disk {
         name              = "osdisk-client"
         caching           = "ReadWrite"
-        client_account_type = local.yaml.client_account_type
+        client_account_type = local.yaml.storage_account_type
     }
 
     source_image_reference {
@@ -277,7 +277,7 @@ resource "azurerm_managed_disk" "client_data_disk" {
     name                  = "datadisk-client"
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
-    client_account_type = local.yaml.client_account_type
+    storage_account_type = local.yaml.client_account_type
     create_option        = "Empty"
     disk_size_gb         = local.yaml.data_disk_size_gb
 }
