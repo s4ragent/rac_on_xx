@@ -35,13 +35,10 @@ common_execansible(){
 
 common_runall(){
 	common_runonly $*
-	common_execansible centos2oel.yml
- 	sleep 180s
 	common_execansible rac.yml
 }
 
 common_jdbcrunner(){
-	export TF_VAR_has_client=1
 	common_runall $*
 	common_execansible rac.yml --tags jdbcrunner --extra-vars "jdbcrunner=on"
 }
@@ -52,23 +49,19 @@ common_jdbcrunner_only(){
 
 common_cvu(){
 	common_runonly $*
-	common_execansible centos2oel.yml
 	common_execansible rac.yml --skip-tags installdbca --extra-vars "cvu=on"
 }
 
 common_iperf(){
 	common_runonly 1
-	common_execansible centos2oel.yml
 	if [ "$1" = "vxlan0" ]; then
  		common_execansible rac.yml --tags security,vxlan_conf
- fi
+	fi
 	common_execansible rac.yml --tags iperf --extra-vars "IPERF_DEV=$1"
 }
 
 common_preinstall(){
 	common_runonly $*
-	common_execansible centos2oel.yml
-	sleep 180s
 	common_execansible rac.yml --skip-tags installdbca
 }
 
@@ -77,8 +70,6 @@ common_preinstall_with_vnc(){
     vnc_pass="Moracle123!"
  fi
 	common_runonly $*
-	common_execansible centos2oel.yml
-	sleep 180s
 	common_execansible rac.yml --skip-tags installdbca --extra-vars "vnc_pass=$vnc_pass"
 }
 
@@ -87,14 +78,10 @@ common_preinstall_with_xrdp(){
     vnc_pass="Moracle123!"
  fi
 	common_runonly $*
-	common_execansible centos2oel.yml
-	sleep 180s
 	common_execansible rac.yml --skip-tags installdbca --extra-vars "xrdp_pass=$xrdp_pass"
 }
 
 common_after_runonly(){
-	common_execansible centos2oel.yml
-	sleep 180s
 	common_execansible rac.yml
 }
 
