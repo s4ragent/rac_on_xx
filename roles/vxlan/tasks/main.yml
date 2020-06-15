@@ -4,43 +4,23 @@
     copy: src=09_vxlan.j2 dest=/etc/NetworkManager/dispatcher.d/09_vxlan owner=root group=root mode=0700
     tags:
       - vxlan_conf
+    
+  - name: "nmcli add vxlan"
+    become: yes
+    shell: "nmcli connection add type vxlan id {{ item.id }} con-name {{ item.name }} ifname {{ item.name }} dev {{ VXLAN_DEV }} remote 127.0.0.1 ip4 {{ item.ip }}/24"
+    with_items:
+      - { name: vxlan0, id: 10, ip: {{ vxlan0_IP }} }
+      - { name: vxlan1, id: 11, ip: {{ vxlan1_IP }} }
+      - { name: vxlan2, id: 12, ip: {{ vxlan2_IP }} } 
+    tags:
+      - vxlan_conf
       
-
-
-
-  - name: "install vxlan.init"
+  - name: "nmcli up vxlan"
     become: yes
-    shell: chdir=/usr/local/bin install -o root -g root -m 755 vxlan.init /etc/init.d/vxlan
-    when: ansible_distribution_version|int == 6
+    shell: "nmcli con up {{ item }}"
+    with_items:
+      - vxlan0
+      - vxlan1
+      - vxlan2
     tags:
-      - vxlan_init
       - vxlan_conf
-      - addclient
-
-  - name: "daemon_reload"
-    become: yes
-    systemd: daemon_reload=yes
-    when: ansible_distribution_version|int == 7
-    tags:
-      - vxlan_init
-      - vxlan_conf
-      - addclient
-      
-  - name: "start_enable vxlan.service(Without NetworkManager)"
-    become: yes
-    systemd: name=vxlan.service state=started enabled=yes
-    when: ansible_distribution_version|int == 7
-    tags:
-      - vxlan_init
-      - vxlan_conf
-      - addclient
-      
-  - name: "restart vxlan"
-    become: yes
-    shell: "chkconfig vxlan on;service vxlan restart"
-    when: ansible_distribution_version|int == 6
-    tags:
-      - vxlan_init
-      - vxlan_conf
-      - addclient
-
