@@ -1,6 +1,6 @@
 #!/bin/bash
 
-rdev=eth0
+rdev={{ VXLAN_DEV }}
 iplist="{% for host in play_hosts %}{{ hostvars[host]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} {% endfor %}"
 
 interface=$1
