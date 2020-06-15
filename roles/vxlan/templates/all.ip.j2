@@ -1,11 +1,22 @@
-{% for host in play_hosts %}
-{% if inventory_hostname != host %}
-{% if VXLAN_NODENAME is defined %}
-{{ hostvars[host]['VXLAN_NODENAME'] }} 
-{% else %}
-{{ hostvars[host]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} 
-{% endif %}
-{% endif %}
-{% endfor %}
+#!/bin/bash
+
+rdev=eth0
+iplist="{% for host in play_hosts %}{{ hostvars[host]["ansible_" + VXLAN_DEV]['ipv4']['address'] }} {% endfor %}"
+
+interface=$1
+status=$2
+myip=`ip addr show $rdev | grep 'inet ' | awk -F '[/ ]' '{print $6}'`
+
+if [[ $interface =~ vxlan* ]] && [[ $status == "up" ]]; then
+	for ip in $iplist;
+	do
+		if [ "$ip" != "$myip" ]; then
+			bridge fdb append 00:00:00:00:00:00 dev $interface dst $ip
+		fi
+	done
+fi
+
+
+
 
 
