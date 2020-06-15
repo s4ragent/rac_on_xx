@@ -5,6 +5,7 @@ case "$1" in
   "iperf" ) shift;common_iperf $*;;
   "iperf_only" ) shift;common_iperf_only $*;;
   "cvu" ) shift;common_cvu $*;;  
+  "cvu_only" ) shift;common_cvu_only $*;;  
   "jdbcrunner" ) shift;common_jdbcrunner $*;;
   "jdbcrunner_only" ) shift;common_jdbcrunner_only $*;;
   "preinstall" ) shift;common_preinstall $*;;
