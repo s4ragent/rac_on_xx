@@ -61,6 +61,14 @@ common_iperf(){
 	fi
 }
 
+common_iperf_only(){
+	if [ "$1" = "vxlan0" ]; then
+ 		common_execansible rac.yml --tags ssh,security,vxlan_conf,iperf --extra-vars "IPERF_DEV=$1"
+	else
+		common_execansible rac.yml --tags ssh,security,iperf --extra-vars "IPERF_DEV=$1"
+	fi
+}
+
 common_preinstall(){
 	common_runonly $*
 	common_execansible rac.yml --skip-tags installdbca
