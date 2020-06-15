@@ -10,7 +10,6 @@
     tags:
       - security
 
-
 #  - name: "disable selinux"
 #    become: yes
 #    replace: dest='/etc/selinux/config' regexp='SELINUX=enforcing' replace='SELINUX=disabled'
@@ -36,7 +35,12 @@
 
   - name: "firewalld trusted vxlan_dev"
     become: yes
-    firewalld: zone=trusted interface="{{ item }}" permanent=true state=enabled immediate=true
+    firewalld:
+      zone: trusted
+      interface: "{{ item }}"
+      permanent: yes
+      state: enabled
+      immediate: yes
     with_items:
      - vxlan0
      - vxlan1
@@ -44,7 +48,6 @@
     ignore_errors: yes
     tags:
       - security
-
 
   - name: "drop 169.254.169.254"
     become: yes
