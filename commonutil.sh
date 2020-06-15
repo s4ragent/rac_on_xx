@@ -52,6 +52,10 @@ common_cvu(){
 	common_execansible rac.yml --skip-tags installdbca --extra-vars "cvu=on"
 }
 
+common_cvu_only(){
+	common_execansible rac.yml --skip-tags installdbca --extra-vars "cvu=on"
+}
+
 common_iperf(){
 	common_runonly 1
 	if [ "$1" = "vxlan0" ]; then
