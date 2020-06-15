@@ -30,6 +30,7 @@
       port: 8472/udp
       permanent: yes
       state: enabled
+      immediate: yes
     ignore_errors: yes
     tags:
       - security
@@ -41,6 +42,7 @@
       port: 5901-5903/tcp
       permanent: yes
       state: enabled
+      immediate: yes
     ignore_errors: yes
     tags:
       - security
