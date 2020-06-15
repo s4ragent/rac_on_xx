@@ -26,7 +26,7 @@
   - name: "firewalld allow vxlan"
     become: yes
     firewalld:
-      port: 4789/udp
+      port: 8472/udp
       permanent: yes
       state: enabled
     ignore_errors: yes
