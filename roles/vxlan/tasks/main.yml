@@ -9,9 +9,9 @@
     become: yes
     shell: "nmcli connection add type vxlan id {{ item.id }} con-name {{ item.name }} ifname {{ item.name }} dev {{ VXLAN_DEV }} remote 127.0.0.1 ip4 {{ item.ip }}/24"
     with_items:
-      - { name: vxlan0, id: 10, ip: {{ vxlan0_IP }} }
-      - { name: vxlan1, id: 11, ip: {{ vxlan1_IP }} }
-      - { name: vxlan2, id: 12, ip: {{ vxlan2_IP }} } 
+      - { name: vxlan0, id: 10, ip: "{{ vxlan0_IP }}" }
+      - { name: vxlan1, id: 11, ip: "{{ vxlan1_IP }}" }
+      - { name: vxlan2, id: 12, ip: "{{ vxlan2_IP }}" } 
     tags:
       - vxlan_conf
       
