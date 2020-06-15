@@ -1,65 +1,11 @@
 ---
-  - name: "create /etc/vxlan"
+  - name: "copy 09_vxlan"
     become: yes
-    file: path=/etc/vxlan state=directory owner=root group=root mode=0755
+    copy: src=09_vxlan.j2 dest=/etc/NetworkManager/dispatcher.d/09_vxlan owner=root group=root mode=0700
     tags:
       - vxlan_conf
-      - addclient
       
-  - name: "create all.ip"
-    become: yes
-    template: src=all.ip.j2 dest=/etc/vxlan/all.ip owner=root group=root mode=0644
-    tags:
-      - vxlan_conf
-      - addclient
-            
-  - name: "create vxlan0.conf"
-    become: yes
-    template: src=vxlan0.conf.j2 dest=/etc/vxlan/vxlan0.conf owner=root group=root mode=0644
-    tags:
-      - vxlan_conf
-      - addclient
-            
-  - name: "create vxlan1.conf"
-    become: yes
-    template: src=vxlan1.conf.j2 dest=/etc/vxlan/vxlan1.conf owner=root group=root mode=0644
-    tags:
-      - vxlan_conf
-      - addclient
-            
-  - name: "create vxlan2.conf"
-    become: yes
-    template: src=vxlan2.conf.j2 dest=/etc/vxlan/vxlan2.conf owner=root group=root mode=0644
-    tags:
-      - vxlan_conf
-      - addclient
-      
-  - name: "copy vxlan.init(Without NetworkManager)"
-    become: yes
-    template: src=vxlan.init.j2 dest=/usr/local/bin/vxlan.init owner=root group=root mode=0700
-    when: ansible_distribution_version|int == 6
-    tags:
-      - vxlan_init
-      - vxlan_conf
-      - addclient
 
-  - name: "copy vxlan.init(Without NetworkManager)"
-    become: yes
-    copy: src=vxlan.init dest=/usr/local/bin/vxlan.init owner=root group=root mode=0700
-    when: ansible_distribution_version|int == 7
-    tags:
-      - vxlan_init
-      - vxlan_conf
-      - addclient
-      
-  - name: "copy vxlan.service(Without NetworkManager)"
-    become: yes
-    copy: src=vxlan.service dest=/etc/systemd/system/vxlan.service owner=root group=root mode=0700
-    when: ansible_distribution_version|int == 7
-    tags:
-      - vxlan_init
-      - vxlan_conf
-      - addclient
 
 
   - name: "install vxlan.init"
