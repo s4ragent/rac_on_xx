@@ -33,6 +33,16 @@
     tags:
       - security
 
+  - name: "firewalld allow vnc"
+    become: yes
+    firewalld:
+      port: 5901-5903/tcp
+      permanent: yes
+      state: enabled
+    ignore_errors: yes
+    tags:
+      - security
+
   - name: "firewalld trusted vxlan_dev"
     become: yes
     firewalld:
