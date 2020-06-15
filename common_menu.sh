@@ -3,6 +3,7 @@ case "$1" in
   "crsctl" ) shift;common_crsctl $*;;
   "execansible" ) shift;common_execansible $*;;
   "iperf" ) shift;common_iperf $*;;
+  "iperf_only" ) shift;common_iperf_only $*;;
   "cvu" ) shift;common_cvu $*;;  
   "jdbcrunner" ) shift;common_jdbcrunner $*;;
   "jdbcrunner_only" ) shift;common_jdbcrunner_only $*;;
