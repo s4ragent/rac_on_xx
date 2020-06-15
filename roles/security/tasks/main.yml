@@ -1,84 +1,70 @@
 ---      
   - name: "install selinux,firewalld"
     become: yes
-    yum: name="{{ item }}" state=present
-    with_items:
-      - selinux-policy
-      - firewalld
-    when: ansible_distribution_version|int == 7
+    dnf:
+      name:
+        - selinux-policy
+        - selinux-policy-targeted
+        - firewalld
+      state: present
     tags:
       - security
 
-  - name: "install selinux,firewalld"
-    become: yes
-    yum: name="{{ item }}" state=present
-    with_items:
-      - selinux-policy
-      - iptables
-    when: ansible_distribution_version|int == 6
-    tags:
-      - security
+#  - name: "disable selinux"
+#    become: yes
+#    replace: dest='/etc/selinux/config' regexp='SELINUX=enforcing' replace='SELINUX=disabled'
+#    tags:
+#      - security
 
-  - name: "disable selinux"
-    become: yes
-    replace: dest='/etc/selinux/config' regexp='SELINUX=enforcing' replace='SELINUX=disabled'
-    tags:
-      - security
+#  - name: "disable selinux setenforce"
+#    become: yes
+#    shell: setenforce 0
+#    ignore_errors: yes
+#    tags:
+#      - security
 
-  - name: "disable selinux setenforce"
+  - name: "firewalld allow vxlan"
     become: yes
-    shell: setenforce 0
+    firewalld:
+      port: 4789/udp
+      permanent: yes
+      state: enabled
     ignore_errors: yes
     tags:
       - security
 
-  - name: "disable firewalld"
-    become: yes
-    systemd: name="{{ item }}" state=stopped enabled=no
-    with_items:
-      - firewalld.service
-    when: ansible_distribution_version|int == 7
-    ignore_errors: yes
-    tags:
-      - security
-
-  - name: "disable firewalld"
-    become: yes
-    service: name="{{ item }}" state=stopped enabled=no
-    with_items:
-      - iptables
-    when: ansible_distribution_version|int == 6
-    ignore_errors: yes
-    tags:
-      - security
-      
-  - name: "enable firewalld"
-    become: yes
-    systemd: name="{{ item }}" state=started enabled=yes
-    with_items:
-      - firewalld.service
-    when: ansible_distribution_version|int == 7 and link_local is defined
-    ignore_errors: yes
-    tags:
-      - security
-      
   - name: "firewalld trusted vxlan_dev"
     become: yes
-    firewalld: zone=trusted interface="{{ item }}" permanent=true state=enabled immediate=true
+    firewalld:
+      zone: trusted
+      interface: "{{ item }}"
+      permanent: yes
+      state: enabled
+      immediate: yes
     with_items:
-     - "{{ VXLAN_DEV }}"
      - vxlan0
      - vxlan1
      - vxlan2
-    when: ansible_distribution_version|int == 7 and link_local is defined
     ignore_errors: yes
     tags:
       - security
 
+#  - name: "drop 169.254.169.254"
+#    become: yes
+#    shell: "firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 1 -m state --state NEW -m tcp -p tcp -d 169.254.169.254/32 -j REJECT;firewall-cmd --reload"
+#    when: link_local is defined
+#    ignore_errors: yes
+#    tags:
+#      - security
+
   - name: "drop 169.254.169.254"
-    become: yes
-    shell: "firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 1 -m state --state NEW -m tcp -p tcp -d 169.254.169.254/32 -j REJECT;firewall-cmd --reload"
-    when: ansible_distribution_version|int == 7 and link_local is defined
+    firewalld:
+      rich_rule: rule family=ipv4 destination address=169.254.169.254/32 reject
+      zone: public
+      permanent: yes
+      immediate: yes
+      state: enabled
+    when: link_local is defined
     ignore_errors: yes
     tags:
       - security
