@@ -1,4 +1,32 @@
 ---
+  - name: "firewalld allow vxlan"
+    become: yes
+    firewalld:
+      zone: public
+      port: 8472/udp
+      permanent: yes
+      state: enabled
+      immediate: yes
+    ignore_errors: yes
+    tags:
+      - vxlan_conf
+
+  - name: "firewalld trusted vxlan_dev"
+    become: yes
+    firewalld:
+      source: "{{ item }}/24"
+      zone: trusted
+      permanent: yes
+      state: enabled
+      immediate: yes
+    with_items:
+     - "{{ vxlan0_NETWORK }}"
+     - "{{ vxlan1_NETWORK }}"
+     - "{{ vxlan2_NETWORK }}"
+    ignore_errors: yes
+    tags:
+      - vxlan_conf
+
   - name: "copy 09_vxlan"
     become: yes
     template: src=09_vxlan.j2 dest=/etc/NetworkManager/dispatcher.d/09_vxlan owner=root group=root mode=0700
