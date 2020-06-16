@@ -3,7 +3,7 @@
    any_errors_fatal: true
    roles:
       - ssh
-      - security
+      - firewall
       - vxlan
       - { role: iperf, when: "IPERF_DEV is defined" }
       - { role: dns, when: "dns == 'dnsmasq'" }
