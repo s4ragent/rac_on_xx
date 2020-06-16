@@ -15,7 +15,7 @@
       permanent: yes
       immediate: yes
       state: enabled
-    when: inventory_hostname == groups["dbserver"][0]
+    when: inventory_hostname == groups["dbserver"][0] and IPERF_DEV != "vxlan0"
     ignore_errors: yes
     tags:
       - iperf
@@ -28,7 +28,7 @@
       permanent: yes
       immediate: yes
       state: enabled
-    when: inventory_hostname == groups["client"][0]
+    when: inventory_hostname == groups["client"][0] and IPERF_DEV != "vxlan0"
     ignore_errors: yes
     tags:
       - iperf
