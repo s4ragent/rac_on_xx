@@ -1,4 +1,16 @@
 ---
+  - name: "firewalld allow vnc"
+    become: yes
+    firewalld:
+      zone: public
+      port: 5901-5903/tcp
+      permanent: yes
+      state: enabled
+      immediate: yes
+    ignore_errors: yes
+    tags:
+      - vnc
+
   - set_fact: WindowManager="xfce"
     when: WindowManager is undefined
     tags:
