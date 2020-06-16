@@ -1,0 +1,34 @@
+---      
+  - name: "install selinux,firewalld"
+    become: yes
+    dnf:
+      name:
+        - selinux-policy
+        - selinux-policy-targeted
+        - firewalld
+      state: present
+    tags:
+      - firewall
+
+#  - name: "disable selinux"
+#    become: yes
+#    replace: dest='/etc/selinux/config' regexp='SELINUX=enforcing' replace='SELINUX=disabled'
+#    tags:
+#      - security
+
+#  - name: "disable selinux setenforce"
+#    become: yes
+#    shell: setenforce 0
+#    ignore_errors: yes
+#    tags:
+#      - security
+
+  - name: "drop 169.254.169.254"
+    become: yes
+    shell: "firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 1 -m state --state NEW -m tcp -p tcp -d 169.254.169.254/32 -j REJECT;firewall-cmd --reload"
+    when: link_local is defined
+    ignore_errors: yes
+    tags:
+      - security
+
+
