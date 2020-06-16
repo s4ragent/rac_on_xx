@@ -7,28 +7,14 @@
     tags:
       - iperf
 
-  - name: "accept from client"
+  - name: "firewalld allow vxlan"
     become: yes
     firewalld:
-      rich_rule: rule family=ipv4 destination address={{ hostvars[groups['client'][0]]["ansible_" + IPERF_DEV]['ipv4']['address'] }} accept
       zone: public
+      port: 5201/tcp
       permanent: yes
-      immediate: yes
       state: enabled
-    when: inventory_hostname == groups["dbserver"][0] and IPERF_DEV != "vxlan0"
-    ignore_errors: yes
-    tags:
-      - iperf
-
-  - name: "accept from server"
-    become: yes
-    firewalld:
-      rich_rule: rule family=ipv4 destination address={{ hostvars[groups['dbserver'][0]]["ansible_" + IPERF_DEV]['ipv4']['address'] }} accept
-      zone: public
-      permanent: yes
       immediate: yes
-      state: enabled
-    when: inventory_hostname == groups["client"][0] and IPERF_DEV != "vxlan0"
     ignore_errors: yes
     tags:
       - iperf
