@@ -59,10 +59,11 @@ common_cvu_only(){
 common_iperf(){
 	common_runonly 1
 	if [ "$1" = "vxlan0" ]; then
- 		common_execansible rac.yml --tags ssh,security,vxlan_conf,iperf --extra-vars "IPERF_DEV=$1"
+ 		common_execansible rac.yml --tags ssh,security,vxlan_conf
 	else
-		common_execansible rac.yml --tags ssh,security,iperf --extra-vars "IPERF_DEV=$1"
+		common_execansible rac.yml --tags ssh,security
 	fi
+	common_execansible rac.yml --tags iperf --extra-vars "IPERF_DEV=$1"
 }
 
 common_iperf_only(){
