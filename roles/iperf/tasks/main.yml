@@ -7,7 +7,7 @@
     tags:
       - iperf
 
-  - name: "firewalld allow vxlan"
+  - name: "firewalld allow iperf"
     become: yes
     firewalld:
       zone: public
@@ -16,6 +16,7 @@
       state: enabled
       immediate: yes
     ignore_errors: yes
+    when: IPERF_DEV != "vxlan0"
     tags:
       - iperf
 
