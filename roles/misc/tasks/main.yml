@@ -8,7 +8,7 @@
         - firewalld
       state: present
     tags:
-      - firewall
+      - misc
 
 #  - name: "disable selinux"
 #    become: yes
@@ -29,6 +29,6 @@
     when: link_local is defined
     ignore_errors: yes
     tags:
-      - security
+      - misc
 
 
