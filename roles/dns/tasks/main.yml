@@ -44,7 +44,7 @@
 
   - name: "nmcli ipv4.ignore-auto-dns"
     become: yes
-    shell: "nmcli con mod {{ VXLAN_DEV }} ipv4.ignore-auto-dns yes"
+    shell: nmcli con mod "System {{ VXLAN_DEV }}" ipv4.ignore-auto-dns yes
     tags:
       - dnsmasq
 
