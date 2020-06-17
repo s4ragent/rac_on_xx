@@ -50,7 +50,7 @@
 
   - name: IPv4 DNS server addresses
     nmcli:
-      conn_name: {{ VXLAN_DEV }} 
+      conn_name: "{{ VXLAN_DEV }}"
       type: ethernet
       dns4: 127.0.0.1
       state: present
