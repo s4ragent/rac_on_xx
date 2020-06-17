@@ -36,3 +36,13 @@
     file: state=present path=/etc/dhcp/dhclient.d/google_hostname.sh state=absent
     tags:
       - misc
+  
+  - name: "change hostname"
+    become: yes
+    shell: "hostnamectl set-hostname {{ NODENAME }}.{{ DOMAIN_NAME }} --static"
+    when: hostname_change is defined
+    ignore_errors: yes
+    tags:
+      - misc
+      
+      
