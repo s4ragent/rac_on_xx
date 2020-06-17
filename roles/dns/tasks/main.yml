@@ -54,7 +54,7 @@
     tags:
       - dnsmasq
 
-  - name: "nmcli ipv4.dns"
+  - name: "nmcli reload"
     become: yes
     shell: nmcli con up "System {{ VXLAN_DEV }}"
     tags:
