@@ -88,7 +88,7 @@ resource "azurerm_network_interface_security_group_association" "attach_dbnic_Ns
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "dbvm" {
     count                 = var.db_servers
-    name                  = format("${local.yaml.NODEPREFIX}%03d", count.index + 1)
+    name                  = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}.${local.yaml.DOMAIN_NAME}"
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
     network_interface_ids = [element(azurerm_network_interface.racdbnic.*.id, count.index)]
@@ -167,7 +167,7 @@ resource "azurerm_network_interface_security_group_association" "attach_storagen
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "storagevm" {
-    name                  = "storage"
+    name                  = "storage.${local.yaml.DOMAIN_NAME}"
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
     network_interface_ids = [azurerm_network_interface.racstoragenic.id]
@@ -244,7 +244,7 @@ resource "azurerm_network_interface_security_group_association" "attach_clientni
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "clientvm" {
-    name                  = "client"
+    name                  = "client.${local.yaml.DOMAIN_NAME}"
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
     network_interface_ids = [azurerm_network_interface.racclientnic.id]
