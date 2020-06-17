@@ -48,11 +48,14 @@
     tags:
       - dnsmasq
 
-  - name: IPv4 DNS server addresses
-    nmcli:
-      conn_name: "System {{ VXLAN_DEV }}"
-      type: ethernet
-      dns4: 127.0.0.1
-      state: present
+  - name: "nmcli ipv4.dns"
+    become: yes
+    shell: nmcli con mod "System {{ VXLAN_DEV }}" ipv4.dns 127.0.0.1
+    tags:
+      - dnsmasq
+
+  - name: "nmcli ipv4.dns"
+    become: yes
+    shell: nmcli con up "System {{ VXLAN_DEV }}"
     tags:
       - dnsmasq
