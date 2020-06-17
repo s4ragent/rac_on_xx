@@ -1,24 +1,23 @@
 ---
   - name: "install dnsmasq packages"
     become: yes
-    yum: name=dnsmasq state=present
+    dnf: 
+      name: dnsmasq
+      state: present
     tags:
       - dnsmasq
-      - addclient
 
   - name: "create addn-hosts"
     become: yes
     template: src=addn-hosts.j2 dest=/etc/addn-hosts owner=root group=root mode=0644
     tags:
       - dnsmasq
-      - addclient
       
   - name: "copy dnsmasq.conf"
     become: yes
     template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.conf owner=root group=root mode=0644
     tags:
       - dnsmasq
-      - addclient
 
   - name: "copy resolv.dnsmasq.conf from /etc/resolv.conf"
     become: yes
@@ -26,7 +25,6 @@
       creates=/etc/resolv.dnsmasq.conf
     tags:
       - dnsmasq
-      - addclient
 
   - name: "add  resolv.dnsmasq.conf"
     become: yes
@@ -34,169 +32,27 @@
     when: ADD_NAMESERVER is defined
     tags:
       - dnsmasq
-      - addclient
 
   - name: "restart and  enable dnsmasq.service"
     become: yes
-    systemd: name=dnsmasq state=started enabled=yes
-    when: ansible_distribution_version|int == 7
+    systemd:
+      state: restarted
+      enabled: yes
+      name: dnsmasq
     tags:
-      - setresolvconf
-      - sethost    
-      - dnsmasq
-      - addclient
-
-  - name: "start_enable dnsmasq"
-    become: yes
-    shell: "chkconfig dnsmasq on;service dnsmasq restart"
-    when: ansible_distribution_version|int == 6
-    ignore_errors: True
-    tags:
-      - setresolvconf
-      - sethost    
-      - dnsmasq
-      - addclient
-
-      
-###### set resolvconf
-
-  - name: "copy setresolvconf.init"
-    become: yes
-    template: src=setresolvconf.init.j2 dest=/usr/local/bin/setresolvconf.init owner=root group=root mode=0700
-    tags:
-      - setresolvconf
-      - addclient
-      
-  - name: "copy setresolvconf.service"
-    become: yes
-    copy: src=setresolvconf.service dest=/etc/systemd/system/setresolvconf.service owner=root group=root mode=0700
-    when: ansible_distribution_version|int == 7
-    tags:
-      - setresolvconf
-      - addclient
-
-  - name: "install setresolvconf.init"
-    become: yes
-    shell: chdir=/usr/local/bin install -o root -g root -m 755 setresolvconf.init /etc/init.d/setresolvconf
-    when: ansible_distribution_version|int == 6
-    tags:
-      - setresolvconf
-      - addclient
-      
-  - name: "daemon_reload"
-    become: yes
-    systemd: daemon_reload=yes
-    when: ansible_distribution_version|int == 7
-    ignore_errors: True
-    tags:
-      - setresolvconf
-      - addclient
-      
-  - name: "start_enable setresolvconf.service"
-    become: yes
-    systemd: name=setresolvconf state=started enabled=yes
-    when: ansible_distribution_version|int == 7
-    ignore_errors: True
-    tags:
-      - setresolvconf
-      - addclient
-
-  - name: "start_enable sethost.service"
-    become: yes
-    shell: "chkconfig setresolvconf on;service  setresolvconf restart"
-    when: ansible_distribution_version|int == 6
-    ignore_errors: True
-    tags:
-      - setresolvconf
-      - addclient
-
-      
-###### for dhclient enable environment (e.g. gce/ec2)
-  - name: "check dhclient"
-    become: yes
-    shell: ps -elf | grep dhclient | grep -v grep | wc -l
-    ignore_errors: true
-    register: dhclient_rerult
-    tags:
-      - setresolvconf
-      - addclient
-      
-#  - name: "edit dhclient.conf"
-#    become: yes
-#    lineinfile: state=present create=yes insertafter=EOF line="{{ item }}" dest="{{ DHCPCLIENT }}"
-#    with_items:
-#      - "supersede domain-name-servers 127.0.0.1;"
-#    when: dhclient_rerult.stdout != "0"
-#    tags:
-#      - setresolvconf
-#      - sethost
-
-
-  - name: "disable dns via dhcp(nmcli)"
-    become: yes
-    shell : "nmcli con mod eth0 ipv4.ignore-auto-dns yes"
-    ignore_errors: true
-    register: nmcli_result
-    when: dhclient_rerult.stdout != "0"
-    tags:
-      - setresolvconf
-      - sethost
-      - addclient
-
-  - name: "disable dns via dhcp(no nmcli)"
-    become: yes
-    lineinfile: state=present create=yes insertafter=EOF line="PEERDNS=no" regexp="PEERDNS="  dest="/etc/sysconfig/network-scripts/ifcfg-eth0"
-    when: dhclient_rerult.stdout != "0" and nmcli_result.rc != "0"
-    ignore_errors: true
-    tags:
-      - setresolvconf
-      - sethost
-      - addclient
-
-  - name: "disable dns via dhcp(no nmcli)"
-    become: yes
-    lineinfile: state=present create=yes insertafter=EOF line="PEERDNS=no" regexp="PEERDNS="  dest="/etc/sysconfig/network-scripts/ifcfg-{{ VXLAN_DEV }}"
-    when: dhclient_rerult.stdout != "0" and nmcli_result.rc != "0"
-    ignore_errors: true
-    tags:
-      - setresolvconf
-      - sethost
-      - addclient
-      
-  - name: "delete /etc/dhcp/dhclient.d/google_hostname.sh(for google)"
-    become: yes
-    file: state=present path=/etc/dhcp/dhclient.d/google_hostname.sh state=absent
-    tags:
-      - setresolvconf
-      - sethost
-
-##### at last restart dnsmasq.service & network.service & setresolvconf.service
-  - name: "restart start_enable dnsmasq,network,setresolvconf"
-    become: yes
-    systemd: name={{ item }} state=restarted enabled=yes
-    with_items:
-      - dnsmasq
-      - network
-      - setresolvconf
-    when: ansible_distribution_version|int == 7
-    ignore_errors: True
-    tags:
-      - setresolvconf
-      - sethost    
       - dnsmasq
 
-  - name: "start_enable dnsmasq,network,setresolvconf"
+  - name: "nmcli ipv4.ignore-auto-dns"
     become: yes
-    shell: "chkconfig {{ item }} on;service {{ item }} restart"
-    when: ansible_distribution_version|int == 6
-    ignore_errors: True
-    with_items:
-      - dnsmasq
-      - network
-      - setresolvconf
+    shell: "nmcli con mod {{ VXLAN_DEV }} ipv4.ignore-auto-dns yes"
     tags:
-      - setresolvconf
-      - sethost    
       - dnsmasq
 
-
+  - name: IPv4 DNS server addresses
+    nmcli:
+      conn_name: {{ VXLAN_DEV }} 
+      type: ethernet
+      dns4: 127.0.0.1
+      state: present
+    tags:
+      - dnsmasq
