@@ -43,6 +43,7 @@ data_disk_mountpoint: "/u01"
 ansible_ssh_user: azureuser
 ansible_ssh_private_key_file: raconxx
 dns: dnsmasq
+DNS_CON: "System eth0"
 #####for NFS option values
 #storage_type: "nbd"
 storage_type: "nfs"
