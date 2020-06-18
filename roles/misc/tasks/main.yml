@@ -33,7 +33,10 @@
 
   - name: "delete /etc/dhcp/dhclient.d/google_hostname.sh(for google)"
     become: yes
-    file: state=present path=/etc/dhcp/dhclient.d/google_hostname.sh state=absent
+    file: 
+      state: present 
+      path: /etc/dhcp/dhclient.d/google_hostname.sh
+      state: absent
     tags:
       - misc
   

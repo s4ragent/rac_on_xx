@@ -9,26 +9,42 @@
 
   - name: "create addn-hosts"
     become: yes
-    template: src=addn-hosts.j2 dest=/etc/addn-hosts owner=root group=root mode=0644
+    template:
+      src: addn-hosts.j2
+      dest: /etc/addn-hosts
+      owner: root
+      group: root
+      mode: 0644
     tags:
       - dnsmasq
       
   - name: "copy dnsmasq.conf"
     become: yes
-    template: src=dnsmasq.conf.j2 dest=/etc/dnsmasq.conf owner=root group=root mode=0644
+    template:
+      src: dnsmasq.conf.j2
+      dest: /etc/dnsmasq.conf
+      owner: root
+      group: root
+      mode: 0644
     tags:
       - dnsmasq
 
   - name: "copy resolv.dnsmasq.conf from /etc/resolv.conf"
     become: yes
     shell: cp /etc/resolv.conf /etc/resolv.dnsmasq.conf
-      creates=/etc/resolv.dnsmasq.conf
+    args:
+      creates: /etc/resolv.dnsmasq.conf
     tags:
       - dnsmasq
 
   - name: "add  resolv.dnsmasq.conf"
     become: yes
-    lineinfile: state=present create=yes insertafter=EOF line="nameserver {{ ADD_NAMESERVER }}" dest=/etc/resolv.dnsmasq.conf
+    lineinfile:
+      state: present
+      create: yes
+      insertafter: EOF
+      line: "nameserver {{ ADD_NAMESERVER }}"
+      dest: /etc/resolv.dnsmasq.conf
     when: ADD_NAMESERVER is defined
     tags:
       - dnsmasq
@@ -44,18 +60,18 @@
 
   - name: "nmcli ipv4.ignore-auto-dns"
     become: yes
-    shell: nmcli con mod "System {{ VXLAN_DEV }}" ipv4.ignore-auto-dns yes
+    shell: nmcli con mod "{{ DNS_CON }}" ipv4.ignore-auto-dns yes
     tags:
       - dnsmasq
 
   - name: "nmcli ipv4.dns"
     become: yes
-    shell: nmcli con mod "System {{ VXLAN_DEV }}" ipv4.dns 127.0.0.1
+    shell: nmcli con mod "{{ DNS_CON }}" ipv4.dns 127.0.0.1
     tags:
       - dnsmasq
 
   - name: "nmcli reload"
     become: yes
-    shell: nmcli con up "System {{ VXLAN_DEV }}"
+    shell: nmcli con up "{{ DNS_CON }}"
     tags:
       - dnsmasq

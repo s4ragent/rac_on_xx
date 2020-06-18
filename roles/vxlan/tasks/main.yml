@@ -29,7 +29,12 @@
 
   - name: "copy 09_vxlan"
     become: yes
-    template: src=09_vxlan.j2 dest=/etc/NetworkManager/dispatcher.d/09_vxlan owner=root group=root mode=0700
+    template:
+      src: 09_vxlan.j2
+      dest: /etc/NetworkManager/dispatcher.d/09_vxlan
+      owner: root
+      group: root
+      mode: 0700
     tags:
       - vxlan_conf
     
