@@ -177,22 +177,13 @@
       - prereq
 
 
-  - name: "disable chronyd"
-    become: yes
-    systemd: name=chronyd.service state=stopped enabled=no
-    when: ansible_distribution_version|int == 7
-    ignore_errors: yes
-    tags:
-      - ntp
 
-  - name: "mv chronyd.conf"
-    become: yes
-    shell: mv /etc/chrony.conf /etc/chrony.conf.original
-    args:
-      creates: /etc/chrony.conf.original
-    ignore_errors: yes
-    tags:
-      - ntp
+#https://github.com/oraclebase/vagrant/blob/master/rac/ol7_183/shared_scripts/configure_chrony.sh
+#systemctl enable chronyd
+#systemctl restart chronyd
+#chronyc -a 'burst 4/4'
+#chronyc -a makestep
+
 
   - name: "Partition additional disks"
     become: yes
