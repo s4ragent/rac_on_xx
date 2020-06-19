@@ -179,11 +179,29 @@
 
 
 #https://github.com/oraclebase/vagrant/blob/master/rac/ol7_183/shared_scripts/configure_chrony.sh
-#systemctl enable chronyd
-#systemctl restart chronyd
-#chronyc -a 'burst 4/4'
-#chronyc -a makestep
+  - name: chrony
+    become: yes
+    systemd:
+      state: restarted
+      enabled: yes
+      name: chronyd
+    tags:
+      - chronyd
+      - prereq
 
+  - name: "chrocyc burst"
+    become: yes
+    shell: chronyc -a 'burst 4/4'
+    tags:
+      - chronyd
+      - prereq
+
+  - name: "chrocyc burst"
+    become: yes
+    shell: chronyc -a makestep
+    tags:
+      - chronyd
+      - prereq
 
   - name: "Partition additional disks"
     become: yes
@@ -252,13 +270,41 @@
       - oraclehome
 
 
-  - name: "install iperf3"
+  - name: "install selinux,firewalld"
     become: yes
-    dnf: 
-      name: iperf3
+    dnf:
+      name:
+        -  bc
+        -  binutils
+        -  elfutils-libelf
+        -  elfutils-libelf-devel
+        -  fontconfig-devel
+        -  glibc
+        -  glibc-devel
+        -  ksh
+        -  libaio
+        -  libaio-devel
+        -  libXrender
+        -  libX11
+        -  libXau
+        -  libXi
+        -  libXtst
+        -  libgcc
+        -  libnsl
+        -  librdmacm
+        -  libstdc++
+        -  libstdc++-devel
+        -  libxcb
+        -  libibverbs
+        -  make
+        -  smartmontools
+        -  sysstat 
+        -  libnsl2
+        -  libnsl2-devel
       state: present
     tags:
       - preinstallpackages
+      - prereq
 
   - name: "create swap(dd)"
     become: yes
@@ -312,7 +358,7 @@
     tags:
       - preinstallpackages
 
-  - name: "sysctl ipfrag"
+  - name: "sysctl"
     become: yes
     sysctl: name="{{ item.name}}"  value="{{ item.value}}" sysctl_set=yes state=present reload=yes
     ignore_errors: yes
