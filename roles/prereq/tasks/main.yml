@@ -1,8 +1,10 @@
 ---
-
   - name: "create group"
     become: yes
-    group: name={{ item.name }} state=present gid={{ item.gid }}
+    group:
+      name: "{{ item.name }}"
+      state: present
+      gid: "{{ item.gid }}"
     with_items:
       - { name: 'oinstall', gid: '601' }
       - { name: 'dba', gid: '602' }
@@ -15,7 +17,10 @@
 
   - name: "delete user"
     become: yes
-    user: name={{ item }} state=absent remove=yes
+    user:
+      name: "{{ item }}"
+      state: absent
+      remove: yes
     ignore_errors: true
     with_items:
       - oracle
@@ -25,25 +30,27 @@
 
   - name: "create user"
     become: yes
-    user: name={{ item.name}} uid={{ item.uid }} group=oinstall groups={{ item.groups}} shell=/bin/bash
+    user:
+      name: "{{ item.name}}"
+      uid: "{{ item.uid }}"
+      group: oinstall
+      groups: "{{ item.groups}}"
+      shell: /bin/bash
     with_items:
       - { name: 'oracle', uid: '501',groups: 'dba,oper,asmdba' }
       - { name: 'grid', uid: '2001',groups: 'asmadmin,asmdba,asmoper' }
     tags:
       - createuser
 
-#  - name: "chmod user's home"
-#    become: yes
-#    file: path="/home/{{ item }}" state=directory owner={{ item }} group=oinstall mode=0700
-#    with_items:
-#      - oracle
-#      - grid
-#    tags:
-#      - createuser
 
   - name: "copy .bashrc"
     become: yes
-    copy: src=.bashrc dest=/home/{{ item }}/.bashrc mode=644 owner={{ item }} group=oinstall 
+    copy:
+      src: .bashrc
+      dest: /home/{{ item }}/.bashrc
+      mode: 644
+      owner: "{{ item }}"
+      group: oinstall 
     with_items:
       - oracle
       - grid
