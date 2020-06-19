@@ -3,8 +3,8 @@
     become: yes
     group:
       name: "{{ item.name }}"
-      state: present
       gid: "{{ item.gid }}"
+      state: present
     with_items:
       - { name: 'oinstall', gid: '601' }
       - { name: 'dba', gid: '602' }
@@ -14,6 +14,7 @@
       - { name: 'asmoper', gid: '2003' }
     tags:
       - createuser
+      - prereq
 
   - name: "delete user"
     become: yes
@@ -27,6 +28,7 @@
       - grid
     tags:
       - createuser
+      - prereq
 
   - name: "create user"
     become: yes
@@ -41,13 +43,13 @@
       - { name: 'grid', uid: '2001',groups: 'asmadmin,asmdba,asmoper' }
     tags:
       - createuser
-
+      - prereq
 
   - name: "copy .bashrc"
     become: yes
     copy:
       src: .bashrc
-      dest: /home/{{ item }}/.bashrc
+      dest: "/home/{{ item }}/.bashrc"
       mode: 644
       owner: "{{ item }}"
       group: oinstall 
@@ -57,12 +59,13 @@
     tags:
       - profile
       - createuser
+      - prereq
 
   - name: "copy .bash_profile"
     become: yes
     template:
       src: ".bash_profile_{{ item }}.j2"
-      dest: /home/{{ item }}/.bash_profile
+      dest: "/home/{{ item }}/.bash_profile"
       mode: 0644
       owner: "{{ item }}"
       group: oinstall
@@ -72,6 +75,7 @@
     tags:
       - profile
       - createuser
+      - prereq
       
   - name: "create ssh key"
     local_action: shell ssh-keygen -t rsa -P "" -f id_rsa
@@ -80,6 +84,7 @@
     run_once: true
     tags:
       - sshkey
+      - prereq
  
   - name: "copy authorized key"
     become: yes
@@ -91,11 +96,12 @@
       - grid
     tags:
       - sshkey
+      - prereq
 
   - name: "copy private key"
     become: yes
     copy:
-      dest: /home/{{ item }}/.ssh/id_rsa
+      dest: "/home/{{ item }}/.ssh/id_rsa"
       mode: 600
       owner: "{{ item }}"
       group: oinstall
@@ -105,12 +111,13 @@
       - grid
     tags:
       - sshkey
+      - prereq
 
   - name: "create ssh config"
     become: yes
     template:
       src: config.j2
-      dest: /home/{{ item }}/.ssh/config
+      dest: "/home/{{ item }}/.ssh/config"
       owner: "{{ item }}"
       group: oinstall
       mode: 0600
@@ -120,15 +127,22 @@
     when: SSHPORT is defined and SSHPORT !=""
     tags:
       - sshkey
+      - prereq
 
   - name: "create known hosts"
     become: yes
-    template: src=known_hosts.j2 dest=/home/{{ item }}/.ssh/known_hosts owner={{ item }} group=oinstall mode=0644
+    template:
+      src=known_hosts.j2
+      dest="/home/{{ item }}/.ssh/known_hosts"
+      owner="{{ item }}"
+      group=oinstall
+      mode=0644
     with_items:
       - oracle
       - grid
     tags:
       - sshkey
+      - prereq
 
 
   - name: "delete ssh key"
@@ -136,15 +150,31 @@
     run_once: true
     tags:
       - sshkey
+      - prereq
 
-
-  - name: "copy limits.nonf"
+  - name: limit.conf
     become: yes
-    copy: src=limits.conf dest=/etc/security/limits.conf mode=644 owner=root group=root
+    pam_limits:
+      domain: "{{item.user}}"
+      limit_type: "{{item.limit_type}}"
+      limit_item: "{{item.limit_item}}"
+      value: "{{item.value}}"
+    with_items:
+      - { user: 'oracle', limit_type: 'soft', limit_item: 'nproc', value: 2047 }
+      - { user: 'oracle', limit_type: 'hard', limit_item: 'nproc', value: 16384 }
+      - { user: 'oracle', limit_type: 'soft', limit_item: 'nofile', value: 1024 }
+      - { user: 'oracle', limit_type: 'hard', limit_item: 'nofile', value: 65536 }
+      - { user: 'oracle', limit_type: 'soft', limit_item: 'stack', value: 10240 }
+      - { user: 'oracle', limit_type: 'hard', limit_item: 'stack', value: 32768 }      
+      - { user: 'grid', limit_type: 'soft', limit_item: 'nproc', value: 2047 }
+      - { user: 'grid', limit_type: 'hard', limit_item: 'nproc', value: 16384 }
+      - { user: 'grid', limit_type: 'soft', limit_item: 'nofile', value: 1024 }
+      - { user: 'grid', limit_type: 'hard', limit_item: 'nofile', value: 65536 }
+      - { user: 'grid', limit_type: 'soft', limit_item: 'stack', value: 10240 }
+      - { user: 'grid', limit_type: 'hard', limit_item: 'stack', value: 32768 } 
     tags:
-      - kernel
-
-
+      - limits
+      - prereq
 
 
   - name: "disable chronyd"
