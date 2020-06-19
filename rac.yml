@@ -7,9 +7,8 @@
       - vxlan
       - { role: iperf, when: "IPERF_DEV is defined" }
       - { role: dns, when: "dns == 'dnsmasq'" }
-      - common
+      - prereq
       - { role: vnc, when: "vnc_pass is defined" }
-      - { role: xrdp, when: "xrdp_pass is defined" }
 
  - hosts: storage
    any_errors_fatal: true
