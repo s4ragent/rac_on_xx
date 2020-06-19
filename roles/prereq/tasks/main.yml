@@ -60,7 +60,12 @@
 
   - name: "copy .bash_profile"
     become: yes
-    template: src=.bash_profile_{{ item }}.j2 dest=/home/{{ item }}/.bash_profile mode=0644 owner={{ item }} group=oinstall
+    template:
+      src: ".bash_profile_{{ item }}.j2"
+      dest: /home/{{ item }}/.bash_profile
+      mode: 0644
+      owner: "{{ item }}"
+      group: oinstall
     with_items:
       - oracle
       - grid
@@ -78,7 +83,9 @@
  
   - name: "copy authorized key"
     become: yes
-    authorized_key: user={{ item }} key="{{ lookup('file', 'id_rsa.pub') }}" 
+    authorized_key:
+      user: "{{ item }}"
+      key: "{{ lookup('file', 'id_rsa.pub') }}" 
     with_items:
       - oracle
       - grid
@@ -87,7 +94,12 @@
 
   - name: "copy private key"
     become: yes
-    copy: dest=/home/{{ item }}/.ssh/id_rsa mode=600 owner={{ item }} group=oinstall content="{{ lookup('file', 'id_rsa') }}"
+    copy:
+      dest: /home/{{ item }}/.ssh/id_rsa
+      mode: 600
+      owner: "{{ item }}"
+      group: oinstall
+      content: "{{ lookup('file', 'id_rsa') }}"
     with_items:
       - oracle
       - grid
@@ -96,7 +108,12 @@
 
   - name: "create ssh config"
     become: yes
-    template: src=config.j2 dest=/home/{{ item }}/.ssh/config owner={{ item }} group=oinstall mode=0600
+    template:
+      src: config.j2
+      dest: /home/{{ item }}/.ssh/config
+      owner: "{{ item }}"
+      group: oinstall
+      mode: 0600
     with_items:
       - oracle
       - grid
