@@ -120,52 +120,8 @@
     tags:
       - kernel
 
-  - name: "copy ifcfg-lo"
-    become: yes
-    copy: src=ifcfg-lo dest=/etc/sysconfig/network-scripts/ifcfg-lo mode=644 owner=root group=root
-    tags:
-      - kernel
-
-  - name: "restart network"
-    become: yes
-    systemd: name=network state=restarted
-    when: ansible_distribution_version|int == 7
-    ignore_errors: True
-    tags:
-      - kernel
-
-  - name: "restart network"
-    become: yes
-    shell: "service network restart"
-    when: ansible_distribution_version|int == 6
-    ignore_errors: True
-    tags:
-      - kernel
 
 
-  - name: "disable ntpd"
-    become: yes
-    systemd: name=ntpd state=stopped enabled=no
-    when: ansible_distribution_version|int == 7
-    ignore_errors: yes
-    tags:
-      - ntp
-
-  - name: "mv ntpd.conf"
-    become: yes
-    shell: mv /etc/ntp.conf /etc/ntp.conf.original
-    args:
-      creates: /etc/ntp.conf.original
-    ignore_errors: yes
-    tags:
-      - ntp
-
-  - name: "rm  ntpd.pid"
-    become: yes
-    file: path=/var/run/ntpd.pid state=absent
-    ignore_errors: yes
-    tags:
-      - ntp
 
   - name: "disable chronyd"
     become: yes
@@ -250,24 +206,14 @@
     tags:
       - oraclehome
 
-  - name: "install preinstall packages"
+
+  - name: "install iperf3"
     become: yes
-    yum: name={{ PreInstallRPM }} state=present enablerepo=ol7_optional_latest
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
-    when: ansible_distribution_version|int == 7
+    dnf: 
+      name: iperf3
+      state: present
     tags:
       - preinstallpackages
-
-  - name: "install preinstall packages"
-    become: yes
-    yum: name={{ PreInstallRPM }} state=present
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
-    when: ansible_distribution_version|int == 6
-    tags:
-      - preinstallpackages
-
 
   - name: "create swap(dd)"
     become: yes
