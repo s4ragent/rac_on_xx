@@ -1,8 +1,0 @@
-#!/bin/bash
-exec xfce4-session
-
-#cat > /etc/skel/.Xclients << EOF
-##!/bin/bash
-#exec xfce4-session
-#EOF
-#chmod +x /etc/skel/.Xclients
