@@ -1,8 +1,10 @@
 ---
-
   - name: "create group"
     become: yes
-    group: name={{ item.name }} state=present gid={{ item.gid }}
+    group:
+      name: "{{ item.name }}"
+      gid: "{{ item.gid }}"
+      state: present
     with_items:
       - { name: 'oinstall', gid: '601' }
       - { name: 'dba', gid: '602' }
@@ -12,54 +14,68 @@
       - { name: 'asmoper', gid: '2003' }
     tags:
       - createuser
+      - prereq
 
   - name: "delete user"
     become: yes
-    user: name={{ item }} state=absent remove=yes
+    user:
+      name: "{{ item }}"
+      state: absent
+      remove: yes
     ignore_errors: true
     with_items:
       - oracle
       - grid
     tags:
       - createuser
+      - prereq
 
   - name: "create user"
     become: yes
-    user: name={{ item.name}} uid={{ item.uid }} group=oinstall groups={{ item.groups}} shell=/bin/bash
+    user:
+      name: "{{ item.name}}"
+      uid: "{{ item.uid }}"
+      group: oinstall
+      groups: "{{ item.groups}}"
+      shell: /bin/bash
     with_items:
       - { name: 'oracle', uid: '501',groups: 'dba,oper,asmdba' }
       - { name: 'grid', uid: '2001',groups: 'asmadmin,asmdba,asmoper' }
     tags:
       - createuser
-
-#  - name: "chmod user's home"
-#    become: yes
-#    file: path="/home/{{ item }}" state=directory owner={{ item }} group=oinstall mode=0700
-#    with_items:
-#      - oracle
-#      - grid
-#    tags:
-#      - createuser
+      - prereq
 
   - name: "copy .bashrc"
     become: yes
-    copy: src=.bashrc dest=/home/{{ item }}/.bashrc mode=644 owner={{ item }} group=oinstall 
+    copy:
+      src: .bashrc
+      dest: "/home/{{ item }}/.bashrc"
+      mode: 644
+      owner: "{{ item }}"
+      group: oinstall 
     with_items:
       - oracle
       - grid
     tags:
       - profile
       - createuser
+      - prereq
 
   - name: "copy .bash_profile"
     become: yes
-    template: src=.bash_profile_{{ item }}.j2 dest=/home/{{ item }}/.bash_profile mode=0644 owner={{ item }} group=oinstall
+    template:
+      src: ".bash_profile_{{ item }}.j2"
+      dest: "/home/{{ item }}/.bash_profile"
+      mode: 0644
+      owner: "{{ item }}"
+      group: oinstall
     with_items:
       - oracle
       - grid
     tags:
       - profile
       - createuser
+      - prereq
       
   - name: "create ssh key"
     local_action: shell ssh-keygen -t rsa -P "" -f id_rsa
@@ -68,43 +84,65 @@
     run_once: true
     tags:
       - sshkey
+      - prereq
  
   - name: "copy authorized key"
     become: yes
-    authorized_key: user={{ item }} key="{{ lookup('file', 'id_rsa.pub') }}" 
+    authorized_key:
+      user: "{{ item }}"
+      key: "{{ lookup('file', 'id_rsa.pub') }}" 
     with_items:
       - oracle
       - grid
     tags:
       - sshkey
+      - prereq
 
   - name: "copy private key"
     become: yes
-    copy: dest=/home/{{ item }}/.ssh/id_rsa mode=600 owner={{ item }} group=oinstall content="{{ lookup('file', 'id_rsa') }}"
+    copy:
+      dest: "/home/{{ item }}/.ssh/id_rsa"
+      mode: 600
+      owner: "{{ item }}"
+      group: oinstall
+      content: "{{ lookup('file', 'id_rsa') }}"
     with_items:
       - oracle
       - grid
     tags:
       - sshkey
+      - prereq
 
   - name: "create ssh config"
     become: yes
-    template: src=config.j2 dest=/home/{{ item }}/.ssh/config owner={{ item }} group=oinstall mode=0600
+    template:
+      src: config.j2
+      dest: "/home/{{ item }}/.ssh/config"
+      owner: "{{ item }}"
+      group: oinstall
+      mode: 0600
     with_items:
       - oracle
       - grid
     when: SSHPORT is defined and SSHPORT !=""
     tags:
       - sshkey
+      - prereq
 
   - name: "create known hosts"
     become: yes
-    template: src=known_hosts.j2 dest=/home/{{ item }}/.ssh/known_hosts owner={{ item }} group=oinstall mode=0644
+    template:
+      src=known_hosts.j2
+      dest="/home/{{ item }}/.ssh/known_hosts"
+      owner="{{ item }}"
+      group=oinstall
+      mode=0644
     with_items:
       - oracle
       - grid
     tags:
       - sshkey
+      - prereq
 
 
   - name: "delete ssh key"
@@ -112,77 +150,58 @@
     run_once: true
     tags:
       - sshkey
+      - prereq
 
-
-  - name: "copy limits.nonf"
+  - name: limit.conf
     become: yes
-    copy: src=limits.conf dest=/etc/security/limits.conf mode=644 owner=root group=root
+    pam_limits:
+      domain: "{{item.user}}"
+      limit_type: "{{item.limit_type}}"
+      limit_item: "{{item.limit_item}}"
+      value: "{{item.value}}"
+    with_items:
+      - { user: 'oracle', limit_type: 'soft', limit_item: 'nproc', value: 2047 }
+      - { user: 'oracle', limit_type: 'hard', limit_item: 'nproc', value: 16384 }
+      - { user: 'oracle', limit_type: 'soft', limit_item: 'nofile', value: 1024 }
+      - { user: 'oracle', limit_type: 'hard', limit_item: 'nofile', value: 65536 }
+      - { user: 'oracle', limit_type: 'soft', limit_item: 'stack', value: 10240 }
+      - { user: 'oracle', limit_type: 'hard', limit_item: 'stack', value: 32768 }      
+      - { user: 'grid', limit_type: 'soft', limit_item: 'nproc', value: 2047 }
+      - { user: 'grid', limit_type: 'hard', limit_item: 'nproc', value: 16384 }
+      - { user: 'grid', limit_type: 'soft', limit_item: 'nofile', value: 1024 }
+      - { user: 'grid', limit_type: 'hard', limit_item: 'nofile', value: 65536 }
+      - { user: 'grid', limit_type: 'soft', limit_item: 'stack', value: 10240 }
+      - { user: 'grid', limit_type: 'hard', limit_item: 'stack', value: 32768 } 
     tags:
-      - kernel
+      - limits
+      - prereq
 
-  - name: "copy ifcfg-lo"
+
+
+#https://github.com/oraclebase/vagrant/blob/master/rac/ol7_183/shared_scripts/configure_chrony.sh
+  - name: chrony
     become: yes
-    copy: src=ifcfg-lo dest=/etc/sysconfig/network-scripts/ifcfg-lo mode=644 owner=root group=root
+    systemd:
+      state: restarted
+      enabled: yes
+      name: chronyd
     tags:
-      - kernel
+      - chronyd
+      - prereq
 
-  - name: "restart network"
+  - name: "chrocyc burst"
     become: yes
-    systemd: name=network state=restarted
-    when: ansible_distribution_version|int == 7
-    ignore_errors: True
+    shell: chronyc -a 'burst 4/4'
     tags:
-      - kernel
+      - chronyd
+      - prereq
 
-  - name: "restart network"
+  - name: "chrocyc burst"
     become: yes
-    shell: "service network restart"
-    when: ansible_distribution_version|int == 6
-    ignore_errors: True
+    shell: chronyc -a makestep
     tags:
-      - kernel
-
-
-  - name: "disable ntpd"
-    become: yes
-    systemd: name=ntpd state=stopped enabled=no
-    when: ansible_distribution_version|int == 7
-    ignore_errors: yes
-    tags:
-      - ntp
-
-  - name: "mv ntpd.conf"
-    become: yes
-    shell: mv /etc/ntp.conf /etc/ntp.conf.original
-    args:
-      creates: /etc/ntp.conf.original
-    ignore_errors: yes
-    tags:
-      - ntp
-
-  - name: "rm  ntpd.pid"
-    become: yes
-    file: path=/var/run/ntpd.pid state=absent
-    ignore_errors: yes
-    tags:
-      - ntp
-
-  - name: "disable chronyd"
-    become: yes
-    systemd: name=chronyd.service state=stopped enabled=no
-    when: ansible_distribution_version|int == 7
-    ignore_errors: yes
-    tags:
-      - ntp
-
-  - name: "mv chronyd.conf"
-    become: yes
-    shell: mv /etc/chrony.conf /etc/chrony.conf.original
-    args:
-      creates: /etc/chrony.conf.original
-    ignore_errors: yes
-    tags:
-      - ntp
+      - chronyd
+      - prereq
 
   - name: "Partition additional disks"
     become: yes
@@ -250,24 +269,42 @@
     tags:
       - oraclehome
 
-  - name: "install preinstall packages"
+
+  - name: "install selinux,firewalld"
     become: yes
-    yum: name={{ PreInstallRPM }} state=present enablerepo=ol7_optional_latest
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
-    when: ansible_distribution_version|int == 7
+    dnf:
+      name:
+        -  bc
+        -  binutils
+        -  elfutils-libelf
+        -  elfutils-libelf-devel
+        -  fontconfig-devel
+        -  glibc
+        -  glibc-devel
+        -  ksh
+        -  libaio
+        -  libaio-devel
+        -  libXrender
+        -  libX11
+        -  libXau
+        -  libXi
+        -  libXtst
+        -  libgcc
+        -  libnsl
+        -  librdmacm
+        -  libstdc++
+        -  libstdc++-devel
+        -  libxcb
+        -  libibverbs
+        -  make
+        -  smartmontools
+        -  sysstat 
+        -  libnsl2
+        -  libnsl2-devel
+      state: present
     tags:
       - preinstallpackages
-
-  - name: "install preinstall packages"
-    become: yes
-    yum: name={{ PreInstallRPM }} state=present
-    async: "{{ ASYNC }}"
-    poll: "{{ POLL }}"
-    when: ansible_distribution_version|int == 6
-    tags:
-      - preinstallpackages
-
+      - prereq
 
   - name: "create swap(dd)"
     become: yes
@@ -321,7 +358,7 @@
     tags:
       - preinstallpackages
 
-  - name: "sysctl ipfrag"
+  - name: "sysctl"
     become: yes
     sysctl: name="{{ item.name}}"  value="{{ item.value}}" sysctl_set=yes state=present reload=yes
     ignore_errors: yes
