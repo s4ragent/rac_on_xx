@@ -216,7 +216,6 @@
       - fdisk
       - prereq
 
-
   - name: "fdisk data_disk_dev"
     become: yes
     filesystem:
@@ -241,23 +240,42 @@
 
   - debug: var=uuid.stdout
     tags:
+      - oraclehome
+      - fdisk
       - blkid
+      - prereq
 
   - name: "create data_disk mountpoint"
     become: yes
-    file: path={{ data_disk_mountpoint }} state=directory owner=grid group=oinstall mode=0755
+    file:
+      path: "{{ data_disk_mountpoint }}"
+      state: directory
+      owner: grid
+      group: oinstall
+      mode: 0755
     when: data_disk_dev is defined and data_disk_dev !=""
     tags:
       - oraclehome
       - fdisk
+      - blkid
+      - prereq
 
   - name: "mount data_disk_dev"
     become: yes
-    mount: name={{ data_disk_mountpoint }} src="UUID={{ uuid.stdout }}" fstype=xfs opts=defaults passno=0 dump=0 state=mounted
+    mount:
+      name: "{{ data_disk_mountpoint }}"
+      src: "UUID={{ uuid.stdout }}" 
+      fstype: xfs 
+      opts: defaults 
+      passno: 0
+      dump: 0
+      state: mounted
     when: data_disk_dev is defined and data_disk_dev !=""
     tags:
       - oraclehome
       - fdisk
+      - blkid
+      - prereq
 
   - name: "create gridbase gridhome oradata orainventry"
     become: yes
