@@ -176,6 +176,17 @@
       - limits
       - prereq
 
+
+  - name: /etc/pam.d/login
+    pamd:
+      name: login
+      type: session
+      control: required
+      module_path: pam_limits.so
+    tags:
+      - limits
+      - prereq
+      
 #https://github.com/oraclebase/vagrant/blob/master/rac/ol7_183/shared_scripts/configure_chrony.sh
   - name: chrony
     become: yes
@@ -332,7 +343,8 @@
     tags:
       - ddswap
       - swap
-
+      - prereq
+      
   - name: "create swap(swapon)"
     become: yes
     shell: swapon /u01/swap
@@ -341,6 +353,7 @@
     tags:
       - swapon
       - swap
+      - prereq
       
   - name: "mount swap(fstab)"
     become: yes
@@ -356,7 +369,8 @@
     tags:
       - fstabswap
       - swap
-
+      - prereq
+      
   - name: "unzip cvuqdisk"
     local_action: shell {{ UNZIP }} /media/{{ GRID_MEDIA1 }} {{ CVUQDISK }}
     args:
@@ -367,6 +381,7 @@
     when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
+      - prereq
       
   - name: "copy cvuqdisk"
     become: yes
@@ -376,7 +391,8 @@
     when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
-      
+      - prereq
+        
   - name: "install cvuqdisk"
     become: yes
     dnf: 
