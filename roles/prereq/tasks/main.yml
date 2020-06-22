@@ -176,8 +176,6 @@
       - limits
       - prereq
 
-
-
 #https://github.com/oraclebase/vagrant/blob/master/rac/ol7_183/shared_scripts/configure_chrony.sh
   - name: chrony
     become: yes
@@ -289,7 +287,6 @@
     tags:
       - oraclehome
 
-
   - name: "install selinux,firewalld"
     become: yes
     dnf:
@@ -347,7 +344,14 @@
       
   - name: "mount swap(fstab)"
     become: yes
-    mount: name=swap src=/u01/swap fstype=swap opts=defaults passno=0 dump=0 state=present
+    mount:
+      name: swap 
+      src: /u01/swap
+      fstype: swap
+      opts: defaults
+      passno: 0
+      dump: 0
+      state: present
     when: ansible_swaptotal_mb < SWAP_SIZE -1
     tags:
       - fstabswap
@@ -366,7 +370,9 @@
       
   - name: "copy cvuqdisk"
     become: yes
-    copy: src="/tmp/{{ CVUQDISK }}" dest=/tmp/cvuqdisk.rpm
+    copy:
+      src: "/tmp/{{ CVUQDISK }}"
+      dest: /tmp/cvuqdisk.rpm
     when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
@@ -383,10 +389,10 @@
 
   - name: check sysctl.conf
     sysctl: 
-      name="{{ item.name }}" 
-      value="{{ item.value }}" 
-      state=present
-      reload=yes
+      name: "{{ item.name }}" 
+      value: "{{ item.value }}" 
+      state: present
+      reload: yes
     with_items: 
       - { name: 'fs.aio-max-nr', value: "1048576" } 
       - { name: 'fs.file-max', value: "6815744" } 
