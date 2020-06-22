@@ -204,28 +204,29 @@
       - prereq
 
   - name: "Partition additional disks"
-    become: yes
-    shell: |
-      if
-        [ -b {{ data_disk_dev }} ]
-      then
-        [ -b {{ data_disk_dev }}1 ] || parted --script "{{ data_disk_dev }}" mklabel gpt mkpart primary 1MiB 100%
-      fi
-    args:
-      creates: '{{ data_disk_dev }}1'
-      executable: '/bin/bash'
+    parted:
+      device: "{{ data_disk_dev }}"
+      number: 1
+      part_end: 1MiB
+      label: gpt
+      state: present
     when: data_disk_dev is defined and data_disk_dev !=""
     tags:
       - oraclehome
       - fdisk
+      - prereq
+
 
   - name: "fdisk data_disk_dev"
     become: yes
-    filesystem: fstype=xfs dev={{ data_disk_dev }}1
+    filesystem:
+      fstype: xfs
+      dev: "{{ data_disk_dev }}1"
     when: data_disk_dev is defined and data_disk_dev !=""
     tags:
       - oraclehome
       - fdisk
+      - prereq
 
   - name: get blkid
     become: yes
@@ -236,6 +237,7 @@
       - oraclehome
       - fdisk
       - blkid
+      - prereq
 
   - debug: var=uuid.stdout
     tags:
@@ -353,54 +355,33 @@
       
   - name: "install cvuqdisk"
     become: yes
-    yum: name=/tmp/cvuqdisk.rpm state=present
+    dnf: 
+      name: /tmp/cvuqdisk.rpm
+      state: present
     when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
+      - prereq
 
-  - name: "sysctl"
-    become: yes
-    sysctl: name="{{ item.name}}"  value="{{ item.value}}" sysctl_set=yes state=present reload=yes
-    ignore_errors: yes
-    with_items:
-      - { name: 'net.ipv4.ipfrag_high_thresh', value: '10388608'}
-      - { name: 'net.ipv4.ipfrag_low_thresh', value: '6291456'}
-      - { name: 'net.ipv4.ipfrag_time', value: '60' }
-    when: ip_fragment is defined  
+  - name: check sysctl.conf
+    sysctl: 
+      name="{{ item.name }}" 
+      value="{{ item.value }}" 
+      state=present
+      reload=yes
+    with_items: 
+      - { name: 'fs.aio-max-nr', value: "1048576" } 
+      - { name: 'fs.file-max', value: "6815744" } 
+      - { name: 'kernel.shmmax', value: "{{ (( ansible_memtotal_mb|int * 1024 * 1024 ) * 0.50 )|int}}" } 
+      - { name: 'kernel.shmall', value: "{{ ( ansible_memtotal_mb|int * 1024 * 1024 ) / 4096 }}" } 
+      - { name: 'kernel.shmmni', value: "4096" } 
+      - { name: 'kernel.sem', value: "250 32000 100 128" } 
+      - { name: 'kernel.panic_on_oops', value: "1" } 
+      - { name: 'net.ipv4.ip_local_port_range', value: "9000 65500" } 
+      - { name: 'net.core.rmem_default', value: "262144" } 
+      - { name: 'net.core.rmem_max', value: "4194304" } 
+      - { name: 'net.core.wmem_default', value: "262144" } 
+      - { name: 'net.core.wmem_max', value: "1048576" } 
     tags:
       - sysctl
-
-  - name: "sysctl"
-    become: yes
-    shell: /sbin/sysctl -p
-    ignore_errors: yes
-    tags:
-      - sysctl
-
-  - name: "setcap ping"
-    become: yes
-    shell: setcap cap_net_raw,cap_net_admin+p /usr/bin/ping
-    ignore_errors: yes
-    when: setcap is defined and setcap !=""
-    tags:
-      - ping
-      
-  - name: "disable NetworkManager"
-    become: yes
-    systemd: name="{{ item }}" state=stopped enabled=no
-    with_items:
-      - NetworkManager.service
-    when: ansible_distribution_version|int == 7
-    ignore_errors: yes
-    tags:
-      - networkmanager
-
-  - name: "disable NetworkManager"
-    become: yes
-    service: name="{{ item }}" state=stopped enabled=no
-    with_items:
-      - NetworkManager
-    when: ansible_distribution_version|int == 6
-    ignore_errors: yes
-    tags:
-      - networkmanager
+      - prereq
