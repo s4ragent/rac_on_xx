@@ -6,8 +6,8 @@ STORAGE_ROOT: /u01
 ORA_ORACLE_BASE: /u01/app/oracle
 GRID_ORACLE_BASE: /u01/app/grid
 ###version specific
-ORA_ORACLE_HOME: /u01/app/oracle/product/12.2.0/dbhome_1
-GRID_ORACLE_HOME: /u01/app/12.2.0/grid
+ORA_ORACLE_HOME: /u01/app/oracle/product/19.7.0/dbhome_1
+GRID_ORACLE_HOME: /u01/app/19.7.0/grid
 ORAINVENTORY: /u01/app/oraInventory
 #PreInstallRPM: oracle-database-preinstall-18c.x86_64
 CVUQDISK: cv/rpm/cvuqdisk-1.0.10-1.rpm
