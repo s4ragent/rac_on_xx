@@ -77,7 +77,7 @@ common_iperf_only(){
 
 common_preinstall(){
 	common_runonly $*
-	common_execansible rac.yml --skip-tags installdbca
+	common_execansible rac.yml --skip-tags installdbca,download
 }
 
 common_preinstall_with_vnc(){
