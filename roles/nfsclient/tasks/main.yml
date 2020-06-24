@@ -51,7 +51,6 @@
 
   - name: "create asm device vote(qemu-img)"
     become: yes
-    #shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
     shell: "qemu-img create -f raw -o size={{ item.size }}M {{ item.name }}"
     args:
       creates: "{{ item.name }}"
@@ -77,7 +76,7 @@
   - name: "chown oradata"
     become: yes
     file:
-      path: "{{ item}}"
+      path: "{{ item }}"
       state: file
       owner: grid
       group: asmadmin
