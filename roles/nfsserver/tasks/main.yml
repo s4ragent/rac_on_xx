@@ -1,8 +1,9 @@
 ---
+#https://www.server-world.info/query?os=CentOS_8&p=nfs
   - name: "install nfs packages"
     become: yes
     dnf: 
-      name: nfsserver
+      name: nfs-utils
       state: present
     tags:
       - nfsserver
@@ -38,6 +39,5 @@
     with_items:
       - rpcbind
       - nfs-server
-      - nfs-idmap
     tags:
       - nfsserver
