@@ -406,6 +406,7 @@
       - prereq
 
   - name: check sysctl.conf
+    become: yes
     sysctl: 
       name: "{{ item.name }}" 
       value: "{{ item.value }}" 
