@@ -4,7 +4,15 @@
     dnf:
       name:
         - nfs-utils
+    tags:
+      - nfsclient
+
+  - name: "install nfs packages"
+    become: yes
+    dnf:
+      name:
         - qemu-img
+    when: DD_CMD is undefined
     tags:
       - nfsclient
 
@@ -16,7 +24,6 @@
       owner: grid
       group: oinstall
       mode: 0755
-    when: storage_type == 'nfs'
     tags:
       - nfsclient
 
