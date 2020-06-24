@@ -299,7 +299,7 @@
     tags:
       - oraclehome
 
-  - name: "install selinux,firewalld"
+  - name: "install packages"
     become: yes
     dnf:
       name:
