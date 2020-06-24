@@ -109,7 +109,7 @@ common_gridrootsh(){
 }
 
 common_deleteall(){
-
+        export TF_VAR_db_servers=0
 	cd $VIRT_TYPE
 
 	terraform destroy -auto-approve
