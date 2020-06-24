@@ -20,28 +20,24 @@
 
   - name: "create exports"
     become: yes
-    template: src=exports.j2 dest=/etc/exports owner=root group=root mode=0644
+    template: 
+      src: exports.j2
+      dest: /etc/exports
+      owner: root
+      group: root
+      mode: 0644
     tags:
       - nfsserver
 
   - name: "restart nfs"
     become: yes
-    systemd: name={{ item }} state=restarted enabled=yes
+    systemd:
+      name: "{{ item }}"
+      state: restarted 
+      enabled: yes
     with_items:
       - rpcbind
       - nfs-server
       - nfs-idmap
-    when: ansible_distribution_version|int == 7
-    tags:
-      - nfsserver
-
-  - name: "restart nfs"
-    become: yes
-    shell: "chkconfig {{ item }} on;service  {{ item }} restart"
-    when: ansible_distribution_version|int == 6
-    with_items:
-      - rpcbind
-      - nfslock
-      - nfs
     tags:
       - nfsserver
