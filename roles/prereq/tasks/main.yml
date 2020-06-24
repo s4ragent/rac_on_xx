@@ -329,7 +329,7 @@
         -  smartmontools
         -  sysstat 
         -  libnsl2
-        -  "libnsl2-devel"
+#        -  libnsl2-devel
       state: present
     tags:
       - preinstallpackages
