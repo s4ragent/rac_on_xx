@@ -330,6 +330,7 @@
         -  sysstat 
         -  libnsl2
 #        -  libnsl2-devel
+        - unzip
       state: present
     tags:
       - preinstallpackages
