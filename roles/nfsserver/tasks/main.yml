@@ -41,3 +41,20 @@
       - nfs-server
     tags:
       - nfsserver
+
+  - name: "firewalld allow nfs"
+    become: yes
+    firewalld:
+      zone: public
+      service: "{{ item }}"
+      permanent: yes
+      state: enabled
+      immediate: yes
+    with_items:
+      - nfs
+      - nfs3
+      - mountd
+      - rpc-bind
+    ignore_errors: yes
+    tags:
+      - nfsserver
