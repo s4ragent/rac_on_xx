@@ -213,6 +213,7 @@
       - prereq
 
   - name: "Partition additional disks"
+    become: yes
     parted:
       device: "{{ data_disk_dev }}"
       number: 1
