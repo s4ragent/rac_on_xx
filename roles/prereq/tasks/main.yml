@@ -217,7 +217,7 @@
     parted:
       device: "{{ data_disk_dev }}"
       number: 1
-      part_end: 1MiB
+      part_start: 1MiB
       label: gpt
       state: present
     when: data_disk_dev is defined and data_disk_dev !=""
