@@ -33,10 +33,6 @@ DHCPCLIENT: "/etc/dhclient-eth0.conf"
 MEDIA_COPY: "true"
 SWITCH_KERNEL: "0"
 MEDIA_PATH: /downloadmedia
-DB_MEDIA: V982063-01.zip
-DB_PATCH: p30869156_190000_Linux-x86-64.zip
-GRID_MEDIA: V982068-01.zip
-GRID_PATCH: p30899722_190000_Linux-x86-64.zip
 #BUCKET_URL="gs://xxxxxxxxx"
 ## for additional disk values
 data_disk_dev: "/dev/sdc"
