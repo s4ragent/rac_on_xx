@@ -3,8 +3,8 @@
     become: yes
     become_user: grid
     unarchive:
-      src: foo.tgz
-      dest: /var/lib/foo
+      src: "/media/{{ CVU_MEDIA }}"
+      dest: /tmp
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - cvu
