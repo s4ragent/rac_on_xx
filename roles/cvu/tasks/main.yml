@@ -1,4 +1,14 @@
 ---
+  - name: "copy cvu"
+    become: yes
+    become_user: grid
+    unarchive:
+      src: foo.tgz
+      dest: /var/lib/foo
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - cvu
+
   - name: "cvu"
     become: yes
     become_user: grid
@@ -7,12 +17,12 @@
     ignore_errors: True
     when: inventory_hostname == groups["dbserver"][0]
     tags:
-      - cvucrsinst
+      - cvu
       
   - debug: var=cvu_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     tags:
-      - cvucrsinst
+      - cvu
 
   - name: "cvu_ssa"
     become: yes
@@ -22,9 +32,9 @@
     ignore_errors: True
     when: inventory_hostname == groups["dbserver"][0]
     tags:
-      - cvucrsinst
+      - cvu
       
   - debug: var=cvussa_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     tags:
-      - cvucrsinst
+      - cvu
