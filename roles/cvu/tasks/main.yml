@@ -3,8 +3,8 @@
     become: yes
     become_user: grid
     unarchive:
-      src: "/media/{{ GRID_MEDIA }}"
-      dest: "{{ GRID_ORACLE_HOME }}"
+      src: "/media/{{ CVU_MEDIA }}"
+      dest: "/tmp"
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - cvu
@@ -12,7 +12,8 @@
   - name: "cvu"
     become: yes
     become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/runcluvfy.sh stage -pre crsinst -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+    #shell: "{{ GRID_ORACLE_HOME }}/runcluvfy.sh stage -pre crsinst -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+    shell: "/tmp/bin/cluvfy stage -pre crsinst -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %} -verbose"
     register: cvu_result
     ignore_errors: True
     when: inventory_hostname == groups["dbserver"][0]
@@ -27,7 +28,7 @@
   - name: "cvu_ssa"
     become: yes
     become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/runcluvfy.sh comp ssa -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %} -s {{ VOTE_DEV }}"
+    shell: "/tmp/bin/cluvfy comp ssa -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %} -s {{ VOTE_DEV }} -verbose"
     register: cvussa_result
     ignore_errors: True
     when: inventory_hostname == groups["dbserver"][0]
