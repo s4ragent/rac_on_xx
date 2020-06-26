@@ -12,7 +12,7 @@
   - name: "cvu"
     become: yes
     become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/runcluvfy.sh stage -pre crsinst -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+    shell: "{{ GRID_ORACLE_HOME }}/bin/cluvfy stage -pre crsinst -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
     register: cvu_result
     ignore_errors: True
     when: inventory_hostname == groups["dbserver"][0]
@@ -27,7 +27,7 @@
   - name: "cvu_ssa"
     become: yes
     become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/runcluvfy.sh comp ssa -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %} -s {{ VOTE_DEV }}"
+    shell: "{{ GRID_ORACLE_HOME }}/bin/cluvfy comp ssa -n {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %} -s {{ VOTE_DEV }}"
     register: cvussa_result
     ignore_errors: True
     when: inventory_hostname == groups["dbserver"][0]
