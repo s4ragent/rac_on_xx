@@ -4,7 +4,7 @@
     become_user: grid
     unarchive:
       src: "/media/{{ CVU_MEDIA }}"
-      dest: /tmp
+      dest: "{{ GRID_ORACLE_HOME }}"
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - cvu
