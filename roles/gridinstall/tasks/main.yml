@@ -1,7 +1,50 @@
 ---
+  - name: "crete directory"
+    become: yes
+    file:
+      path: "{{ MEDIA_PATH }}"
+      state: directory
+      mode: 0755
+      group: root
+      owner: root
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - creategridrsp
+      - gridinstall
+      - installdbca
+
+  - name: "copy grid media"
+    become: yes
+    become_user: grid
+    unarchive:
+      src: "/media/{{ GRID_MEDIA }}"
+      dest: "{{ GRID_ORACLE_HOME }}"
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - creategridrsp
+      - gridinstall
+      - installdbca
+
+  - name: "copy grid patch"
+    become: yes
+    become_user: grid
+    unarchive:
+      src: "/media/{{ GRID_PATCH }}"
+      dest: "{{ MEDIA_PATH }}"
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - creategridrsp
+      - gridinstall
+      - installdbca
+
   - name: "create grid/asm.rsp"
     become: yes
-    template: src={{ item }}.rsp.j2 dest=/home/grid/{{ item }}.rsp owner=grid group=oinstall mode=0644
+    template:
+      src: "{{ item }}.rsp.j2"
+      dest: "/home/grid/{{ item }}.rsp"
+      owner: grid
+      group: oinstall
+      mode: 0644
     when: inventory_hostname == groups["dbserver"][0]
     with_items:
       - grid
