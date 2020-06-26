@@ -3,7 +3,7 @@
     become: yes
     become_user: grid
     unarchive:
-      src: "/media/{{ CVU_MEDIA }}"
+      src: "/media/{{ GRID_MEDIA }}"
       dest: "{{ GRID_ORACLE_HOME }}"
     when: inventory_hostname == groups["dbserver"][0]
     tags:
