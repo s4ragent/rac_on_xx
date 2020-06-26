@@ -248,7 +248,7 @@ resource "azurerm_linux_virtual_machine" "clientvm" {
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
     network_interface_ids = [azurerm_network_interface.racclientnic.id]
-    size                  = local.yaml.vm_size
+    size                  = local.yaml.client_vm_size
 
     os_disk {
         name              = "osdisk-client"
