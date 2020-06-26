@@ -19,6 +19,7 @@
     unarchive:
       src: "/media/{{ GRID_MEDIA }}"
       dest: "{{ GRID_ORACLE_HOME }}"
+      creates: "{{ GRID_ORACLE_HOME }}/bin"
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - creategridrsp
@@ -31,6 +32,7 @@
     unarchive:
       src: "/media/{{ GRID_PATCH }}"
       dest: "{{ MEDIA_PATH }}"
+      creates: "{{ MEDIA_PATH }}/{{ GRID_PATCH_NUM }}"
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - creategridrsp
@@ -57,7 +59,7 @@
   - name: "runInstaller(grid)"
     become: yes
     become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/gridSetup.sh -silent -responseFile /home/grid/grid.rsp -waitforcompletion {{ INSTALL_OPS }}"
+    shell: "{{ GRID_ORACLE_HOME }}/gridSetup.sh -silent -applyRU {{ MEDIA_PATH }}/{{ GRID_PATCH_NUM }} -responseFile /home/grid/grid.rsp -waitforcompletion {{ INSTALL_OPS }}"
     when: inventory_hostname == groups["dbserver"][0]
     register: runinstallergrid_result
     ignore_errors: True
