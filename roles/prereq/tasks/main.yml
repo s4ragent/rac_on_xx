@@ -364,8 +364,8 @@
       src: /u01/swap
       fstype: swap
       opts: defaults
-      passno: 0
-      dump: 0
+      passno: '0'
+      dump: '0'
       state: present
     when: ansible_swaptotal_mb < SWAP_SIZE -1
     tags:
