@@ -277,8 +277,8 @@
       src: "UUID={{ uuid.stdout }}" 
       fstype: xfs 
       opts: defaults 
-      passno: 0
-      dump: 0
+      passno: '0'
+      dump: '0'
       state: mounted
     when: data_disk_dev is defined and data_disk_dev !=""
     tags:
