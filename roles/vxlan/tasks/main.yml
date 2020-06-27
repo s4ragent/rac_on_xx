@@ -14,19 +14,19 @@
   - name: "firewalld trusted vxlan_dev"
     become: yes
     firewalld:
-#      source: "{{ item }}/24"
-      interface: "{{ item }}"
+      source: "{{ item }}/24"
+#      interface: "{{ item }}"
       zone: trusted
       permanent: yes
       state: enabled
       immediate: yes
     with_items:
-#     - "{{ vxlan0_NETWORK }}"
-#     - "{{ vxlan1_NETWORK }}"
-#     - "{{ vxlan2_NETWORK }}"
-     - vxlan0
-     - vxlan1
-     - vxlan2
+     - "{{ vxlan0_NETWORK }}"
+     - "{{ vxlan1_NETWORK }}"
+     - "{{ vxlan2_NETWORK }}"
+#     - vxlan0
+#     - vxlan1
+#     - vxlan2
     ignore_errors: yes
     tags:
       - vxlan_conf
