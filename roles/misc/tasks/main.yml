@@ -31,6 +31,14 @@
     tags:
       - misc
 
+  - name: "enable firewalld logs"
+    become: yes
+    shell: "firewall-cmd --set-log-denied all;firewall-cmd --reload"
+    ignore_errors: yes
+    tags:
+      - misc
+
+
   - name: "delete /etc/dhcp/dhclient.d/google_hostname.sh(for google)"
     become: yes
     file: 
