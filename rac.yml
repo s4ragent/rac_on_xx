@@ -40,7 +40,6 @@
  - hosts: dbserver
    any_errors_fatal: true
    roles:
-      - createdg
       - dbinstall
  #     - dbcaserial
       - { role: dbcaserial, when: "dbca == 'serial'" }
