@@ -15,7 +15,7 @@
     become: yes
     firewalld:
 #      source: "{{ item }}/24"
-      interface="{{ item }}"
+      interface: "{{ item }}"
       zone: trusted
       permanent: yes
       state: enabled
