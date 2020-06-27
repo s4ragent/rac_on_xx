@@ -5,8 +5,8 @@
       path: "{{ MEDIA_PATH }}"
       state: directory
       mode: 0755
-      group: root
-      owner: root
+      group: oinstall
+      owner: grid
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - creategridrsp
