@@ -187,6 +187,25 @@
       - gridinstall
       - installdbca
 
+
+  - name: "mgmtdb"
+    become: yes
+    become_user: grid
+    shell: "{{ GRID_ORACLE_HOME }}/gridSetup.sh -executeConfigTools -responseFile /home/grid/grid.rsp -silent {{ INSTALL_OPS }}"
+    register: asmca_result
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - mgmtdb
+      - gridinstall
+      - installdbca
+
+  - debug: var=asmca_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - mgmtdb
+      - gridinstall
+      - installdbca
+
 #  - name: "change css misscount"
 #    become: yes
 #    shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl set css misscount 360"
