@@ -40,6 +40,7 @@
  - hosts: dbserver
    any_errors_fatal: true
    roles:
+      - asmca
       - dbinstall
  #     - dbcaserial
       - { role: dbcaserial, when: "dbca == 'serial'" }
