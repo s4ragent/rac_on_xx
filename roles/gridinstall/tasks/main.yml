@@ -171,6 +171,22 @@
       - gridinstall
       - installdbca
 
+  - name: "crsctl"
+    become: yes
+    become_user: grid
+    shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
+    register: crsctl_result
+    tags:
+      - crsctl
+      - gridinstall
+      - installdbca
+
+  - debug: var=crsctl_result.stdout_lines
+    tags:
+      - crsctl
+      - gridinstall
+      - installdbca
+
 #  - name: "change css misscount"
 #    become: yes
 #    shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl set css misscount 360"
@@ -199,14 +215,14 @@
     become: yes
     become_user: grid
     shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
-    register: crsctl_result
+    register: crsctlasm_result
     tags:
-      - crsctl
+      - crsctl_asmca
       - gridinstall
       - installdbca
 
-  - debug: var=crsctl_result.stdout_lines
+  - debug: var=crsctlasm_result.stdout_lines
     tags:
-      - crsctl
+      - crsctl_asmca
       - gridinstall
       - installdbca
