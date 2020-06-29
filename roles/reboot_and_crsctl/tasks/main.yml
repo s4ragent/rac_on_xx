@@ -2,7 +2,8 @@
   - name: Reboot
     become: yes
     reboot:
-      reboot_timeout: 300
+      reboot_timeout: 1200
+      test_command: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - reboot_and_crsctl
