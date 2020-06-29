@@ -46,6 +46,12 @@
       - { role: dbcaserial, when: "dbca == 'serial'" }
       - { role: dbca, when: "dbca == 'paralell'" }
 
+ - hosts: dbserver
+   any_errors_fatal: true
+   serial: 1
+   roles:
+      - reboot_and_crsctl
+
  - hosts: all:!storage
    any_errors_fatal: true
    roles:
