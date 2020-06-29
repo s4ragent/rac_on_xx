@@ -11,14 +11,21 @@
 #    tags:
 #      - vnc
 
+#  - name: install the 'Server With GUI' package group
+#    become: yes
+#    dnf:
+#      name: '@Server with GUI'
+#      state: present
+#    tags:
+#      - vnc
+
+#https://bugzilla.redhat.com/show_bug.cgi?id=1782899
   - name: install the 'Server With GUI' package group
     become: yes
-    dnf:
-      name: '@Server with GUI'
-      state: present
+    shell: "dnf -y group install 'Server With GUI' --nobest && dnf -y group upgrade 'Server With GUI'"
     tags:
       - vnc
- 
+      
   - name: install tigervnc-server
     become: yes
     dnf:
