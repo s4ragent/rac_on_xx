@@ -1,5 +1,5 @@
 ---
-  - name: "crete directory"
+  - name: "crete media directory"
     become: yes
     file:
       path: "{{ MEDIA_PATH }}"
@@ -12,6 +12,7 @@
       - creategridrsp
       - gridinstall
       - installdbca
+      - download
 
   - name: "copy grid media"
     become: yes
@@ -25,7 +26,8 @@
       - creategridrsp
       - gridinstall
       - installdbca
-
+      - download
+      
   - name: "copy grid patch"
     become: yes
     become_user: grid
@@ -38,7 +40,8 @@
       - creategridrsp
       - gridinstall
       - installdbca
-
+      - download
+      
   - name: "create grid/asm.rsp"
     become: yes
     template:
