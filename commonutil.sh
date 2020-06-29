@@ -119,6 +119,7 @@ do
     common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
     common_runall $1 >>$LOG  2>&1
+    common_execansible rac.yml --tags reboot_and_crsctl,jdbcrunner --extra-vars '{"jdbcrunner":"on","reboot_and_crsctl":"on"}'    
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
