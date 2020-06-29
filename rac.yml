@@ -8,7 +8,7 @@
       - { role: iperf, when: "IPERF_DEV is defined" }
       - { role: dns, when: "dns == 'dnsmasq'" }
 #      - prereq
-      - { role: vnc, when: "vnc_pass is defined" }
+      - { role: vnc, when: "vnc is defined" }
 
  - hosts: all:!client
    any_errors_fatal: true
