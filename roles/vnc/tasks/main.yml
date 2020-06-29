@@ -40,3 +40,7 @@
       reboot_timeout: 300
     tags:
       - vnc
+
+
+#bash XXutil.sh ssh storage 6901 5901
+#vncviewer localhost:6901
