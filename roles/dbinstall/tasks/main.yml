@@ -19,7 +19,8 @@
       - creategridrsp
       - gridinstall
       - installdbca
-
+      - download
+      
   - name: "create db.rsp"
     become: yes
     template: 
