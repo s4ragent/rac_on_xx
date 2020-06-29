@@ -38,4 +38,27 @@ get_Internal_IP(){
 	echo $Internal_IP
 }
 
+stop(){
+	expr "$1" + 1 >/dev/null 2>&1
+	if [ $? -lt 2 ]
+	then
+    		NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+	else
+    		NODENAME=$1
+	fi
+	az vm deallocate -g $RG_NAME -n $NODENAME
+}
+
+start(){
+	expr "$1" + 1 >/dev/null 2>&1
+	if [ $? -lt 2 ]
+	then
+    		NODENAME="$NODEPREFIX"`printf "%.3d" $1`
+	else
+    		NODENAME=$1
+	fi
+	az vm start -g $RG_NAME -n $NODENAME
+}
+
+
 source ./common_menu.sh
