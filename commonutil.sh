@@ -81,19 +81,9 @@ common_preinstall(){
 }
 
 common_preinstall_with_vnc(){
- if [ "$vnc_pass" = "" ]; then
-    vnc_pass="Moracle123!"
- fi
 	common_runonly $*
-	common_execansible rac.yml --skip-tags installdbca --extra-vars "vnc_pass=$vnc_pass"
-}
-
-common_preinstall_with_xrdp(){
- if [ "$xrdp_pass" = "" ]; then
-    vnc_pass="Moracle123!"
- fi
-	common_runonly $*
-	common_execansible rac.yml --skip-tags installdbca --extra-vars "xrdp_pass=$xrdp_pass"
+	common_execansible rac.yml --skip-tags installdbca
+	common_execansible rac.yml --tags download
 }
 
 common_after_runonly(){
