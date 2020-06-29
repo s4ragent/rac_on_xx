@@ -42,15 +42,12 @@
   - name: "create grid/asm.rsp"
     become: yes
     template:
-      src: "{{ item }}.rsp.j2"
-      dest: "/home/grid/{{ item }}.rsp"
+      src: "grid.rsp.j2"
+      dest: "/home/grid/grid.rsp"
       owner: grid
       group: oinstall
       mode: 0644
     when: inventory_hostname == groups["dbserver"][0]
-    with_items:
-      - grid
-      - asm
     tags:
       - creategridrsp
       - gridinstall
