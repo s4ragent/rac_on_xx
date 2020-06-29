@@ -10,7 +10,6 @@ case "$1" in
   "jdbcrunner_only" ) shift;common_jdbcrunner_only $*;;
   "preinstall" ) shift;common_preinstall $*;;
   "preinstall_with_vnc" ) shift;common_preinstall_with_vnc $*;;
-  "preinstall_with_xrdp" ) shift;common_preinstall_with_xrdp $*;;
   "after_runonly" ) shift;common_after_runonly $*;;
   "install_dbca" ) shift;common_install_dbca $*;;
   "gridrootsh" ) shift;common_gridrootsh $*;;
