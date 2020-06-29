@@ -5,3 +5,15 @@
       reboot_timeout: 300
     tags:
       - reboot_and_crsctl
+
+  - name: "crsctl"
+    become: yes
+    become_user: grid
+    shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
+    register: crsctl_result
+    tags:
+      - reboot_and_crsctl
+
+  - debug: var=crsctl_result.stdout_lines
+    tags:
+      - reboot_and_crsctl
