@@ -3,6 +3,7 @@
     become: yes
     reboot:
       reboot_timeout: 300
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - reboot_and_crsctl
 
@@ -11,9 +12,11 @@
     become_user: grid
     shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
     register: crsctl_result
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - reboot_and_crsctl
 
   - debug: var=crsctl_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - reboot_and_crsctl
