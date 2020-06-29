@@ -1,1 +1,7 @@
 ---
+  - name: Reboot
+    become: yes
+    reboot:
+      reboot_timeout: 300
+    tags:
+      - reboot_and_crsctl
