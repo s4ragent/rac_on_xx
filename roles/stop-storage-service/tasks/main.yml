@@ -1,7 +1,0 @@
----
-  - name: "stop nfs-server.service"
-    become: yes
-    systemd: name=nfs-server.service state=stopped
-    ignore_errors: yes
-    tags:
-      - stop
