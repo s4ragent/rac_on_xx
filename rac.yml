@@ -8,7 +8,7 @@
       - { role: iperf, when: "IPERF_DEV is defined" }
       - { role: dns, when: "dns == 'dnsmasq'" }
 #      - prereq
-      - { role: vnc, when: "vnc is defined" }
+
 
  - hosts: all:!client
    any_errors_fatal: true
@@ -25,6 +25,7 @@
  - hosts: dbserver
    any_errors_fatal: true
    roles:
+      - { role: vnc, when: "vnc is defined" }
 #      - download
       - { role: nfsclient, when: "storage_type == 'nfs' or storage_type == 'efs'" }
 #      - { role: nbdserver, when: "storage_type == 'nbd'" }
@@ -45,11 +46,6 @@
  #     - dbcaserial
       - { role: dbcaserial, when: "dbca == 'serial'" }
       - { role: dbca, when: "dbca == 'paralell'" }
-
- - hosts: dbserver
-   any_errors_fatal: true
-   serial: 1
-   roles:
       - reboot_and_crsctl
 
  - hosts: all:!storage
