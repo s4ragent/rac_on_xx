@@ -26,7 +26,6 @@
    any_errors_fatal: true
    roles:
       - { role: vnc, when: "vnc is defined" }
-#      - download
       - { role: nfsclient, when: "storage_type == 'nfs' or storage_type == 'efs'" }
 #      - { role: nbdserver, when: "storage_type == 'nbd'" }
 #      - { role: nbdclient, when: "storage_type == 'nbd'" }
