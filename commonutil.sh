@@ -82,7 +82,7 @@ common_preinstall(){
 
 common_preinstall_with_vnc(){
 	common_runonly $*
-	common_execansible rac.yml --skip-tags installdbca
+	common_execansible rac.yml --skip-tags installdbca --extra-vars "vnc=on"
 	common_execansible rac.yml --tags download
 }
 
