@@ -60,5 +60,4 @@ start(){
 	az vm start -g $RG_NAME -n $NODENAME
 }
 
-
 source ./common_menu.sh
