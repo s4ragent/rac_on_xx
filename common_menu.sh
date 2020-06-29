@@ -24,4 +24,6 @@ case "$1" in
   "buildimage" ) shift;buildimage $*;;
   "get_External_IP" ) shift;get_External_IP $*;;
   "get_Internal_IP" ) shift;get_Internal_IP $*;;
+  "stop" ) shift;stop $*;;
+  "start" ) shift;start $*;;
 esac
