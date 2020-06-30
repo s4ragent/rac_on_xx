@@ -6,6 +6,9 @@ provider "azurerm" {
 variable "db_servers" {
 }
 
+variable "client_servers" {
+}
+
 locals{ 
         yaml = yamldecode(file("./vars.yml"))
 }
@@ -244,7 +247,7 @@ resource "azurerm_network_interface_security_group_association" "attach_clientni
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "clientvm" {
-    count                 = var.client
+    count                 = var.client_servers
     name                  = "client"
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
