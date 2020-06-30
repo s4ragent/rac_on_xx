@@ -42,10 +42,14 @@
    roles:
       - asmca
       - dbinstall
- #     - dbcaserial
       - { role: dbcaserial, when: "dbca == 'serial'" }
       - { role: dbca, when: "dbca == 'paralell'" }
-      - reboot_and_crsctl
+      
+
+ - hosts: dbserver
+   serial: 1
+   roles:
+      - after_install
 
  - hosts: all:!storage
    any_errors_fatal: true
