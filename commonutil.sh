@@ -165,8 +165,8 @@ common_runonly(){
 
 	cd ../
 	
-	STORAGEIntIP=`get_Internal_IP storage`
-	STORAGEExtIP=`get_External_IP storage`
+	STORAGEIntIP=`get_Internal_IP storage001`
+	STORAGEExtIP=`get_External_IP storage001`
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIntIP"
 
 	common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
