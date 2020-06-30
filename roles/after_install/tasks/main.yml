@@ -4,20 +4,20 @@
     reboot:
       reboot_timeout: 1200
       test_command: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
-    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - reboot_and_crsctl
+      - after_install
 
   - name: "crsctl"
     become: yes
     become_user: grid
     shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
     register: crsctl_result
-    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - reboot_and_crsctl
+      - after_install
 
   - debug: var=crsctl_result.stdout_lines
-    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - reboot_and_crsctl
+      - after_install
