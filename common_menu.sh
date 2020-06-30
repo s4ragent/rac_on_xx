@@ -26,4 +26,5 @@ case "$1" in
   "get_Internal_IP" ) shift;get_Internal_IP $*;;
   "stop" ) shift;stop $*;;
   "start" ) shift;start $*;;
+  "addClient" ) shift;common_addClient $*;;
 esac
