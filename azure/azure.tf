@@ -170,7 +170,7 @@ resource "azurerm_network_interface_security_group_association" "attach_storagen
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "storagevm" {
-    name                  = "storage"
+    name                  = "storage001"
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
     network_interface_ids = [azurerm_network_interface.racstoragenic.id]
@@ -189,7 +189,7 @@ resource "azurerm_linux_virtual_machine" "storagevm" {
         version   = local.yaml.vm_os_version
     }
 
-    computer_name  = "storage.${local.yaml.DOMAIN_NAME}"
+    computer_name  = "storage001.${local.yaml.DOMAIN_NAME}"
     admin_username = local.yaml.ansible_ssh_user
     disable_password_authentication = true
         
