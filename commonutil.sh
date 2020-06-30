@@ -169,7 +169,7 @@ common_runonly(){
 	STORAGEExtIP=`get_External_IP storage`
 	common_update_all_yml "STORAGE_SERVER: $STORAGEIntIP"
 
-	common_update_ansible_inventory storage $STORAGEExtIP storage 0 storage
+	common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
@@ -198,7 +198,7 @@ common_addClient(){
 	terraform apply -auto-approve
 	
 	ClientExtIP=`get_External_IP client`
-	common_update_ansible_inventory client $ClientExtIP client 70 client
+	common_update_ansible_inventory client001 $ClientExtIP client001 70 client
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
