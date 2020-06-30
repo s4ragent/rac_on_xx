@@ -341,7 +341,7 @@
     shell: dd if=/dev/zero of=/u01/swap bs=1M count={{ SWAP_SIZE }} && mkswap /u01/swap
     async: "{{ ASYNC }}"
     poll: "{{ POLL }}"
-    when: ansible_swaptotal_mb < SWAP_SIZE -1
+    when: "ansible_swaptotal_mb < SWAP_SIZE -1 and ’dbserver’ in group_names"
     tags:
       - ddswap
       - swap
@@ -351,7 +351,7 @@
     become: yes
     shell: swapon /u01/swap
     ignore_errors: yes
-    when: ansible_swaptotal_mb < SWAP_SIZE -1
+    when: "ansible_swaptotal_mb < SWAP_SIZE -1 and ’dbserver’ in group_names"
     tags:
       - swapon
       - swap
@@ -367,7 +367,7 @@
       passno: '0'
       dump: '0'
       state: present
-    when: ansible_swaptotal_mb < SWAP_SIZE -1
+    when: "ansible_swaptotal_mb < SWAP_SIZE -1 and ’dbserver’ in group_names"
     tags:
       - fstabswap
       - swap
