@@ -197,6 +197,7 @@ common_addClient(){
 	
 	terraform apply -auto-approve
 	
+	cd ../
 	ClientExtIP=`get_External_IP client001`
 	common_update_ansible_inventory client001 $ClientExtIP client001 70 client
 }
