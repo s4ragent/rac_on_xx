@@ -244,6 +244,7 @@ resource "azurerm_network_interface_security_group_association" "attach_clientni
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "clientvm" {
+    count                 = var.client
     name                  = "client"
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
