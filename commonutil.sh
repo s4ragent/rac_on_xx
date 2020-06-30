@@ -100,6 +100,7 @@ common_gridrootsh(){
 
 common_deleteall(){
         export TF_VAR_db_servers=0
+	export TF_VAR_client=0
 	cd $VIRT_TYPE
 
 	terraform destroy -auto-approve
@@ -150,6 +151,7 @@ common_runonly(){
 	fi
 
 	export TF_VAR_db_servers=$nodecount
+	export TF_VAR_client=0
 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
 	cd $VIRT_TYPE
 	
@@ -176,8 +178,7 @@ common_runonly(){
 	done
  	
 	
-    	ClientExtIP=`get_External_IP client`
-	common_update_ansible_inventory client $ClientExtIP client 70 client
+
 
 	
 #	sleep 60s
@@ -186,6 +187,18 @@ common_runonly(){
 #	CLIENTIP="${SEGMENT}$NUM"	
 #	run "client01" $CLIENTIP $CLIENTNUM "client"
 	
+}
+
+common_addClient(){
+	export TF_VAR_db_servers=$nodecount
+	export TF_VAR_client=1
+	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+	cd $VIRT_TYPE
+	
+	terraform apply -auto-approve
+	
+	ClientExtIP=`get_External_IP client`
+	common_update_ansible_inventory client $ClientExtIP client 70 client
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
