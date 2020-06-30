@@ -190,7 +190,7 @@ common_runonly(){
 }
 
 common_addClient(){
-	export TF_VAR_db_servers=$nodecount
+	export TF_VAR_db_servers=`ls $VIRT_TYPE/host_vars/$NODEPREFIX* | wc -l`
 	export TF_VAR_client_servers=1
 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
 	cd $VIRT_TYPE
