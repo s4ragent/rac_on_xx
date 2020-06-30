@@ -42,7 +42,7 @@
       - installdbca
       - download
       
-  - name: "create grid/asm.rsp"
+  - name: "create grid.rsp"
     become: yes
     template:
       src: "grid.rsp.j2"
