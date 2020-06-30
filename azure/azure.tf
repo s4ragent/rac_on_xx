@@ -278,6 +278,7 @@ resource "azurerm_linux_virtual_machine" "clientvm" {
 }
 
 resource "azurerm_managed_disk" "client_data_disk" {
+    count                 = var.client_servers
     name                  = "datadisk-client"
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
@@ -287,8 +288,8 @@ resource "azurerm_managed_disk" "client_data_disk" {
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "client_data_disk_attach" {
-  managed_disk_id    = azurerm_managed_disk.client_data_disk.id
-  virtual_machine_id = azurerm_linux_virtual_machine.clientvm.id
+  managed_disk_id    = azurerm_managed_disk.client_data_disk[0].id
+  virtual_machine_id = azurerm_linux_virtual_machine.clientvm[0].id
   lun                = "10"
   caching            = "ReadWrite"
 }
