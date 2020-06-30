@@ -216,9 +216,11 @@ resource "azurerm_virtual_machine_data_disk_attachment" "storage_data_disk_attac
 }
 
 ###client####
+##client
 # Create public IPs
 resource "azurerm_public_ip" "racclientip" {
-    name                         = "client-publicIP"
+    count                        = var.client_servers
+    name                         = "${format("client%03d", count.index + 1)}-publicIP"
     location                     = local.yaml.location
     resource_group_name          = azurerm_resource_group.racgroup.name
     allocation_method            = "Dynamic"
@@ -227,20 +229,22 @@ resource "azurerm_public_ip" "racclientip" {
 
 # Create network interface
 resource "azurerm_network_interface" "racclientnic" {
-    name                      = "nic-client"
+    count                     = var.client_servers
+    name                      = "nic-${format("client%03d", count.index + 1)}"
     location                  = local.yaml.location
     resource_group_name       = azurerm_resource_group.racgroup.name
 
     ip_configuration {
-        name                          = "ipconfigclient"
+        name                          = "ipconfigclient${count.index}"
         subnet_id                     = azurerm_subnet.racsubnet.id
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id          = azurerm_public_ip.racclientip.id
+        public_ip_address_id          = element(azurerm_public_ip.racclientip.*.id, count.index) 
     }
 }
 
 resource "azurerm_network_interface_security_group_association" "attach_clientnic_Nsg" {
-    network_interface_id      = azurerm_network_interface.racclientnic.id
+    count                     = var.client_servers
+    network_interface_id      = element(azurerm_network_interface.racclientnic.*.id, count.index)
     network_security_group_id = azurerm_network_security_group.racnsg.id
 }
 
@@ -248,14 +252,14 @@ resource "azurerm_network_interface_security_group_association" "attach_clientni
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "clientvm" {
     count                 = var.client_servers
-    name                  = "client"
+    name                  = format("client%03d", count.index + 1)
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
-    network_interface_ids = [azurerm_network_interface.racclientnic.id]
+    network_interface_ids = [element(azurerm_network_interface.racclientnic.*.id, count.index)]
     size                  = local.yaml.client_vm_size
 
     os_disk {
-        name              = "osdisk-client"
+        name              = "osdisk-${format("client%03d", count.index + 1)}"
         caching           = "ReadWrite"
         storage_account_type = local.yaml.storage_account_type
     }
@@ -267,7 +271,7 @@ resource "azurerm_linux_virtual_machine" "clientvm" {
         version   = local.yaml.vm_os_version
     }
 
-    computer_name  = "client.${local.yaml.DOMAIN_NAME}"
+    computer_name  = "${format("client%03d", count.index + 1)}.${local.yaml.DOMAIN_NAME}"
     admin_username = local.yaml.ansible_ssh_user
     disable_password_authentication = true
         
@@ -275,6 +279,24 @@ resource "azurerm_linux_virtual_machine" "clientvm" {
         username       = local.yaml.ansible_ssh_user
         public_key     = file("../${local.yaml.ansible_ssh_private_key_file}.pub")
     }
+}
+
+resource "azurerm_managed_disk" "client_data_disk" {
+    count                 = var.client_servers
+    name                  = "datadisk-${format("client%03d", count.index + 1)}"
+    location              = local.yaml.location
+    resource_group_name   = azurerm_resource_group.racgroup.name
+    storage_account_type = local.yaml.storage_account_type
+    create_option        = "Empty"
+    disk_size_gb         = local.yaml.data_disk_size_gb
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "client_data_disk_attach" {
+  count              = var.client_servers
+  managed_disk_id    = element(azurerm_managed_disk.client_data_disk.*.id, count.index)
+  virtual_machine_id = element(azurerm_linux_virtual_machine.clientvm.*.id, count.index)
+  lun                = "10"
+  caching            = "ReadWrite"
 }
 
 
