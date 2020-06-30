@@ -10,17 +10,17 @@
     tags:
       - misc
 
-  - name: "disable selinux"
-    become: yes
-    replace: dest='/etc/selinux/config' regexp='SELINUX=enforcing' replace='SELINUX=disabled'
-    tags:
-      - misc
-
 #  - name: "disable selinux"
 #    become: yes
-#    replace: dest='/etc/selinux/config' regexp='SELINUX=enforcing' replace='SELINUX=permissive'
+#    replace: dest='/etc/selinux/config' regexp='SELINUX=enforcing' replace='SELINUX=disabled'
 #    tags:
 #      - misc
+
+  - name: "disable selinux"
+    become: yes
+    replace: dest='/etc/selinux/config' regexp='SELINUX=enforcing' replace='SELINUX=permissive'
+    tags:
+      - misc
 
   - name: "disable selinux setenforce"
     become: yes
