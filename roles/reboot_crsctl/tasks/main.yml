@@ -14,8 +14,8 @@
       reboot_timeout: 1200
       test_command: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
     tags:
-      - reboot_and_crsctl
-      - after_install
+      - reboot_crsctl
+      - installdbca
 
   - name: "crsctl"
     become: yes
@@ -23,10 +23,10 @@
     shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
     register: crsctl_result
     tags:
-      - reboot_and_crsctl
-      - after_install
+      - reboot_crsctl
+      - installdbca
 
   - debug: var=crsctl_result.stdout_lines
     tags:
-      - reboot_and_crsctl
-      - after_install
+      - reboot_crsctl
+      - installdbca
