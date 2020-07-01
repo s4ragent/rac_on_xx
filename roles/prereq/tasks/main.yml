@@ -2,7 +2,7 @@
   - name: "zeroconf"
     become: yes
     lineinfile:
-      dest: /etc/sysconfig/network
+      path: /etc/sysconfig/network
       line: 'NOZEROCONF=yes'
     ignore_errors: true
     when: "'dbserver' in group_names"
