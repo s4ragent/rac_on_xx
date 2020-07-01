@@ -212,6 +212,16 @@
       - chronyd
       - prereq
 
+  - name: stop avahi-daemon
+    become: yes
+    systemd:
+      state: stop
+      enabled: no
+      name: avahi-daemon
+    tags:
+      - avahi-daemon
+      - prereq
+
   - name: "Partition additional disks"
     become: yes
     parted:
@@ -330,7 +340,8 @@
         -  sysstat 
         -  libnsl2
 #        -  libnsl2-devel
-        - unzip
+        -  unzip
+        -  libvirt-devel
       state: present
     tags:
       - preinstallpackages
