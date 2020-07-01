@@ -2,7 +2,7 @@
   - name: "dbca"
     become: yes
     become_user: oracle
-    shell: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -createDatabase -templateName {{ TEMPLATENAME }} -gdbName {{ DBNAME }} -sid {{ SIDNAME }} -SysPassword {{ SYSPASSWORD }} -SystemPassword {{ SYSTEMPASSWORD }} -emConfiguration NONE -redoLogFileSize {{ REDOFILESIZE }} -recoveryAreaDestination +{{ FRA_DISKGROUP_NAME }} -storageType ASM -asmSysPassword {{ ASMSYSPASSWORD }} -diskGroupName {{ DATA_DISKGROUP_NAME }} -characterSet {{ CHARSET }} -nationalCharacterSet {{ NCHAR }} -totalMemory {{ MEMORYTARGET }} -databaseType {{ DATABASETYPE }} -nodelist {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+    shell: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -createDatabase -templateName {{ TEMPLATENAME }} -gdbName {{ DBNAME }} -sid {{ SIDNAME }} -SysPassword {{ SYSPASSWORD }} -SystemPassword {{ SYSTEMPASSWORD }} -numberOfPDBs 1 -pdbName {{ PDBNAME }} -pdbAdminPassword {{ PDBADMINPASSWORD }}  -emConfiguration NONE -redoLogFileSize {{ REDOFILESIZE }} -recoveryAreaDestination +{{ FRA_DISKGROUP_NAME }} -storageType ASM -asmSysPassword {{ ASMSYSPASSWORD }} -diskGroupName {{ DATA_DISKGROUP_NAME }} -characterSet {{ CHARSET }} -nationalCharacterSet {{ NCHAR }} -totalMemory {{ MEMORYTARGET }} -databaseType {{ DATABASETYPE }} -nodelist {% for host in groups['dbserver']  %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - dbca
