@@ -226,7 +226,7 @@
   - name: stop avahi-daemon
     become: yes
     systemd:
-      state: stop
+      state: stopped
       enabled: no
       name: avahi-daemon
     tags:
