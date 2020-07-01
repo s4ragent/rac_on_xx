@@ -38,9 +38,7 @@
     ignore_errors: yes
     tags:
       - misc
-      - createuser
-      - prereq
-
+      
   - name: "firewalld trusted haip"
     become: yes
     firewalld:
