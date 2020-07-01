@@ -19,11 +19,6 @@ vm_os_version: "latest"
 data_sa_type: "Standard_LRS"
 data_disk_size_gb: "100"
 link_local: disable
-######## common user specific value  ###############
-#xrdp_pass: Xrdp123!
-#guac_pass: Guac123!
-#WindowManager: "xfce"
-#WindowManager: "gnome"
 ####common VIRT_TYPE specific value ################
 INSTALL_OPS: "-ignorePrereqFailure"
 MEDIA_COPY: "true"
