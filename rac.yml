@@ -43,7 +43,7 @@
  - hosts: dbserver
    serial: 1
    roles:
-      - after_install
+      - reboot_crsctl
 
  - hosts: all:!storage
    any_errors_fatal: true
