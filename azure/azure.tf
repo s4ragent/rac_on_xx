@@ -95,7 +95,7 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
     network_interface_ids = [element(azurerm_network_interface.racdbnic.*.id, count.index)]
-    size                  = local.yaml.vm_size
+    size                  = local.yaml.db_vm_size
 
     os_disk {
         name              = "osdisk-${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
