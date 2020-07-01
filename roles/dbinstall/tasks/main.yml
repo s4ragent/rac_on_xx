@@ -6,7 +6,6 @@
       - dbinstall
       - installdbca
 
-
   - name: "copy db media"
     become: yes
     become_user: oracle
