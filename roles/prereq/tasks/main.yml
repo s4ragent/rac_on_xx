@@ -343,7 +343,6 @@
 #        -  libnsl2-devel
         -  unzip
         -  libvirt-devel
-        -  avahi
       state: present
     tags:
       - preinstallpackages
