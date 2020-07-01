@@ -56,6 +56,16 @@
       - createuser
       - prereq
 
+  - name: "drop 169.254.169.254 from grid"
+    become: yes
+    shell: "firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 1 -m owner --uid-owner grid -m state --state NEW -m tcp -p tcp -d 169.254.169.254/32 -j REJECT;firewall-cmd --reload"
+    when: "link_local is defined and 'dbserver' in group_names"
+    ignore_errors: yes
+    tags:
+      - misc
+      - createuser
+      - prereq
+      
   - name: "copy .bashrc"
     become: yes
     copy:
