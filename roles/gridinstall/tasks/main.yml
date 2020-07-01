@@ -13,6 +13,7 @@
       - gridinstall
       - installdbca
       - download
+      - downloadgrid
 
   - name: "copy grid media"
     become: yes
@@ -27,6 +28,7 @@
       - gridinstall
       - installdbca
       - download
+      - downloadgrid
       
   - name: "copy grid patch"
     become: yes
@@ -41,6 +43,7 @@
       - gridinstall
       - installdbca
       - download
+      - downloadgrid
       
   - name: "create grid.rsp"
     become: yes
