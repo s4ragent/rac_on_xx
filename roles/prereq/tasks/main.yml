@@ -223,16 +223,6 @@
       - chronyd
       - prereq
 
-  - name: stop avahi-daemon
-    become: yes
-    systemd:
-      state: stopped
-      enabled: no
-      name: avahi-daemon
-    tags:
-      - avahi-daemon
-      - prereq
-
   - name: "Partition additional disks"
     become: yes
     parted:
@@ -353,9 +343,21 @@
 #        -  libnsl2-devel
         -  unzip
         -  libvirt-devel
+        -  avahi
       state: present
     tags:
       - preinstallpackages
+      - prereq
+
+  - name: stop avahi-daemon
+    become: yes
+    systemd:
+      state: stopped
+      enabled: no
+      name: avahi-daemon
+    ignore_errors: yes
+    tags:
+      - avahi-daemon
       - prereq
 
   - name: "create swap(dd)"
