@@ -27,4 +27,5 @@ case "$1" in
   "stop" ) shift;stop $*;;
   "start" ) shift;start $*;;
   "addClient" ) shift;common_addClient $*;;
+  "deletedatabase" ) shift;common_deletedatabase $*;;
 esac
