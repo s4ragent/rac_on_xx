@@ -59,6 +59,7 @@
     when: inventory_hostname == groups["dbserver"][0] and dbca != "delete"
     tags:
       - addpdbservice
+      - startpdbservice
       - dbca
       - installdbca
 
