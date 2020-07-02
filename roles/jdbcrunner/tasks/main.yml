@@ -11,19 +11,32 @@
       - jdbcrunner
       - installjdbcrunner
 
-  - name: "create user"
-    become: yes
-    become_user: oracle
-    script: createuser.sh "{{ SIDNAME }}1"
+  - name: "create createuser.sh"
+    template: 
+      src: createuser.sh.j2 
+      dest: "~/createuser.sh"
+      mode: 0755
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - jdbcrunner
+      - installjdbcrunner
+
+  - name: "createuser"
+    shell: createuser.sh && touch createuser.txt
+    args:
+      chdir: "~/"
+      creates: createuser.txt
     when: inventory_hostname == groups["dbserver"][0]
     register: createuser_result
     tags:
-      - jdbcrunner   
+      - jdbcrunner
+      - installjdbcrunner
 
   - debug: var=createuser_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - jdbcrunner
+      - installjdbcrunner
       
   - name:
     git:
@@ -32,7 +45,6 @@
     when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
-      - installjdbcrunner
 
   - name: "unzip jdbcdriver"
     local_action: shell {{ UNZIP }} /media/{{ GRID_MEDIA }} {{ JDBCDRIVER }}
@@ -61,34 +73,35 @@
     when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
-      - installjdbcrunner
 
   - name: load tpcc data
-    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc_load.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ SCAN_NAME }}:1521/{{ PDBNAME }} -jdbcUser tpcc -jdbcPass TccP12#_TccP12#_"
+    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc_load.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ SCAN_NAME }}:1521/{{ PDBNAME }} -jdbcUser {{ TPCCUSER }} -jdbcPass {{ TPCC_PASSWORD }}"
     args:
       chdir: "~/jdbcrunner"
     when: inventory_hostname == groups["client"][0]
     register: tpccload_result
     tags:
       - jdbcrunner
+      - exectpcc
 
   - debug: var=tpccload_result.stdout_lines
     when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
+      - exectpcc
 
   - name: exec tpcc
-    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ SCAN_NAME }}:1521/{{ PDBNAME }}  -jdbcUser tpcc -jdbcPass TccP12#_TccP12#_"
+    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ SCAN_NAME }}:1521/{{ PDBNAME }}  -jdbcUser {{ TPCCUSER }} -jdbcPass {{ TPCC_PASSWORD }}"
     args:
       chdir: "~/jdbcrunner"
     when: inventory_hostname == groups["client"][0]
     register: tpcc_result
     tags:
       - jdbcrunner
-      - tpcc_exec
+      - exectpcc
 
   - debug: var=tpcc_result.stdout_lines
     when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
-      - tpcc_exec
+      - exectpcc
