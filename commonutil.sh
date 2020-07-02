@@ -39,12 +39,12 @@ common_runall(){
 }
 
 common_jdbcrunner(){
-	common_runall $*
-	common_execansible rac.yml --tags jdbcrunner --extra-vars "jdbcrunner=on"
+	addClient
+	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,prereq,jdbcrunner --extra-vars "jdbcrunner=on"
 }
 
 common_jdbcrunner_only(){
-	common_execansible rac.yml --tags jdbcrunner --extra-vars "jdbcrunner=on"
+	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,prereq,jdbcrunner --extra-vars "jdbcrunner=on"
 }
 
 common_cvu(){
