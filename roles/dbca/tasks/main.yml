@@ -6,7 +6,7 @@
       - dbca
       - installdbca
 
-  - name: "dbca serial"
+  - name: "dbca parallel"
     become: yes
     become_user: oracle
     shell: "{{ DBCA_CMD }} -nodelist {% for host in groups['dbserver'] %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
@@ -15,6 +15,36 @@
       - dbca
       - installdbca
 
+  - name: "dbca serial first node"
+    become: yes
+    become_user: oracle
+    shell: "{{ DBCA_CMD }} -nodelist {{ NODENAME }}"
+    when: inventory_hostname == groups["dbserver"][0] and dbca == serial
+    tags:
+      - dbca1st
+      - dbca
+      - installdbca
+
+  - name: "dbca serial othernode"
+    become: yes
+    become_user: oracle
+    shell: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -addInstance -gdbName {{ DBNAME }} -nodeName {{ hostvars[item.1]['NODENAME'] }}"
+    with_indexed_items: "{{ groups['dbserver'] }}"
+    when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca == serial
+    tags:
+      - dbcaother
+      - dbca
+      - installdbca
+
+  - name: "add pdb serverpool"
+    become: yes
+    become_user: grid
+    shell: "{{ GRID_ORACLE_HOME }}/bin/srvctl add service –db {{ DBNAME }} –pdb {{ PDBNAME }} –service {{ PDBNAME }} –serverpool {{ SERVERPOOLNAME }}"
+    when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca != delete
+    tags:
+      - addpdbserverpool
+      - dbca
+      - installdbca
 
   - name: "delete database"
     become: yes
