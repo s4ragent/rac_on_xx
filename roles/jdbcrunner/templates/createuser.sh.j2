@@ -1,19 +1,19 @@
 #!/bin/bash
 source ~/.bash_profile
-export ORACLE_SID=$1
+export ORACLE_SID={{ SIDNAME }}1
 echo "SID:$ORACLE_SID"
 echo ""
 sqlplus /nolog <<EOF
 conn /as sysdba
 
 alter session set container={{ PDBNAME }};
-CREATE TABLESPACE USERS DATAFILE '{{ DATA_DISKGROUP_NAME }}';
+CREATE TABLESPACE USERS DATAFILE '+{{ DATA_DISKGROUP_NAME }}';
 
-DROP USER tpcc cascade;
-CREATE USER tpcc IDENTIFIED BY TccP12#_TccP12#_
+DROP USER {{ TPCCUSER }} cascade;
+CREATE USER {{ TPCCUSER }}  IDENTIFIED BY {{ TPCC_PASSWORD }}
 DEFAULT TABLESPACE USERS
 QUOTA UNLIMITED ON USERS
 TEMPORARY TABLESPACE TEMP;
-GRANT connect, resource TO tpcc;
+GRANT connect, resource TO {{ TPCCUSER }} ;
 exit
 EOF
