@@ -39,7 +39,7 @@
   - name: "add pdb service"
     become: yes
     become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/bin/srvctl add service –db {{ DBNAME }} –pdb {{ PDBNAME }} –service {{ PDBNAME }}"
+    shell: "{{ GRID_ORACLE_HOME }}/bin/srvctl add service –d {{ DBNAME }} –s {{ PDBNAME }} –pdb {{ PDBNAME }}"
     when: inventory_hostname == groups["dbserver"][0] and dbca != "delete"
     tags:
       - addpdbservice
