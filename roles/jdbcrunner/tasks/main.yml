@@ -26,10 +26,9 @@
   - name: "createuser"
     become: yes
     become_user: oracle
-    shell: ./createuser.sh && touch createuser.txt
+    shell: ./createuser.sh createuser.txt
     args:
       chdir: "~/"
-      creates: createuser.txt
     when: inventory_hostname == groups["dbserver"][0]
     register: createuser_result
     tags:
