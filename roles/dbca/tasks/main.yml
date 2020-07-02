@@ -38,8 +38,8 @@
 
   - name: "add pdb service"
     become: yes
-    become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/bin/srvctl add service –d {{ DBNAME }} –s {{ PDBNAME }} –pdb {{ PDBNAME }}"
+    become_user: oracle
+    shell: "{{ ORA_ORACLE_HOME }}/bin/srvctl add service -db {{ DBNAME }} -service {{ PDBNAME }} -serverpool  {{ SERVERPOOLNAME }} –pdb {{ PDBNAME }}"
     when: inventory_hostname == groups["dbserver"][0] and dbca != "delete"
     tags:
       - addpdbservice
@@ -48,11 +48,11 @@
 
   - name: "start pdb"
     become: yes
-    become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/bin/srvctl start service –db {{ DBNAME }} -service {{ PDBNAME }}"
-    when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca != "delete"
+    become_user: oracle
+    shell: "{{ ORA_ORACLE_HOME }}/bin/srvctl start service –db {{ DBNAME }} -service {{ PDBNAME }}"
+    when: inventory_hostname == groups["dbserver"][0] and dbca != "delete"
     tags:
-      - addpdbserverpool
+      - addpdbservice
       - dbca
       - installdbca
 
