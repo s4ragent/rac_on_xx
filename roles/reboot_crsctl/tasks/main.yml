@@ -12,7 +12,7 @@
     become: yes
     reboot:
       reboot_timeout: 1200
-      test_command: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
+      test_command: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t && sleep 120s"
     tags:
       - reboot_crsctl
       - installdbca
