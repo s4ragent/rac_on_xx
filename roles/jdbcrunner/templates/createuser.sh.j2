@@ -6,6 +6,7 @@ echo ""
 sqlplus /nolog <<EOF
 conn /as sysdba
 
+ALTER PLUGGABLE DATABASE {{ PDBNAME } OPEN;
 alter session set container={{ PDBNAME }};
 CREATE TABLESPACE USERS DATAFILE '+{{ DATA_DISKGROUP_NAME }}';
 
