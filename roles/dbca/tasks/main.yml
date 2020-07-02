@@ -46,6 +46,16 @@
       - dbca
       - installdbca
 
+  - name: "start pdb"
+    become: yes
+    become_user: grid
+    shell: "{{ GRID_ORACLE_HOME }}/bin/srvctl start service –db {{ DBNAME }} -service {{ PDBNAME }}"
+    when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca != delete
+    tags:
+      - addpdbserverpool
+      - dbca
+      - installdbca
+
   - name: "delete database"
     become: yes
     become_user: oracle
