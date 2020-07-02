@@ -36,9 +36,7 @@
    roles:
       - asmca
       - dbinstall
-      - { role: dbcaserial, when: "dbca == 'serial'" }
-      - { role: dbca, when: "dbca == 'paralell'" }
-      
+      - dbca   
 
  - hosts: dbserver
    serial: 1
