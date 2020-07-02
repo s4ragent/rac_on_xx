@@ -52,7 +52,7 @@
     shell: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -deleteDatabase -sourceDB {{ DBNAME }} -sysDBAUserName sys -sysDBAPassword {{ SYSPASSWORD }}  -forceArchiveLogDeletion"
     when: inventory_hostname == groups["dbserver"][0] and dbca == delete
     tags:
-      - dbcadelete
+      - deletedatabase
 
   - name: "crsctl"
     become: yes
@@ -62,8 +62,10 @@
     tags:
       - dbca
       - installdbca
+      - deletedatabase
 
   - debug: var=dbca_crsctl_result.stdout_lines
     tags:
       - dbca
       - installdbca
+      - deletedatabase
