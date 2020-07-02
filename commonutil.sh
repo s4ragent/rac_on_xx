@@ -39,7 +39,7 @@ common_runall(){
 }
 
 common_jdbcrunner(){
-	addClient
+	common_addClient
 	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=on"
 }
 
