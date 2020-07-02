@@ -22,7 +22,7 @@
       - installjdbcrunner
 
   - name: "createuser"
-    shell: createuser.sh && touch createuser.txt
+    shell: ./createuser.sh && touch createuser.txt
     args:
       chdir: "~/"
       creates: createuser.txt
