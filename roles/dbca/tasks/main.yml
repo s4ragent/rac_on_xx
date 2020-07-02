@@ -40,6 +40,9 @@
     become: yes
     become_user: oracle
     shell: "{{ ORA_ORACLE_HOME }}/bin/srvctl add service -db {{ DBNAME }} -service {{ PDBNAME }} -serverpool  {{ SERVERPOOLNAME }} –pdb {{ PDBNAME }}"
+    environment:
+      ORACLE_HOME:
+        "{{ ORA_ORACLE_HOME }}"
     when: inventory_hostname == groups["dbserver"][0] and dbca != "delete"
     tags:
       - addpdbservice
@@ -50,6 +53,9 @@
     become: yes
     become_user: oracle
     shell: "{{ ORA_ORACLE_HOME }}/bin/srvctl start service –db {{ DBNAME }} -service {{ PDBNAME }}"
+    environment:
+      ORACLE_HOME:
+        "{{ ORA_ORACLE_HOME }}"
     when: inventory_hostname == groups["dbserver"][0] and dbca != "delete"
     tags:
       - addpdbservice
