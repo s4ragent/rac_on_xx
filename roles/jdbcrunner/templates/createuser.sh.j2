@@ -4,6 +4,8 @@ export ORACLE_SID={{ SIDNAME }}1
 echo "SID:$ORACLE_SID"
 echo ""
 sqlplus /nolog <<EOF
+whenever sqlerror exit 5
+whenever oserror exit 9
 conn /as sysdba
 
 ALTER PLUGGABLE DATABASE {{ PDBNAME }} OPEN;
