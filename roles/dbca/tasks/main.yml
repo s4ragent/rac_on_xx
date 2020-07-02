@@ -39,7 +39,7 @@
   - name: "add pdb service"
     become: yes
     become_user: oracle
-    shell: "{{ ORA_ORACLE_HOME }}/bin/srvctl add service -d {{ DBNAME }} -pdb {{ PDBNAME }} -serverpool {{ SERVERPOOLNAME }}"
+    shell: "{{ ORA_ORACLE_HOME }}/bin/srvctl add service -d {{ DBNAME }} -pdb SRV{{ PDBNAME }} -serverpool {{ SERVERPOOLNAME }}"
     environment:
       ORACLE_HOME:
         "{{ ORA_ORACLE_HOME }}"
@@ -52,7 +52,7 @@
   - name: "start pdb"
     become: yes
     become_user: oracle
-    shell: "{{ ORA_ORACLE_HOME }}/bin/srvctl start service –d {{ DBNAME }} -s {{ PDBNAME }}"
+    shell: "{{ ORA_ORACLE_HOME }}/bin/srvctl start service –d {{ DBNAME }} -s SRV{{ PDBNAME }}"
     environment:
       ORACLE_HOME:
         "{{ ORA_ORACLE_HOME }}"
