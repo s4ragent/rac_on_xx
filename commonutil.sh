@@ -44,7 +44,7 @@ common_jdbcrunner(){
 }
 
 common_jdbcrunner_only(){
-	common_execansible rac.yml --tags ssh,vxlan_conf,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=on"
+	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=on"
 }
 
 common_deletedatabase(){
