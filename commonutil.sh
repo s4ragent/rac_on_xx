@@ -40,11 +40,15 @@ common_runall(){
 
 common_jdbcrunner(){
 	addClient
-	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,prereq,jdbcrunner --extra-vars "jdbcrunner=on"
+	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=on"
 }
 
 common_jdbcrunner_only(){
-	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,prereq,jdbcrunner --extra-vars "jdbcrunner=on"
+	common_execansible rac.yml --tags ssh,vxlan_conf,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=on"
+}
+
+common_deletedatabase(){
+	common_execansible rac.yml --tags deletedatabase --extra-vars "dbca=delete"
 }
 
 common_cvu(){
@@ -120,8 +124,7 @@ do
     common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
     common_runall $1 >>$LOG  2>&1
-    common_addClient >>$LOG  2>&1
-    common_execansible rac.yml --tags ssh,vxlan_conf,dnsmasq >>$LOG  2>&1
+    common_jdbcrunner >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
@@ -177,16 +180,6 @@ common_runonly(){
 		External_IP=`get_External_IP $NODENAME`
 		common_update_ansible_inventory $NODENAME $External_IP $NODENAME $i dbserver
 	done
- 	
-	
-
-
-	
-#	sleep 60s
-#	CLIENTNUM=70
-#	NUM=`expr $BASE_IP + $CLIENTNUM`
-#	CLIENTIP="${SEGMENT}$NUM"	
-#	run "client01" $CLIENTIP $CLIENTNUM "client"
 	
 }
 
