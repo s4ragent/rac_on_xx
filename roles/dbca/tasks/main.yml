@@ -10,7 +10,7 @@
     become: yes
     become_user: oracle
     shell: "{{ DBCA_CMD }} -nodelist {% for host in groups['dbserver'] %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
-    when: inventory_hostname == groups["dbserver"][0] and dbca == paralell
+    when: inventory_hostname == groups["dbserver"][0] and dbca == "paralell"
     tags:
       - dbca
       - installdbca
@@ -19,7 +19,7 @@
     become: yes
     become_user: oracle
     shell: "{{ DBCA_CMD }} -nodelist {{ NODENAME }}"
-    when: inventory_hostname == groups["dbserver"][0] and dbca == serial
+    when: inventory_hostname == groups["dbserver"][0] and dbca == "serial"
     tags:
       - dbca1st
       - dbca
@@ -30,7 +30,7 @@
     become_user: oracle
     shell: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -addInstance -gdbName {{ DBNAME }} -nodeName {{ hostvars[item.1]['NODENAME'] }}"
     with_indexed_items: "{{ groups['dbserver'] }}"
-    when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca == serial
+    when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca == "serial"
     tags:
       - dbcaother
       - dbca
@@ -40,7 +40,7 @@
     become: yes
     become_user: grid
     shell: "{{ GRID_ORACLE_HOME }}/bin/srvctl add service –db {{ DBNAME }} –pdb {{ PDBNAME }} –service {{ PDBNAME }} –serverpool {{ SERVERPOOLNAME }}"
-    when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca != delete
+    when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca != "delete"
     tags:
       - addpdbserverpool
       - dbca
@@ -50,7 +50,7 @@
     become: yes
     become_user: grid
     shell: "{{ GRID_ORACLE_HOME }}/bin/srvctl start service –db {{ DBNAME }} -service {{ PDBNAME }}"
-    when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca != delete
+    when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca != "delete"
     tags:
       - addpdbserverpool
       - dbca
@@ -60,7 +60,7 @@
     become: yes
     become_user: oracle
     shell: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -deleteDatabase -sourceDB {{ DBNAME }} -sysDBAUserName sys -sysDBAPassword {{ SYSPASSWORD }}  -forceArchiveLogDeletion"
-    when: inventory_hostname == groups["dbserver"][0] and dbca == delete
+    when: inventory_hostname == groups["dbserver"][0] and dbca == "delete"
     tags:
       - deletedatabase
 
