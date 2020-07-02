@@ -12,6 +12,8 @@
       - installjdbcrunner
 
   - name: "create createuser.sh"
+    become: yes
+    become_user: oracle
     template: 
       src: createuser.sh.j2 
       dest: "~/createuser.sh"
@@ -22,6 +24,8 @@
       - installjdbcrunner
 
   - name: "createuser"
+    become: yes
+    become_user: oracle
     shell: ./createuser.sh && touch createuser.txt
     args:
       chdir: "~/"
