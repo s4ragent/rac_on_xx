@@ -70,7 +70,6 @@
     when: inventory_hostname == groups["dbserver"][0] and dbca == "delete"
     tags:
       - deletedatabase
-      - dbca
 
   - name: "crsctl"
     become: yes
@@ -79,8 +78,11 @@
     register: crsctl_result
     tags:
       - deletedatabase
+      - dbca
+      - installdbca
 
   - debug: var=crsctl_result.stdout_lines
     tags:
       - deletedatabase
       - dbca
+      - installdbca
