@@ -51,6 +51,10 @@ common_deletedatabase(){
 	common_execansible rac.yml --tags deletedatabase --extra-vars "dbca=delete"
 }
 
+common_reboot_crsctl(){
+	common_execansible rac.yml --tags reboot_crsctl --extra-vars "reboot_crsctl=on"
+}
+
 common_cvu(){
 	common_runonly $*
 	common_execansible rac.yml --skip-tags installdbca --extra-vars "cvu=on"
@@ -124,6 +128,7 @@ do
     common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
     common_runall $1 >>$LOG  2>&1
+    common_reboot_crsctl $1 >>$LOG  2>&1
     common_jdbcrunner >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
