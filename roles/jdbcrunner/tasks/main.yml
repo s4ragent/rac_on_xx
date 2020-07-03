@@ -2,11 +2,19 @@
   - name: "dbca_cmd"
     set_fact:
       TARGET: {{ SCAN_NAME }}
-      when: jdbcrunner == 'ha'
-      tags:
+    when: jdbcrunner == 'ha'
+    tags:
       - jdbcrunner
       - installjdbcrunner
-      
+
+  - name: "dbca_cmd"
+    set_fact:
+      TARGET: "{{ hostvars[groups['dbserver'][0]]['ansible_vxlan0']['ipv4']['address'] }}"
+    when: jdbcrunner != 'ha'  
+    tags:
+      - jdbcrunner
+      - installjdbcrunner
+ 
   - name: "install jdbcrunner dependency library"
     become: yes
     dnf:
