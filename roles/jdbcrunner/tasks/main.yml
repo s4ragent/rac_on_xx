@@ -1,5 +1,5 @@
 ---
-  - name: "dbca_cmd"
+  - name: "set targe(HA)"
     set_fact:
       TARGET: {{ SCAN_NAME }}
     when: jdbcrunner == 'ha'
@@ -7,7 +7,7 @@
       - jdbcrunner
       - installjdbcrunner
 
-  - name: "dbca_cmd"
+  - name: "set target(SINGLE)"
     set_fact:
       TARGET: "{{ hostvars[groups['dbserver'][0]]['ansible_vxlan0']['ipv4']['address'] }}"
     when: jdbcrunner != 'ha'  
