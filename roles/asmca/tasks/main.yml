@@ -40,18 +40,3 @@
       - createdg
       - installdbca
       
-  - name: "crsctl"
-    become: yes
-    become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
-    register: crsctlasm_result
-    tags:
-      - crsctl_asmca
-      - gridinstall
-      - installdbca
-
-  - debug: var=crsctlasm_result.stdout_lines
-    tags:
-      - crsctl_asmca
-      - gridinstall
-      - installdbca
