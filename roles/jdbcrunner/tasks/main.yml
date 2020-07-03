@@ -1,4 +1,12 @@
 ---
+  - name: "dbca_cmd"
+    set_fact:
+      TARGET: {{ SCAN_NAME }}
+      when: jdbcrunner == 'ha'
+      tags:
+      - jdbcrunner
+      - installjdbcrunner
+      
   - name: "install jdbcrunner dependency library"
     become: yes
     dnf:
@@ -78,7 +86,7 @@
       - jdbcrunner
 
   - name: load tpcc data
-    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc_load.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ SCAN_NAME }}:1521/{{ PDBNAME }} -jdbcUser {{ TPCCUSER }} -jdbcPass {{ TPCC_PASSWORD }}"
+    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc_load.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ TARGET }}:1521/{{ PDBNAME }} -jdbcUser {{ TPCCUSER }} -jdbcPass {{ TPCC_PASSWORD }}"
     args:
       chdir: "~/jdbcrunner"
     when: inventory_hostname == groups["client"][0]
@@ -94,7 +102,7 @@
       - exectpcc
 
   - name: exec tpcc
-    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ SCAN_NAME }}:1521/{{ PDBNAME }}  -jdbcUser {{ TPCCUSER }} -jdbcPass {{ TPCC_PASSWORD }}"
+    shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ TARGET }}:1521/{{ PDBNAME }}  -jdbcUser {{ TPCCUSER }} -jdbcPass {{ TPCC_PASSWORD }}"
     args:
       chdir: "~/jdbcrunner"
     when: inventory_hostname == groups["client"][0]
