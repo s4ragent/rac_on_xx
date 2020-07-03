@@ -147,13 +147,31 @@ common_all_replaceinventory(){
 	done
 }
 
-common_runonly(){
 
+common_init(){
 	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
 		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
 		chmod 600 ${ansible_ssh_private_key_file}*
 	fi
- 	
+	cd $VIRT_TYPE
+	
+	terraform init
+
+	cd ../
+}
+
+common_runonly(){
+	common_init
+	
+	common_addStorage
+	STORAGEIntIP=`get_Internal_IP storage001`
+	common_update_all_yml "STORAGE_SERVER: $STORAGEIntIP"
+	
+ 	common_addDbServer $1
+}
+
+common_addDbServer(){
+
 	if [ "$1" = "" ]; then
 		nodecount=3
 	else
@@ -161,34 +179,38 @@ common_runonly(){
 	fi
 
 	export TF_VAR_db_servers=$nodecount
-	export TF_VAR_storage_servers=1
+	export TF_VAR_storage_servers=`ls $VIRT_TYPE/host_vars/storage* | wc -l`
 	export TF_VAR_client_servers=0
 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
 	cd $VIRT_TYPE
 	
-	terraform init
 	terraform apply -auto-approve
-
- 	
-	if [ $? != 0 ]; then 
-		exit 255 
-	fi
-
+	
 	cd ../
 	
-	STORAGEIntIP=`get_Internal_IP storage001`
-	STORAGEExtIP=`get_External_IP storage001`
-	common_update_all_yml "STORAGE_SERVER: $STORAGEIntIP"
-
-	common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
 	for i in `seq 1 $nodecount`;
 	do
 		NODENAME="$NODEPREFIX"`printf "%.3d" $i`
 		External_IP=`get_External_IP $NODENAME`
 		common_update_ansible_inventory $NODENAME $External_IP $NODENAME $i dbserver
 	done
-	
 }
+
+common_addStorage(){
+	export TF_VAR_db_servers=0
+	export TF_VAR_storage_servers=1
+	export TF_VAR_client_servers=0
+	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+	cd $VIRT_TYPE
+	
+	terraform apply -auto-approve
+	
+	cd ../
+	
+	STORAGEExtIP=`get_External_IP storage001`
+	common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
+}
+
 
 common_addClient(){
 	export TF_VAR_db_servers=`ls $VIRT_TYPE/host_vars/$NODEPREFIX* | wc -l`
