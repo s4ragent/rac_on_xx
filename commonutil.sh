@@ -207,7 +207,7 @@ common_addStorage(){
 	
 	cd ../
 
-	if [ "$storage_type" = "nfs" or "$storage_type" = "iscsi" ]; then
+	if [ "$storage_type" = "nfs"  "$storage_type" = "iscsi" ]; then
 		STORAGEExtIP=`get_External_IP storage001`
 		common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
 	fi
