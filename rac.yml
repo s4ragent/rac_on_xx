@@ -30,13 +30,15 @@
    serial: 1
    roles:
       - gridinstall
+      - crsctl
 
  - hosts: dbserver
    any_errors_fatal: true
    roles:
       - asmca
       - dbinstall
-      - dbca   
+      - dbca
+      - crsctl
 
  - hosts: dbserver
    serial: 1
