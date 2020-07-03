@@ -6,6 +6,9 @@ provider "azurerm" {
 variable "db_servers" {
 }
 
+variable "storage_servers" {
+}
+
 variable "client_servers" {
 }
 
@@ -138,10 +141,11 @@ resource "azurerm_virtual_machine_data_disk_attachment" "db_data_disk_attach" {
   caching            = "ReadWrite"
 }
 
-###storage####
+##storage
 # Create public IPs
 resource "azurerm_public_ip" "racstorageip" {
-    name                         = "storage-publicIP"
+    count                        = var.storage_servers
+    name                         = "${format("storage%03d", count.index + 1)}-publicIP"
     location                     = local.yaml.location
     resource_group_name          = azurerm_resource_group.racgroup.name
     allocation_method            = "Dynamic"
@@ -150,34 +154,37 @@ resource "azurerm_public_ip" "racstorageip" {
 
 # Create network interface
 resource "azurerm_network_interface" "racstoragenic" {
-    name                      = "nic-storage"
+    count                     = var.storage_servers
+    name                      = "nic-${format("storage%03d", count.index + 1)}"
     location                  = local.yaml.location
     resource_group_name       = azurerm_resource_group.racgroup.name
 
     ip_configuration {
-        name                          = "ipconfigstorage"
+        name                          = "ipconfigstorage${count.index}"
         subnet_id                     = azurerm_subnet.racsubnet.id
         private_ip_address_allocation = "Dynamic"
-        public_ip_address_id          = azurerm_public_ip.racstorageip.id
+        public_ip_address_id          = element(azurerm_public_ip.racstorageip.*.id, count.index) 
     }
 }
 
 resource "azurerm_network_interface_security_group_association" "attach_storagenic_Nsg" {
-    network_interface_id      = azurerm_network_interface.racstoragenic.id
+    count                     = var.storage_servers
+    network_interface_id      = element(azurerm_network_interface.racstoragenic.*.id, count.index)
     network_security_group_id = azurerm_network_security_group.racnsg.id
 }
 
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "storagevm" {
-    name                  = "storage001"
+    count                 = var.storage_servers
+    name                  = format("storage%03d", count.index + 1)
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
-    network_interface_ids = [azurerm_network_interface.racstoragenic.id]
+    network_interface_ids = [element(azurerm_network_interface.racstoragenic.*.id, count.index)]
     size                  = local.yaml.storage_vm_size
 
     os_disk {
-        name              = "osdisk-storage"
+        name              = "osdisk-${format("storage%03d", count.index + 1)}"
         caching           = "ReadWrite"
         storage_account_type = local.yaml.storage_account_type
     }
@@ -189,7 +196,7 @@ resource "azurerm_linux_virtual_machine" "storagevm" {
         version   = local.yaml.vm_os_version
     }
 
-    computer_name  = "storage001.${local.yaml.DOMAIN_NAME}"
+    computer_name  = "${format("storage%03d", count.index + 1)}.${local.yaml.DOMAIN_NAME}"
     admin_username = local.yaml.ansible_ssh_user
     disable_password_authentication = true
         
@@ -200,7 +207,8 @@ resource "azurerm_linux_virtual_machine" "storagevm" {
 }
 
 resource "azurerm_managed_disk" "storage_data_disk" {
-    name                  = "datadisk-storage"
+    count                 = var.storage_servers
+    name                  = "datadisk-${format("storage%03d", count.index + 1)}"
     location              = local.yaml.location
     resource_group_name   = azurerm_resource_group.racgroup.name
     storage_account_type = local.yaml.storage_account_type
@@ -209,11 +217,13 @@ resource "azurerm_managed_disk" "storage_data_disk" {
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "storage_data_disk_attach" {
-  managed_disk_id    = azurerm_managed_disk.storage_data_disk.id
-  virtual_machine_id = azurerm_linux_virtual_machine.storagevm.id
+  count              = var.storage_servers
+  managed_disk_id    = element(azurerm_managed_disk.storage_data_disk.*.id, count.index)
+  virtual_machine_id = element(azurerm_linux_virtual_machine.storagevm.*.id, count.index)
   lun                = "10"
   caching            = "ReadWrite"
 }
+
 
 ###client####
 ##client
