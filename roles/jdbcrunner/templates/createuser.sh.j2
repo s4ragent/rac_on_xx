@@ -1,6 +1,7 @@
 #!/bin/bash
 source ~/.bash_profile
 
+#sqlplus sys/oracle123@scan:1521/pdb01 as sysdba
 sqlplus "sys/{{ SYSPASSWORD }}@scan:1521/{{ DBNAME }} as sysdba" <<EOF
 --whenever sqlerror exit 5
 --whenever oserror exit 9
