@@ -204,6 +204,41 @@ common_addClient(){
 	common_update_ansible_inventory client001 $ClientExtIP client001 70 client
 }
 
+
+common_runonly_singledb(){
+
+	if [  ! -e ${ansible_ssh_private_key_file} ] ; then
+		ssh-keygen -t rsa -P "" -f $ansible_ssh_private_key_file
+		chmod 600 ${ansible_ssh_private_key_file}*
+	fi
+ 	
+	export TF_VAR_db_servers=1
+	export TF_VAR_storage_servers=0
+	export TF_VAR_client_servers=1
+	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+	cd $VIRT_TYPE
+	
+	terraform init
+	terraform apply -auto-approve
+
+ 	
+	if [ $? != 0 ]; then 
+		exit 255 
+	fi
+
+	cd ../
+	
+	common_update_all_yml ""
+	
+	NODENAME="$NODEPREFIX"`printf "%.3d" 1`
+	External_IP=`get_External_IP $NODENAME`
+	common_update_ansible_inventory $NODENAME $External_IP $NODENAME 1 dbserver
+	
+	ClientExtIP=`get_External_IP client001`
+	common_update_ansible_inventory client001 $ClientExtIP client001 70 client
+	
+}
+
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
 common_update_ansible_inventory(){
 hostgroup=$5
