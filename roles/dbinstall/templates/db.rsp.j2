@@ -4,11 +4,7 @@ UNIX_GROUP_NAME=oinstall
 INVENTORY_LOCATION={{ ORAINVENTORY }} 
 ORACLE_HOME={{ ORA_ORACLE_HOME }}
 ORACLE_BASE={{ ORA_ORACLE_BASE }}
-{% if dbca == 'SEHA' %}
-oracle.install.db.InstallEdition=SE2
-{% else %}
 oracle.install.db.InstallEdition=EE
-{% endif %}
 oracle.install.db.OSDBA_GROUP=dba
 oracle.install.db.OSOPER_GROUP=oper
 oracle.install.db.OSBACKUPDBA_GROUP=dba
@@ -16,11 +12,7 @@ oracle.install.db.OSDGDBA_GROUP=dba
 oracle.install.db.OSKMDBA_GROUP=dba
 oracle.install.db.OSRACDBA_GROUP=dba
 oracle.install.db.rac.configurationType=
-{% if dbca == 'paralell' or dbca == 'serial' or dbca == 'SEHA' %}
 oracle.install.db.CLUSTER_NODES={% for host in play_hosts %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %} 
-{% else %}
-oracle.install.db.CLUSTER_NODES=
-{% endif %} 
 oracle.install.db.isRACOneInstall=false
 oracle.install.db.racOneServiceName=
 oracle.install.db.rac.serverpoolName=
