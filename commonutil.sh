@@ -206,9 +206,11 @@ common_addStorage(){
 	terraform apply -auto-approve
 	
 	cd ../
-	
-	STORAGEExtIP=`get_External_IP storage001`
-	common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
+
+	if [ "storage_type" = "nfs" ]; then
+		STORAGEExtIP=`get_External_IP storage001`
+		common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
+	fi
 }
 
 
