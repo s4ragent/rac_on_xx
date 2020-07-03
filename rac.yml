@@ -41,7 +41,7 @@
  - hosts: dbserver
    serial: 1
    roles:
-      - reboot_crsctl
+      - { role: reboot_crsctl, when: "reboot_crsctl is defined" }
 
  - hosts: all:!storage
    any_errors_fatal: true
