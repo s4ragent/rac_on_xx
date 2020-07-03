@@ -1,7 +1,7 @@
 #!/bin/bash
 #export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no"
 export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30"
-export  ANSIBLE_INVENTORY_IGNORE="~, .orig, .bak, .ini, .cfg, .retry, .pyc, .pyo, .yml, .md, .sh, images, .log, .service,Vagrantfile, .out, .tf, .tfstate, .backup, .tfvars"
+export ANSIBLE_INVENTORY_IGNORE="~, .orig, .bak, .ini, .cfg, .retry, .pyc, .pyo, .yml, .md, .sh, images, .log, .service,Vagrantfile, .out, .tf, .tfstate, .backup, .tfvars"
 export ANSIBLE_LOG_PATH="./ansible-`date +%Y%m%d%H%M%S`.log"
 export ANSIBLE_SSH_PIPELINING=True
 
@@ -192,6 +192,7 @@ common_runonly(){
 
 common_addClient(){
 	export TF_VAR_db_servers=`ls $VIRT_TYPE/host_vars/$NODEPREFIX* | wc -l`
+	export TF_VAR_storage_servers=1
 	export TF_VAR_client_servers=1
 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
 	cd $VIRT_TYPE
