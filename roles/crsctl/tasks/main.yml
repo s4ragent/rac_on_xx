@@ -8,13 +8,10 @@
       - crsctl
       - gridinstall
       - installdbca
-      - dbca
-      - deletedatabase
 
   - debug: var=crsctl_result.stdout_lines
     tags:
       - crsctl
       - gridinstall
       - installdbca
-      - dbca
-      - deletedatabase
+
