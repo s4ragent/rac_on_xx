@@ -64,6 +64,7 @@
     file: 
       path: /etc/dhcp/dhclient.d/google_hostname.sh
       state: absent
+    when: google_hostname is defined  
     tags:
       - misc
   
