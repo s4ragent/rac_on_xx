@@ -70,3 +70,17 @@
     when: inventory_hostname == groups["dbserver"][0] and dbca == "delete"
     tags:
       - deletedatabase
+      - dbca
+
+  - name: "crsctl"
+    become: yes
+    become_user: grid
+    shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t"
+    register: crsctl_result
+    tags:
+      - deletedatabase
+
+  - debug: var=crsctl_result.stdout_lines
+    tags:
+      - deletedatabase
+      - dbca
