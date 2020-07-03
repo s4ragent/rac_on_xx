@@ -1,7 +1,7 @@
 ---
   - name: "set targe(HA)"
     set_fact:
-      TARGET: {{ SCAN_NAME }}
+      TARGET: "{{ SCAN_NAME }}"
     when: jdbcrunner == 'ha'
     tags:
       - jdbcrunner
