@@ -42,7 +42,7 @@
   - name: "createuser"
     become: yes
     become_user: oracle
-    shell: ./createuser.sh createuser.txt
+    shell: bash -x ./createuser.sh createuser.txt
     args:
       chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
