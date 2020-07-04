@@ -54,9 +54,11 @@
     tags:
       - vxlan_conf
       
-  - name: "nmcli up/reload vxlan"
+  - name: "nmcli up vxlan"
     become: yes
     shell: "nmcli con up {{ item }}"
+    args:
+      creates: "/etc/NetworkManager/system-connections/{{ item.name }}.nmconnection"
     with_items:
       - vxlan0
       - vxlan1
@@ -64,13 +66,12 @@
     tags:
       - vxlan_conf
 
-  - name: "start vip"
+  - name: "add fdb"
     become: yes
-    become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/bin/srvctl start vip -node {{ NODENAME }} "
-    environment:
-      ORACLE_HOME:
-        "{{ GRID_ORACLE_HOME }}"
-    ignore_errors: yes
+    shell: "/etc/NetworkManager/dispatcher.d/09_vxlan {{ item }} up"
+    with_items:
+      - vxlan0
+      - vxlan1
+      - vxlan2
     tags:
       - vxlan_conf
