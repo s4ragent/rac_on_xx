@@ -58,7 +58,7 @@
     become: yes
     shell: "nmcli con up {{ item }}"
     args:
-      creates: "/etc/NetworkManager/system-connections/{{ item.name }}.nmconnection"
+      creates: "/etc/NetworkManager/system-connections/{{ item }}.nmconnection"
     with_items:
       - vxlan0
       - vxlan1
