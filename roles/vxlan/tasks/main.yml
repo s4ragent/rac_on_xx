@@ -54,12 +54,23 @@
     tags:
       - vxlan_conf
       
-  - name: "nmcli up vxlan"
+  - name: "nmcli up/reload vxlan"
     become: yes
     shell: "nmcli con up {{ item }}"
     with_items:
       - vxlan0
       - vxlan1
       - vxlan2
+    tags:
+      - vxlan_conf
+
+  - name: "start vip"
+    become: yes
+    become_user: grid
+    shell: "{{ GRID_ORACLE_HOME }}/bin/srvctl start vip -node {{ NODENAME }} "
+    environment:
+      ORACLE_HOME:
+        "{{ GRID_ORACLE_HOME }}"
+    ignore_errors: yes
     tags:
       - vxlan_conf
