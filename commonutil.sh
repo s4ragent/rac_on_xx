@@ -40,11 +40,11 @@ common_runall(){
 
 common_jdbcrunner(){
 	common_addClient
-	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=ha"
+	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=on"
 }
 
 common_jdbcrunner_only(){
-	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=ha"
+	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=on"
 }
 
 common_deletedatabase(){
