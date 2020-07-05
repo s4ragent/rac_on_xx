@@ -1,0 +1,17 @@
+---
+ - hosts: all
+   any_errors_fatal: true
+   roles:
+      - ssh
+      - misc
+      - prereq
+
+ - hosts: dbserver
+   any_errors_fatal: true
+   roles:
+      - singedb_install_dbca
+
+ - hosts: all
+   any_errors_fatal: true
+   roles:
+      - jdbcrunner
