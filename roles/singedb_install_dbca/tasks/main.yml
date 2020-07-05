@@ -1,1 +1,97 @@
 ---
+  - name: "firewalld allow tns"
+    become: yes
+    firewalld:
+      zone: public
+      port: 1521/tcp
+      permanent: yes
+      state: enabled
+      immediate: yes
+    ignore_errors: yes
+    tags:
+      - singledb
+
+  - name: "create oradata"
+    become: yes
+    file:
+      path: "{{ ORA_DATA }}"
+      state: directory
+      owner: oracle
+      group: oinstall
+      mode: 0755
+    tags:
+      - singledb
+
+  - name: "crete media directory"
+    become: yes
+    file:
+      path: "{{ MEDIA_PATH }}"
+      state: directory
+      mode: 0755
+      group: oinstall
+      owner: oracle
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - singledb
+
+  - name: "copy patch"
+    become: yes
+    become_user: oracle
+    unarchive:
+      src: "/media/{{ GRID_PATCH }}"
+      dest: "{{ MEDIA_PATH }}"
+      creates: "{{ MEDIA_PATH }}/{{ GRID_PATCH_NUM }}"
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - singledb
+
+  - set_fact: INSTALL_DB_OPS=""
+    when: INSTALL_DB_OPS is undefined
+    tags:
+      - singledb
+
+  - name: "copy db media"
+    become: yes
+    become_user: oracle
+    unarchive:
+      src: "/media/{{ DB_MEDIA }}"
+      dest: "{{ ORA_ORACLE_HOME }}"
+      creates: "{{ ORA_ORACLE_HOME }}/bin"
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - singledb
+
+  - name: "runInstaller(db)"
+    become: yes
+    become_user: oracle
+    shell: "{{ ORA_ORACLE_HOME }}/runInstaller -silent -applyRU {{ MEDIA_PATH }}/{{ GRID_PATCH_NUM }} -responseFile /home/oracle/db.rsp -waitforcompletion {{ INSTALL_OPS }} {{ INSTALL_DB_OPS }}"
+    when: inventory_hostname == groups["dbserver"][0]
+    ignore_errors: True
+    register: runinstallerdb_result
+    tags:
+      - runinstallerdb
+      - dbinstall
+      - installdbca
+
+  - debug: var=runinstallerdb_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
+    failed_when: runinstallerdb_result.rc !=0 and runinstallerdb_result.rc != 250 and runinstallerdb_result.rc != 6
+    tags:
+      - runinstallerdb
+      - dbinstall
+      - installdbca
+
+  - name: "db root.sh"
+    become: yes
+    shell: "{{ ORA_ORACLE_HOME }}/root.sh -silent"
+    register: dbrootsh_result
+    tags:
+      - dbrootsh
+      - dbinstall
+      - installdbca
+
+  - debug: var=dbrootsh_result.stdout_lines
+    tags:
+      - dbrootsh
+      - dbinstall
+      - installdbca      
