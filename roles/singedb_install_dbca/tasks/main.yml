@@ -152,6 +152,9 @@
   - name: "lsnrctl"
     become: yes
     become_user: oracle
+    environment:
+      ORACLE_HOME:
+        "{{ ORA_ORACLE_HOME }}"
     shell: |
       {{ ORA_ORACLE_HOME }}/bin/lsnrctl start
     when: inventory_hostname == groups["dbserver"][0]
