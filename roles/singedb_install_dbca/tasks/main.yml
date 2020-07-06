@@ -92,7 +92,7 @@
       oracle.install.db.OSKMDBA_GROUP=dba \
       oracle.install.db.OSRACDBA_GROUP=dba \
       SECURITY_UPDATES_VIA_MYORACLESUPPORT=false \
-      DECLINE_SECURITY_UPDATES=true"
+      DECLINE_SECURITY_UPDATES=true
     when: inventory_hostname == groups["dbserver"][0]
     ignore_errors: True
     register: runinstallerdb_result
