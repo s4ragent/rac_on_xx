@@ -25,7 +25,7 @@
   - name: "create orainventory"
     become: yes
     file:
-      path: "{{ ORAINVANTORY }}"
+      path: "{{ ORAINVENTORY }}"
       state: directory
       owner: oracle
       group: oinstall
