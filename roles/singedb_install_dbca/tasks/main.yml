@@ -76,7 +76,7 @@
     become: yes
     become_user: oracle
     shell: 
-      {{ ORA_ORACLE_HOME }}/runInstaller -silent -applyRU {{ MEDIA_PATH }}/{{ GRID_PATCH_NUM }} \
+      "{{ ORA_ORACLE_HOME }}"/runInstaller -silent -applyRU {{ MEDIA_PATH }}/{{ GRID_PATCH_NUM }} \
       -responseFile {{ ORA_ORACLE_HOME }}/install/response/db_install.rsp -waitforcompletion {{ INSTALL_OPS }} {{ INSTALL_DB_OPS }} \
       oracle.install.option=INSTALL_DB_SWONLY \
       ORACLE_HOSTNAME={{ ansible_hostname }} \
