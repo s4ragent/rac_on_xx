@@ -91,7 +91,7 @@
     tags:
       - singledb
       - singledbinstall
-      
+
   - name: "dbca"
     become: yes
     become_user: oracle
