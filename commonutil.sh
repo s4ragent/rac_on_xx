@@ -122,7 +122,7 @@ common_deleteall(){
 }
 
 common_heatrun(){
-LOG="`date "+%Y%m%d-%H%M%S"`_$VIRT_TYPE.log"
+LOG="`date "+%Y%m%d-%H%M%S"`_${VIRT_TYPE}_rac.log"
 echo "ALLSTART `date "+%Y%m%d-%H%M%S"`" >>$LOG
 for i in `seq 1 $2`
 do
@@ -131,6 +131,21 @@ do
     common_runall $1 >>$LOG  2>&1
     common_reboot_crsctl $1 >>$LOG  2>&1
     common_jdbcrunner >>$LOG  2>&1
+    echo "START $STARTTIME" >>$LOG
+    echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
+done
+common_deleteall >>$LOG  2>&1
+echo "ALLEND `date "+%Y%m%d-%H%M%S"`" >>$LOG
+}
+
+common_heatrun_single(){
+LOG="`date "+%Y%m%d-%H%M%S"`_${VIRT_TYPE}_single.log"
+echo "ALLSTART `date "+%Y%m%d-%H%M%S"`" >>$LOG
+for i in `seq 1 $2`
+do
+    common_deleteall >>$LOG  2>&1
+    STARTTIME=`date "+%Y%m%d-%H%M%S"`
+    common_runall_singledb $1 >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
@@ -236,7 +251,7 @@ common_runall_singledb(){
 	common_update_all_yml ""
  	common_addDbServer 1
  	common_addClient
- 	common_execansible single.yml
+ 	common_execansible single.yml --extra-vars "dbca=single"
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
