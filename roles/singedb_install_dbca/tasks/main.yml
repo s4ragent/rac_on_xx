@@ -156,7 +156,7 @@
       ORACLE_HOME:
         "{{ ORA_ORACLE_HOME }}"
     shell: |
-      {{ ORA_ORACLE_HOME }}/bin/lsnrctl start
+      {{ ORA_ORACLE_HOME }}/bin/lsnrctl start && sleep 120s
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - singledb
