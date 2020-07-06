@@ -72,7 +72,7 @@
       oracle.install.option=INSTALL_DB_SWONLY                               \
       ORACLE_HOSTNAME="{{ ansible_hostname }}"                              \
       UNIX_GROUP_NAME=oinstall                                            \
-      INVENTORY_LOCATION="{{ ORA_INVENTORY }}"                              \
+      INVENTORY_LOCATION="{{ ORAINVENTORY }}"                              \
       SELECTED_LANGUAGES="{{ INSTALL_LANG }}"                              \
       ORACLE_HOME="{{ ORA_ORACLE_HOME }}"                                   \
       ORACLE_BASE="{{ ORA_ORACLE_BASE }}"                                   \
