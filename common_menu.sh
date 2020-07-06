@@ -14,7 +14,9 @@ case "$1" in
   "install_dbca" ) shift;common_install_dbca $*;;
   "gridrootsh" ) shift;common_gridrootsh $*;;
   "heatrun") shift;common_heatrun $*;;
+  "heatrun_single") shift;common_heatrun_single $*;;
   "runall" ) shift;common_runall $*;;
+  "runall_singledb" ) shift;common_runall_singledb $*;;
   "ssh" ) shift;common_ssh $*;;
   "replaceinventory" ) shift;common_all_replaceinventory $*;;
   "create_inventry" ) shift;common_create_inventry "$@";;
