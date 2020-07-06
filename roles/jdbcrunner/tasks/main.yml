@@ -9,12 +9,12 @@
 
   - name: "set target(SINGLE)"
     set_fact:
-      TARGET: "{{ hostvars[groups['dbserver'][0]]['ansible_vxlan0']['ipv4']['address'] }}"
+      TARGET: " {{ hostvars[groups['dbserver'][0]]["ansible_" + VXLAN_DEV ].ipv4.address }}"
     when: dbca == 'single'  
     tags:
       - jdbcrunner
       - installjdbcrunner
- 
+
   - name: "install jdbcrunner dependency library"
     become: yes
     dnf:
