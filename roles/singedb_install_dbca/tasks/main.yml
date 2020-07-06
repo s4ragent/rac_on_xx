@@ -148,3 +148,14 @@
     tags:
       - singledb
       - singledbca
+
+  - name: "lsnrctl"
+    become: yes
+    become_user: oracle
+    shell: |
+      {{ ORA_ORACLE_HOME }}/bin/lsnrctl start
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - singledb
+      - singledbca
+      - singledblsnrctl
