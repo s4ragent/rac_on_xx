@@ -111,8 +111,6 @@
       - singledb
       - singledbinstall     
 
-
-
   - name: "dbca"
     become: yes
     become_user: oracle
@@ -136,3 +134,7 @@
       -totalMemory "{{ MEMORYTARGET }}" \
       -databaseType "{{ DATABASETYPE }" \
       -ignorePreReqs
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - singledb
+      - singledbca
