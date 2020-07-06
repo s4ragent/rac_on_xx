@@ -90,8 +90,8 @@
   - debug: var=dbrootsh_result.stdout_lines
     tags:
       - singledb
-      - singledbinstall     
-
+      - singledbinstall
+      
   - name: "dbca"
     become: yes
     become_user: oracle
