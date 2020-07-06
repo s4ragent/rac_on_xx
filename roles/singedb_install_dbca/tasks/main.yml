@@ -22,6 +22,17 @@
     tags:
       - singledb
 
+  - name: "create orainventory"
+    become: yes
+    file:
+      path: "{{ ORAINVANTORY }}"
+      state: directory
+      owner: oracle
+      group: oinstall
+      mode: 0755
+    tags:
+      - singledb
+
   - name: "crete media directory"
     become: yes
     file:
