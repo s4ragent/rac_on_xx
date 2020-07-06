@@ -107,6 +107,19 @@
       - singledb
       - singledbinstall
 
+  - name: "orainstrootsh"
+    become: yes
+    shell: "{{ ORAINVENTORY }}/orainstRoot.sh -silent"
+    register: orainstrootsh_result
+    tags:
+      - singledb
+      - singledbinstall
+
+  - debug: var=orainstrootsh_result.stdout_lines
+    tags:
+      - singledb
+      - singledbinstall
+
   - name: "db root.sh"
     become: yes
     shell: "{{ ORA_ORACLE_HOME }}/root.sh -silent"
