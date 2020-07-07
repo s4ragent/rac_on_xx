@@ -109,6 +109,18 @@
       - jdbcrunner
       - exectpcc
 
+  - name: Download snapper
+    become: yes
+    become_user: oracle
+    get_url:
+      url: https://raw.githubusercontent.com/tanelpoder/tpt-oracle/master/snapper.sql
+      dest: "~/snapper.sql"
+      mode: '0775'
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - jdbcrunner
+      - snapper
+
   - name: exec tpcc
     shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ TARGET }}:1521/{{ PDBNAME }}  -jdbcUser {{ TPCCUSER }} -jdbcPass {{ TPCC_PASSWORD }}"
     args:
