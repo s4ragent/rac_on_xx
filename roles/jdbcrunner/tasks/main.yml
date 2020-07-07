@@ -121,6 +121,24 @@
       - jdbcrunner
       - snapper
 
+  - name: shell module + cmd args
+    become: yes
+    become_user: oracle
+    shell:
+      cmd: |
+        source ~/.bash_profile
+        sqlplus 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
+        @snapper  ash 1800 1 all
+        exit
+        EOF
+    when: inventory_hostname == groups["dbserver"][0]
+    async: 5
+    poll: 0
+    register: snapper_result
+    tags:
+      - jdbcrunner
+      - snapper
+
   - name: exec tpcc
     shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ TARGET }}:1521/{{ PDBNAME }}  -jdbcUser {{ TPCCUSER }} -jdbcPass {{ TPCC_PASSWORD }}"
     args:
@@ -136,3 +154,9 @@
     tags:
       - jdbcrunner
       - exectpcc
+
+  - debug: var=snapper_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - jdbcrunner
+      - snapper
