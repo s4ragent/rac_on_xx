@@ -127,9 +127,10 @@
     shell:
       cmd: |
         source ~/.bash_profile
-        sqlplus 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
+        sqlplus -s 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
         spool snapper.log
-        @snapper  ash 1100 1 all
+        @snapper  ash 1200 1 all
+        spool off
         exit
         EOF
     when: inventory_hostname == groups["dbserver"][0]
