@@ -121,7 +121,7 @@
       - jdbcrunner
       - snapper
 
-  - name: shell module + cmd args
+  - name: execute snapper
     become: yes
     become_user: oracle
     shell:
