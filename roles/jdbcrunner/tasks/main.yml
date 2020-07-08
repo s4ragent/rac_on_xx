@@ -19,7 +19,7 @@
  
   - name: "set snapper measuretime"
     set_fact:
-      snapper_measuretime:  '{{ TPCC_MEASURETIME + TPCC_WARMUPTIME }}'
+      snapper_measuretime:  '{{ ( TPCC_MEASURETIME + TPCC_WARMUPTIME )|int}}'
     when: dbca == 'single'  
     tags:
       - jdbcrunner
@@ -149,7 +149,7 @@
       chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
     #register: snapper_result
-    async: "{{ snapper_measuretime + 10 |int}}"
+    async: "{{ snapper_measuretime + 10 }}"
     poll: 0
     tags:
       - jdbcrunner
