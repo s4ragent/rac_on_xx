@@ -129,7 +129,7 @@
     shell:
       cmd: |
         source ~/.bash_profile
-        sqlplus -s 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
+        sqlplus 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
         --spool snapper.log
         @snapper  ash 1200 1 all
         --spool off
