@@ -149,7 +149,7 @@
       chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
     #register: snapper_result
-    async: "{{ snapper_measuretime + 10 }}"
+    async: "{{ snapper_measuretime + 10 |int}}"
     poll: 0
     tags:
       - jdbcrunner
