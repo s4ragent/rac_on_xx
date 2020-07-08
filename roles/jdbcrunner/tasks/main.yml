@@ -129,13 +129,20 @@
         source ~/.bash_profile
         sqlplus -s 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
         spool snapper.log
-        @snapper  ash 1200 1 all
+        @snapper  ash 1 1 all
         spool off
         exit
         EOF
     when: inventory_hostname == groups["dbserver"][0]
-    async: 5
-    poll: 0
+    register: snapper_result
+#    async: 5
+#    poll: 0
+    tags:
+      - jdbcrunner
+      - snapper
+
+  - debug: var=snapper_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - jdbcrunner
       - snapper
