@@ -1,4 +1,11 @@
 ---
+  - name: re gather_facts for vxlan
+    become: yes
+    setup:
+    ignore_errors: yes
+    tags:
+      - iperf
+
   - name: "install iperf3"
     become: yes
     dnf: 
