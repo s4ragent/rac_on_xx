@@ -252,7 +252,7 @@ common_runall_singledb(){
 	common_update_all_yml ""
  	common_addDbServer 1
  	common_addClient
- 	common_execansible single.yml --extra-vars "dbca=single IPERF_DEV=$VXLAN_DEV"
+ 	common_execansible single.yml --extra-vars \'{"dbca":"single","IPERF_DEV":"$VXLAN_DEV"}\'	
 }
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
