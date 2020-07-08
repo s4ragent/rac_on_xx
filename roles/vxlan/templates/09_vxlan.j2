@@ -8,6 +8,7 @@ status=$2
 myip=`ip addr show $rdev | grep 'inet ' | awk -F '[/ ]' '{print $6}'`
 
 if [[ $interface =~ vxlan* ]] && [[ $status == "up" ]]; then
+	bridge fdb del 00:00:00:00:00:00 dev $interface dst 127.0.0.1
 	for ip in $iplist;
 	do
 		if [ "$ip" != "$myip" ]; then
