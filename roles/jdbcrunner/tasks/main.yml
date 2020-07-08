@@ -144,6 +144,7 @@
         spool off
         exit
         EOF
+        sleep 5s
     args:
       chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
