@@ -169,12 +169,16 @@
     tags:
       - jdbcrunner
       - exectpcc
+      - snapper
+
 
   - debug: var=tpcc_result.stdout_lines
     when: inventory_hostname == groups["client"][0]
     tags:
       - jdbcrunner
       - exectpcc
+      - snapper
+
 
   - name: cat snapper.log
     become: yes
