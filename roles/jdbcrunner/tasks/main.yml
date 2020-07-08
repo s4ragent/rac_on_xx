@@ -171,6 +171,8 @@
     become: yes
     become_user: oracle
     shell: cat snapper.log
+    args:
+      chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
     register: snapper_result
     tags:
