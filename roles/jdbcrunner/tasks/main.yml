@@ -6,6 +6,7 @@
     tags:
       - jdbcrunner
       - installjdbcrunner
+      - snapper
 
   - name: "set target(SINGLE)"
     set_fact:
@@ -14,7 +15,8 @@
     tags:
       - jdbcrunner
       - installjdbcrunner
-
+      - snapper
+      
   - name: "install jdbcrunner dependency library"
     become: yes
     dnf:
