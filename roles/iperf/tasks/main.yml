@@ -30,14 +30,14 @@
   - name: client iperf
     become: yes
     shell: iperf3 --client {{ hostvars[groups['dbserver'][0]]["ansible_" + IPERF_DEV]['ipv4']['address'] }} --time 60
-    when: “'dbserver' not in group_names"
+    when: "'dbserver' not in group_names"
     #when: inventory_hostname == groups["storage"][0]
     register: iperf_result
     tags:
       - iperf
 
   - debug: var=iperf_result.stdout_lines
-    when: “'dbserver' not in group_names"
+    when: "'dbserver' not in group_names"
     #when: inventory_hostname == groups["storage"][0]
     tags:
       - iperf
