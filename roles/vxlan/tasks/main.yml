@@ -1,11 +1,4 @@
 ---
-  - name: Collect only facts returned by facter
-    become: yes
-    setup:
-    ignore_errors: yes
-    tags:
-      - vxlan_conf
-      
   - name: "firewalld allow vxlan"
     become: yes
     firewalld:
