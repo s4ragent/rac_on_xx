@@ -139,15 +139,15 @@
       cmd: |
         source ~/.bash_profile
         sqlplus 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
-        --spool snapper.log
-        @snapper  ash {{ snapper_measuretime }} 1 all
-        --spool off
+        spool snapper.log
+        @snapper ash {{ snapper_measuretime }} 1 all
+        spool off
         exit
         EOF
     args:
       chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
-    register: snapper_result
+    #register: snapper_result
     async: 5
     poll: 0
     tags:
@@ -176,17 +176,17 @@
       - jdbcrunner
       - exectpcc
 
-#  - name: cat snapper.log
-#    become: yes
-#    become_user: oracle
-#    shell: cat snapper.log
-#    args:
-#      chdir: "~/"
-#    when: inventory_hostname == groups["dbserver"][0]
-#    register: snapper_result
-#    tags:
-#      - jdbcrunner
-#      - snapper
+  - name: cat snapper.log
+    become: yes
+    become_user: oracle
+    shell: cat snapper.log
+    args:
+      chdir: "~/"
+    when: inventory_hostname == groups["dbserver"][0]
+    register: snapper_result
+    tags:
+      - jdbcrunner
+      - snapper
 
   - debug: var=snapper_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
