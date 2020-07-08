@@ -129,7 +129,7 @@ for i in `seq 1 $2`
 do
     common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
-    common_runall $1 >>$LOG  2>&1
+    common_runall $1 '--extra-vars "IPERF_DEV=vxlan0"' >>$LOG  2>&1
     common_reboot_crsctl $1 >>$LOG  2>&1
     common_jdbcrunner >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
