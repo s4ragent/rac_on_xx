@@ -5,6 +5,7 @@
       - ssh
       - misc
       - prereq
+      - { role: iperf, when: "IPERF_DEV is defined" }
 
  - hosts: dbserver
    any_errors_fatal: true
