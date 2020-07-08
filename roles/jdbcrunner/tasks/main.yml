@@ -135,6 +135,8 @@
         spool off
         exit
         EOF
+    args:
+      chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
     register: snapper_result
 #    async: 5
