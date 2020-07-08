@@ -19,7 +19,7 @@
  
    - name: "set snapper measuretime"
     set_fact:
-      snapper_measuretime:  '"{{ TPCC_MEASURETIME + TPCC_WARMUPTIME }}"'
+      snapper_measuretime:  '"{{ TPCC_MEASURETIME + TPCC_WARMUPTIME - 10 }}"'
     when: dbca == 'single'  
     tags:
       - jdbcrunner
