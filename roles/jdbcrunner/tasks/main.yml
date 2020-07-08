@@ -149,7 +149,7 @@
       chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
     #register: snapper_result
-    async: {{ TPCC_MEASURETIME + TPCC_WARMUPTIME + 10 }}
+    async: "{{ snapper_measuretime + 10 }}"
     poll: 0
     tags:
       - jdbcrunner
