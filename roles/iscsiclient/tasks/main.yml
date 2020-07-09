@@ -1,2 +1,24 @@
 ---
 #https://www.server-world.info/query?os=CentOS_8&p=iscsi&f=2
+  - name: "install iscsi-initiator-utils packages"
+    become: yes
+    dnf: 
+      name: iscsi-initiator-utils
+      state: present
+    tags:
+      - iscsiclient
+
+  - name: "iscsiadm -m discovery"
+    become: yes
+    shell: "iscsiadm -m discovery -t sendtargets -p {{ STORAGE_SERVER }}"
+    tags:
+      - iscsiclient
+
+  - name: "iscsiadm login"
+    become: yes
+    shell: "iscsiadm -m node --login"
+    tags:
+      - iscsiclient
+      
+      
+      
