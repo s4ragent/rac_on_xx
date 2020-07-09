@@ -15,9 +15,9 @@
     args:
       creates: "{{ ORA_DATA }}/{{ item.name }}.img"
     with_items:
-      - { name: vote, ip: "{{ VOTE_SIZE }}" }
-      - { name: data, ip: "{{ DATA_SIZE }}" }
-      - { name: fra,  ip: "{{ FRA_SIZE }}" } 
+      - { name: vote, size: "{{ VOTE_SIZE }}" }
+      - { name: data, size: "{{ DATA_SIZE }}" }
+      - { name: fra,  size: "{{ FRA_SIZE }}" } 
     tags:
       - targetcli
 
