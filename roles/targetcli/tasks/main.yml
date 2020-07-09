@@ -1,10 +1,51 @@
 ---
 #https://www.server-world.info/query?os=CentOS_8&p=iscsi&f=1
+#http://sugakun.blog.fc2.com/blog-entry-2.html
   - name: "install targetcli packages"
     become: yes
     dnf: 
       name: targetcli
       state: present
+    tags:
+      - targetcli
+
+  - name: "create fileio"
+    become: yes
+    shell: "targetcli /backstores/fileio create {{ item.name }} {{ ORA_DATA }}/{{ item.name }}.img {{ item.size }}M"
+    args:
+      creates: "{{ ORA_DATA }}/{{ item.name }}.img"
+    with_items:
+      - { name: vote, ip: "{{ VOTE_SIZE }}" }
+      - { name: data, ip: "{{ DATA_SIZE }}" }
+      - { name: fra,  ip: "{{ FRA_SIZE }}" } 
+    tags:
+      - targetcli
+
+  - name: "create target"
+    become: yes
+    shell: "targetcli /iscsi create {{ TARGETNAME }}"
+    ignore_errors: yes
+    tags:
+      - targetcli
+
+  - name: "create luns"
+    become: yes
+    shell: "targetcli /iscsi/{{ TARGETNAME }}/tpg1/luns create /backstores/fileio/{{ item }}"
+    with_items:
+      - vote
+      - data
+      - fra
+    ignore_errors: yes
+    tags:
+      - targetcli
+
+  - name: "allow all"
+    become: yes
+    shell: "targetcli /iscsi/{{ TARGETNAME }}/tpg1 {{ item }}"
+    with_items:
+      - "set attribute authentication=0"
+      - "set attribute generate_node_acls=1"
+    ignore_errors: yes
     tags:
       - targetcli
 
@@ -17,7 +58,7 @@
     tags:
       - targetcli
 
-  - name: "firewalld allow nfs"
+  - name: "firewalld allow iscsi"
     become: yes
     firewalld:
       zone: public
