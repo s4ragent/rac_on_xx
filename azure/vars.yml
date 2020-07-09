@@ -40,13 +40,13 @@ NFS_OPS:  "rw,bg,hard,nointr,rsize=65536,wsize=65536,tcp,vers=4.0,timeo=600,acti
 ##### common storage value
 ORA_DATA: /u01/oradata
 VOTE_DEV: /u01/oradata/vote.img
-VOTE_SIZE: 40960
+VOTE_SIZE: 10240
 VOTE_DISKGROUP_NAME: VOTE
 DATA_DEV: /u01/oradata/data.img
 DATA_SIZE: 25600
 DATA_DISKGROUP_NAME: DATA
 FRA_DEV: /u01/oradata/fra.img
-FRA_SIZE: 30720
+FRA_SIZE: 40960
 FRA_DISKGROUP_NAME: FRA
 ASM_STRING: /u01/oradata/*
 #####
