@@ -9,6 +9,17 @@
     tags:
       - targetcli
 
+  - name: "create oradata"
+    become: yes
+    file:
+      path: "{{ ORA_DATA }}"
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+    tags:
+      - targetcli
+
   - name: "create fileio"
     become: yes
     shell: "targetcli /backstores/fileio create {{ item.name }} {{ ORA_DATA }}/{{ item.name }}.img {{ item.size }}M"
