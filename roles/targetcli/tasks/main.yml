@@ -1,1 +1,30 @@
 ---
+#https://www.server-world.info/query?os=CentOS_8&p=iscsi&f=1
+  - name: "install targetcli packages"
+    become: yes
+    dnf: 
+      name: targetcli
+      state: present
+    tags:
+      - targetcli
+
+  - name: "restart targetcli"
+    become: yes
+    systemd:
+      name: targetcli
+      state: restarted 
+      enabled: yes
+    tags:
+      - targetcli
+
+  - name: "firewalld allow nfs"
+    become: yes
+    firewalld:
+      zone: public
+      service: iscsi-target
+      permanent: yes
+      state: enabled
+      immediate: yes
+    ignore_errors: yes
+    tags:
+      - targetcli
