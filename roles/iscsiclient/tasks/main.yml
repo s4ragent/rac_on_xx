@@ -16,7 +16,7 @@
 
   - name: "iscsiadm login"
     become: yes
-    shell: "iscsiadm -m node -t {{ STORAGE_SERVER }} --login"
+    shell: "iscsiadm -m node --login"
     tags:
       - iscsiclient
       
