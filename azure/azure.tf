@@ -75,6 +75,8 @@ resource "azurerm_network_interface" "racdbnic" {
     name                      = "nic-${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
     location                  = local.yaml.location
     resource_group_name       = azurerm_resource_group.racgroup.name
+    
+    enable_accelerated_networking = true
 
     ip_configuration {
         name                          = "ipconfigdb${count.index}"
@@ -158,6 +160,8 @@ resource "azurerm_network_interface" "racstoragenic" {
     name                      = "nic-${format("storage%03d", count.index + 1)}"
     location                  = local.yaml.location
     resource_group_name       = azurerm_resource_group.racgroup.name
+    
+    enable_accelerated_networking = true
 
     ip_configuration {
         name                          = "ipconfigstorage${count.index}"
@@ -243,6 +247,8 @@ resource "azurerm_network_interface" "racclientnic" {
     name                      = "nic-${format("client%03d", count.index + 1)}"
     location                  = local.yaml.location
     resource_group_name       = azurerm_resource_group.racgroup.name
+    
+    enable_accelerated_networking = true
 
     ip_configuration {
         name                          = "ipconfigclient${count.index}"
