@@ -42,11 +42,14 @@
   - name: "firewalld trusted haip"
     become: yes
     firewalld:
-      source: "169.254.0.0/16"
+      source: "{{ item }}"
       zone: trusted
       permanent: yes
       state: enabled
       immediate: yes
+    with_items:
+     - "169.254.0.0/16"
+     - "224.0.0.0/24"
     ignore_errors: yes
     tags:
       - misc
