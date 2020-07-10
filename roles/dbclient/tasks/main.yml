@@ -1,4 +1,18 @@
 ---
+  - name: "set targe(HA)"
+    set_fact:
+      TARGET: "{{ SCAN_NAME }}"
+    when: dbca != 'single'
+    tags:
+      - dbclient
+
+  - name: "set target(SINGLE)"
+    set_fact:
+      TARGET:  '{{ hostvars[groups["dbserver"][0]]["ansible_" + VXLAN_DEV ].ipv4.address }}'
+    when: dbca == 'single'  
+    tags:
+      - dbclient
+      
   - name: "create oradata"
     become: yes
     file:
@@ -88,7 +102,7 @@
       - dbclient
 
   - debug: var=runinstallerdb_result.stdout_lines
-    when: inventory_hostname == groups["dbserver"][0]
+    when: inventory_hostname == groups["client"][0]
     failed_when: runinstallerdb_result.rc !=0 and runinstallerdb_result.rc != 250 and runinstallerdb_result.rc != 6
     tags:
       - dbclient
