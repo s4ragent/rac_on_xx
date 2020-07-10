@@ -40,14 +40,20 @@
   - name: create table
     shell:
       cmd: |
+        export PATH={{ INSTANT_CLIENT_PATH }}/bin:$PATH
+        export LD_LIBRARY_PATH={{ INSTANT_CLIENT_PATH }}/lib:$LD_LIBRARY_PATH
+        export TNS_ADMIN=~/
         sqlplus 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
         alter session set db_create_file_dest='{{ db_create_file_dest }}';
         @misc/ts.sql
-
         exit
         EOF
     args:
-      chdir: "~/"
+      chdir: "~/SLOB"
+    register: create_ts_result
     tags:
-      - jdbcrunner
-      - snapper
+      - slob
+
+  - debug: var=screate_ts_result.stdout_lines
+    tags:
+      - slob
