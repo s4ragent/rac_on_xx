@@ -8,7 +8,7 @@
       
   - name: "set db_create_file_dest"
     set_fact:
-      db_create_file_dest:  '{{ hostvars[groups["dbserver"][0]]["ansible_" + VXLAN_DEV ].ipv4.address }}'
+      db_create_file_dest:  '{{ ORA_DATA }}/{{ DB_NAME }}'
     when: dbca == 'single'  
     tags:
       - slob
@@ -37,13 +37,13 @@
     tags:
       - slob
  
-  - name: execute snapper
+  - name: create table
     shell:
       cmd: |
         sqlplus 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
-        spool snapper.log
-        @snapper ash {{ snapper_measuretime }} 1 all
-        spool off
+        alter session set db_create_file_dest='{{ db_create_file_dest }}';
+        @misc/ts.sql
+
         exit
         EOF
     args:
