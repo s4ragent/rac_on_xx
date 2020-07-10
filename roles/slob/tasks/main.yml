@@ -85,6 +85,6 @@
     tags:
       - slob
 
-  - debug: var=screate_ts_result.stdout_lines
+  - debug: var=create_ts_result.stdout_lines
     tags:
       - slob
