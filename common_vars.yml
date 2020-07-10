@@ -21,7 +21,7 @@ INSTANT_CLIENT_PATH: /usr/lib/oracle/19.6/client64
 CVUQDISK: cv/rpm/cvuqdisk-1.0.10-1.rpm
 JDBCDRIVER: jdbc/lib/ojdbc8.jar
 UNZIP: /usr/bin/unzip
-
+FOWARD_PORT: 1234
 
 
 
