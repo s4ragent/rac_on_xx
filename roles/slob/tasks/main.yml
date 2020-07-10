@@ -22,7 +22,7 @@
       
   - name: "set db_create_file_dest"
     set_fact:
-      db_create_file_dest:  '{{ ORA_DATA }}/{{ DB_NAME }}'
+      db_create_file_dest:  '{{ ORA_DATA }}/{{ DBNAME }}'
     when: dbca == 'single'  
     tags:
       - slob
