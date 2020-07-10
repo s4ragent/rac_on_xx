@@ -1,0 +1,6 @@
+---
+  - name: download slob
+    unarchive:
+      src: https://github.com/therealkevinc/SLOB_distribution/raw/master/2018.04.16.slob_2.4.2.1.tar.gz
+      dest: "~/"
+      remote_src: yes
