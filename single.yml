@@ -17,3 +17,10 @@
    roles:
    #   - jdbcrunner
       - dbclient
+
+
+ - hosts: client
+   any_errors_fatal: true
+   roles:
+   #   - jdbcrunner
+      - slob
