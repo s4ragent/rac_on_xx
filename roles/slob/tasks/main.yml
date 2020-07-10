@@ -13,7 +13,6 @@
     tags:
       - slob
 
-
   - name: download slob
     unarchive:
       src: https://github.com/therealkevinc/SLOB_distribution/raw/master/2018.04.16.slob_2.4.2.1.tar.gz
@@ -21,3 +20,34 @@
       remote_src: yes
     tags:
       - slob
+
+  - name: "install gcc"
+    become: yes
+    dnf:
+      name: 
+        - gcc
+      state: latest
+    tags:
+      - slob
+  
+  - name: "make slob"
+    shell: make
+    args:
+      chdir: "~/SLOB/wait_kit"
+    tags:
+      - slob
+ 
+  - name: execute snapper
+    shell:
+      cmd: |
+        sqlplus 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
+        spool snapper.log
+        @snapper ash {{ snapper_measuretime }} 1 all
+        spool off
+        exit
+        EOF
+    args:
+      chdir: "~/"
+    tags:
+      - jdbcrunner
+      - snapper
