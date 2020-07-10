@@ -1,6 +1,23 @@
 ---
+  - name: "set db_create_file_dest"
+    set_fact:
+      db_create_file_dest: '+DATA'
+    when: dbca != 'single'
+    tags:
+      - slob
+      
+  - name: "set db_create_file_dest"
+    set_fact:
+      db_create_file_dest:  '{{ hostvars[groups["dbserver"][0]]["ansible_" + VXLAN_DEV ].ipv4.address }}'
+    when: dbca == 'single'  
+    tags:
+      - slob
+
+
   - name: download slob
     unarchive:
       src: https://github.com/therealkevinc/SLOB_distribution/raw/master/2018.04.16.slob_2.4.2.1.tar.gz
       dest: "~/"
       remote_src: yes
+    tags:
+      - slob
