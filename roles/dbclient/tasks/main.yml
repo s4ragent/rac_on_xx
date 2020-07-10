@@ -16,7 +16,9 @@
   - name: "install instant client"
     become: yes
     dnf:
-      name: 'https://download.oracle.com/otn_software/linux/instantclient/19600/oracle-instantclient19.6-basic-19.6.0.0.0-1.x86_64.rpm'
+      name: 
+        - 'https://download.oracle.com/otn_software/linux/instantclient/19600/oracle-instantclient19.6-basic-19.6.0.0.0-1.x86_64.rpm'
+        - 'https://download.oracle.com/otn_software/linux/instantclient/19600/oracle-instantclient19.6-sqlplus-19.6.0.0.0-1.x86_64.rpm'
       state: latest
     tags:
       - dbclient
