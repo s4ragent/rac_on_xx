@@ -23,4 +23,4 @@
    any_errors_fatal: true
    roles:
    #   - jdbcrunner
-      - slob
+      - { role: slob, vars: { dbca: "single" } }
