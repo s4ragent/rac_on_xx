@@ -1,4 +1,18 @@
 ---
+  - name: "set targe(HA)"
+    set_fact:
+      TARGET: "{{ SCAN_NAME }}"
+    when: dbca != 'single'
+    tags:
+      - slob
+
+  - name: "set target(SINGLE)"
+    set_fact:
+      TARGET:  '{{ hostvars[groups["dbserver"][0]]["ansible_" + VXLAN_DEV ].ipv4.address }}'
+    when: dbca == 'single'  
+    tags:
+      - slob
+      
   - name: "set db_create_file_dest"
     set_fact:
       db_create_file_dest: '+DATA'
@@ -13,11 +27,20 @@
     tags:
       - slob
 
+  - name: "create tnsnames.ora"
+    template: 
+      src: tnsnames.ora.j2 
+      dest: "~/tnsnames.ora"
+      mode: 0644
+    tags:
+      - slob
+
   - name: download slob
     unarchive:
       src: https://github.com/therealkevinc/SLOB_distribution/raw/master/2018.04.16.slob_2.4.2.1.tar.gz
       dest: "~/"
       remote_src: yes
+      creates: "~/SLOB"
     tags:
       - slob
 
@@ -36,7 +59,15 @@
       chdir: "~/SLOB/wait_kit"
     tags:
       - slob
- 
+
+  - name: "copy slob.conf"
+    template: 
+      src: slob.conf.j2 
+      dest: "~/SLOB/slob.conf"
+      mode: 0644
+    tags:
+      - slob
+
   - name: create table
     shell:
       cmd: |
