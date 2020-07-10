@@ -37,7 +37,7 @@
 
   - name: download slob
     unarchive:
-      src: https://github.com/therealkevinc/SLOB_distribution/raw/master/2018.04.16.slob_2.4.2.1.tar.gz
+      src: {{ SLOB_URL }}
       dest: "~/"
       remote_src: yes
       creates: "~/SLOB"
@@ -68,12 +68,16 @@
     tags:
       - slob
 
+ - name: dummpy tnsping
+   become: yes
+   file:
+     src: /usr/bin/echo
+     dest: /usr/bin/tnsping
+     state: link
+
   - name: create table
     shell:
       cmd: |
-        export PATH={{ INSTANT_CLIENT_PATH }}/bin:$PATH
-        export LD_LIBRARY_PATH={{ INSTANT_CLIENT_PATH }}/lib:$LD_LIBRARY_PATH
-        export TNS_ADMIN=~/
         sqlplus 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
         alter session set db_create_file_dest='{{ db_create_file_dest }}';
         @misc/ts.sql
@@ -81,6 +85,8 @@
         EOF
     args:
       chdir: "~/SLOB"
+    environment:
+      TNS_ADMIN: "~/" 
     register: create_ts_result
     tags:
       - slob
