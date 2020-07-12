@@ -136,6 +136,7 @@
     become_user: oracle
     shell:
       cmd: |
+        export ORACLE_SID=`ps -ef | grep pmon  | grep -v grep | awk -F '_' '{print $3}'`
         source ~/.bash_profile
         sqlplus 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
         spool snapper.log
