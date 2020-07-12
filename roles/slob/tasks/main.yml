@@ -96,3 +96,17 @@
   - debug: var=create_ts_result.stdout_lines
     tags:
       - slob
+
+  - name: setup.sh
+    shell: "./setup.sh IOPS 20"
+    args:
+      chdir: "~/SLOB"
+    environment:
+      TNS_ADMIN: "~/" 
+    register: create_setup_result
+    tags:
+      - slob
+
+  - debug: var=create_setup_result.stdout_lines
+    tags:
+      - slob
