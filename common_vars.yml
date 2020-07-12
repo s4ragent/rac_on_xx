@@ -17,7 +17,7 @@ GRID_ORACLE_HOME: /u01/app/19.7.0/grid
 ORAINVENTORY: /u01/app/oraInventory
 INSTANT_CLIENT_BASIC: 'https://download.oracle.com/otn_software/linux/instantclient/19600/oracle-instantclient19.6-basic-19.6.0.0.0-1.x86_64.rpm'
 INSTANT_CLIENT_SQLPLUS: 'https://download.oracle.com/otn_software/linux/instantclient/19600/oracle-instantclient19.6-sqlplus-19.6.0.0.0-1.x86_64.rpm'
-INSTANT_CLIENT_PATH: /usr/lib/oracle/19.6/client64
+#INSTANT_CLIENT_PATH: /usr/lib/oracle/19.6/client64
 SLOB_URL: https://github.com/therealkevinc/SLOB_distribution/raw/2.5.2.4/2020.01.30.slob_2.5.2.4.tar.gz
 CVUQDISK: cv/rpm/cvuqdisk-1.0.10-1.rpm
 JDBCDRIVER: jdbc/lib/ojdbc8.jar
