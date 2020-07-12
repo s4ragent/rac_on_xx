@@ -68,12 +68,12 @@
     tags:
       - slob
 
- - name: dummpy tnsping
-   become: yes
-   file:
-     src: /usr/bin/echo
-     dest: /usr/bin/tnsping
-     state: link
+  - name: dummpy tnsping
+    become: yes
+    file:
+      src: /usr/bin/echo
+      dest: /usr/bin/tnsping
+      state: link
 
   - name: create table
     shell:
