@@ -74,6 +74,8 @@
       src: /usr/bin/echo
       dest: /usr/bin/tnsping
       state: link
+    tags:
+      - slob
 
   - name: create table
     shell:
