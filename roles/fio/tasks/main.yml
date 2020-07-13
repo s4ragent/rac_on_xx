@@ -16,6 +16,9 @@
       - vxlan2
       - randwrite
 
+## NFS/single => ORA_DATA
+#  iscsi / raw => VOTE_DEV
+
 #fio -filename=/tmp/test2g -direct=1 -rw=read -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=file1
 #fio -filename=/tmp/test2g -direct=1 -rw=write -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=file1
 #fio -filename=/tmp/test2g -direct=1 -rw=randread -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=file1
