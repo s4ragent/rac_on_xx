@@ -143,11 +143,12 @@
     when: inventory_hostname == groups["dbserver"][0]
 
   - name: fetch logs
+    become: yes
     fetch:
       src: "{{ item }}"
       dest: "{{ log_dir }}"
     with_items:
       - "~/jdbcrunner/logs/jdbcrunner.log"
-      - "~/awr.log"
+      - "/home/oracle/awr.log"
 
 
