@@ -3,28 +3,12 @@
     set_fact:
       TARGET: "{{ SCAN_NAME }}"
     when: dbca != 'single'
-    tags:
-      - jdbcrunner
-      - installjdbcrunner
-      - snapper
 
   - name: "set target(SINGLE)"
     set_fact:
       TARGET:  '{{ hostvars[groups["dbserver"][0]]["ansible_" + VXLAN_DEV ].ipv4.address }}'
     when: dbca == 'single'  
-    tags:
-      - jdbcrunner
-      - installjdbcrunner
-      - snapper
  
-  - name: "set snapper measuretime"
-    set_fact:
-      snapper_measuretime:  '{{ ( TPCC_MEASURETIME + TPCC_WARMUPTIME )|int}}'
-    tags:
-      - jdbcrunner
-      - installjdbcrunner
-      - snapper
-
   - name: "install jdbcrunner dependency library"
     become: yes
     dnf:
@@ -33,9 +17,6 @@
         - ant
       state: latest
     when: inventory_hostname == groups["client"][0]
-    tags:
-      - jdbcrunner
-      - installjdbcrunner
 
   - name: "create createuser.sh"
     become: yes
@@ -45,9 +26,6 @@
       dest: "~/createuser.sh"
       mode: 0755
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - jdbcrunner
-      - installjdbcrunner
 
   - name: "createuser"
     become: yes
@@ -57,23 +35,15 @@
       chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
     register: createuser_result
-    tags:
-      - jdbcrunner
-      - installjdbcrunner
 
   - debug: var=createuser_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - jdbcrunner
-      - installjdbcrunner
       
   - name:
     git:
       repo: https://github.com/sh2/jdbcrunner.git
       dest: "~/jdbcrunner"
     when: inventory_hostname == groups["client"][0]
-    tags:
-      - jdbcrunner
 
   - name: "unzip jdbcdriver"
     local_action: shell {{ UNZIP }} /media/{{ GRID_MEDIA }} {{ JDBCDRIVER }}
@@ -83,16 +53,12 @@
       chdir: /tmp
     run_once: true
     when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
-    tags:
-      - jdbcrunner
       
   - name: "copy jdbcdriver"
     copy:
       src: "/tmp/{{ JDBCDRIVER }}"
       dest: "~/jdbcrunner/lib/ojdbc.jar"
     when: inventory_hostname == groups["client"][0] and MEDIA_COPY is defined and MEDIA_COPY !=""
-    tags:
-      - jdbcrunner
 
   - name: ant
     shell: /usr/bin/ant && touch ant.txt
@@ -100,8 +66,6 @@
       chdir: "~/jdbcrunner"
       creates: ant.txt
     when: inventory_hostname == groups["client"][0]
-    tags:
-      - jdbcrunner
 
   - name: load tpcc data
     shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc_load.js -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ TARGET }}:1521/{{ PDBNAME }} -jdbcUser {{ TPCCUSER }} -jdbcPass {{ TPCC_PASSWORD }}"
@@ -109,90 +73,65 @@
       chdir: "~/jdbcrunner"
     when: inventory_hostname == groups["client"][0]
     register: tpccload_result
-    tags:
-      - jdbcrunner
-      - exectpcc
 
   - debug: var=tpccload_result.stdout_lines
     when: inventory_hostname == groups["client"][0]
-    tags:
-      - jdbcrunner
-      - exectpcc
 
-  - name: Download snapper
+  - name: Download awr_last.sql
     become: yes
     become_user: oracle
     get_url:
-      url: https://raw.githubusercontent.com/tanelpoder/tpt-oracle/master/snapper.sql
-      dest: "~/snapper.sql"
+      url: https://raw.githubusercontent.com/tanelpoder/tpt-oracle/master/awr/awr_last.sql
+      dest: "~/awr_last.sql"
       mode: '0775'
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - jdbcrunner
-      - snapper
 
-  - name: execute snapper
+  - name: change awr settings
     become: yes
     become_user: oracle
     shell:
       cmd: |
         source ~/.bash_profile
-        sqlplus 'sys/{{ SYSPASSWORD }}@{{ TARGET }}:1521/{{ DBNAME }} as sysdba' <<'EOF'
-        spool snapper.log
-        @snapper ash {{ snapper_measuretime }} 1 all
-        spool off
+        export ORACLE_SID=`ps -ef | grep pmon  | grep -v grep | awk -F '_' '{print $3}'`
+        sqlplus 'sys/{{ SYSPASSWORD }} as sysdba' <<'EOF'
+        exec DBMS_WORKLOAD_REPOSITORY.MODIFY_SNAPSHOT_SETTINGS ( interval => 1440);
+        exec DBMS_WORKLOAD_REPOSITORY.CREATE_SNAPSHOT ();
         exit
         EOF
     args:
       chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
-    #register: snapper_result
-    async: 3600
-    poll: 0
-    tags:
-      - jdbcrunner
-      - snapper
-
-#  - debug: var=snapper_result.stdout_lines
-#    when: inventory_hostname == groups["dbserver"][0]
-#    tags:
-#      - jdbcrunner
-#      - snapper
-
+    register: change_awr_result
+      
+  - debug: var=change_awr_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
+      
   - name: exec tpcc
     shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc.js  -measurementTime {{ TPCC_MEASURETIME }} -warmupTime {{ TPCC_WARMUPTIME }} -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ TARGET }}:1521/{{ PDBNAME }}  -jdbcUser {{ TPCCUSER }} -jdbcPass {{ TPCC_PASSWORD }}"
     args:
       chdir: "~/jdbcrunner"
     when: inventory_hostname == groups["client"][0]
     register: tpcc_result
-    tags:
-      - jdbcrunner
-      - exectpcc
-      - snapper
-
 
   - debug: var=tpcc_result.stdout_lines
     when: inventory_hostname == groups["client"][0]
-    tags:
-      - jdbcrunner
-      - exectpcc
-      - snapper
 
-
-  - name: cat snapper.log
+  - name: get awr report
     become: yes
     become_user: oracle
-    shell: cat snapper.log
+    shell:
+      cmd: |
+        source ~/.bash_profile
+        export ORACLE_SID=`ps -ef | grep pmon  | grep -v grep | awk -F '_' '{print $3}'`
+        sqlplus 'sys/{{ SYSPASSWORD }} as sysdba' <<'EOF'
+        exec DBMS_WORKLOAD_REPOSITORY.CREATE_SNAPSHOT ();
+        @awr_last
+        exit
+        EOF
     args:
       chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
-    register: snapper_result
-    tags:
-      - jdbcrunner
-      - snapper
-
-  - debug: var=snapper_result.stdout_lines
+    register: get_awr_result
+      
+  - debug: var=get_awr_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - jdbcrunner
-      - snapper
