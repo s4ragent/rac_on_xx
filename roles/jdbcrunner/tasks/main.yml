@@ -1,4 +1,7 @@
 ---
+  - set_fact: log_dir="."
+    when: log_dir is undefined
+
   - name: "set targe(HA)"
     set_fact:
       TARGET: "{{ SCAN_NAME }}"
@@ -126,7 +129,9 @@
         export ORACLE_SID=`ps -ef | grep pmon  | grep -v grep | awk -F '_' '{print $3}'`
         sqlplus 'sys/{{ SYSPASSWORD }} as sysdba' <<'EOF'
         exec DBMS_WORKLOAD_REPOSITORY.CREATE_SNAPSHOT ();
+        spool awr.log
         @awr_last
+        spool off
         exit
         EOF
     args:
@@ -136,3 +141,13 @@
       
   - debug: var=get_awr_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
+
+  - name: fetch logs
+    fetch:
+      src: "{{ item }}"
+      dest: "{{ log_dir }}"
+    with_items:
+      - "~/jdbcrunner/logs/jdbcrunner.log"
+      - "~/awr.log"
+
+
