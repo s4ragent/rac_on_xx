@@ -14,13 +14,7 @@
 
  - hosts: all
    any_errors_fatal: true
+   vars:
+     dbca: "single"
    roles:
-   #   - jdbcrunner
-      - dbclient
-
-
- - hosts: client
-   any_errors_fatal: true
-   roles:
-   #   - jdbcrunner
-      - { role: slob, vars: { dbca: "single" } }
+      - { role: jdbcrunner, tags: ['jdbcrunner']}
