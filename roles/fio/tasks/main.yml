@@ -5,6 +5,18 @@
       name: fio
       state: present
 
+  - name: "nmcli up vxlan"
+    become: yes
+    shell: "nmcli con up {{ item }} && touch {{ item }}.txt"
+    args:
+      creates: "{{ item }}.txt"
+    with_items:
+      - vxlan0
+      - vxlan1
+      - vxlan2
+    tags:
+      - vxlan_conf
+
 #fio -filename=/tmp/test2g -direct=1 -rw=read -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=file1
 #fio -filename=/tmp/test2g -direct=1 -rw=write -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=file1
 #fio -filename=/tmp/test2g -direct=1 -rw=randread -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=file1
