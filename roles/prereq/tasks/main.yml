@@ -8,7 +8,6 @@
     when: "'dbserver' in group_names"
     tags:
       - zeroconf
-      - prereq
       
   - name: "create group"
     become: yes
@@ -25,7 +24,6 @@
       - { name: 'asmoper', gid: '2003' }
     tags:
       - createuser
-      - prereq
 
   - name: "delete user"
     become: yes
@@ -39,7 +37,6 @@
       - grid
     tags:
       - createuser
-      - prereq
 
   - name: "create user"
     become: yes
@@ -54,7 +51,6 @@
       - { name: 'grid', uid: '2001',groups: 'asmadmin,asmdba,asmoper' }
     tags:
       - createuser
-      - prereq
       
   - name: "copy .bashrc"
     become: yes
@@ -70,7 +66,6 @@
     tags:
       - profile
       - createuser
-      - prereq
 
   - name: "copy .bash_profile"
     become: yes
@@ -86,7 +81,6 @@
     tags:
       - profile
       - createuser
-      - prereq
       
   - name: "create ssh key"
     local_action: shell ssh-keygen -t rsa -P "" -f id_rsa
@@ -95,7 +89,6 @@
     run_once: true
     tags:
       - sshkey
-      - prereq
  
   - name: "copy authorized key"
     become: yes
@@ -107,7 +100,6 @@
       - grid
     tags:
       - sshkey
-      - prereq
 
   - name: "copy private key"
     become: yes
@@ -122,7 +114,6 @@
       - grid
     tags:
       - sshkey
-      - prereq
 
   - name: "create ssh config"
     become: yes
@@ -138,7 +129,6 @@
     when: SSHPORT is defined and SSHPORT !=""
     tags:
       - sshkey
-      - prereq
 
   - name: "create known hosts"
     become: yes
@@ -153,7 +143,6 @@
       - grid
     tags:
       - sshkey
-      - prereq
 
 
   - name: "delete ssh key"
@@ -161,7 +150,6 @@
     run_once: true
     tags:
       - sshkey
-      - prereq
 
   - name: limit.conf
     become: yes
@@ -185,7 +173,6 @@
       - { user: 'grid', limit_type: 'hard', limit_item: 'stack', value: 32768 } 
     tags:
       - limits
-      - prereq
 
 
   - name: /etc/pam.d/login
@@ -196,7 +183,6 @@
       module_path: pam_limits.so
     tags:
       - limits
-      - prereq
       
 #https://github.com/oraclebase/vagrant/blob/master/rac/ol7_183/shared_scripts/configure_chrony.sh
   - name: chrony
@@ -207,21 +193,18 @@
       name: chronyd
     tags:
       - chronyd
-      - prereq
 
   - name: "chrocyc burst"
     become: yes
     shell: chronyc -a 'burst 4/4'
     tags:
       - chronyd
-      - prereq
 
   - name: "chrocyc burst"
     become: yes
     shell: chronyc -a makestep
     tags:
       - chronyd
-      - prereq
 
   - name: "Partition additional disks"
     become: yes
@@ -235,7 +218,6 @@
     tags:
       - oraclehome
       - fdisk
-      - prereq
 
   - name: "fdisk data_disk_dev"
     become: yes
@@ -246,7 +228,6 @@
     tags:
       - oraclehome
       - fdisk
-      - prereq
 
   - name: get blkid
     become: yes
@@ -257,14 +238,12 @@
       - oraclehome
       - fdisk
       - blkid
-      - prereq
 
   - debug: var=uuid.stdout
     tags:
       - oraclehome
       - fdisk
       - blkid
-      - prereq
 
   - name: "create data_disk mountpoint"
     become: yes
@@ -279,7 +258,6 @@
       - oraclehome
       - fdisk
       - blkid
-      - prereq
 
   - name: "mount data_disk_dev"
     become: yes
@@ -296,7 +274,6 @@
       - oraclehome
       - fdisk
       - blkid
-      - prereq
 
   - name: "create gridbase gridhome oradata orainventry"
     become: yes
@@ -346,7 +323,6 @@
       state: present
     tags:
       - preinstallpackages
-      - prereq
 
   - name: stop avahi-daemon
     become: yes
@@ -356,8 +332,7 @@
       name: avahi-daemon
     ignore_errors: yes
     tags:
-      - avahi-daemon
-      - prereq
+      - avahi
 
   - name: "create swap(dd)"
     become: yes
@@ -366,9 +341,7 @@
     poll: "{{ POLL }}"
     when: "ansible_swaptotal_mb < SWAP_SIZE -1 and 'dbserver' in group_names"
     tags:
-      - ddswap
       - swap
-      - prereq
       
   - name: "create swap(swapon)"
     become: yes
@@ -376,9 +349,7 @@
     ignore_errors: yes
     when: "ansible_swaptotal_mb < SWAP_SIZE -1 and 'dbserver' in group_names"
     tags:
-      - swapon
       - swap
-      - prereq
       
   - name: "mount swap(fstab)"
     become: yes
@@ -392,9 +363,7 @@
       state: present
     when: "ansible_swaptotal_mb < SWAP_SIZE -1 and 'dbserver' in group_names"
     tags:
-      - fstabswap
       - swap
-      - prereq
       
   - name: "unzip cvuqdisk"
     local_action: shell {{ UNZIP }} /media/{{ GRID_MEDIA }} {{ CVUQDISK }}
@@ -406,7 +375,6 @@
     when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
-      - prereq
       
   - name: "copy cvuqdisk"
     become: yes
@@ -416,7 +384,6 @@
     when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
-      - prereq
         
   - name: "install cvuqdisk"
     become: yes
@@ -426,7 +393,6 @@
     when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
-      - prereq
 
   - name: check sysctl.conf
     become: yes
@@ -450,4 +416,3 @@
       - { name: 'net.core.wmem_max', value: "1048576" } 
     tags:
       - sysctl
-      - prereq
