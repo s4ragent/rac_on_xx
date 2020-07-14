@@ -86,15 +86,16 @@ common_deleteall(){
 }
 
 common_heatrun(){
-LOG="`date "+%Y%m%d-%H%M%S"`_${VIRT_TYPE}_rac.log"
-echo "ALLSTART `date "+%Y%m%d-%H%M%S"`" >>$LOG
 for i in `seq 1 $2`
 do
+    LOGDIR="`date "+%Y%m%d-%H%M%S"`"
+    mkdir $LOGDIR
+    LOG=${LOGDIR}/${VIRT_TYPE}_rac_$[1}node.log"
+    cp ${VIRT_TYPE}/vars.yml $LOGDIR/
     common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
-    common_runall $1 --extra-vars "IPERF_DEV=vxlan0" >>$LOG  2>&1
-    common_reboot_crsctl $1 >>$LOG  2>&1
-    common_jdbcrunner >>$LOG  2>&1
+    common_runall $1 -e "iperf=on" -e "fio=on" -e "reboot_crsctl=on" -e "log_dir=$LOGDIR" >>$LOG  2>&1
+    common_jdbcrunner -e "log_dir=$LOGDIR" >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
@@ -103,13 +104,16 @@ echo "ALLEND `date "+%Y%m%d-%H%M%S"`" >>$LOG
 }
 
 common_heatrun_single(){
-LOG="`date "+%Y%m%d-%H%M%S"`_${VIRT_TYPE}_single.log"
-echo "ALLSTART `date "+%Y%m%d-%H%M%S"`" >>$LOG
-for i in `seq 1 $2`
+for i in `seq 1 $1`
 do
+    LOGDIR="`date "+%Y%m%d-%H%M%S"`"
+    mkdir $LOGDIR
+    LOG=${LOGDIR}/${VIRT_TYPE}_single.log"
+    cp ${VIRT_TYPE}/vars.yml $LOGDIR/
     common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
-    common_runall_singledb $1 >>$LOG  2>&1
+    common_runall_single $1 -e "iperf=on" -e "fio=on" -e "log_dir=$LOGDIR" >>$LOG  2>&1
+    common_jdbcrunner_single -e "log_dir=$LOGDIR" >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
@@ -157,7 +161,7 @@ common_runall(){
 
 common_jdbcrunner(){
 	common_addClient
-	common_execansible rac.yml --tags ssh,misc,vxlan,dnsmasq,jdbcrunner -e "jdbcrunner=on"
+	common_execansible rac.yml --tags ssh,misc,vxlan,dnsmasq,jdbcrunner -e "jdbcrunner=on" $*
 }
 
 common_runonly_single(){
@@ -175,7 +179,7 @@ common_runall_single(){
 
 common_jdbcrunner_single(){
 	common_addClient
-	common_execansible single.yml --tags ssh,misc,dnsmasq,jdbcrunner -e "jdbcrunner=on"
+	common_execansible single.yml --tags ssh,misc,dnsmasq,jdbcrunner -e "jdbcrunner=on" $*
 }
 
 common_addDbServer(){
