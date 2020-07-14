@@ -132,12 +132,12 @@
   - name: fetch jdbcrunner.log
     fetch:
       src: "~/jdbcrunner/logs/jdbcrunner.log"
-      dest: "{{ log_dir }}"
+      dest: "{{ log_dir }}/jdbcrunner"
     when: inventory_hostname == groups["client"][0]
 
   - name: fetch awr.log
     become: yes
     fetch:
       src: "/home/oracle/awr.log"
-      dest: "{{ log_dir }}"
+      dest: "{{ log_dir }}/awr"
     when: inventory_hostname == groups["dbserver"][0]
