@@ -1,10 +1,6 @@
 ---
   - set_fact: INSTALL_DB_OPS=""
     when: INSTALL_DB_OPS is undefined
-    tags:
-      - runinstallerdb
-      - dbinstall
-      - installdbca
 
   - name: "copy db media"
     become: yes
@@ -15,9 +11,7 @@
       creates: "{{ ORA_ORACLE_HOME }}/bin"
     when: inventory_hostname == groups["dbserver"][0]
     tags:
-      - creategridrsp
-      - gridinstall
-      - installdbca
+      - createdbrsp
       - download
       - downloaddb
       
@@ -32,8 +26,6 @@
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - createdbrsp
-      - dbinstall
-      - installdbca
       
   - name: "runInstaller(db)"
     become: yes
@@ -44,16 +36,12 @@
     register: runinstallerdb_result
     tags:
       - runinstallerdb
-      - dbinstall
-      - installdbca
 
   - debug: var=runinstallerdb_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     failed_when: runinstallerdb_result.rc !=0 and runinstallerdb_result.rc != 250 and runinstallerdb_result.rc != 6
     tags:
       - runinstallerdb
-      - dbinstall
-      - installdbca
 
   - name: "db root.sh"
     become: yes
@@ -61,14 +49,10 @@
     register: dbrootsh_result
     tags:
       - dbrootsh
-      - dbinstall
-      - installdbca
 
   - debug: var=dbrootsh_result.stdout_lines
     tags:
       - dbrootsh
-      - dbinstall
-      - installdbca
 
   - name: "disable dnfs"
     become: yes
@@ -78,6 +62,4 @@
     when: DNFS is defined and DNFS == 'disable'
     tags:
       - dbrootsh
-      - dbinstall
-      - installdbca
       - oradisablednfs
