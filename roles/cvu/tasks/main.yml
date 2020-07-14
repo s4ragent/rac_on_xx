@@ -6,8 +6,6 @@
       src: "/media/{{ CVU_MEDIA }}"
       dest: "/tmp"
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - cvu
 
   - name: "cvu"
     become: yes
@@ -17,13 +15,9 @@
     register: cvu_result
     ignore_errors: True
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - cvu
       
   - debug: var=cvu_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - cvu
 
   - name: "cvu_ssa"
     become: yes
@@ -32,10 +26,6 @@
     register: cvussa_result
     ignore_errors: True
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - cvu
       
   - debug: var=cvussa_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - cvu
