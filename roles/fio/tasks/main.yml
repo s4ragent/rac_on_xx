@@ -55,7 +55,7 @@
     become: yes
     fetch:
       src: "/tmp/fio_{{ item }}.log"
-      dest: "{{ log_dir }}"
+      dest: "{{ log_dir }}/fio"
     when: inventory_hostname == groups["dbserver"][0]
     with_items:
       - read
