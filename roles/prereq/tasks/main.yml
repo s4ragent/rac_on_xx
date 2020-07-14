@@ -337,8 +337,6 @@
   - name: "create swap(dd)"
     become: yes
     shell: dd if=/dev/zero of=/u01/swap bs=1M count={{ SWAP_SIZE }} && mkswap /u01/swap
-    async: 3600
-    poll: 60
     when: "ansible_swaptotal_mb < SWAP_SIZE -1 and 'dbserver' in group_names"
     tags:
       - swap
