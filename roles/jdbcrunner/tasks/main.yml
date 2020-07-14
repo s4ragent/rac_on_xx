@@ -94,7 +94,6 @@
     become_user: oracle
     shell:
       cmd: |
-        export ORACLE_SID=`ps -ef | grep pmon  | grep -v grep | awk -F '_' '{print $3}'`
         source ~/.bash_profile
         export ORACLE_SID=`ps -ef | grep pmon  | grep -v grep | awk -F '_' '{print $3}'`
         sqlplus 'sys/{{ SYSPASSWORD }} as sysdba' <<'EOF'
@@ -105,19 +104,11 @@
     args:
       chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
-    register: change_awr_result
-      
-  - debug: var=change_awr_result.stdout_lines
-    when: inventory_hostname == groups["dbserver"][0]
       
   - name: exec tpcc
     shell: "/usr/bin/java -Djava.security.egd=file:/dev/./urandom -cp jdbcrunner-1.3-nojdbc.jar:lib/ojdbc.jar JR scripts/tpcc.js  -measurementTime {{ TPCC_MEASURETIME }} -warmupTime {{ TPCC_WARMUPTIME }} -jdbcDriver oracle.jdbc.driver.OracleDriver -jdbcUrl jdbc:oracle:thin:@{{ TARGET }}:1521/{{ PDBNAME }}  -jdbcUser {{ TPCCUSER }} -jdbcPass {{ TPCC_PASSWORD }}"
     args:
       chdir: "~/jdbcrunner"
-    when: inventory_hostname == groups["client"][0]
-    register: tpcc_result
-
-  - debug: var=tpcc_result.stdout_lines
     when: inventory_hostname == groups["client"][0]
 
   - name: get awr report
@@ -137,19 +128,14 @@
     args:
       chdir: "~/"
     when: inventory_hostname == groups["dbserver"][0]
-    register: get_awr_result
-      
-  - debug: var=get_awr_result.stdout_lines
-    when: inventory_hostname == groups["dbserver"][0]
 
-  - name: fetch logs
-    become: yes
+  - name: fetch jdbcrunner.log
     fetch:
       src: "~/jdbcrunner/logs/jdbcrunner.log"
       dest: "{{ log_dir }}"
     when: inventory_hostname == groups["client"][0]
 
-  - name: fetch logs
+  - name: fetch awr.log
     become: yes
     fetch:
       src: "/home/oracle/awr.log"
