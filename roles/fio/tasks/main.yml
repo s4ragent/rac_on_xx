@@ -2,7 +2,7 @@
   - name: "set fio type"
     set_fact:
       fio_type: file
-    when: dbca = 'single' or storage_type = 'nfs'
+    when: dbca == 'single' or storage_type == 'nfs'
 
   - name: "set fio type"
     set_fact:
@@ -12,12 +12,12 @@
   - name: "set fio target"
     set_fact:
       fio_target: "{{ ORA_DATA }}/fio.img"
-    when: fio_type = file
+    when: fio_type == file
 
   - name: "set fio target"
     set_fact:
       fio_target: "{{ VOTE_DEV }}"
-    when: fio_type = raw
+    when: fio_type == raw
 
   - name: "install fio packages"
     become: yes
