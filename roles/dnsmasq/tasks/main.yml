@@ -4,8 +4,7 @@
     dnf: 
       name: dnsmasq
       state: present
-    tags:
-      - dnsmasq
+
 
   - name: "create addn-hosts"
     become: yes
@@ -15,8 +14,7 @@
       owner: root
       group: root
       mode: 0644
-    tags:
-      - dnsmasq
+
       
   - name: "copy dnsmasq.conf"
     become: yes
@@ -26,16 +24,14 @@
       owner: root
       group: root
       mode: 0644
-    tags:
-      - dnsmasq
+
 
   - name: "copy resolv.dnsmasq.conf from /etc/resolv.conf"
     become: yes
     shell: cp /etc/resolv.conf /etc/resolv.dnsmasq.conf
     args:
       creates: /etc/resolv.dnsmasq.conf
-    tags:
-      - dnsmasq
+
 
   - name: "add  resolv.dnsmasq.conf"
     become: yes
@@ -46,8 +42,7 @@
       line: "nameserver {{ ADD_NAMESERVER }}"
       dest: /etc/resolv.dnsmasq.conf
     when: ADD_NAMESERVER is defined
-    tags:
-      - dnsmasq
+
 
   - name: "restart and  enable dnsmasq.service"
     become: yes
@@ -55,23 +50,18 @@
       state: restarted
       enabled: yes
       name: dnsmasq
-    tags:
-      - dnsmasq
 
   - name: "nmcli ipv4.ignore-auto-dns"
     become: yes
     shell: nmcli con mod "{{ DNS_CON }}" ipv4.ignore-auto-dns yes
-    tags:
-      - dnsmasq
+
 
   - name: "nmcli ipv4.dns"
     become: yes
     shell: nmcli con mod "{{ DNS_CON }}" ipv4.dns 127.0.0.1
-    tags:
-      - dnsmasq
+
 
   - name: "nmcli reload"
     become: yes
     shell: nmcli con up "{{ DNS_CON }}"
-    tags:
-      - dnsmasq
+
