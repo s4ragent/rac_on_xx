@@ -8,8 +8,6 @@
       state: enabled
       immediate: yes
     ignore_errors: yes
-    tags:
-      - vxlan_conf
 
   - name: "firewalld trusted vxlan_dev"
     become: yes
@@ -28,8 +26,6 @@
 #     - vxlan1
 #     - vxlan2
     ignore_errors: yes
-    tags:
-      - vxlan_conf
 
   - name: "copy 09_vxlan"
     become: yes
@@ -39,8 +35,6 @@
       owner: root
       group: root
       mode: 0700
-    tags:
-      - vxlan_conf
     
   - name: "nmcli add vxlan"
     become: yes
@@ -51,8 +45,6 @@
       - { name: vxlan0, id: 10, ip: "{{ vxlan0_IP }}" }
       - { name: vxlan1, id: 11, ip: "{{ vxlan1_IP }}" }
       - { name: vxlan2, id: 12, ip: "{{ vxlan2_IP }}" } 
-    tags:
-      - vxlan_conf
       
   - name: "nmcli up vxlan"
     become: yes
@@ -63,8 +55,6 @@
       - vxlan0
       - vxlan1
       - vxlan2
-    tags:
-      - vxlan_conf
 
   - name: "add fdb"
     become: yes
@@ -73,5 +63,3 @@
       - vxlan0
       - vxlan1
       - vxlan2
-    tags:
-      - vxlan_conf
