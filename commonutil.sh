@@ -88,9 +88,9 @@ common_deleteall(){
 common_heatrun(){
 for i in `seq 1 $2`
 do
-    LOGDIR=`date "+%Y%m%d-%H%M%S"`
+    LOGDIR="`date "+%Y%m%d-%H%M%S"`_${VIRT_TYPE}_rac_${1}node
     mkdir $LOGDIR
-    LOG="${LOGDIR}/${VIRT_TYPE}_rac_${1}node.log"
+    LOG="${LOGDIR}/heatrun.log"
     cp ${VIRT_TYPE}/vars.yml $LOGDIR/
     common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
@@ -106,9 +106,9 @@ echo "ALLEND `date "+%Y%m%d-%H%M%S"`" >>$LOG
 common_heatrun_single(){
 for i in `seq 1 $1`
 do
-    LOGDIR=`date "+%Y%m%d-%H%M%S"`
+    LOGDIR="`date "+%Y%m%d-%H%M%S"`_${VIRT_TYPE}_single"
     mkdir $LOGDIR
-    LOG="${LOGDIR}/${VIRT_TYPE}_single.log"
+    LOG="${LOGDIR}/heatrun.log"
     cp ${VIRT_TYPE}/vars.yml $LOGDIR/
     common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
