@@ -1,5 +1,5 @@
 ---
-  - set_fact: log_dir="."
+  - set_fact: log_dir="./"
     when: log_dir is undefined
 
   - name: "set targe(HA)"
@@ -126,7 +126,7 @@
     shell:
       cmd: |
         source ~/.bash_profile
-        export ORACLE_SID=`ps -ef | grep pmon  | grep -v grep | awk -F '_' '{print $3}'`
+        export ORACLE_SID=`ps -ef | grep pmon | grep -v grep | awk -F '_' '{print $3}'`
         sqlplus 'sys/{{ SYSPASSWORD }} as sysdba' <<'EOF'
         exec DBMS_WORKLOAD_REPOSITORY.CREATE_SNAPSHOT ();
         spool awr.log
@@ -145,10 +145,13 @@
   - name: fetch logs
     become: yes
     fetch:
-      src: "{{ item }}"
+      src: "~/jdbcrunner/logs/jdbcrunner.log"
       dest: "{{ log_dir }}"
-    with_items:
-      - "~/jdbcrunner/logs/jdbcrunner.log"
-      - "/home/oracle/awr.log"
+    when: inventory_hostname == groups["client"][0]
 
-
+  - name: fetch logs
+    become: yes
+    fetch:
+      src: "/home/oracle/awr.log"
+      dest: "{{ log_dir }}"
+    when: inventory_hostname == groups["dbserver"][0]
