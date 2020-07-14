@@ -1,25 +1,67 @@
 ---
+
+ORA_DATA: /u01/oradata
+VOTE_DEV: /u01/oradata/vote.img
+
+  - name: "set fio type"
+    set_fact:
+      fio_type: file
+    when: dbca = 'single' or storage_type = 'nfs'
+
+  - name: "set fio type"
+    set_fact:
+      fio_type: raw
+     when: fio_type is undefined
+
+  - name: "set fio target"
+    set_fact:
+      fio_target: "{{ ORA_DATA }}/fio.img"
+    when: fio_type = file
+
+  - name: "set fio target"
+    set_fact:
+      fio_target: "{{ VOTE_DEV }}"
+    when: fio_type = raw
+
   - name: "install fio packages"
     become: yes
     dnf: 
       name: fio
       state: present
+    when: inventory_hostname == groups["dbserver"][0]
 
-  - name: "nmcli up vxlan"
+  - name: "execute fio"
     become: yes
-    shell: "nmcli con up {{ item }} && touch {{ item }}.txt"
+    shell: "fio -filename={{ fio_target }}  -direct=1 -rw=read -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=fio.{{ item }} --output=fio_{{ item }}.log"
     args:
       chdir: "~/"
+    when: inventory_hostname == groups["dbserver"][0]
     with_items:
-      - vxlan0
-      - vxlan1
-      - vxlan2
+      - read
+      - write
+      - randread
       - randwrite
 
-## NFS/single => ORA_DATA
-#  iscsi / raw => VOTE_DEV
+  - name: Remove file
+    become: yes
+    file:
+      path: "{{ fio_target }}"
+      state: absent
+    when: fio_type = file and inventory_hostname == groups["dbserver"][0]
+    
+  - name: "init dev"
+    become: yes
+    shell: "dd if=/dev/zero of={{ fio_target }} bs=1024k count=1000"
+    when: fio_type = raw and inventory_hostname == groups["dbserver"][0]
 
-#fio -filename=/tmp/test2g -direct=1 -rw=read -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=file1
-#fio -filename=/tmp/test2g -direct=1 -rw=write -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=file1
-#fio -filename=/tmp/test2g -direct=1 -rw=randread -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=file1
-#fio -filename=/tmp/test2g -direct=1 -rw=randwrite -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=file1
+  - name: fetch fio.log
+    become: yes
+    fetch:
+      src: "fio_{{ item }}.log"
+      dest: "{{ log_dir }}"
+    when: inventory_hostname == groups["dbserver"][0]
+    with_items:
+      - read
+      - write
+      - randread
+      - randwrite
