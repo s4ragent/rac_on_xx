@@ -22,6 +22,16 @@
       fio_target: "{{ VOTE_DEV }}"
     when: fio_type == 'raw'
 
+  - name: "create oradata"
+    become: yes
+    file:
+      path: "{{ ORA_DATA }}"
+      state: directory
+      owner: grid
+      group: oinstall
+      mode: 0755
+    when: fio_type == 'file'
+
   - name: "install fio packages"
     become: yes
     dnf: 
