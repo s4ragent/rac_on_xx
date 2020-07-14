@@ -1,18 +1,17 @@
 ---
+  - set_fact: log_dir="./"
+    when: log_dir is undefined
+    
   - name: re gather_facts for vxlan
     become: yes
     setup:
     ignore_errors: yes
-    tags:
-      - iperf
 
   - name: "install iperf3"
     become: yes
     dnf: 
       name: iperf3
       state: present
-    tags:
-      - iperf
 
   - name: "firewalld allow iperf"
     become: yes
@@ -24,29 +23,31 @@
       immediate: yes
     ignore_errors: yes
     when: IPERF_DEV != "vxlan0"
-    tags:
-      - iperf
+
 
   - name: start server iperf
     become: yes
     shell: iperf3 --server --one-off --daemon
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - iperf
+
 
   - name: client iperf
     become: yes
-    shell: iperf3 --client {{ hostvars[groups['dbserver'][0]]["ansible_" + IPERF_DEV]['ipv4']['address'] }} --time 60
+    shell: iperf3 --client {{ hostvars[groups['dbserver'][0]]["ansible_" + IPERF_DEV]['ipv4']['address'] }} --time 60 --logfile /tmp/iperf.log
     when: "'dbserver' not in group_names"
     #when: inventory_hostname == groups["storage"][0]
     register: iperf_result
-    tags:
-      - iperf
+
 
   - debug: var=iperf_result.stdout_lines
     when: "'dbserver' not in group_names"
     #when: inventory_hostname == groups["storage"][0]
-    tags:
-      - iperf
 
+
+  - name: fetch iperf.log
+    become: yes
+    fetch:
+      src: "/tmp/iperf.log"
+      dest: "{{ log_dir }}/iperf"
+    when: "'dbserver' not in group_names"
 
