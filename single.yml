@@ -5,8 +5,8 @@
      - { role: ssh, tags: ['ssh'] }
      - { role: misc, tags: ['misc'] }
      - { role: prereq, tags: ['prereq'] }
-     - { role: iperf, tags: ['iperf'], when: "iperf is defined or benchmark is defined" }
-     - { role: fio, tags: ['fio'], when: "fio is defined or benchmark is defined" }
+     - { role: iperf, tags: ['iperf'], when: "iperf is defined" }
+     - { role: fio, tags: ['fio'], when: "fio is defined" }
 
  - hosts: dbserver
    any_errors_fatal: true
@@ -18,4 +18,4 @@
    vars:
      dbca: "single"
    roles:
-      - { role: jdbcrunner, tags: ['jdbcrunner'], when: "jdbcrunner is defined or benchmark is defined" }
+      - { role: jdbcrunner, tags: ['jdbcrunner'], when: "jdbcrunner is defined" }
