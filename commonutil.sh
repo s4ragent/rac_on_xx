@@ -33,21 +33,6 @@ common_execansible(){
    echo "###START $starttime END `date` ###"
 }
 
-common_runall(){
-	common_runonly $*
-	shift
-	common_execansible rac.yml $*
-}
-
-common_jdbcrunner(){
-	common_addClient
-	common_jdbcrunner_only
-}
-
-common_jdbcrunner_only(){
-	common_execansible rac.yml --tags ssh,misc,vxlan,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=on"
-}
-
 common_deletedatabase(){
 	common_execansible rac.yml --tags deletedatabase --extra-vars "dbca=delete"
 }
@@ -164,6 +149,35 @@ common_runonly(){
  	common_addDbServer $1
 }
 
+common_runall(){
+	common_runonly $*
+	shift
+	common_execansible rac.yml $*
+}
+
+common_jdbcrunner(){
+	common_addClient
+	common_execansible rac.yml --tags ssh,misc,vxlan,dnsmasq,jdbcrunner -e "jdbcrunner=on"
+}
+
+common_runonly_single(){
+	common_init
+	
+	common_update_all_yml ""
+ 	common_addDbServer 1
+}
+
+common_runall_single(){
+	common_runonly_singledb $*
+	shift
+	common_execansible single.yml $*
+}
+
+common_jdbcrunner_single(){
+	common_addClient
+	common_execansible single.yml --tags ssh,misc,dnsmasq,jdbcrunner -e "jdbcrunner=on"
+}
+
 common_addDbServer(){
 
 	if [ "$1" = "" ]; then
@@ -222,16 +236,6 @@ common_addClient(){
 	common_update_ansible_inventory client001 $ClientExtIP client001 70 client
 }
 
-
-common_runall_singledb(){
-
-	common_init
-	
-	common_update_all_yml ""
- 	common_addDbServer 1
- 	common_addClient
- 	common_execansible single.yml -e "dbca=single" -e "IPERF_DEV=$VXLAN_DEV"
-}
 
 #$NODENAME $IP $INSTANCE_ID $nodenumber $hostgroup
 common_update_ansible_inventory(){
