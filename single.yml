@@ -2,20 +2,20 @@
  - hosts: all
    any_errors_fatal: true
    roles:
-      - ssh
-      - misc
-      - prereq
-      - { role: iperf, tags: ['iperf'], when: "IPERF_DEV is defined" }
-      - { role: fio, tags: ['fio'], when: "fio is defined" }
+     - { role: ssh, tags: ['ssh'] }
+     - { role: misc, tags: ['misc'] }
+     - { role: prereq, tags: ['prereq'] }
+     - { role: iperf, tags: ['iperf'], when: "iperf is defined or benchmark is defined" }
+     - { role: fio, tags: ['fio'], when: "fio is defined or benchmark is defined" }
 
  - hosts: dbserver
    any_errors_fatal: true
    roles:
-      - singedb_install_dbca
+     - { role: singedb_install_dbca, tags: ['singedb']}
 
  - hosts: all
    any_errors_fatal: true
    vars:
      dbca: "single"
    roles:
-      - { role: jdbcrunner, tags: ['jdbcrunner'], when: "jdbcrunner is defined"}
+      - { role: jdbcrunner, tags: ['jdbcrunner'], when: "jdbcrunner is defined or benchmark is defined" }
