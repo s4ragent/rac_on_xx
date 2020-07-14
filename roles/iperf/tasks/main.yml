@@ -1,12 +1,12 @@
 ---
-  - name: "set targe(HA)"
+  - name: "set IPERF_DEV"
     set_fact:
-      TARGET: "{{ SCAN_NAME }}"
+      IPERF_DEV: 'vxlan0'
     when: dbca != 'single'
 
-  - name: "set target(SINGLE)"
+  - name: "set IPERF_DEV"
     set_fact:
-      TARGET:  '{{ hostvars[groups["dbserver"][0]]["ansible_" + VXLAN_DEV ].ipv4.address }}'
+      IPERF_DEV: "{{ VXLAN_DEV }}"
     when: dbca == 'single'  
 
   - set_fact: log_dir="./"
@@ -34,12 +34,10 @@
     ignore_errors: yes
     when: IPERF_DEV != "vxlan0"
 
-
   - name: start server iperf
     become: yes
     shell: iperf3 --server --one-off --daemon
     when: inventory_hostname == groups["dbserver"][0]
-
 
   - name: client iperf
     become: yes
