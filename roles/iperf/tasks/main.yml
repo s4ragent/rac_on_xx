@@ -1,4 +1,14 @@
 ---
+  - name: "set targe(HA)"
+    set_fact:
+      TARGET: "{{ SCAN_NAME }}"
+    when: dbca != 'single'
+
+  - name: "set target(SINGLE)"
+    set_fact:
+      TARGET:  '{{ hostvars[groups["dbserver"][0]]["ansible_" + VXLAN_DEV ].ipv4.address }}'
+    when: dbca == 'single'  
+
   - set_fact: log_dir="./"
     when: log_dir is undefined
     
