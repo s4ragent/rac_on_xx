@@ -7,8 +7,6 @@
  #       - selinux-policy-targeted
         - firewalld
       state: present
-    tags:
-      - misc
 
 #  - name: "disable selinux"
 #    become: yes
@@ -19,15 +17,11 @@
   - name: "disable selinux"
     become: yes
     replace: dest='/etc/selinux/config' regexp='SELINUX=enforcing' replace='SELINUX=permissive'
-    tags:
-      - misc
-
+    
   - name: "disable selinux setenforce"
     become: yes
     shell: setenforce 0
     ignore_errors: yes
-    tags:
-      - misc
 
 # -m owner --uid-owner cause hang
   - name: "drop 169.254.169.254"
@@ -36,8 +30,6 @@
     shell: "firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 1 -m state --state NEW -m tcp -p tcp -d 169.254.169.254/32 -j REJECT;firewall-cmd --reload"
     when: "link_local is defined and 'dbserver' in group_names"
     ignore_errors: yes
-    tags:
-      - misc
       
   - name: "firewalld trusted haip"
     become: yes
@@ -51,15 +43,11 @@
      - "169.254.0.0/16"
      - "224.0.0.0/24"
     ignore_errors: yes
-    tags:
-      - misc
 
   - name: "enable firewalld logs"
     become: yes
     shell: "firewall-cmd --set-log-denied all;firewall-cmd --reload"
     ignore_errors: yes
-    tags:
-      - misc
 
 
   - name: "delete /etc/dhcp/dhclient.d/google_hostname.sh(for google)"
@@ -67,16 +55,13 @@
     file: 
       path: /etc/dhcp/dhclient.d/google_hostname.sh
       state: absent
-    when: google_hostname is defined  
-    tags:
-      - misc
+    when: google_hostname is defined 
   
   - name: "change hostname"
     become: yes
     shell: "hostnamectl set-hostname {{ NODENAME }}.{{ DOMAIN_NAME }} --static"
     when: hostname_change is defined
     ignore_errors: yes
-    tags:
-      - misc
+
       
    
