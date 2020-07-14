@@ -10,8 +10,6 @@
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - creategridrsp
-      - gridinstall
-      - installdbca
       - download
       - downloadgrid
 
@@ -25,8 +23,6 @@
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - creategridrsp
-      - gridinstall
-      - installdbca
       - download
       - downloadgrid
       
@@ -40,8 +36,6 @@
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - creategridrsp
-      - gridinstall
-      - installdbca
       - download
       - downloadgrid
       
@@ -56,8 +50,6 @@
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - creategridrsp
-      - gridinstall
-      - installdbca
 
   - name: "runInstaller(grid)"
     become: yes
@@ -68,16 +60,12 @@
     ignore_errors: True
     tags:
       - runinstallergrid
-      - gridinstall
-      - installdbca
 
   - debug: var=runinstallergrid_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     failed_when: runinstallergrid_result.rc !=0 and runinstallergrid_result.rc != 250 and runinstallergrid_result.rc != 6
     tags:
       - runinstallergrid
-      - gridinstall
-      - installdbca
 
   - name: "orainstrootsh"
     become: yes
@@ -85,14 +73,10 @@
     register: orainstrootsh_result
     tags:
       - orainstrootsh
-      - gridinstall
-      - installdbca
 
   - debug: var=orainstrootsh_result.stdout_lines
     tags:
       - orainstrootsh
-      - gridinstall
-      - installdbca
 
 #  - name: "grid root.sh"
 #    become: yes
@@ -122,8 +106,6 @@
     tags:
       - disablednfs
       - gridrootsh
-      - gridinstall
-      - installdbca
 
 #  - name: "install strace packages"
 #    become: yes
@@ -141,8 +123,6 @@
     tags:
       - grid1strootsh
       - gridrootsh
-      - gridinstall
-      - installdbca
 
   - debug: var=grid1strootsh_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
@@ -150,8 +130,6 @@
     tags:
       - grid1strootsh
       - gridrootsh
-      - gridinstall
-      - installdbca
 
   - name: "grid other root.sh"
     become: yes
@@ -162,8 +140,6 @@
     tags:
       - gridotherrootsh
       - gridrootsh
-      - gridinstall
-      - installdbca
 
   - debug: var=gridotherrootsh_result.stdout_lines
     when: inventory_hostname != groups["dbserver"][0]
@@ -171,8 +147,4 @@
     tags:
       - gridotherrootsh
       - gridrootsh
-      - gridinstall
-      - installdbca
-
-
 
