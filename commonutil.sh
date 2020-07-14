@@ -97,7 +97,7 @@ do
     common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
     common_runall_single $1 -e "iperf=on" -e "fio=on" -e "log_dir=$LOGDIR" >>$LOG  2>&1
-    common_jdbcrunner_single -e "log_dir=$LOGDIR" >>$LOG  2>&1
+    common_jdbcrunner_single --tags jdbcrunner,iperf -e "iperf=on" -e "log_dir=$LOGDIR" >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
