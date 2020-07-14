@@ -12,12 +12,12 @@
   - name: "set fio target"
     set_fact:
       fio_target: "{{ ORA_DATA }}/fio.img"
-    when: fio_type == file
+    when: fio_type == 'file'
 
   - name: "set fio target"
     set_fact:
       fio_target: "{{ VOTE_DEV }}"
-    when: fio_type == raw
+    when: fio_type == 'raw'
 
   - name: "install fio packages"
     become: yes
@@ -43,12 +43,12 @@
     file:
       path: "{{ fio_target }}"
       state: absent
-    when: fio_type = file and inventory_hostname == groups["dbserver"][0]
+    when: fio_type == 'file' and inventory_hostname == groups["dbserver"][0]
     
   - name: "init dev"
     become: yes
     shell: "dd if=/dev/zero of={{ fio_target }} bs=1024k count=1000"
-    when: fio_type = raw and inventory_hostname == groups["dbserver"][0]
+    when: fio_type == 'raw' and inventory_hostname == groups["dbserver"][0]
 
   - name: fetch fio.log
     become: yes
