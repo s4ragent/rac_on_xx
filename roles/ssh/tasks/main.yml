@@ -8,9 +8,6 @@
       insertafter: EOF
       state: present
     register: ssh_config
-    tags:
-      - ssh
-
 
   - name: Update the /etc/ssh/sshd_config file ClientAliveInterval
     become: yes
@@ -21,8 +18,6 @@
       insertafter: EOF
       state: present
     register: ssh_config
-    tags:
-      - ssh
 
   - name: Update the /etc/ssh/sshd_config file ClientAliveCountMax
     become: yes
@@ -33,8 +28,7 @@
       insertafter: EOF
       state: present
     register: ssh_config
-    tags:
-      - ssh    
+  
 
   - name: Update the /etc/ssh/sshd_config file addressfamily
     become: yes
@@ -45,13 +39,9 @@
       insertafter: EOF
       state: present
     register: ssh_config
-    tags:
-      - ssh
   
   - name: Restart ssh
     become: yes
     systemd:
       name: sshd
       state: restarted
-    tags:
-      - ssh
