@@ -1,8 +1,4 @@
 ---
-
-ORA_DATA: /u01/oradata
-VOTE_DEV: /u01/oradata/vote.img
-
   - name: "set fio type"
     set_fact:
       fio_type: file
