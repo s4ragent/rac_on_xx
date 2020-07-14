@@ -5,7 +5,8 @@
       - ssh
       - misc
       - prereq
-      - { role: iperf, when: "IPERF_DEV is defined" }
+      - { role: iperf, tags: ['iperf'], when: "IPERF_DEV is defined" }
+      - { role: fio, tags: ['fio'], when: "fio is defined" }
 
  - hosts: dbserver
    any_errors_fatal: true
@@ -17,4 +18,4 @@
    vars:
      dbca: "single"
    roles:
-      - { role: jdbcrunner, tags: ['jdbcrunner']}
+      - { role: jdbcrunner, tags: ['jdbcrunner'], when: "jdbcrunner is defined"}
