@@ -7,7 +7,7 @@
   - name: "set fio type"
     set_fact:
       fio_type: raw
-     when: fio_type is undefined
+    when: fio_type is undefined
 
   - name: "set fio target"
     set_fact:
