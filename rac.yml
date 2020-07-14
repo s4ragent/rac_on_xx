@@ -20,7 +20,7 @@
    any_errors_fatal: true
    roles:
      - { role: vnc, tags: ['vnc'], when: "vnc is defined" }
-     - { role: nfsclient, tags: ['nfsclient'], when: "storage_type == 'nfs' or storage_type == 'efs'" }]
+     - { role: nfsclient, tags: ['nfsclient'], when: "storage_type == 'nfs' or storage_type == 'efs'" }
      - { role: fio, tags: ['fio'], when: "fio is defined" }
      - { role: cvu, tags: ['cvu'], when: "cvu is defined" }
 
