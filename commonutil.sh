@@ -101,9 +101,25 @@ do
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
-common_deleteall >>$LOG  2>&1
-echo "ALLEND `date "+%Y%m%d-%H%M%S"`" >>$LOG
+common_deleteall
+}
 
+common_heatrun(){
+for i in `seq 1 $2`
+do
+    LOGDIR="`date "+%Y%m%d-%H%M%S"`_${VIRT_TYPE}_rac_${1}node"
+    mkdir $LOGDIR
+    LOG="${LOGDIR}/heatrun.log"
+    cp ${VIRT_TYPE}/vars.yml $LOGDIR/
+    common_deleteall >>$LOG  2>&1
+    STARTTIME=`date "+%Y%m%d-%H%M%S"`
+    common_runall $1 -e "iperf=on" -e "fio=on" -e "reboot_crsctl=on" -e "log_dir=$LOGDIR" >>$LOG  2>&1
+    common_jdbcrunner -e "log_dir=$LOGDIR" >>$LOG  2>&1
+    echo "START $STARTTIME" >>$LOG
+    echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
+done
+common_deleteall
+}
 common_all_replaceinventory(){
 	for FILE in $VIRT_TYPE/host_vars/*
 	do
