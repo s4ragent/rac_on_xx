@@ -34,11 +34,11 @@ common_execansible(){
 }
 
 common_deletedatabase(){
-	common_execansible rac.yml --tags deletedatabase --extra-vars "dbca=delete"
+	common_execansible rac.yml --tags deletedatabase -e "dbca=delete"
 }
 
 common_reboot_crsctl(){
-	common_execansible rac.yml --tags reboot_crsctl --extra-vars "reboot_crsctl=on"
+	common_execansible rac.yml --tags reboot_crsctl -e "reboot_crsctl=on"
 }
 
 common_cvu(){
@@ -47,7 +47,7 @@ common_cvu(){
 }
 
 common_cvu_only(){
-	common_execansible rac.yml --skip-tags installdbca --extra-vars "cvu=on"
+	common_execansible rac.yml --skip-tags installdbca -e "cvu=on"
 }
 
 
@@ -58,7 +58,7 @@ common_preinstall(){
 
 common_preinstall_with_vnc(){
 	common_runonly $*
-	common_execansible rac.yml --skip-tags installdbca --extra-vars "vnc=on"
+	common_execansible rac.yml --skip-tags installdbca -e "vnc=on"
 	common_execansible rac.yml --tags download
 }
 
