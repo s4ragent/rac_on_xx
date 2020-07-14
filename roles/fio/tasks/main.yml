@@ -30,7 +30,7 @@
       owner: grid
       group: oinstall
       mode: 0755
-    when: fio_type == 'file'
+    when: fio_type == 'file' and inventory_hostname == groups["dbserver"][0]
 
   - name: "install fio packages"
     become: yes
