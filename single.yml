@@ -1,6 +1,8 @@
 ---
  - hosts: all
    any_errors_fatal: true
+   vars:
+     dbca: "single"
    roles:
      - { role: ssh, tags: ['ssh'] }
      - { role: misc, tags: ['misc'] }
