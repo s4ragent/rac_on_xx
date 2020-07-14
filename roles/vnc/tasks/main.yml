@@ -23,23 +23,17 @@
   - name: install the 'Server With GUI' package group
     become: yes
     shell: "dnf -y group install 'Server With GUI' --nobest && dnf -y group upgrade 'Server With GUI'"
-    tags:
-      - vnc
       
   - name: install tigervnc-server
     become: yes
     dnf:
       name: 'tigervnc-server'
       state: present
-    tags:
-      - vnc
       
   - name: Reboot
     become: yes
     reboot:
       reboot_timeout: 300
-    tags:
-      - vnc
 
 
 #bash XXutil.sh ssh storage 6901 5901
