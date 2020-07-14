@@ -5,7 +5,7 @@ case "$1" in
   "cvu" ) shift;common_cvu $*;;  
   "cvu_only" ) shift;common_cvu_only $*;;  
   "jdbcrunner" ) shift;common_jdbcrunner $*;;
-  "jdbcrunner_only" ) shift;common_jdbcrunner_only $*;;
+  "jdbcrunner_single" ) shift;common_jdbcrunner_single $*;;
   "preinstall" ) shift;common_preinstall $*;;
   "preinstall_with_vnc" ) shift;common_preinstall_with_vnc $*;;
   "after_runonly" ) shift;common_after_runonly $*;;
@@ -13,12 +13,13 @@ case "$1" in
   "heatrun") shift;common_heatrun $*;;
   "heatrun_single") shift;common_heatrun_single $*;;
   "runall" ) shift;common_runall $*;;
-  "runall_singledb" ) shift;common_runall_singledb $*;;
+  "runall_single" ) shift;common_runall_single $*;;
   "ssh" ) shift;common_ssh $*;;
   "replaceinventory" ) shift;common_all_replaceinventory $*;;
   "create_inventry" ) shift;common_create_inventry "$@";;
   "run" ) shift;run $*;;
   "runonly" ) shift;common_runonly $*;;
+  "runonly_single" ) shift;common_runonly_single $*;;
   "deleteall" ) shift;common_deleteall $*;;
   "buildimage" ) shift;buildimage $*;;
   "get_External_IP" ) shift;get_External_IP $*;;
