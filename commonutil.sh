@@ -172,8 +172,7 @@ common_runonly_single(){
 }
 
 common_runall_single(){
-	common_runonly_single $*
-	shift
+	common_runonly_single
 	common_execansible single.yml $*
 }
 
