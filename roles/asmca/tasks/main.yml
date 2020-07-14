@@ -6,15 +6,13 @@
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - execonfig
-      - gridinstall
-      - installdbca
+
 
   - debug: var=asmca_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - execonfig
-      - gridinstall
-      - installdbca
+
 
 #  - name: "change css misscount"
 #    become: yes
@@ -36,7 +34,5 @@
       - { name: "{{ DATA_DISKGROUP_NAME }}", path: "{{ DATA_DEV }}" }
       - { name: "{{ FRA_DISKGROUP_NAME }}", path: "{{ FRA_DEV }}" }
     tags:
-      - gridinstall
       - createdg
-      - installdbca
       
