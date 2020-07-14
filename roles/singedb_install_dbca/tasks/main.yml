@@ -8,8 +8,6 @@
       state: enabled
       immediate: yes
     ignore_errors: yes
-    tags:
-      - singledb
 
   - name: "create oradata"
     become: yes
@@ -19,8 +17,6 @@
       owner: oracle
       group: oinstall
       mode: 0755
-    tags:
-      - singledb
 
   - name: "create orainventory"
     become: yes
@@ -30,8 +26,6 @@
       owner: oracle
       group: oinstall
       mode: 0755
-    tags:
-      - singledb
 
   - name: "crete media directory"
     become: yes
@@ -42,8 +36,6 @@
       group: oinstall
       owner: oracle
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - singledb
 
   - name: "copy patch"
     become: yes
@@ -53,13 +45,9 @@
       dest: "{{ MEDIA_PATH }}"
       creates: "{{ MEDIA_PATH }}/{{ GRID_PATCH_NUM }}"
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - singledb
 
   - set_fact: INSTALL_DB_OPS=""
     when: INSTALL_DB_OPS is undefined
-    tags:
-      - singledb
 
   - name: "copy db media"
     become: yes
@@ -69,8 +57,6 @@
       dest: "{{ ORA_ORACLE_HOME }}"
       creates: "{{ ORA_ORACLE_HOME }}/bin"
     when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - singledb
 
   - name: "runInstaller(db)"
     become: yes
@@ -97,14 +83,12 @@
     ignore_errors: True
     register: runinstallerdb_result
     tags:
-      - singledb
       - singledbinstall
 
   - debug: var=runinstallerdb_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     failed_when: runinstallerdb_result.rc !=0 and runinstallerdb_result.rc != 250 and runinstallerdb_result.rc != 6
     tags:
-      - singledb
       - singledbinstall
 
   - name: "orainstrootsh"
@@ -112,12 +96,10 @@
     shell: "{{ ORAINVENTORY }}/orainstRoot.sh -silent"
     register: orainstrootsh_result
     tags:
-      - singledb
       - singledbinstall
 
   - debug: var=orainstrootsh_result.stdout_lines
     tags:
-      - singledb
       - singledbinstall
 
   - name: "db root.sh"
@@ -125,12 +107,10 @@
     shell: "{{ ORA_ORACLE_HOME }}/root.sh -silent"
     register: dbrootsh_result
     tags:
-      - singledb
       - singledbinstall
 
   - debug: var=dbrootsh_result.stdout_lines
     tags:
-      - singledb
       - singledbinstall
   
   - name: "dbca"
@@ -146,7 +126,6 @@
       -databaseType {{ DATABASETYPE }} -ignorePreReqs
     when: inventory_hostname == groups["dbserver"][0]
     tags:
-      - singledb
       - singledbca
 
   - name: "lsnrctl"
@@ -159,6 +138,5 @@
       {{ ORA_ORACLE_HOME }}/bin/lsnrctl start && sleep 120s
     when: inventory_hostname == groups["dbserver"][0]
     tags:
-      - singledb
       - singledbca
       - singledblsnrctl
