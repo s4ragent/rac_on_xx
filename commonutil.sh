@@ -120,6 +120,7 @@ do
 done
 common_deleteall
 }
+
 common_all_replaceinventory(){
 	for FILE in $VIRT_TYPE/host_vars/*
 	do
