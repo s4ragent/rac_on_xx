@@ -41,11 +41,11 @@ common_runall(){
 
 common_jdbcrunner(){
 	common_addClient
-	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=on"
+	common_jdbcrunner_only
 }
 
 common_jdbcrunner_only(){
-	common_execansible rac.yml --tags ssh,misc,vxlan_conf,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=on"
+	common_execansible rac.yml --tags ssh,misc,vxlan,dnsmasq,jdbcrunner --extra-vars "jdbcrunner=on"
 }
 
 common_deletedatabase(){
@@ -58,31 +58,13 @@ common_reboot_crsctl(){
 
 common_cvu(){
 	common_runonly $*
-	common_execansible rac.yml --skip-tags installdbca --extra-vars "cvu=on"
+	common_cvu_only
 }
 
 common_cvu_only(){
 	common_execansible rac.yml --skip-tags installdbca --extra-vars "cvu=on"
 }
 
-common_iperf(){
-	common_runonly 1
-	if [ "$1" = "vxlan0" ]; then
- 		common_execansible rac.yml --tags ssh,misc,vxlan_conf
-	else
-		common_execansible rac.yml --tags ssh,misc
-	fi
-	common_execansible rac.yml --tags iperf --extra-vars "IPERF_DEV=$1"
-}
-
-common_iperf_only(){
-	if [ "$1" = "vxlan0" ]; then
- 		common_execansible rac.yml --tags ssh,misc,vxlan_conf
-	else
-		common_execansible rac.yml --tags ssh,misc
-	fi
-	common_execansible rac.yml --tags iperf --extra-vars "IPERF_DEV=$1"
-}
 
 common_preinstall(){
 	common_runonly $*
@@ -101,10 +83,6 @@ common_after_runonly(){
 
 common_install_dbca(){
 	common_execansible rac.yml --tags installdbca
-}
-
-common_gridrootsh(){
-	common_execansible rac.yml --tags installdbca --skip-tags runinstallergrid
 }
 
 common_deleteall(){
