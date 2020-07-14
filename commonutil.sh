@@ -96,8 +96,7 @@ do
     cp ${VIRT_TYPE}/vars.yml $LOGDIR/
     common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
-    common_runall_single $1 -e "iperf=on" -e "fio=on" -e "log_dir=$LOGDIR" >>$LOG  2>&1
-    common_jdbcrunner_single --tags jdbcrunner,iperf -e "iperf=on" -e "log_dir=$LOGDIR" >>$LOG  2>&1
+    common_runall_single $1 -e "iperf=on" -e "fio=on" -e "jdbcrunner=on" -e "log_dir=$LOGDIR" >>$LOG  2>&1
     echo "START $STARTTIME" >>$LOG
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
@@ -168,7 +167,8 @@ common_runonly_single(){
 	common_init
 	
 	common_update_all_yml ""
- 	common_addDbServer 1
+ common_addDbServer 1
+ common_addClient
 }
 
 common_runall_single(){
@@ -178,8 +178,7 @@ common_runall_single(){
 }
 
 common_jdbcrunner_single(){
-	common_addClient
-	common_execansible single.yml --tags ssh,misc,dnsmasq,jdbcrunner -e "jdbcrunner=on" $*
+	common_execansible single.yml --tags jdbcrunner -e "jdbcrunner=on" $*
 }
 
 common_addDbServer(){
