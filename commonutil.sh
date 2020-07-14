@@ -90,7 +90,7 @@ for i in `seq 1 $2`
 do
     LOGDIR="`date "+%Y%m%d-%H%M%S"`"
     mkdir $LOGDIR
-    LOG=${LOGDIR}/${VIRT_TYPE}_rac_$[1}node.log"
+    LOG="${LOGDIR}/${VIRT_TYPE}_rac_$[1}node.log"
     cp ${VIRT_TYPE}/vars.yml $LOGDIR/
     common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
@@ -108,7 +108,7 @@ for i in `seq 1 $1`
 do
     LOGDIR="`date "+%Y%m%d-%H%M%S"`"
     mkdir $LOGDIR
-    LOG=${LOGDIR}/${VIRT_TYPE}_single.log"
+    LOG="${LOGDIR}/${VIRT_TYPE}_single.log"
     cp ${VIRT_TYPE}/vars.yml $LOGDIR/
     common_deleteall >>$LOG  2>&1
     STARTTIME=`date "+%Y%m%d-%H%M%S"`
