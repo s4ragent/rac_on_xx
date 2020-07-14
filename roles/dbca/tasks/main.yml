@@ -2,18 +2,12 @@
   - name: "dbca_cmd"
     set_fact:
       DBCA_CMD: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -createDatabase -templateName {{ TEMPLATENAME }} -gdbName {{ DBNAME }} -sid {{ SIDNAME }} policyManaged=true createServerPool=true serverPoolName={{ SERVERPOOLNAME }} -createAsContainerDatabase true -numberOfPDBs 1 -pdbName {{ PDBNAME }} -pdbAdminPassword {{ PDBADMINPASSWORD }} -SysPassword {{ SYSPASSWORD }} -SystemPassword {{ SYSTEMPASSWORD }} -emConfiguration NONE -redoLogFileSize {{ REDOFILESIZE }} -recoveryAreaDestination +{{ FRA_DISKGROUP_NAME }} -storageType ASM -asmSysPassword {{ ASMSYSPASSWORD }} -diskGroupName {{ DATA_DISKGROUP_NAME }} -characterSet {{ CHARSET }} -nationalCharacterSet {{ NCHAR }} -totalMemory {{ MEMORYTARGET }} -databaseType {{ DATABASETYPE }}"
-    tags:
-      - dbca
-      - installdbca
 
   - name: "dbca parallel"
     become: yes
     become_user: oracle
     shell: "{{ DBCA_CMD }} -nodelist {% for host in groups['dbserver'] %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
     when: inventory_hostname == groups["dbserver"][0] and dbca == "paralell"
-    tags:
-      - dbca
-      - installdbca
 
   - name: "dbca serial first node"
     become: yes
@@ -22,8 +16,6 @@
     when: inventory_hostname == groups["dbserver"][0] and dbca == "serial"
     tags:
       - dbca1st
-      - dbca
-      - installdbca
 
   - name: "dbca serial othernode"
     become: yes
@@ -33,8 +25,6 @@
     when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca == "serial"
     tags:
       - dbcaother
-      - dbca
-      - installdbca
 
   - name: "add pdb service"
     become: yes
@@ -46,8 +36,6 @@
     when: inventory_hostname == groups["dbserver"][0] and dbca != "delete"
     tags:
       - addpdbservice
-      - dbca
-      - installdbca
 
   - name: "start pdb"
     become: yes
@@ -60,8 +48,6 @@
     tags:
       - addpdbservice
       - startpdbservice
-      - dbca
-      - installdbca
 
   - name: "delete database"
     become: yes
@@ -78,11 +64,7 @@
     register: crsctl_result
     tags:
       - deletedatabase
-      - dbca
-      - installdbca
 
   - debug: var=crsctl_result.stdout_lines
     tags:
       - deletedatabase
-      - dbca
-      - installdbca
