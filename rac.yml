@@ -2,52 +2,51 @@
  - hosts: all
    any_errors_fatal: true
    roles:
-      - ssh
-      - misc
-      - vxlan
-      - { role: iperf, when: "IPERF_DEV is defined" }
-      - { role: dns, when: "dns == 'dnsmasq'" }
-      - prereq
+     - { role: ssh, tags: ['ssh'] }
+     - { role: misc, tags: ['misc'] }
+     - { role: vxlan, tags: ['vxlan'] }
+     - { role: iperf, tags: ['iperf'], when: "iperf is defined or benchmark is defined" }
+     - { role: dnsmasq, tags: ['dnsmasq'], when: "dns == 'dnsmasq'" }
+     - { role: prereq, tags: ['prereq'] }
 
  - hosts: storage
    any_errors_fatal: true
    roles:
-      - { role: nfsserver, when: "storage_type == 'nfs'" }
+     - { role: nfsserver, tags: ['nfsserver'], when: "storage_type == 'nfs'" }
 #      - { role: nbdserver, when: "storage_type == 'nbd'" }
 #      - { role: efs, when: "storage_type == 'efs'" }
 
  - hosts: dbserver
    any_errors_fatal: true
    roles:
-      - { role: vnc, when: "vnc is defined" }
-      - { role: nfsclient, when: "storage_type == 'nfs' or storage_type == 'efs'" }
-#      - { role: nbdserver, when: "storage_type == 'nbd'" }
-#      - { role: nbdclient, when: "storage_type == 'nbd'" }
-      - { role: cvu, when: "cvu is defined" }
+     - { role: vnc, tags: ['vnc'], when: "vnc is defined" }
+     - { role: nfsclient, tags: ['nfsclient'], when: "storage_type == 'nfs' or storage_type == 'efs'" }]
+     - { role: fio, tags: ['fio'], when: "fio is defined or benchmark is defined" }
+     - { role: cvu, tags: ['cvu'], when: "cvu is defined" }
 
  - hosts: dbserver
    any_errors_fatal: true
    serial: 1
    roles:
-      - gridinstall
+     - { role: gridinstall, tags: ['gridinstall','installdbca'] }
 
  - hosts: dbserver
    roles:
-      - crsctl
+     - { role: crsctl, tags: ['crsctl','gridinstall','installdbca'] }
       
  - hosts: dbserver
    any_errors_fatal: true
    roles:
-      - asmca
-      - dbinstall
-      - dbca
+      - { role: asmca, tags: ['gridinstall','installdbca'] }
+      - { role: dbinstall, tags: ['dbinstall','installdbca'] }
+      - { role: dbca, tags: ['dbca','installdbca'] }
 
  - hosts: dbserver
    serial: 1
    roles:
-      - { role: reboot_crsctl, when: "reboot_crsctl is defined" }
+      - { role: reboot_crsctl, tags: ['reboot_crsctl','installdbca'] , when: "reboot_crsctl is defined" }
 
  - hosts: all:!storage
    any_errors_fatal: true
    roles:
-      - { role: jdbcrunner, when: "jdbcrunner is defined" }
+      - { role: jdbcrunner, tags: ['jdbcrunner'], when: "jdbcrunner is defined or benchmark is defined" }
