@@ -5,8 +5,6 @@
     dnf: 
       name: nfs-utils
       state: present
-    tags:
-      - nfsserver
 
   - name: "create nfs root directory"
     become: yes
@@ -16,8 +14,6 @@
       owner: root 
       group: root
       mode: 0755
-    tags:
-      - nfsserver
 
   - name: "create exports"
     become: yes
@@ -39,8 +35,6 @@
     with_items:
       - rpcbind
       - nfs-server
-    tags:
-      - nfsserver
 
   - name: "firewalld allow nfs"
     become: yes
@@ -56,5 +50,3 @@
       - mountd
       - rpc-bind
     ignore_errors: yes
-    tags:
-      - nfsserver
