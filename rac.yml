@@ -5,7 +5,7 @@
      - { role: ssh, tags: ['ssh'] }
      - { role: misc, tags: ['misc'] }
      - { role: vxlan, tags: ['vxlan'] }
-     - { role: iperf, tags: ['iperf'], when: "iperf is defined or benchmark is defined" }
+     - { role: iperf, tags: ['iperf'], when: "iperf is defined" }
      - { role: dnsmasq, tags: ['dnsmasq'], when: "dns == 'dnsmasq'" }
      - { role: prereq, tags: ['prereq'] }
 
@@ -21,7 +21,7 @@
    roles:
      - { role: vnc, tags: ['vnc'], when: "vnc is defined" }
      - { role: nfsclient, tags: ['nfsclient'], when: "storage_type == 'nfs' or storage_type == 'efs'" }]
-     - { role: fio, tags: ['fio'], when: "fio is defined or benchmark is defined" }
+     - { role: fio, tags: ['fio'], when: "fio is defined" }
      - { role: cvu, tags: ['cvu'], when: "cvu is defined" }
 
  - hosts: dbserver
@@ -49,4 +49,4 @@
  - hosts: all:!storage
    any_errors_fatal: true
    roles:
-      - { role: jdbcrunner, tags: ['jdbcrunner'], when: "jdbcrunner is defined or benchmark is defined" }
+      - { role: jdbcrunner, tags: ['jdbcrunner'], when: "jdbcrunner is defined" }
