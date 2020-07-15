@@ -9,4 +9,25 @@
     register: scsi_id_result
     ignore_errors: yes
 
+  - name: "copy udev rules"
+    become: yes
+    template:
+      src: "90-oracle-asmdevices.rules.j2"
+      dest: "/etc/udev/rules.d/90-oracle-asmdevices.rules"
+      mode: 0644
+      owner: root
+      group: root
 
+  - name: /etc/scsi_id.config
+    lineinfile:
+      path: /etc/scsi_id.config
+      line: "options=-g"
+      create: yes
+      state: present
+      owner: root
+      group: root
+      mode: '0644'
+
+  - name: "reload udev"
+    become: yes
+    shell: "udevadm control --reload-rules"
