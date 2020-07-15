@@ -106,7 +106,7 @@ common_deleteall
 common_heatrun(){
 for i in `seq 1 $2`
 do
-    LOGDIR="`date "+%Y%m%d-%H%M%S"`_${VIRT_TYPE}_rac_${1}node"
+    LOGDIR="`date "+%Y%m%d-%H%M%S"`_${VIRT_TYPE}_rac_${1}node_${storage_type}"
     mkdir $LOGDIR
     LOG="${LOGDIR}/heatrun.log"
     cp ${VIRT_TYPE}/vars.yml $LOGDIR/
