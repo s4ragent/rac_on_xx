@@ -13,6 +13,7 @@
    any_errors_fatal: true
    roles:
      - { role: nfsserver, tags: ['nfsserver'], when: "storage_type == 'nfs'" }
+     - { role: targetcli, tags: ['targetcli'], when: "storage_type == 'iscsi'" }
 #      - { role: nbdserver, when: "storage_type == 'nbd'" }
 #      - { role: efs, when: "storage_type == 'efs'" }
 
@@ -21,6 +22,8 @@
    roles:
      - { role: vnc, tags: ['vnc'], when: "vnc is defined" }
      - { role: nfsclient, tags: ['nfsclient'], when: "storage_type == 'nfs' or storage_type == 'efs'" }
+     - { role: isciclient, tags: ['iscsiclient'], when: "storage_type == 'iscsi'" }
+     - { role: udev, tags: ['udev'], when: "storage_type == 'iscsi'" }
      - { role: fio, tags: ['fio'], when: "fio is defined" }
      - { role: cvu, tags: ['cvu'], when: "cvu is defined" }
 
