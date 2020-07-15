@@ -196,7 +196,7 @@
 
   - name: "chrocyc burst"
     become: yes
-    until: r.stdout|int <= 0
+    until: r.rc|int <= 0
     shell: chronyc -a 'burst 4/4'
     register: r
     retries: 10
