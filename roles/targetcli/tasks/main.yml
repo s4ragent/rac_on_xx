@@ -52,7 +52,7 @@
   - name: "restart targetcli"
     become: yes
     systemd:
-      name: targetcli
+      name: target
       state: restarted 
       enabled: yes
 
