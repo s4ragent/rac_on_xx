@@ -22,7 +22,7 @@
    roles:
      - { role: vnc, tags: ['vnc'], when: "vnc is defined" }
      - { role: nfsclient, tags: ['nfsclient'], when: "storage_type == 'nfs' or storage_type == 'efs'" }
-     - { role: isciclient, tags: ['iscsiclient'], when: "storage_type == 'iscsi'" }
+     - { role: iscsiclient, tags: ['iscsiclient'], when: "storage_type == 'iscsi'" }
      - { role: udev, tags: ['udev'], when: "storage_type == 'iscsi'" }
      - { role: fio, tags: ['fio'], when: "fio is defined" }
      - { role: cvu, tags: ['cvu'], when: "cvu is defined" }
