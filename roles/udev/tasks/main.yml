@@ -1,0 +1,3 @@
+---
+
+#/usr/lib/udev/scsi_id -g -u -d 
