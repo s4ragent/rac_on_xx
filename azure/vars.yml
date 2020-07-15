@@ -36,7 +36,7 @@ DNS_CON: "System eth0"
 storage_type: "nfs"
 NFS_ROOT: /
 NFS_OPS:  "rw,bg,hard,nointr,rsize=65536,wsize=65536,tcp,vers=4.0,timeo=600,actimeo=0"
-DNFS: disable
+#DNFS: disable
 ##### common storage value
 ORA_DATA: /u01/oradata
 VOTE_DEV: /u01/oradata/vote.img
