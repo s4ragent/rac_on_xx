@@ -49,6 +49,9 @@ DNS_CON: "System eth0"
 ##DD_CMD: dd
 ##### common storage value
 ##for iSCSI
+RAW_VOTE_DEV: /dev/sdd
+RAW_DATA_DEV: /dev/sde
+RAW_FRA_DEV: /dev/sdf
 VOTE_DEV: /u01/oradata/vote.img
 DATA_DEV: /u01/oradata/data.img
 FRA_DEV: /u01/oradata/fra.img
