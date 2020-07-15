@@ -9,9 +9,11 @@ storage_account_type: "Standard_LRS"
 db_vm_size: "Standard_B1ls"
 storage_vm_size: "Standard_B1ls"
 client_vm_size: "Standard_B1ls"
+enable_accelerated_networking: false
 #db_vm_size: "Standard_D3_v2"
 #storage_vm_size: "Standard_D3_v2"
 #client_vm_size: "Standard_D3_v2"
+#enable_accelerated_networking: true
 vm_os_publisher: "Oracle"
 vm_os_offer: "Oracle-Linux"
 vm_os_sku: "81"
