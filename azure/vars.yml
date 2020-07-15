@@ -47,15 +47,15 @@ DNS_CON: "System eth0"
 ##NFS_ROOT: /u01
 ##NFS_OPS:  "rw,bg,hard,nointr,rsize=65536,wsize=65536,tcp,vers=3,timeo=600,actimeo=0"
 ##DD_CMD: dd
-##### common storage value
 ##for iSCSI
 RAW_VOTE_DEV: /dev/sdd
 RAW_DATA_DEV: /dev/sde
 RAW_FRA_DEV: /dev/sdf
-VOTE_DEV: /u01/oradata/vote.img
-DATA_DEV: /u01/oradata/data.img
-FRA_DEV: /u01/oradata/fra.img
-ASM_STRING: /u01/oradata/*
+VOTE_DEV: /dev/asm-vote
+DATA_DEV: /dev/asm-data
+FRA_DEV: /dev/asm-fra
+ASM_STRING: /dev/asm*
+##### common storage value
 ORA_DATA: /u01/oradata
 VOTE_SIZE: 10240
 VOTE_DISKGROUP_NAME: VOTE
