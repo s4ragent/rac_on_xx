@@ -95,7 +95,7 @@
     shell:
       cmd: |
         source ~/.bash_profile
-        export ORACLE_SID=`ps -ef | grep pmon  | grep -v grep | awk -F '_' '{print $3}'`
+        export ORACLE_SID=`ps -ef | grep ora_pmon_  | grep -v grep | awk -F 'pmon_' '{print $2}'`
         sqlplus 'sys/{{ SYSPASSWORD }} as sysdba' <<'EOF'
         exec DBMS_WORKLOAD_REPOSITORY.MODIFY_SNAPSHOT_SETTINGS ( interval => 1440);
         exec DBMS_WORKLOAD_REPOSITORY.CREATE_SNAPSHOT ();
@@ -117,7 +117,7 @@
     shell:
       cmd: |
         source ~/.bash_profile
-        export ORACLE_SID=`ps -ef | grep pmon | grep -v grep | awk -F '_' '{print $3}'`
+        export ORACLE_SID=`ps -ef | grep ora_pmon_  | grep -v grep | awk -F 'pmon_' '{print $2}'`
         sqlplus 'sys/{{ SYSPASSWORD }} as sysdba' <<'EOF'
         exec DBMS_WORKLOAD_REPOSITORY.CREATE_SNAPSHOT ();
         spool awr.log
