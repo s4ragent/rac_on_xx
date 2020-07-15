@@ -19,6 +19,7 @@
       group: root
 
   - name: /etc/scsi_id.config
+    become: yes
     lineinfile:
       path: /etc/scsi_id.config
       line: "options=-g"
