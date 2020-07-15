@@ -76,7 +76,7 @@ resource "azurerm_network_interface" "racdbnic" {
     location                  = local.yaml.location
     resource_group_name       = azurerm_resource_group.racgroup.name
     
-    enable_accelerated_networking = true
+    enable_accelerated_networking = local.yaml.enable_accelerated_networking
 
     ip_configuration {
         name                          = "ipconfigdb${count.index}"
@@ -161,7 +161,7 @@ resource "azurerm_network_interface" "racstoragenic" {
     location                  = local.yaml.location
     resource_group_name       = azurerm_resource_group.racgroup.name
     
-    enable_accelerated_networking = true
+    enable_accelerated_networking = local.yaml.enable_accelerated_networking
 
     ip_configuration {
         name                          = "ipconfigstorage${count.index}"
@@ -289,7 +289,7 @@ resource "azurerm_linux_virtual_machine" "clientvm" {
 
     computer_name  = "${format("client%03d", count.index + 1)}.${local.yaml.DOMAIN_NAME}"
     admin_username = local.yaml.ansible_ssh_user
-    disable_password_authentication = true
+    disable_password_authentication = local.yaml.enable_accelerated_networking
         
     admin_ssh_key {
         username       = local.yaml.ansible_ssh_user
