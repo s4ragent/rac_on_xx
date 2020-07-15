@@ -1,0 +1,3 @@
+KERNEL==”sd?1″, SUBSYSTEM==”block”, PROGRAM==”/usr/lib/udev/scsi_id -g -u -d /dev/$parent”, RESULT==”36090a04890c4a64799afa577352d392a”, SYMLINK+=”asm-vote″, OWNER=”grid”, GROUP=”asmadmin”, MODE=”0660″
+KERNEL==”sd?1″, SUBSYSTEM==”block”, PROGRAM==”/usr/lib/udev/scsi_id -g -u -d /dev/$parent”, RESULT==”36090a04890c4964799af4577352d2921″, SYMLINK+=”asm-data″, OWNER=”grid”, GROUP=”asmadmin”, MODE=”0660″
+KERNEL==”sd?1″, SUBSYSTEM==”block”, PROGRAM==”/usr/lib/udev/scsi_id -g -u -d /dev/$parent”, RESULT==”36090a04890c4864799af8576352d49e2″, SYMLINK+=”asm-fra″, OWNER=”grid”, GROUP=”asmadmin”, MODE=”0660″
