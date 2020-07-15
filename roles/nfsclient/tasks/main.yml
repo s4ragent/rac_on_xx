@@ -25,7 +25,7 @@
     become: yes
     mount:
       name: "{{ ORA_DATA }}"
-      src: "{{ STORAGE_SERVER }}:/"
+      src: "{{ STORAGE_SERVER }}:{{ NFS_ROOT }}"
       fstype: nfs
       opts: "{{ NFS_OPS }}"
       state: mounted
