@@ -49,6 +49,11 @@
       - "set attribute generate_node_acls=1"
     ignore_errors: yes
 
+  - name: "targetcli saveconfig"
+    become: yes
+    shell: "targetcli saveconfig"
+    ignore_errors: yes
+
   - name: "restart targetcli"
     become: yes
     systemd:
