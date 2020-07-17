@@ -41,12 +41,13 @@
       - fra
     ignore_errors: yes
 
-
-#targetcli /iscsi/iqn.2015-12.com.example:myhost01/tpg1/acls create iqn.1994-05.com.redhat:0fa619ccaea
-
   - name: "allow acls"
     become: yes
     shell: "targetcli /iscsi/{{ TARGETNAME }}/tpg1 {{ item }}"
+    with_items:	
+      - "set attribute authentication=0"
+      - "set attribute demo_mode_write_protect=0"
+      - "set attribute generate_node_acls=1"
     ignore_errors: yes
 
   - name: "targetcli saveconfig"
