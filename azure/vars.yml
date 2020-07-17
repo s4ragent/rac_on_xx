@@ -51,7 +51,8 @@ DNS_CON: "System eth0"
 ##DD_CMD: dd
 ##for iSCSI
 storage_type: "iscsi"
-TARGETNAME: iqn.2020-07.org.jpoug:444
+TARGETNAME: iqn.2020-07.org.jpoug:111
+INITIATORNAME: iqn.2020-07.org.jpoug:222
 RAW_VOTE_DEV: /dev/sdd
 RAW_DATA_DEV: /dev/sde
 RAW_FRA_DEV: /dev/sdf
