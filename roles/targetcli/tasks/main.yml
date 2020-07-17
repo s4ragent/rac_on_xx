@@ -1,7 +1,7 @@
 ---
 #https://www.server-world.info/query?os=CentOS_8&p=iscsi&f=1
 #http://sugakun.blog.fc2.com/blog-entry-2.html
-
+#http://atodorov.org/blog/2015/04/07/how-to-configure-iscsi-target-on-red-hat-enterprise-linux-7/
   - name: "install targetcli packages"
     become: yes
     dnf: 
