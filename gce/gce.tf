@@ -1,3 +1,11 @@
+variable "project_id" {
+  type = string
+}
+
+variable "region" {
+  type = string
+}
+
 provider "google" {
 	project = "apps-gcp-terraform-test"
 	region  = "asia-northeast1"
