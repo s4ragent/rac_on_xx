@@ -1,14 +1,10 @@
-variable "project_id" {
-  type = string
-}
-
-variable "region" {
-  type = string
+locals{ 
+        yaml = yamldecode(file("./vars.yml"))
 }
 
 provider "google" {
-	project = "apps-gcp-terraform-test"
-	region  = "asia-northeast1"
+	project = local.yaml.project
+	region  = local.yaml.region
   }
   
   resource "google_compute_instance" "apps-gcp-terraform" {
