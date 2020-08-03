@@ -52,20 +52,18 @@ DNS_CON: "System eth0"
 ##for iSCSI
 storage_type: "iscsi"
 TARGETNAME: iqn.2020-07.org.jpoug:444
-RAW_VOTE_DEV: /dev/sdd
-RAW_DATA_DEV: /dev/sde
-RAW_FRA_DEV: /dev/sdf
 VOTE_DEV: /dev/asm-vote
 DATA_DEV: /dev/asm-data
 FRA_DEV: /dev/asm-fra
 ASM_STRING: /dev/asm*
 ##### common storage value
 ORA_DATA: /u01/oradata
-VOTE_SIZE: 10240
+### XXX_SIZE is GiB
+VOTE_SIZE: 10
 VOTE_DISKGROUP_NAME: VOTE
-DATA_SIZE: 25600
+DATA_SIZE: 25
 DATA_DISKGROUP_NAME: DATA
-FRA_SIZE: 40960
+FRA_SIZE: 40
 FRA_DISKGROUP_NAME: FRA
 #####
 NODEPREFIX: node
