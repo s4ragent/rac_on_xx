@@ -13,6 +13,11 @@
       regexp: '^InitiatorName=(.*)'
       replace: 'InitiatorName={{ iSCSIName }}.{{ NODENAME }}'
 
+  - name: Reboot
+    become: yes
+    reboot:
+      reboot_timeout: 1200
+
   - name: "iscsiadm -m discovery"
     become: yes
     shell: "iscsiadm -m discovery -t sendtargets -p {{ STORAGE_SERVER }}"
