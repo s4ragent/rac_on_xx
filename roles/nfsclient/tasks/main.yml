@@ -49,21 +49,21 @@
  #     - { name: "{{ VOTE_DEV }}", size: "{{ VOTE_BASE_SIZE + VOTE_MULTI_SIZE * groups['dbserver'] | length  }}" }
  #     - { name: "{{ DATA_DEV }}", size: "{{ DATA_BASE_SIZE + DATA_MULTI_SIZE * groups['dbserver'] | length }}" }
  #     - { name: "{{ FRA_DEV }}", size: "{{ FRA_BASE_SIZE + FRA_MULTI_SIZE * groups['dbserver'] | length }}" }
-      - { name: "{{ VOTE_DEV }}", size: "{{ VOTE_SIZE }}" }
-      - { name: "{{ DATA_DEV }}", size: "{{ DATA_SIZE }}" }
-      - { name: "{{ FRA_DEV }}", size: "{{ FRA_SIZE }}" }
+      - { name: "{{ VOTE_DEV }}", size: "{{ VOTE_SIZE * 1024 | length }}" }
+      - { name: "{{ DATA_DEV }}", size: "{{ DATA_SIZE * 1024 | length }}" }
+      - { name: "{{ FRA_DEV }}", size: "{{ FRA_SIZE * 1024 | length }}" }
 
   - name: "create asm device vote(dd)"
     become: yes
     shell: dd if=/dev/zero of={{ item.name }} bs=1M count={{ item.size }}
     when: inventory_hostname == groups["dbserver"][0] and DD_CMD is defined
     with_items:
- #     - { name: "{{ VOTE_DEV }}", size: "{{ VOTE_BASE_SIZE + VOTE_MULTI_SIZE * groups['dbserver'] | length  }}" }
+ #     - { name: "{{ VOTE_DEV }}", size: "{{ VOTE_BASE_SIZE + VOTE_MULTI_SIZE * groups['dbserver'] | length }}" }
  #     - { name: "{{ DATA_DEV }}", size: "{{ DATA_BASE_SIZE + DATA_MULTI_SIZE * groups['dbserver'] | length }}" }
  #     - { name: "{{ FRA_DEV }}", size: "{{ FRA_BASE_SIZE + FRA_MULTI_SIZE * groups['dbserver'] | length }}" }
-      - { name: "{{ VOTE_DEV }}", size: "{{ VOTE_SIZE }}" }
-      - { name: "{{ DATA_DEV }}", size: "{{ DATA_SIZE }}" }
-      - { name: "{{ FRA_DEV }}", size: "{{ FRA_SIZE }}" }
+      - { name: "{{ VOTE_DEV }}", size: "{{ VOTE_SIZE * 1024 | length }}" }
+      - { name: "{{ DATA_DEV }}", size: "{{ DATA_SIZE * 1024 | length }}" }
+      - { name: "{{ FRA_DEV }}", size: "{{ FRA_SIZE * 1024 | length }}" }
 
 
   - name: "chown oradata"
