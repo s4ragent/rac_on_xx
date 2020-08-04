@@ -51,7 +51,7 @@ DNS_CON: "System eth0"
 ##DD_CMD: dd
 ##for iSCSI
 storage_type: "iscsi"
-iSCSIName: iqn.2020-07.org.jpoug:
+iSCSIName: iqn.2020-07.org.jpoug:444
 VOTE_DEV: /dev/asm-vote
 DATA_DEV: /dev/asm-data
 FRA_DEV: /dev/asm-fra
