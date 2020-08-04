@@ -29,12 +29,12 @@
 
   - name: "create target"
     become: yes
-    shell: "targetcli /iscsi create {{ TARGETNAME }}"
+    shell: "targetcli /iscsi create {{ iSCSIName }}.{{ NODENAME }}"
     ignore_errors: yes
 
   - name: "create luns"
     become: yes
-    shell: "targetcli /iscsi/{{ TARGETNAME }}/tpg1/luns create /backstores/fileio/{{ item }}"
+    shell: "targetcli /iscsi/{{ iSCSIName }}.{{ NODENAME }}/tpg1/luns create /backstores/fileio/{{ item }}"
     with_items:
       - vote
       - data
@@ -43,7 +43,7 @@
 
   - name: "allow acls"
     become: yes
-    shell: "targetcli /iscsi/{{ TARGETNAME }}/tpg1 {{ item }}"
+    shell: "targetcli /iscsi/{{ iSCSIName }}.{{ NODENAME }}/tpg1 {{ item }}"
     with_items:
       - "set attribute authentication=0"
       - "set attribute demo_mode_write_protect=0"
