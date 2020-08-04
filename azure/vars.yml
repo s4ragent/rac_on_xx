@@ -20,15 +20,12 @@ vm_os_sku: "81"
 vm_os_version: "latest"
 data_sa_type: "Standard_LRS"
 data_disk_size_gb: "100"
+data_disk_mountpoint: "/u01"
 link_local: disable
 ####common VIRT_TYPE specific value ################
 INSTALL_OPS: "-ignorePrereqFailure"
 MEDIA_COPY: "true"
 MEDIA_PATH: /downloadmedia
-#BUCKET_URL="gs://xxxxxxxxx"
-## for additional disk values
-data_disk_dev: "/dev/sdc"
-data_disk_mountpoint: "/u01"
 ####ansible specific
 ansible_ssh_user: azureuser
 ansible_ssh_private_key_file: raconxx
