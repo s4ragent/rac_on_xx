@@ -210,15 +210,22 @@
     tags:
       - chronyd
 
+  - name: "get device_name"
+    become: yes
+    shell: "fdisk -l | grep -v /dev/sda | grep '{{ data_disk_size_gb }} GiB' | awk -F ' |:' {'print $2'}"
+    register: device_name_result
+    when: data_disk_size_gb is defined and data_disk_size_gb !=""
+    ignore_errors: yes
+    
   - name: "Partition additional disks"
     become: yes
     parted:
-      device: "{{ data_disk_dev }}"
+      device: "{{ device_name_result.stdout }}"
       number: 1
       part_start: 1MiB
       label: gpt
       state: present
-    when: data_disk_dev is defined and data_disk_dev !=""
+    when: data_disk_size_gb is defined and data_disk_size_gb !=""
     tags:
       - oraclehome
       - fdisk
@@ -227,17 +234,17 @@
     become: yes
     filesystem:
       fstype: xfs
-      dev: "{{ data_disk_dev }}1"
-    when: data_disk_dev is defined and data_disk_dev !=""
+      dev: "{{ device_name_result.stdout }}1"
+    when: data_disk_size_gb is defined and data_disk_size_gb !=""
     tags:
       - oraclehome
       - fdisk
 
   - name: get blkid
     become: yes
-    shell: '/sbin/blkid {{ data_disk_dev }}1 | awk -F''"'' ''{ print $2 }'' '
+    shell: '/sbin/blkid {{ device_name_result.stdout }}1 | awk -F''"'' ''{ print $2 }'' '
     register: uuid
-    when: data_disk_dev is defined and data_disk_dev !=""
+    when: data_disk_size_gb is defined and data_disk_size_gb !=""
     tags:
       - oraclehome
       - fdisk
@@ -257,7 +264,7 @@
       owner: grid
       group: oinstall
       mode: 0755
-    when: data_disk_dev is defined and data_disk_dev !=""
+    when: data_disk_size_gb is defined and data_disk_size_gb !=""
     tags:
       - oraclehome
       - fdisk
@@ -273,7 +280,7 @@
       passno: '0'
       dump: '0'
       state: mounted
-    when: data_disk_dev is defined and data_disk_dev !=""
+    when: data_disk_size_gb is defined and data_disk_size_gb !=""
     tags:
       - oraclehome
       - fdisk
