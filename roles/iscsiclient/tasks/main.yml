@@ -10,8 +10,8 @@
     become: yes
     replace:
       path: /etc/iscsi/initiatorname.iscsi
-      regexp: 'InitiatorName=*'
-      replace: 'InitiatorName={{ iSCSIName }}.{{ NODENAME }}'
+      regexp: '^InitiatorName=(.*)'
+      replace: '^InitiatorName={{ iSCSIName }}.{{ NODENAME }}'
 
   - name: "iscsiadm -m discovery"
     become: yes
