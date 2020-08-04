@@ -19,7 +19,7 @@
 
   - name: "create fileio"
     become: yes
-    shell: "targetcli /backstores/fileio create {{ item.name }} {{ ORA_DATA }}/{{ item.name }}.img {{ item.size }}M"
+    shell: "targetcli /backstores/fileio create {{ item.name }} {{ ORA_DATA }}/{{ item.name }}.img {{ item.size }}G"
     args:
       creates: "{{ ORA_DATA }}/{{ item.name }}.img"
     with_items:
