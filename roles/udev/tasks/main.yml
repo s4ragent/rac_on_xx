@@ -1,4 +1,16 @@
 ---
+  - name: "get device_name"
+    become: yes
+    shell: fdisk -l | grep -v /dev/sda | grep "{{ item }} GiB" | awk -F " |:" {'print $2'}
+    with_items:
+      - "{{ RAW_VOTE_DEV }}"
+      - "{{ RAW_DATA_DEV }}"
+      - "{{ RAW_FRA_DEV }}"
+    register: device_name_result
+    ignore_errors: yes
+
+
+
   - name: "get scsi_id"
     become: yes
     shell: "/usr/lib/udev/scsi_id -g -u -d {{ item }}"
