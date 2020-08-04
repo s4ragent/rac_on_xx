@@ -19,6 +19,7 @@
       reboot_timeout: 1200
     when: restart_iscsi is undefined
 
+#iscsiadm start iscsid daemon automatically (not nessary systemctl enable iscsid)
   - name: "iscsiadm -m discovery"
     become: yes
     shell: "iscsiadm -m discovery -t sendtargets -p {{ STORAGE_SERVER }}"
