@@ -9,15 +9,13 @@
     register: device_name_result
     ignore_errors: yes
 
-
-
   - name: "get scsi_id"
     become: yes
     shell: "/usr/lib/udev/scsi_id -g -u -d {{ item }}"
     with_items:
-      - "{{ RAW_VOTE_DEV }}"
-      - "{{ RAW_DATA_DEV }}"
-      - "{{ RAW_FRA_DEV }}"
+      - "{{ device_name_result.results.0.stdout }}"
+      - "{{ device_name_result.results.1.stdout }}"
+      - "{{ device_name_result.results.2.stdout }}"
     register: scsi_id_result
     ignore_errors: yes
 
