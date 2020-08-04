@@ -6,6 +6,13 @@
       name: iscsi-initiator-utils
       state: present
 
+  - name: create initiatorname.iscsi
+    become: yes
+    replace:
+      path: /etc/iscsi/initiatorname.iscsi
+      regexp: 'InitiatorName=*'
+      replace: 'InitiatorName={{ InitiatorName }}.{{ NODENAME }}'
+
   - name: "iscsiadm -m discovery"
     become: yes
     shell: "iscsiadm -m discovery -t sendtargets -p {{ STORAGE_SERVER }}"
