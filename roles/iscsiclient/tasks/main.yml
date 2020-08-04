@@ -17,6 +17,7 @@
     become: yes
     reboot:
       reboot_timeout: 1200
+    when: restart_iscsi is undefined
 
   - name: "iscsiadm -m discovery"
     become: yes
