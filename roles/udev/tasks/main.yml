@@ -1,7 +1,7 @@
 ---
-  - name: "create luns"
+  - name: "get scsi_id"
     become: yes
-    shell: "/usr/lib/udev/scsi_id -g -u -d  {{ item }}"
+    shell: "/usr/lib/udev/scsi_id -g -u -d {{ item }}"
     with_items:
       - "{{ RAW_VOTE_DEV }}"
       - "{{ RAW_DATA_DEV }}"
