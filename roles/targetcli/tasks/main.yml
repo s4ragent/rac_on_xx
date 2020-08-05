@@ -45,7 +45,7 @@
     become: yes
     shell: "targetcli /iscsi/{{ iSCSIName }}.{{ NODENAME }}/tpg1/acls create {{ iSCSIName }}.{{ hostvars[item]['NODENAME'] }}"
     with_items:
-      - "{{ groups['dbservers'] }}"       
+      - "{{ groups['dbserver'] }}"       
     ignore_errors: yes
 
   - name: "targetcli saveconfig"
