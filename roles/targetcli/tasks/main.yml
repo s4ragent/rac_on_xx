@@ -48,6 +48,12 @@
       - "set attribute authentication=0"
       - "set attribute demo_mode_write_protect=0"
       - "set attribute generate_node_acls=1"
+      
+      with_items:
+    - "{{ groups['virtual_centers'] }}"  
+      
+      
+      
     ignore_errors: yes
 
   - name: "targetcli saveconfig"
