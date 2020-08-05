@@ -358,6 +358,10 @@
     tags:
       - swap
 
+  - debug: var=SWAP_SIZE
+    tags:
+      - swap
+      
   - name: "create swap(dd)"
     become: yes
     shell: dd if=/dev/zero of=/u01/swap bs=1M count={{ SWAP_SIZE }} && mkswap /u01/swap
