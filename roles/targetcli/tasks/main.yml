@@ -41,19 +41,11 @@
       - fra
     ignore_errors: yes
 
-  - name: "allow acls"
+  - name: "create acls"
     become: yes
-    shell: "targetcli /iscsi/{{ iSCSIName }}.{{ NODENAME }}/tpg1 {{ item }}"
+    shell: "targetcli /iscsi/{{ iSCSIName }}.{{ NODENAME }}/tpg1/acls create {{ iSCSIName }}.{{ hostvars[item]['NODENAME'] }}"
     with_items:
-      - "set attribute authentication=0"
-      - "set attribute demo_mode_write_protect=0"
-      - "set attribute generate_node_acls=1"
-      
-      with_items:
-    - "{{ groups['virtual_centers'] }}"  
-      
-      
-      
+      - "{{ groups['dbservers'] }}"       
     ignore_errors: yes
 
   - name: "targetcli saveconfig"
