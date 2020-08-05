@@ -49,8 +49,6 @@ DNS_CON: "System eth0"
 ##for iSCSI
 storage_type: "iscsi"
 iSCSIName: iqn.2020-07.org.jpoug:444
-iSCSIUSER: iscsi
-iSCSIPASS: iscsi
 #restart_iscsi: true
 VOTE_DEV: /dev/asm-vote
 DATA_DEV: /dev/asm-data
