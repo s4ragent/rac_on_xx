@@ -12,7 +12,7 @@
     become: yes
     reboot:
       reboot_timeout: 1200
-      test_command: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t && sleep 120s"
+      test_command: "{{ GRID_ORACLE_HOME }}/bin/crsctl status resource -t && sleep 150s"
 
   - name: "crsctl"
     become: yes
