@@ -53,4 +53,4 @@
    any_errors_fatal: true
    roles:
       - { role: jdbcrunner, tags: ['jdbcrunner'], when: "jdbcrunner is defined" }
-      - { role: crsctl, tags: ['crsctl'] }
+      - { role: crsctl, tags: ['crsctl'], when: "jdbcrunner is defined" }
