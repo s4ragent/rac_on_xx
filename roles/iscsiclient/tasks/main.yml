@@ -19,6 +19,14 @@
       reboot_timeout: 1200
     when: reboot_iscsi is defined
 
+  - name: Restart iscsid
+    become: yes
+    systemd:
+      name: iscsid
+      state: restarted
+    when: reboot_iscsi is undefined
+
+
 #iscsiadm start iscsid daemon automatically (not nessary systemctl enable iscsid)
   - name: "iscsiadm -m discovery"
     become: yes
