@@ -98,9 +98,13 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     resource_group_name   = azurerm_resource_group.racgroup.name
     network_interface_ids = [element(azurerm_network_interface.racdbnic.*.id, count.index)]
     size                  = local.yaml.db_vm_size
-    ultra_ssd_enabled = true
-    zone = [local.yaml.zone]
 
+    zone = ["local.yaml.zone"]
+    
+    additional_capabilities {
+       ultra_ssd_enabled = true
+    }
+        
     os_disk {
         name              = "osdisk-${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
         caching           = "ReadWrite"
@@ -234,7 +238,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "client_data_disk_attach
 resource "azurerm_managed_disk" "ultra_disk_vote" {
     name                  = "ultra_disk_vote"
     location              = local.yaml.location
-    zones = [local.yaml.zone]
+    zones = ["local.yaml.zone"]
     resource_group_name   = azurerm_resource_group.racgroup.name
     storage_account_type = UltraSSD_LRS
     create_option        = "Empty"
