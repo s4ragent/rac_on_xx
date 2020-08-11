@@ -32,25 +32,7 @@ ansible_ssh_user: azureuser
 ansible_ssh_private_key_file: raconxx
 dns: dnsmasq
 DNS_CON: "System eth0"
-#####for NFS option values
-#storage_type: "nfs"
-#VOTE_DEV: /u01/oradata/vote.img
-#DATA_DEV: /u01/oradata/data.img
-#FRA_DEV: /u01/oradata/fra.img
-#ASM_STRING: /u01/oradata/*
-##for NFS v4
-#NFS_ROOT: /
-#NFS_OPS:  "rw,bg,hard,nointr,rsize=65536,wsize=65536,tcp,vers=4.0,timeo=600,actimeo=0"
-##DNFS: disable
-############
-##for NFS v3
-##NFS_ROOT: /u01
-##NFS_OPS:  "rw,bg,hard,nointr,rsize=65536,wsize=65536,tcp,vers=3,timeo=600,actimeo=0"
-##DD_CMD: dd
-##for iSCSI
-storage_type: "iscsi"
-iSCSIName: iqn.2020-07.org.jpoug:444
-#restart_iscsi: true
+storage_type: "raw"
 VOTE_DEV: /dev/asm-vote
 DATA_DEV: /dev/asm-data
 FRA_DEV: /dev/asm-fra
