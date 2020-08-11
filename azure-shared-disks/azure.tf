@@ -99,7 +99,7 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     network_interface_ids = [element(azurerm_network_interface.racdbnic.*.id, count.index)]
     size                  = local.yaml.db_vm_size
 
-    zone = ["local.yaml.zone"]
+    zone = "local.yaml.zone"
     
     additional_capabilities {
        ultra_ssd_enabled = true
