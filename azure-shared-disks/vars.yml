@@ -1,0 +1,92 @@
+#### azure user specific value  ###################
+suffix: "raconxx"
+location: "westus2"
+#ZONE: "japanwest"
+vnet_addr: "10.153.0.0/16"
+snet_addr: "10.153.1.0/24"
+VXLAN_DEV: "eth0"
+storage_account_type: "Standard_LRS"
+#db_vm_size: "Standard_B1s"
+#storage_vm_size: "Standard_B1s"
+#client_vm_size: "Standard_B1s"
+#enable_accelerated_networking: false
+db_vm_size: "Standard_D3_v2"
+storage_vm_size: "Standard_D3_v2"
+client_vm_size: "Standard_D3_v2"
+enable_accelerated_networking: true
+vm_os_publisher: "Oracle"
+vm_os_offer: "Oracle-Linux"
+vm_os_sku: "81"
+vm_os_version: "latest"
+data_sa_type: "Standard_LRS"
+data_disk_size_gb: "100"
+data_disk_mountpoint: "/u01"
+link_local: disable
+####common VIRT_TYPE specific value ################
+INSTALL_OPS: "-ignorePrereqFailure"
+MEDIA_COPY: "true"
+MEDIA_PATH: /downloadmedia
+####ansible specific
+ansible_ssh_user: azureuser
+ansible_ssh_private_key_file: raconxx
+dns: dnsmasq
+DNS_CON: "System eth0"
+#####for NFS option values
+#storage_type: "nfs"
+#VOTE_DEV: /u01/oradata/vote.img
+#DATA_DEV: /u01/oradata/data.img
+#FRA_DEV: /u01/oradata/fra.img
+#ASM_STRING: /u01/oradata/*
+##for NFS v4
+#NFS_ROOT: /
+#NFS_OPS:  "rw,bg,hard,nointr,rsize=65536,wsize=65536,tcp,vers=4.0,timeo=600,actimeo=0"
+##DNFS: disable
+############
+##for NFS v3
+##NFS_ROOT: /u01
+##NFS_OPS:  "rw,bg,hard,nointr,rsize=65536,wsize=65536,tcp,vers=3,timeo=600,actimeo=0"
+##DD_CMD: dd
+##for iSCSI
+storage_type: "iscsi"
+iSCSIName: iqn.2020-07.org.jpoug:444
+#restart_iscsi: true
+VOTE_DEV: /dev/asm-vote
+DATA_DEV: /dev/asm-data
+FRA_DEV: /dev/asm-fra
+ASM_STRING: /dev/asm*
+##### common storage value
+ORA_DATA: /u01/oradata
+### XXX_SIZE is GiB
+VOTE_SIZE: 10
+VOTE_DISKGROUP_NAME: VOTE
+DATA_SIZE: 25
+DATA_DISKGROUP_NAME: DATA
+FRA_SIZE: 40
+FRA_DISKGROUP_NAME: FRA
+#####
+NODEPREFIX: node
+DOMAIN_NAME: raconxx.public
+SCAN_NAME: scan
+INSTALL_LANG: en,ja
+CLUSTER_NAME: node-cluster
+DBNAME: ORCL
+SIDNAME: ORCL
+SYSPASSWORD: oracle123
+SYSTEMPASSWORD: oracle123
+PDBNAME: PDB01
+PDBADMINPASSWORD: oracle123
+REDOFILESIZE: 1024
+ASMSYSPASSWORD: oracle123
+ASMMONPASSWORD: oracle123
+CHARSET: AL32UTF8
+NCHAR: AL16UTF16
+MEMORYTARGET: 10240
+TEMPLATENAME: General_Purpose.dbc
+DATABASETYPE: MULTIPURPOSE
+SERVERPOOLNAME: raconxx
+dbca: paralell
+TPCCUSER: tpcc
+TPCC_PASSWORD: TccP12!_TccP12!_
+TPCC_MEASURETIME: 900
+TPCC_WARMUPTIME: 300
+
