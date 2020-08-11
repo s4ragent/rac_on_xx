@@ -6,9 +6,6 @@ provider "azurerm" {
 variable "db_servers" {
 }
 
-variable "storage_servers" {
-}
-
 variable "client_servers" {
 }
 
@@ -118,6 +115,8 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     computer_name  = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}.${local.yaml.DOMAIN_NAME}"
     admin_username = local.yaml.ansible_ssh_user
     disable_password_authentication = true
+    ultra_ssd_enabled = true
+    zones = [local.yaml.zone]
         
     admin_ssh_key {
         username       = local.yaml.ansible_ssh_user
@@ -229,3 +228,24 @@ resource "azurerm_virtual_machine_data_disk_attachment" "client_data_disk_attach
   caching            = "ReadWrite"
 }
 
+
+######ultra disk ####
+resource "azurerm_managed_disk" "ultra_disk_vote" {
+    name                  = "ultra_disk_vote"
+    location              = local.yaml.location
+    zones = [local.yaml.zone]
+    resource_group_name   = azurerm_resource_group.racgroup.name
+    storage_account_type = UltraSSD_LRS
+    create_option        = "Empty"
+    disk_size_gb         = local.yaml.data_disk_size_gb
+     
+    provisioner "local-exec" {
+      command = "saz disk update --resource-group azurerm_resource_group.racgroup.name --name ultra_disk_vote --set maxShares=5"
+    }
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "ultra_disk_vote_attach" {
+  managed_disk_id    = azurerm_managed_disk.ultra_disk_vote.id
+  virtual_machine_id = element(azurerm_linux_virtual_machine.dbvm.*.id, count.index)
+  lun                = "20"
+}
