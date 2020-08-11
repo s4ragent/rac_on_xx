@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ####common VIRT_TYPE specific value ################
-VIRT_TYPE="azure"
+VIRT_TYPE="azure-shared-disks"
 
 cd ..
 source ./commonutil.sh
 
 #### VIRT_TYPE specific processing  (must define)###
-	RG_NAME="rg-${suffix}"
+RG_NAME="rg-${suffix}"
 
 get_External_IP(){
 	expr "$1" + 1 >/dev/null 2>&1
