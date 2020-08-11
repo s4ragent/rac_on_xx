@@ -98,6 +98,8 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     resource_group_name   = azurerm_resource_group.racgroup.name
     network_interface_ids = [element(azurerm_network_interface.racdbnic.*.id, count.index)]
     size                  = local.yaml.db_vm_size
+    ultra_ssd_enabled = true
+    zones = [local.yaml.zone]
 
     os_disk {
         name              = "osdisk-${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
@@ -115,8 +117,7 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     computer_name  = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}.${local.yaml.DOMAIN_NAME}"
     admin_username = local.yaml.ansible_ssh_user
     disable_password_authentication = true
-    ultra_ssd_enabled = true
-    zones = [local.yaml.zone]
+
         
     admin_ssh_key {
         username       = local.yaml.ansible_ssh_user
