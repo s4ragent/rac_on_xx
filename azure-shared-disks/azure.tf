@@ -240,7 +240,7 @@ resource "azurerm_managed_disk" "ultra_disk_vote" {
     location              = local.yaml.location
     zones = ["local.yaml.zone"]
     resource_group_name   = azurerm_resource_group.racgroup.name
-    storage_account_type = UltraSSD_LRS
+    storage_account_type = "UltraSSD_LRS"
     create_option        = "Empty"
     disk_size_gb         = local.yaml.VOTE_SIZE
      
