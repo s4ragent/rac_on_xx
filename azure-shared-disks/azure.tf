@@ -99,7 +99,7 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     network_interface_ids = [element(azurerm_network_interface.racdbnic.*.id, count.index)]
     size                  = local.yaml.db_vm_size
     ultra_ssd_enabled = true
-    zones = [local.yaml.zone]
+    zone = [local.yaml.zone]
 
     os_disk {
         name              = "osdisk-${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}"
@@ -238,10 +238,10 @@ resource "azurerm_managed_disk" "ultra_disk_vote" {
     resource_group_name   = azurerm_resource_group.racgroup.name
     storage_account_type = UltraSSD_LRS
     create_option        = "Empty"
-    disk_size_gb         = local.yaml.data_disk_size_gb
+    disk_size_gb         = local.yaml.VOTE_SIZE
      
     provisioner "local-exec" {
-      command = "saz disk update --resource-group azurerm_resource_group.racgroup.name --name ultra_disk_vote --set maxShares=5"
+      command = "az disk update --resource-group azurerm_resource_group.racgroup.name --name ultra_disk_vote --set maxShares=5"
     }
 }
 
