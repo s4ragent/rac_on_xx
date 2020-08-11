@@ -207,17 +207,16 @@ common_addDbServer(){
 }
 
 common_addStorage(){
-	export TF_VAR_db_servers=0
-	export TF_VAR_storage_servers=1
-	export TF_VAR_client_servers=0
-	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
-	cd $VIRT_TYPE
-	
-	terraform apply -auto-approve
-	
-	cd ../
-
 	if [ "$storage_type" = "nfs" -o "$storage_type" = "iscsi" ]; then
+		export TF_VAR_db_servers=0
+		export TF_VAR_storage_servers=1
+		export TF_VAR_client_servers=0
+		export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+		cd $VIRT_TYPE
+	
+		terraform apply -auto-approve
+	
+		cd ../
 		STORAGEExtIP=`get_External_IP storage001`
 		common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
 	fi
