@@ -207,7 +207,6 @@ common_addDbServer(){
 }
 
 common_addStorage(){
-	if [ "$storage_type" = "nfs" -o "$storage_type" = "iscsi" ]; then
 		export TF_VAR_db_servers=0
 		export TF_VAR_storage_servers=1
 		export TF_VAR_client_servers=0
@@ -217,6 +216,8 @@ common_addStorage(){
 		terraform apply -auto-approve
 	
 		cd ../
+		
+	if [ "$storage_type" = "nfs" -o "$storage_type" = "iscsi" ]; then
 		STORAGEExtIP=`get_External_IP storage001`
 		common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
 	fi
