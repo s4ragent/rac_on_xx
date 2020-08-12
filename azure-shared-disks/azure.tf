@@ -63,6 +63,7 @@ resource "azurerm_public_ip" "racdbip" {
     location                     = local.yaml.location
     resource_group_name          = azurerm_resource_group.racgroup.name
     allocation_method            = "Dynamic"
+    zones                         = "[${local.yaml.zone}]"
 }
 
 
@@ -245,7 +246,7 @@ resource "azurerm_managed_disk" "ultra_disk_vote" {
     disk_size_gb         = local.yaml.VOTE_SIZE
      
     provisioner "local-exec" {
-      command = "az disk update --resource-group azurerm_resource_group.racgroup.name --name ultra_disk_vote --set maxShares=5"
+      command = "az disk update --resource-group ${azurerm_resource_group.racgroup.name} --name ultra_disk_vote --set maxShares=5"
     }
 }
 
