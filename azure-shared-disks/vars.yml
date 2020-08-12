@@ -2,7 +2,7 @@
 suffix: "raconxx"
 location: "westus2"
 #location: "japanwest"
-zone: 1
+zone: "1"
 vnet_addr: "10.153.0.0/16"
 snet_addr: "10.153.1.0/24"
 VXLAN_DEV: "eth0"
