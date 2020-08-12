@@ -62,8 +62,9 @@ resource "azurerm_public_ip" "racdbip" {
     name                         = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}-publicIP"
     location                     = local.yaml.location
     resource_group_name          = azurerm_resource_group.racgroup.name
-    allocation_method            = "Dynamic"
-    zones                         = "[${local.yaml.zone}]"
+    allocation_method            = "Static"
+    sku                          = "Standard"
+    zones                        = ["${local.yaml.zone}"]
 }
 
 
