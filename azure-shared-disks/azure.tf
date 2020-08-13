@@ -139,6 +139,7 @@ resource "azurerm_managed_disk" "db_data_disk" {
     storage_account_type = local.yaml.storage_account_type
     create_option        = "Empty"
     disk_size_gb         = local.yaml.data_disk_size_gb
+    zones                = ["${local.yaml.zone}"]
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "db_data_disk_attach" {
