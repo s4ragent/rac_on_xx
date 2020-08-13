@@ -157,7 +157,9 @@ resource "azurerm_public_ip" "racclientip" {
     name                         = "${format("client%03d", count.index + 1)}-publicIP"
     location                     = local.yaml.location
     resource_group_name          = azurerm_resource_group.racgroup.name
-    allocation_method            = "Dynamic"
+    allocation_method            = "Static"
+    sku                          = "Standard"
+    zones                        = ["${local.yaml.zone}"]
 }
 
 
@@ -193,6 +195,7 @@ resource "azurerm_linux_virtual_machine" "clientvm" {
     resource_group_name   = azurerm_resource_group.racgroup.name
     network_interface_ids = [element(azurerm_network_interface.racclientnic.*.id, count.index)]
     size                  = local.yaml.client_vm_size
+    zone = local.yaml.zone
 
     os_disk {
         name              = "osdisk-${format("client%03d", count.index + 1)}"
