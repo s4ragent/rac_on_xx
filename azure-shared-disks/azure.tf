@@ -262,3 +262,47 @@ resource "azurerm_virtual_machine_data_disk_attachment" "ultra_disk_vote_attach"
   caching            = "None"
   lun                = "20"
 }
+
+resource "azurerm_managed_disk" "ultra_disk_data" {
+    name                  = "ultra_disk_data"
+    location              = local.yaml.location
+    zones = ["${local.yaml.zone}"]
+    resource_group_name   = azurerm_resource_group.racgroup.name
+    storage_account_type = "UltraSSD_LRS"
+    create_option        = "Empty"
+    disk_size_gb         = local.yaml.DATA_SIZE
+     
+    provisioner "local-exec" {
+      command = "az disk update --resource-group ${azurerm_resource_group.racgroup.name} --name ultra_disk_data --set maxShares=5"
+    }
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "ultra_disk_data_attach" {
+  count              = var.db_servers
+  managed_disk_id    = azurerm_managed_disk.ultra_disk_data.id
+  virtual_machine_id = element(azurerm_linux_virtual_machine.dbvm.*.id, count.index)
+  caching            = "None"
+  lun                = "30"
+}
+
+resource "azurerm_managed_disk" "ultra_disk_fra" {
+    name                  = "ultra_disk_fra"
+    location              = local.yaml.location
+    zones = ["${local.yaml.zone}"]
+    resource_group_name   = azurerm_resource_group.racgroup.name
+    storage_account_type = "UltraSSD_LRS"
+    create_option        = "Empty"
+    disk_size_gb         = local.yaml.FRA_SIZE
+     
+    provisioner "local-exec" {
+      command = "az disk update --resource-group ${azurerm_resource_group.racgroup.name} --name ultra_disk_fra --set maxShares=5"
+    }
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "ultra_disk_vote_attach" {
+  count              = var.db_servers
+  managed_disk_id    = azurerm_managed_disk.ultra_disk_fra.id
+  virtual_machine_id = element(azurerm_linux_virtual_machine.dbvm.*.id, count.index)
+  caching            = "None"
+  lun                = "20"
+}
