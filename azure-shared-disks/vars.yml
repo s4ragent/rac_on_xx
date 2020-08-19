@@ -15,7 +15,7 @@ vm_os_offer: "Oracle-Linux"
 vm_os_sku: "81"
 vm_os_version: "latest"
 data_sa_type: "Standard_LRS"
-data_disk_size_gb: "35"
+data_disk_size_gb: "50"
 data_disk_mountpoint: "/u01"
 link_local: disable
 ####common VIRT_TYPE specific value ################
