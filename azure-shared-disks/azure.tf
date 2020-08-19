@@ -304,5 +304,5 @@ resource "azurerm_virtual_machine_data_disk_attachment" "ultra_disk_fra_attach" 
   managed_disk_id    = azurerm_managed_disk.ultra_disk_fra.id
   virtual_machine_id = element(azurerm_linux_virtual_machine.dbvm.*.id, count.index)
   caching            = "None"
-  lun                = "20"
+  lun                = "40"
 }
