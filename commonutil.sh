@@ -118,6 +118,10 @@ do
     echo "END `date "+%Y%m%d-%H%M%S"`" >>$LOG
 done
 common_deleteall
+sleep 180
+common_deleteall
+sleep 180
+common_deleteall
 }
 
 common_all_replaceinventory(){
