@@ -30,4 +30,5 @@ case "$1" in
   "addStorage" ) shift;common_addStorage $*;;
   "addDbServer" ) shift;common_addDbServer $*;;
   "deletedatabase" ) shift;common_deletedatabase $*;;
+  "reboot_crsctl" ) shift;common_reboot_crsctl $*;;
 esac
