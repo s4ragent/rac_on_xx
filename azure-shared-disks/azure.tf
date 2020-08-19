@@ -225,6 +225,7 @@ resource "azurerm_managed_disk" "client_data_disk" {
     count                 = var.client_servers
     name                  = "datadisk-${format("client%03d", count.index + 1)}"
     location              = local.yaml.location
+    zones = ["${local.yaml.zone}"]
     resource_group_name   = azurerm_resource_group.racgroup.name
     storage_account_type = local.yaml.storage_account_type
     create_option        = "Empty"
