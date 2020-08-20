@@ -1,4 +1,7 @@
 ---
+  - set_fact: log_dir="./"
+    when: log_dir is undefined
+
   - name: "crete media directory"
     become: yes
     file:
