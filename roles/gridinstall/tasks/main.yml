@@ -141,7 +141,7 @@
   - name: get root.sh log(1st)
     become: yes
     fetch:
-      src: {{ item.path }}
+      src: "{{ item.path }}"
       dest: "{{ log_dir }}"
     with_items: "{{ files_to_copy.files }}"
     when: inventory_hostname == groups["dbserver"][0] and grid1strootsh_result.rc !=0
@@ -181,7 +181,7 @@
   - name: get root.sh log(other)
     become: yes
     fetch:
-      src: {{ item.path }}
+      src: "{{ item.path }}"
       dest: "{{ log_dir }}"
     with_items: "{{ files_to_copy.files }}"
     when: inventory_hostname != groups["dbserver"][0] and gridotherrootsh_result.rc !=0
