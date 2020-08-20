@@ -123,6 +123,17 @@
       - grid1strootsh
       - gridrootsh
 
+  - name: "get root.sh.log"
+    fetch:
+      src: "{{ item }}"
+      dest: "{{ savedir }}"
+    with_fileglob:
+      - /u01/app/19.7.0/grid/install/*
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - grid1strootsh
+      - gridrootsh
+
   - debug: var=grid1strootsh_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
     failed_when: grid1strootsh_result.rc !=0
@@ -136,6 +147,17 @@
     register: gridotherrootsh_result
     when: inventory_hostname != groups["dbserver"][0]
     ignore_errors: True
+    tags:
+      - gridotherrootsh
+      - gridrootsh
+
+  - name: "get root.sh.log"
+    fetch:
+      src: "{{ item }}"
+      dest: "{{ savedir }}"
+    with_fileglob:
+      - /u01/app/19.7.0/grid/install/*
+    when: inventory_hostname != groups["dbserver"][0]
     tags:
       - gridotherrootsh
       - gridrootsh
