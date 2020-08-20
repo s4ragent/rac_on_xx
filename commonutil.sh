@@ -199,6 +199,10 @@ common_addDbServer(){
 	cd $VIRT_TYPE
 	
 	terraform apply -auto-approve
+	if [ $? -ne 0 ]; then
+		sleep 180
+		terraform apply -auto-approve
+	fi
 	
 	cd ../
 	
