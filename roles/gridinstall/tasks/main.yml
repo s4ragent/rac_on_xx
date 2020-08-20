@@ -126,12 +126,24 @@
       - grid1strootsh
       - gridrootsh
 
-  - name: "get root.sh.log"
+  - name: list root.sh log(1st)
+    become: yes
+    find:
+      paths: "{{ GRID_ROOTSH_LOGDIR }}"
+      recurse: no
+      patterns: "*.log"
+      register: files_to_copy
+    when: inventory_hostname == groups["dbserver"][0] and grid1strootsh_result.rc !=0
+    tags:
+      - grid1strootsh
+      - gridrootsh
+
+  - name: get root.sh log(1st)
+    become: yes
     fetch:
-      src: "{{ item }}"
+      src: {{ item.path }}
       dest: "{{ log_dir }}"
-    with_fileglob:
-      - "{{ GRID_ROOTSH_LOGDIR }}/*"
+    with_items: "{{ files_to_copy.files }}"
     when: inventory_hostname == groups["dbserver"][0] and grid1strootsh_result.rc !=0
     tags:
       - grid1strootsh
@@ -154,12 +166,24 @@
       - gridotherrootsh
       - gridrootsh
 
-  - name: "get root.sh.log"
+  - name: list root.sh log(other)
+    become: yes
+    find:
+      paths: "{{ GRID_ROOTSH_LOGDIR }}"
+      recurse: no
+      patterns: "*.log"
+      register: files_to_copy
+    when: inventory_hostname != groups["dbserver"][0] and gridotherrootsh_result.rc !=0
+    tags:
+      - gridotherrootsh
+      - gridrootsh
+
+  - name: get root.sh log(other)
+    become: yes
     fetch:
-      src: "{{ item }}"
+      src: {{ item.path }}
       dest: "{{ log_dir }}"
-    with_fileglob:
-      - "{{ GRID_ROOTSH_LOGDIR }}/*"
+    with_items: "{{ files_to_copy.files }}"
     when: inventory_hostname != groups["dbserver"][0] and gridotherrootsh_result.rc !=0
     tags:
       - gridotherrootsh
