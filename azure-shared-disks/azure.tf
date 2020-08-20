@@ -250,6 +250,8 @@ resource "azurerm_managed_disk" "ultra_disk_vote" {
     storage_account_type = "UltraSSD_LRS"
     create_option        = "Empty"
     disk_size_gb         = local.yaml.VOTE_SIZE
+    disk_iops_read_write = local.yaml.disk_iops_read_write
+    disk_mbps_read_write = local.yaml.disk_mbps_read_write    
      
     provisioner "local-exec" {
       command = "az disk update --resource-group ${azurerm_resource_group.racgroup.name} --name ultra_disk_vote --set maxShares=5"
@@ -272,6 +274,8 @@ resource "azurerm_managed_disk" "ultra_disk_data" {
     storage_account_type = "UltraSSD_LRS"
     create_option        = "Empty"
     disk_size_gb         = local.yaml.DATA_SIZE
+    disk_iops_read_write = local.yaml.disk_iops_read_write
+    disk_mbps_read_write = local.yaml.disk_mbps_read_write
      
     provisioner "local-exec" {
       command = "az disk update --resource-group ${azurerm_resource_group.racgroup.name} --name ultra_disk_data --set maxShares=5"
@@ -294,6 +298,8 @@ resource "azurerm_managed_disk" "ultra_disk_fra" {
     storage_account_type = "UltraSSD_LRS"
     create_option        = "Empty"
     disk_size_gb         = local.yaml.FRA_SIZE
+    disk_iops_read_write = local.yaml.disk_iops_read_write
+    disk_mbps_read_write = local.yaml.disk_mbps_read_write
      
     provisioner "local-exec" {
       command = "az disk update --resource-group ${azurerm_resource_group.racgroup.name} --name ultra_disk_fra --set maxShares=5"
