@@ -20,7 +20,7 @@ data_disk_mountpoint: "/u01"
 link_local: disable
 ######## for ultradisk
 disk_iops_read_write : 4800
-disk_mbps_read_write : 1600
+disk_mbps_read_write : 1200
 #######
 ####common VIRT_TYPE specific value ################
 INSTALL_OPS: "-ignorePrereqFailure"
