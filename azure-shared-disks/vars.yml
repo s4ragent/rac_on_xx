@@ -18,6 +18,10 @@ data_sa_type: "Standard_LRS"
 data_disk_size_gb: "50"
 data_disk_mountpoint: "/u01"
 link_local: disable
+######## for ultradisk
+disk_iops_read_write : 4800
+disk_mbps_read_write : 1600
+#######
 ####common VIRT_TYPE specific value ################
 INSTALL_OPS: "-ignorePrereqFailure"
 MEDIA_COPY: "true"
@@ -35,7 +39,7 @@ ASM_STRING: /dev/asm*
 ##### common storage value
 ORA_DATA: /u01/oradata
 ### XXX_SIZE is GiB
-VOTE_SIZE: 10
+VOTE_SIZE: 16
 VOTE_DISKGROUP_NAME: VOTE
 DATA_SIZE: 25
 DATA_DISKGROUP_NAME: DATA
