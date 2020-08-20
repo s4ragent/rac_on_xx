@@ -129,10 +129,10 @@
   - name: "get root.sh.log"
     fetch:
       src: "{{ item }}"
-      dest: "{{ savedir }}"
+      dest: "{{ log_dir }}"
     with_fileglob:
-      - /u01/app/19.7.0/grid/install/*
-    when: inventory_hostname == groups["dbserver"][0]
+      - "{{ GRID_ROOTSH_LOGDIR }}/*"
+    when: inventory_hostname == groups["dbserver"][0] and grid1strootsh_result.rc !=0
     tags:
       - grid1strootsh
       - gridrootsh
@@ -157,10 +157,10 @@
   - name: "get root.sh.log"
     fetch:
       src: "{{ item }}"
-      dest: "{{ savedir }}"
+      dest: "{{ log_dir }}"
     with_fileglob:
-      - /u01/app/19.7.0/grid/install/*
-    when: inventory_hostname != groups["dbserver"][0]
+      - "{{ GRID_ROOTSH_LOGDIR }}/*"
+    when: inventory_hostname != groups["dbserver"][0] and gridotherrootsh_result.rc !=0
     tags:
       - gridotherrootsh
       - gridrootsh
