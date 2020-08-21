@@ -41,7 +41,7 @@
 
   - name: "execute fio"
     become: yes
-    shell: "fio -filename={{ fio_target }}  -direct=1 -rw=read -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=fio.{{ item }} --output=/tmp/fio_{{ item }}.log"
+    shell: "fio -filename={{ fio_target }}  -direct=1 -rw={{ item }} -bs=4k -size=2G -numjobs=64 -runtime=10 -group_reporting -name=fio.{{ item }} --output=/tmp/fio_{{ item }}.log"
     when: inventory_hostname == groups["dbserver"][0]
     with_items:
       - read
