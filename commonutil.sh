@@ -4,6 +4,7 @@ export ANSIBLE_SSH_ARGS="-o StrictHostKeyChecking=no -o ServerAliveInterval=30"
 export ANSIBLE_INVENTORY_IGNORE="~, .orig, .bak, .ini, .cfg, .retry, .pyc, .pyo, .yml, .md, .sh, images, .log, .service,Vagrantfile, .out, .tf, .tfstate, .backup, .tfvars"
 export ANSIBLE_LOG_PATH="./ansible-`date +%Y%m%d%H%M%S`.log"
 export ANSIBLE_SSH_PIPELINING=True
+export ANSIBLE_CALLBACK_WHITELIST=profile_tasks,timer
 
 
 parse_yaml(){
