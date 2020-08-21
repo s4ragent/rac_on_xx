@@ -132,7 +132,7 @@
       paths: "{{ GRID_ROOTSH_LOGDIR }}"
       recurse: no
       patterns: "*.log"
-      register: files_to_copy
+    register: files_to_copy
     when: inventory_hostname == groups["dbserver"][0] and grid1strootsh_result.rc !=0
     tags:
       - grid1strootsh
@@ -172,7 +172,7 @@
       paths: "{{ GRID_ROOTSH_LOGDIR }}"
       recurse: no
       patterns: "*.log"
-      register: files_to_copy
+    register: files_to_copy
     when: inventory_hostname != groups["dbserver"][0] and gridotherrootsh_result.rc !=0
     tags:
       - gridotherrootsh
