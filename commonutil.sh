@@ -5,6 +5,7 @@ export ANSIBLE_INVENTORY_IGNORE="~, .orig, .bak, .ini, .cfg, .retry, .pyc, .pyo,
 export ANSIBLE_LOG_PATH="./ansible-`date +%Y%m%d%H%M%S`.log"
 export ANSIBLE_SSH_PIPELINING=True
 export ANSIBLE_CALLBACK_WHITELIST=profile_tasks,timer
+export ANSIBLE_STDOUT_CALLBACK=yaml
 
 
 parse_yaml(){
