@@ -72,13 +72,22 @@ resource "azurerm_private_dns_a_record" "racrecord" {
 # Create a vip record if it doesn't exist
 resource "azurerm_private_dns_a_record" "racrecord" {
   count                 = var.db_servers
-  name                  = format("${local.yaml.NODEPREFIX}%03d", count.index + 1)
+  name                  = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}-vip"
   zone_name           = azurerm_private_dns_zone.racdns.name
   resource_group_name = azurerm_resource_group.racgroup.name
   ttl                 = 300
   records             = ["${local.network}${count.index + local.common_yaml.BASE_IP + 1 + 100}"]
 }
 
+# Create a scan record if it doesn't exist
+resource "azurerm_private_dns_a_record" "racrecord" {
+  count                 = 3
+  name                  = local.yaml.SCAN_NAME
+  zone_name           = azurerm_private_dns_zone.racdns.name
+  resource_group_name = azurerm_resource_group.racgroup.name
+  ttl                 = 300
+  records             = ["${local.network}${count.index + local.common_yaml.BASE_IP -20 }"]
+}
 
 ###########Azure Private DNS #############
 
