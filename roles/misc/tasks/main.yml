@@ -22,14 +22,6 @@
     become: yes
     shell: setenforce 0
     ignore_errors: yes
-
-# -m owner --uid-owner cause hang
-  - name: "drop 169.254.169.254"
-    become: yes
-#    shell: "firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 1 -m owner --uid-owner grid -m state --state NEW -m tcp -p tcp -d 169.254.169.254/32 -j REJECT;firewall-cmd --reload"
-    shell: "firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 1 -m state --state NEW -m tcp -p tcp -d 169.254.169.254/32 -j REJECT;firewall-cmd --reload"
-    when: "link_local is defined and 'dbserver' in group_names"
-    ignore_errors: yes
       
   - name: "firewalld trusted haip"
     become: yes
