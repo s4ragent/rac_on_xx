@@ -51,7 +51,14 @@
       - { name: 'grid', uid: '2001',groups: 'asmadmin,asmdba,asmoper' }
     tags:
       - createuser
-      
+
+  - name: "drop 169.254.169.254"
+    become: yes
+    shell: "firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 101 -m owner --gid-owner oinstall -m state --state NEW -m tcp -p tcp -d 169.254.169.254/32 -j REJECT;firewall-cmd --reload"
+#    shell: "firewall-cmd --permanent --direct --add-rule ipv4 filter OUTPUT 1 -m state --state NEW -m tcp -p tcp -d 169.254.169.254/32 -j REJECT;firewall-cmd --reload"
+    when: "link_local is defined and 'dbserver' in group_names"
+    ignore_errors: yes
+
   - name: "copy .bashrc"
     become: yes
     copy:
