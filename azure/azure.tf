@@ -38,7 +38,7 @@ resource "azurerm_dns_a_record" "racrecord" {
   zone_name           = azurerm_dns_zone.racdns.name
   resource_group_name = azurerm_resource_group.racgroup.name
   ttl                 = 300
-  records             = ["${network}count.index + 1"]
+  records             = ["${local.network}count.index + 1"]
 }
 
 
