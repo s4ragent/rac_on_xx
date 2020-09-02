@@ -347,7 +347,7 @@
 
   - name: "swap_size is twice as memory"
     set_fact:
-      SWAP_SIZE: {{ ( ansible_memtotal_mb * 2 )| int }}
+      SWAP_SIZE: {{  ansible_memtotal_mb * 2 | int }}
     tags:
       - swap
 
