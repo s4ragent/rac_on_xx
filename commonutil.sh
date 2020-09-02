@@ -166,7 +166,7 @@ common_runall(){
 
 common_jdbcrunner(){
 	common_addClient
-	common_execansible rac.yml --tags ssh,misc,vxlan,dnsmasq,jdbcrunner -e "jdbcrunner=on" $*
+	common_execansible rac.yml --tags ssh,misc,vxlan,dnsmasq,dnsmanage,jdbcrunner -e "jdbcrunner=on" $*
 }
 
 common_runonly_single(){
