@@ -27,7 +27,7 @@ resource "azurerm_resource_group" "racgroup" {
 
 # Create a zone if it doesn't exist
 resource "azurerm_dns_zone" "racdns" {
-  name                = "mydomain.com"
+  name                = local.yaml.DOMAIN_NAME
   resource_group_name = azurerm_resource_group.racgroup.name
 }
 
@@ -35,10 +35,10 @@ resource "azurerm_dns_zone" "racdns" {
 resource "azurerm_dns_a_record" "racrecord" {
   count                 = var.db_servers
   name                  = format("${local.yaml.NODEPREFIX}%03d", count.index + 1)
-  zone_name           = azurerm_dns_zone.example.name
+  zone_name           = azurerm_dns_zone.racdns.name
   resource_group_name = azurerm_resource_group.racgroup.name
   ttl                 = 300
-  records             = ["10.0.180.17"]
+  records             = ["${network}count.index + 1"]
 }
 
 
