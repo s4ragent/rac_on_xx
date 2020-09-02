@@ -369,7 +369,7 @@
   - name: "create swap(dd)"
     become: yes
     shell: dd if=/dev/zero of=/u01/swap bs=1M count={{ SWAP_SIZE }} && mkswap /u01/swap
-    when: "ansible_swaptotal_mb < SWAP_SIZE -1 and 'dbserver' in group_names"
+    when: "ansible_swaptotal_mb < ( SWAP_SIZE | int ) -1 and 'dbserver' in group_names"
     tags:
       - swap
       
@@ -377,7 +377,7 @@
     become: yes
     shell: swapon /u01/swap
     ignore_errors: yes
-    when: "ansible_swaptotal_mb < SWAP_SIZE -1 and 'dbserver' in group_names"
+    when: "ansible_swaptotal_mb < ( SWAP_SIZE | int ) -1 and 'dbserver' in group_names"
     tags:
       - swap
       
