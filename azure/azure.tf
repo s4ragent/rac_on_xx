@@ -15,7 +15,7 @@ variable "client_servers" {
 locals{ 
         yaml = yamldecode(file("./vars.yml"))
         common_yaml =  yamldecode(file("../common_vars.yml"))
-        network = "${element(split(".", local.common_yaml.vxlan0_NETWORK), 0)}.${element(split(".", local.common_yaml.vxlan0_NETWORK), 1)}."
+        network = "${element(split(".", local.common_yaml.vxlan0_NETWORK), 0)}.${element(split(".", local.common_yaml.vxlan0_NETWORK), 1)}.${element(split(".", local.common_yaml.vxlan0_NETWORK), 2)}."
 }
 
 # Create a resource group if it doesn't exist
@@ -38,7 +38,7 @@ resource "azurerm_dns_a_record" "racrecord" {
   zone_name           = azurerm_dns_zone.racdns.name
   resource_group_name = azurerm_resource_group.racgroup.name
   ttl                 = 300
-  records             = ["${local.network}count.index + 1"]
+  records             = ["${local.network}${count.index + 1}"]
 }
 
 
