@@ -85,7 +85,7 @@ resource "azurerm_private_dns_a_record" "racscanrecord" {
   zone_name           = azurerm_private_dns_zone.racdns.name
   resource_group_name = azurerm_resource_group.racgroup.name
   ttl                 = 300
-  records             = ["${local.network}${local.common_yaml.BASE_IP -20 },${local.network}${local.common_yaml.BASE_IP -20 +1},${local.network}${local.common_yaml.BASE_IP -20 +2}"]
+  records             = ["${local.network}${local.common_yaml.BASE_IP -20 }","${local.network}${local.common_yaml.BASE_IP -20 +1}","${local.network}${local.common_yaml.BASE_IP -20 +2}"]
 }
 
 ###########Azure Private DNS #############
