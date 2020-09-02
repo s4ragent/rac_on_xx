@@ -345,7 +345,7 @@
     tags:
       - avahi
 
-  - name: "swap_size is twice as memory"
+#  - name: "swap_size is twice as memory"
     vars:
       SWAP_SIZE: "{{ ansible_memtotal_mb * 2 }}"
     tags:
@@ -356,7 +356,7 @@
       - swap
 
   - name: "swap_size limit 16384"
-    vars:
+    set_fact:
       SWAP_SIZE: 16384
     when: SWAP_SIZE > 16384
     tags:
