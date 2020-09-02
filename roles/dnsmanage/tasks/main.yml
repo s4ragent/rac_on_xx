@@ -1,0 +1,7 @@
+  - name: "nmcli ipv4.dns"
+    become: yes
+    shell: nmcli con mod "{{ DNS_CON }}" ipv4.dns-search "{{ DOMAIN_NAME }}"
+
+  - name: "nmcli reload"
+    become: yes
+    shell: nmcli con up "{{ DNS_CON }}"
