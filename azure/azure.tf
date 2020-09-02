@@ -52,7 +52,7 @@ resource "azurerm_private_dns_zone" "racdns" {
 }
 
 # create virtual network link
-resource "azurerm_private_dns_zone_virtual_network_link" "example" {
+resource "azurerm_private_dns_zone_virtual_network_link" "racvirtnetworklink" {
   name                  = "racvirtnetworklink"
   resource_group_name   = azurerm_resource_group.racgroup.name
   private_dns_zone_name = azurerm_private_dns_zone.racdns.name
