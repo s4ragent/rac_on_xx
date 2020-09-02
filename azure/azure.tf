@@ -22,6 +22,27 @@ resource "azurerm_resource_group" "racgroup" {
     location = local.yaml.location
 }
 
+
+# Create a zone if it doesn't exist
+resource "azurerm_dns_zone" "racdns" {
+  name                = "mydomain.com"
+  resource_group_name = azurerm_resource_group.racgroup.name
+}
+
+# Create a record if it doesn't exist
+resource "azurerm_dns_a_record" "racrecord" {
+  count                 = var.db_servers
+  name                  = format("${local.yaml.NODEPREFIX}%03d", count.index + 1)
+  zone_name           = azurerm_dns_zone.example.name
+  resource_group_name = azurerm_resource_group.racgroup.name
+  ttl                 = 300
+  records             = ["10.0.180.17"]
+}
+
+
+
+
+
 # Create virtual network
 resource "azurerm_virtual_network" "racnetwork" {
     name = "vnet-${local.yaml.suffix}"
