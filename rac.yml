@@ -7,6 +7,7 @@
      - { role: vxlan, tags: ['vxlan'] }
      - { role: iperf, tags: ['iperf'], when: "iperf is defined" }
      - { role: dnsmasq, tags: ['dnsmasq'], when: "dns == 'dnsmasq'" }
+     - { role: dnsmanage, tags: ['dnsmanage'], when: "dns == 'dnsmanage'" }
      - { role: prereq, tags: ['prereq'] }
 
  - hosts: storage
