@@ -348,8 +348,8 @@
 #  - name: "swap_size is twice as memory"
     vars:
       SWAP_SIZE: "{{ ansible_memtotal_mb * 2 }}"
-    tags:
-      - swap
+#    tags:
+#      - swap
 
   - debug: var=SWAP_SIZE
     tags:
