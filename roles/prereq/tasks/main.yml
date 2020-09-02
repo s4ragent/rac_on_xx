@@ -350,7 +350,11 @@
       SWAP_SIZE: "{{ ( ansible_memtotal_mb * 2 )|int }}"
     tags:
       - swap
-      
+
+  - debug: var=SWAP_SIZE
+    tags:
+      - swap
+
   - name: "swap_size limit 16384"
     set_fact:
       SWAP_SIZE: 16384
