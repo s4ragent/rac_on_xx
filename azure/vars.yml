@@ -29,7 +29,8 @@ MEDIA_PATH: /downloadmedia
 ####ansible specific
 ansible_ssh_user: azureuser
 ansible_ssh_private_key_file: raconxx
-dns: dnsmasq
+#dns: dnsmasq
+dns: dnsmanage
 DNS_CON: "System eth0"
 #####for NFS option values
 #storage_type: "nfs"
