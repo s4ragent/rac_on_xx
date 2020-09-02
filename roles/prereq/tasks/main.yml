@@ -391,7 +391,7 @@
       passno: '0'
       dump: '0'
       state: present
-    when: "ansible_swaptotal_mb < SWAP_SIZE -1 and 'dbserver' in group_names"
+    when: "ansible_swaptotal_mb < ( SWAP_SIZE | int ) and 'dbserver' in group_names"
     tags:
       - swap
       
