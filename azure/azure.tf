@@ -35,10 +35,10 @@ resource "azurerm_private_dns_zone" "racdns" {
 resource "azurerm_private_dns_a_record" "racrecord" {
   count                 = var.db_servers
   name                  = format("${local.yaml.NODEPREFIX}%03d", count.index + 1)
-  zone_name           = azurerm_dns_zone.racdns.name
+  zone_name           = azurerm_private_dns_zone.racdns.name
   resource_group_name = azurerm_resource_group.racgroup.name
   ttl                 = 300
-  records             = ["${local.network}${count.index + 1}"]
+  records             = ["${local.network}${count.index + local.common_yaml.BASE_IP + 1}"]
 }
 
 
