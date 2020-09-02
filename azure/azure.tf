@@ -26,7 +26,7 @@ resource "azurerm_resource_group" "racgroup" {
 
 
 # Create a zone if it doesn't exist
-resource "azurerm_dns_zone" "racdns" {
+resource "azurerm_private_dns_zone" "racdns" {
   name                = local.yaml.DOMAIN_NAME
   resource_group_name = azurerm_resource_group.racgroup.name
 }
