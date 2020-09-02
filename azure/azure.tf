@@ -70,7 +70,7 @@ resource "azurerm_private_dns_a_record" "racrecord" {
 }
 
 # Create a vip record if it doesn't exist
-resource "azurerm_private_dns_a_record" "racrecord" {
+resource "azurerm_private_dns_a_record" "racviprecord" {
   count                 = var.db_servers
   name                  = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}-vip"
   zone_name           = azurerm_private_dns_zone.racdns.name
@@ -80,7 +80,7 @@ resource "azurerm_private_dns_a_record" "racrecord" {
 }
 
 # Create a scan record if it doesn't exist
-resource "azurerm_private_dns_a_record" "racrecord" {
+resource "azurerm_private_dns_a_record" "racscanrecord" {
   count                 = 3
   name                  = local.yaml.SCAN_NAME
   zone_name           = azurerm_private_dns_zone.racdns.name
