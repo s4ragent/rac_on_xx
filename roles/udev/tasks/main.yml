@@ -42,3 +42,12 @@
   - name: "reload udev"
     become: yes
     shell: "udevadm control --reload-rules && udevadm trigger"
+
+
+  - name: "init dev"
+    become: yes
+    shell: "dd if=/dev/zero of={{ item }} bs=1024k count=1000"
+    with_items:
+      - "{{ VOTE_DEV }}"
+      - "{{ DATA_DEV }}"
+      - "{{ FRA_DEV }}"
