@@ -10,6 +10,6 @@
     become: yes
     lineinfile:
       path: /etc/hosts
-      line: '{{ hostvars[host]['public_IP'] }} {{ hostvars[host]['NODENAME'] }}.{{ DOMAIN_NAME }} {{ hostvars[host]['NODENAME'] }}'
+      line: "{{ hostvars[host]['public_IP'] }} {{ hostvars[host]['NODENAME'] }}.{{ DOMAIN_NAME }} {{ hostvars[host]['NODENAME'] }}"
     with_items:
       - "{{ play_hosts }}"
