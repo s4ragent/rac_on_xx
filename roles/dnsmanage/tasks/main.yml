@@ -5,11 +5,12 @@
   - name: "nmcli reload"
     become: yes
     shell: nmcli con up "{{ DNS_CON }}"
-
+    
+    
   - name: "add /etc/hosts"
     become: yes
     lineinfile:
       path: /etc/hosts
-      line: "{{ hostvars[host]['public_IP'] }} {{ hostvars[host]['NODENAME'] }}.{{ DOMAIN_NAME }} {{ hostvars[host]['NODENAME'] }}"
+      line: "{{ hostvars[item]['public_IP'] }} {{ hostvars[item]['NODENAME'] }}.{{ DOMAIN_NAME }} {{ hostvars[item]['NODENAME'] }}"
     with_items:
       - "{{ play_hosts }}"
