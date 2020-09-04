@@ -11,6 +11,8 @@ variable "client_servers" {
 
 locals{ 
         yaml = yamldecode(file("./vars.yml"))
+        common_yaml =  yamldecode(file("../common_vars.yml"))
+        network = "${element(split(".", local.common_yaml.vxlan0_NETWORK), 0)}.${element(split(".", local.common_yaml.vxlan0_NETWORK), 1)}.${element(split(".", local.common_yaml.vxlan0_NETWORK), 2)}."
 }
 
 # Create a resource group if it doesn't exist
