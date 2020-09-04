@@ -43,54 +43,6 @@ resource "azurerm_subnet" "racsubnet" {
 
 
 
-###########Azure Private DNS #############
-
-# Create a zone if it doesn't exist
-resource "azurerm_private_dns_zone" "racdns" {
-  name                = local.yaml.DOMAIN_NAME
-  resource_group_name = azurerm_resource_group.racgroup.name
-}
-
-# create virtual network link
-resource "azurerm_private_dns_zone_virtual_network_link" "racvirtnetworklink" {
-  name                  = "racvirtnetworklink"
-  resource_group_name   = azurerm_resource_group.racgroup.name
-  private_dns_zone_name = azurerm_private_dns_zone.racdns.name
-  virtual_network_id    = azurerm_virtual_network.racnetwork.id
-}
-
-# Create a record if it doesn't exist
-resource "azurerm_private_dns_a_record" "racrecord" {
-  count                 = var.db_servers
-  name                  = format("${local.yaml.NODEPREFIX}%03d", count.index + 1)
-  zone_name           = azurerm_private_dns_zone.racdns.name
-  resource_group_name = azurerm_resource_group.racgroup.name
-  ttl                 = 300
-  records             = ["${local.network}${count.index + local.common_yaml.BASE_IP + 1}"]
-}
-
-# Create a vip record if it doesn't exist
-resource "azurerm_private_dns_a_record" "racviprecord" {
-  count                 = var.db_servers
-  name                  = "${format("${local.yaml.NODEPREFIX}%03d", count.index + 1)}-vip"
-  zone_name           = azurerm_private_dns_zone.racdns.name
-  resource_group_name = azurerm_resource_group.racgroup.name
-  ttl                 = 300
-  records             = ["${local.network}${count.index + local.common_yaml.BASE_IP + 1 + 100}"]
-}
-
-# Create a scan record if it doesn't exist
-resource "azurerm_private_dns_a_record" "racscanrecord" {
-  name                  = local.yaml.SCAN_NAME
-  zone_name           = azurerm_private_dns_zone.racdns.name
-  resource_group_name = azurerm_resource_group.racgroup.name
-  ttl                 = 300
-  records             = ["${local.network}${local.common_yaml.BASE_IP -20 }","${local.network}${local.common_yaml.BASE_IP -20 +1}","${local.network}${local.common_yaml.BASE_IP -20 +2}"]
-}
-
-###########Azure Private DNS #############
-
-
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "racnsg" {
     name                = "nsg-${local.yaml.suffix}"
