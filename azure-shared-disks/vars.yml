@@ -21,8 +21,8 @@ link_local: disable
 ######## for ultradisk
 #disk_iops_read_write : 4800
 #disk_mbps_read_write : 1200
-disk_iops_read_write : 1200
-disk_mbps_read_write : 300
+disk_iops_read_write : 2400
+disk_mbps_read_write : 600
 #######
 ####common VIRT_TYPE specific value ################
 INSTALL_OPS: "-ignorePrereqFailure"
