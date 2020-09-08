@@ -117,7 +117,7 @@ resource "azurerm_public_ip" "racdbip" {
     resource_group_name          = azurerm_resource_group.racgroup.name
     allocation_method            = "Static"
     sku                          = "Standard"
-    zones                        = ["${local.yaml.zone}"]
+    zones                        = ["${count.index + 1}"]
 }
 
 
@@ -154,7 +154,7 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     network_interface_ids = [element(azurerm_network_interface.racdbnic.*.id, count.index)]
     size                  = local.yaml.db_vm_size
 
-    zone = ${count.index + 1}
+    zone = count.index + 1
     
     additional_capabilities {
        ultra_ssd_enabled = true
@@ -213,7 +213,7 @@ resource "azurerm_public_ip" "racclientip" {
     resource_group_name          = azurerm_resource_group.racgroup.name
     allocation_method            = "Static"
     sku                          = "Standard"
-    zones                        = ["${local.yaml.zone}"]
+    zones                        = ["1"]
 }
 
 
