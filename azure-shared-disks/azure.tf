@@ -154,7 +154,7 @@ resource "azurerm_linux_virtual_machine" "dbvm" {
     network_interface_ids = [element(azurerm_network_interface.racdbnic.*.id, count.index)]
     size                  = local.yaml.db_vm_size
 
-    zone = local.yaml.zone
+    zone = ${count.index + 1}
     
     additional_capabilities {
        ultra_ssd_enabled = true
@@ -192,7 +192,7 @@ resource "azurerm_managed_disk" "db_data_disk" {
     storage_account_type = local.yaml.storage_account_type
     create_option        = "Empty"
     disk_size_gb         = local.yaml.data_disk_size_gb
-    zones                = ["${local.yaml.zone}"]
+    zones                = ["${count.index + 1}"]
 }
 
 resource "azurerm_virtual_machine_data_disk_attachment" "db_data_disk_attach" {
@@ -249,7 +249,7 @@ resource "azurerm_linux_virtual_machine" "clientvm" {
     resource_group_name   = azurerm_resource_group.racgroup.name
     network_interface_ids = [element(azurerm_network_interface.racclientnic.*.id, count.index)]
     size                  = local.yaml.client_vm_size
-    zone = local.yaml.zone
+    zone = 1
 
     os_disk {
         name              = "osdisk-${format("client%03d", count.index + 1)}"
@@ -278,7 +278,7 @@ resource "azurerm_managed_disk" "client_data_disk" {
     count                 = var.client_servers
     name                  = "datadisk-${format("client%03d", count.index + 1)}"
     location              = local.yaml.location
-    zones = ["${local.yaml.zone}"]
+    zones = ["1"]
     resource_group_name   = azurerm_resource_group.racgroup.name
     storage_account_type = local.yaml.storage_account_type
     create_option        = "Empty"
@@ -298,7 +298,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "client_data_disk_attach
 resource "azurerm_managed_disk" "ultra_disk_vote" {
     name                  = "ultra_disk_vote"
     location              = local.yaml.location
-    zones = ["${local.yaml.zone}"]
+    zones = [1, 2, 3]
     resource_group_name   = azurerm_resource_group.racgroup.name
     storage_account_type = "UltraSSD_LRS"
     create_option        = "Empty"
@@ -322,7 +322,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "ultra_disk_vote_attach"
 resource "azurerm_managed_disk" "ultra_disk_data" {
     name                  = "ultra_disk_data"
     location              = local.yaml.location
-    zones = ["${local.yaml.zone}"]
+    zones = [1, 2, 3]
     resource_group_name   = azurerm_resource_group.racgroup.name
     storage_account_type = "UltraSSD_LRS"
     create_option        = "Empty"
@@ -346,7 +346,7 @@ resource "azurerm_virtual_machine_data_disk_attachment" "ultra_disk_data_attach"
 resource "azurerm_managed_disk" "ultra_disk_fra" {
     name                  = "ultra_disk_fra"
     location              = local.yaml.location
-    zones = ["${local.yaml.zone}"]
+    zones = [1, 2, 3]
     resource_group_name   = azurerm_resource_group.racgroup.name
     storage_account_type = "UltraSSD_LRS"
     create_option        = "Empty"
