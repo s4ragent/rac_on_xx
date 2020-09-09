@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#
 ####common VIRT_TYPE specific value ################
 VIRT_TYPE="azure-shared-disks"
 
