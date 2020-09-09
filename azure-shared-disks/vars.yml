@@ -19,8 +19,8 @@ data_disk_size_gb: "50"
 data_disk_mountpoint: "/u01"
 link_local: disable
 ######## for ultradisk
-#disk_iops_read_write : 4800
-#disk_mbps_read_write : 1200
+##disk_iops_read_write : 4800
+##disk_mbps_read_write : 1200
 disk_iops_read_write : 2400
 disk_mbps_read_write : 600
 #######
