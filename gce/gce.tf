@@ -1,5 +1,6 @@
 locals{ 
         yaml = yamldecode(file("./vars.yml"))
+	common_yaml =  yamldecode(file("../common_vars.yml"))
 }
 
 provider "google" {
