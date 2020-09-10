@@ -202,8 +202,7 @@ common_addDbServer(){
 	
 	terraform apply -auto-approve
 	if [ $? -ne 0 ]; then
-		sleep 180
-		terraform apply -auto-approve
+		exit 1
 	fi
 	
 	cd ../
