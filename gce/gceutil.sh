@@ -6,9 +6,6 @@ VIRT_TYPE="gce"
 cd ..
 source ./commonutil.sh
 
-#### VIRT_TYPE specific processing  (must define)###
-	RG_NAME="rg-${suffix}"
-
 get_External_IP(){
 	expr "$1" + 1 >/dev/null 2>&1
 	if [ $? -lt 2 ]
@@ -46,6 +43,16 @@ get_Internal_IP(){
 	fi
 	echo $Internal_IP	
 }
+
+replaceinventory(){
+	for FILE in $VIRT_TYPE/host_vars/*
+	do
+		INSTANCE_ID=`echo $FILE | awk -F '/' '{print $3}'`
+		External_IP=`get_External_IP $INSTANCE_ID`
+		common_replaceinventory $INSTANCE_ID $External_IP
+	done
+}
+
 
 replaceinventory(){
 	for FILE in $VIRT_TYPE/host_vars/*
