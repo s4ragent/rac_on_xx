@@ -53,16 +53,6 @@ replaceinventory(){
 	done
 }
 
-
-replaceinventory(){
-	for FILE in $VIRT_TYPE/host_vars/*
-	do
-		INSTANCE_ID=`echo $FILE | awk -F '/' '{print $3}'`
-		External_IP=`get_External_IP $INSTANCE_ID`
-		common_replaceinventory $INSTANCE_ID $External_IP
-	done
-}
-
 stop(){
 	expr "$1" + 1 >/dev/null 2>&1
 	if [ $? -lt 2 ]
@@ -71,7 +61,7 @@ stop(){
 	else
     		NODENAME=$1
 	fi
-	az vm deallocate -g $RG_NAME -n $NODENAME
+	gcloud compute instances stop $NODENAME --zone $ZONE -q 
 }
 
 start(){
@@ -82,7 +72,7 @@ start(){
 	else
     		NODENAME=$1
 	fi
-	az vm start -g $RG_NAME -n $NODENAME
+	gcloud compute instances start $NODENAME --zone $ZONE -q 
 	replaceinventory
 }
 
