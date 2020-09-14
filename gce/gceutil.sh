@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ####common VIRT_TYPE specific value ################
-VIRT_TYPE="azure"
+VIRT_TYPE="gce"
 
 cd ..
 source ./commonutil.sh
@@ -18,8 +18,13 @@ get_External_IP(){
     		NODENAME=$1
 	fi
 
-	ip_name=ip_${NODENAME}
-	External_IP=`az vm show -g $RG_NAME -n $NODENAME -d | grep publicIps | awk -F '"' '{print $4}'`
+	LIST_RESULT=$(gcloud compute instances list  $NODENAME --zones $ZONE | tail -n 1)
+	MACHINE_TYPE=`echo $LIST_RESULT | awk '{print $3}'`
+	if [ "$MACHINE_TYPE" = "custom" ]; then
+		External_IP=`echo $LIST_RESULT | awk '{print $9}'`
+	else
+		External_IP=`echo $LIST_RESULT | awk '{print $5}'`
+	fi
 	echo $External_IP	
 }
 
@@ -32,10 +37,14 @@ get_Internal_IP(){
     		NODENAME=$1
 	fi
 	
-	nic_name=nic_${NODENAME}
-	Internal_IP=`az vm show -g $RG_NAME -n $NODENAME -d | grep privateIps | awk -F '"' '{print $4}'`
-
-	echo $Internal_IP
+	LIST_RESULT=$(gcloud compute instances list  $NODENAME --zones $ZONE | tail -n 1)
+	MACHINE_TYPE=`echo $LIST_RESULT | awk '{print $3}'`
+	if [ "$MACHINE_TYPE" = "custom" ]; then
+		Internal_IP=`echo $LIST_RESULT | awk '{print $8}'`
+	else
+		Internal_IP=`echo $LIST_RESULT | awk '{print $4}'`
+	fi
+	echo $Internal_IP	
 }
 
 replaceinventory(){
@@ -46,7 +55,6 @@ replaceinventory(){
 		common_replaceinventory $INSTANCE_ID $External_IP
 	done
 }
-
 
 stop(){
 	expr "$1" + 1 >/dev/null 2>&1
