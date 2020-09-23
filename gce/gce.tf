@@ -27,7 +27,7 @@ resource "google_compute_instance" "development" {
   tags         = ["development", "mass"]
 
   disk {
-    image = "ubuntu-os-cloud/ubuntu-1404-lts"
+    image = local.yaml.image
   }
 
   // Local SSD disk
