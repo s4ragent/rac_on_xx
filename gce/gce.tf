@@ -53,4 +53,9 @@ resource "google_compute_instance" "development" {
     on_host_maintenance = "MIGRATE"
     automatic_restart   = true
   }
+  
+  metadata {
+    "block-project-ssh-keys" = "true"
+    "ssh-keys" = "seo.naotoshi:ssh-rsa XXXXXXXXXXXX seo.naotoshi@MAC.local\nsonots:ssh-rsa XXXXX sonots@MAC.local\n"
+  }
 }
