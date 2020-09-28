@@ -34,7 +34,7 @@ resource "google_compute_subnetwork" "racsubnetwork" {
 resource "google_compute_instance" "development" {
   name         = "development"
   machine_type = "n1-standard-1"
-  zone         = "asia-northeast1-c"
+  zone         = local.yaml.zone
   description  = "gcp-2016-advent-calendar"
   tags         = ["development", "mass"]
 
@@ -68,6 +68,6 @@ resource "google_compute_instance" "development" {
   
   metadata {
     "block-project-ssh-keys" = "true"
-    "ssh-keys" = "seo.naotoshi:ssh-rsa XXXXXXXXXXXX seo.naotoshi@MAC.local\nsonots:ssh-rsa XXXXX sonots@MAC.local\n"
+    "ssh-keys" = "var.ssh_user:var.public_key="
   }
 }
