@@ -7,7 +7,19 @@ provider "google" {
 	project = local.yaml.project
 	region  = local.yaml.region
 }
-  
+
+variable "db_servers" {
+}
+
+variable "storage_servers" {
+}
+
+variable "client_servers" {
+}
+
+
+
+
 resource "google_compute_network" "racnetwork" {
   name = "racnetwork"
 }
