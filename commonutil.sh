@@ -198,6 +198,7 @@ common_addDbServer(){
 	export TF_VAR_storage_servers=`ls $VIRT_TYPE/host_vars/storage* | wc -l`
 	export TF_VAR_client_servers=0
 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+	export TF_VAR_ssh_user=$ansible_ssh_user
 	cd $VIRT_TYPE
 	
 	terraform apply -auto-approve
@@ -223,6 +224,7 @@ common_addStorage(){
 		export TF_VAR_storage_servers=1
 		export TF_VAR_client_servers=0
 		export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+		export TF_VAR_ssh_user=$ansible_ssh_user
 		cd $VIRT_TYPE
 	
 		terraform apply -auto-approve
@@ -241,6 +243,7 @@ common_addClient(){
 	export TF_VAR_storage_servers=`ls $VIRT_TYPE/host_vars/storage* | wc -l`
 	export TF_VAR_client_servers=1
 	export TF_VAR_public_key=`cat ${ansible_ssh_private_key_file}.pub`
+	export TF_VAR_ssh_user=$ansible_ssh_user
 	cd $VIRT_TYPE
 	
 	terraform apply -auto-approve
