@@ -461,6 +461,7 @@
 #      - preinstallpackages
 
   - name: "install cvuqdisk"
+    become: yes
     shell: rpm -ivh /tmp/cvuqdisk.rpm
     when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
