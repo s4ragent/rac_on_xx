@@ -441,7 +441,7 @@
     when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
-      
+
   - name: "copy cvuqdisk"
     become: yes
     copy:
@@ -451,11 +451,17 @@
     tags:
       - preinstallpackages
         
+#  - name: "install cvuqdisk"
+#    become: yes
+#    dnf: 
+#      name: /tmp/cvuqdisk.rpm
+#      state: present
+#    when: MEDIA_COPY is defined and MEDIA_COPY !=""
+#    tags:
+#      - preinstallpackages
+
   - name: "install cvuqdisk"
-    become: yes
-    dnf: 
-      name: /tmp/cvuqdisk.rpm
-      state: present
+    shell: rpm -ivh /tmp/cvuqdisk.rpm
     when: MEDIA_COPY is defined and MEDIA_COPY !=""
     tags:
       - preinstallpackages
