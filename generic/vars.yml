@@ -1,7 +1,7 @@
 #### generic user specific value  ###################
 VXLAN_DEV: "ens160"
 hostname_change : true
-
+disable_chrony : true
 ####common VIRT_TYPE specific value ################
 INSTALL_OPS: "-ignorePrereqFailure"
 MEDIA_COPY: "true"
