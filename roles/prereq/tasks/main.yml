@@ -455,9 +455,9 @@
     become: yes
     dnf: 
       name: /tmp/cvuqdisk.rpm
+      disable_gpg_check: yes
       state: present
     when: MEDIA_COPY is defined and MEDIA_COPY !=""
-    ignore_errors: true
     tags:
       - preinstallpackages
 
