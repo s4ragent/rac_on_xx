@@ -205,6 +205,7 @@
       state: restarted
       enabled: yes
       name: chronyd
+    when: disable_chrony is not defined
     tags:
       - chronyd
 
@@ -215,12 +216,33 @@
     register: r
     retries: 10
     delay: 5
+    when: disable_chrony is not defined
     tags:
       - chronyd
 
   - name: "chrocyc burst"
     become: yes
     shell: chronyc -a makestep
+    when: disable_chrony is not defined
+    tags:
+      - chronyd
+
+  - name: disable chrony
+    become: yes
+    systemd:
+      state: stopped
+      enabled: no
+      name: chronyd
+    when: disable_chrony is defined
+    tags:
+      - chronyd
+
+  - name: rm chrony.conf
+    become: yes
+    file:
+      path: /etc/chrony.conf 
+      state: absent
+    when: disable_chrony is defined
     tags:
       - chronyd
 
