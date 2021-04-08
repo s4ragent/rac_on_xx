@@ -451,21 +451,22 @@
     tags:
       - preinstallpackages
         
+  - name: "install cvuqdisk"
+    become: yes
+    dnf: 
+      name: /tmp/cvuqdisk.rpm
+      state: present
+    when: MEDIA_COPY is defined and MEDIA_COPY !=""
+    ignore_errors: true
+    tags:
+      - preinstallpackages
+
 #  - name: "install cvuqdisk"
 #    become: yes
-#    dnf: 
-#      name: /tmp/cvuqdisk.rpm
-#      state: present
+#    shell: rpm -ivh /tmp/cvuqdisk.rpm
 #    when: MEDIA_COPY is defined and MEDIA_COPY !=""
 #    tags:
 #      - preinstallpackages
-
-  - name: "install cvuqdisk"
-    become: yes
-    shell: rpm -ivh /tmp/cvuqdisk.rpm
-    when: MEDIA_COPY is defined and MEDIA_COPY !=""
-    tags:
-      - preinstallpackages
 
   - name: check sysctl.conf
     become: yes
