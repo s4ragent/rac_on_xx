@@ -1,5 +1,5 @@
 #### generic user specific value  ###################
-VXLAN_DEV: "ens160"
+VXLAN_DEV: "ens192"
 hostname_change : true
 disable_chrony : true
 ####common VIRT_TYPE specific value ################
@@ -7,10 +7,10 @@ INSTALL_OPS: "-ignorePrereqFailure"
 MEDIA_COPY: "true"
 MEDIA_PATH: /downloadmedia
 ####ansible specific
-ansible_ssh_user: opc
+ansible_ssh_user: admin
 ansible_ssh_private_key_file: raconxx
 dns: dnsmasq
-DNS_CON: "ens160"
+DNS_CON: "ens192"
 data_disk_size_gb: "100"
 data_disk_mountpoint: "/u01"
 ##for iSCSI
