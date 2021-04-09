@@ -11,7 +11,7 @@ source ./commonutil.sh
 common_runonly(){
         echo "INPUT STORAGE_IP"
         read STORAGEExtIP
-        common_update_all_yml "STORAGE_SERVER: $STORAGEIntIP"
+        common_update_all_yml "STORAGE_SERVER: $STORAGEExtIP"
         common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
         
         echo "INPUT NUMBERS OF DBSERVERS"
