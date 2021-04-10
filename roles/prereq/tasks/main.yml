@@ -97,7 +97,7 @@
       - createuser
       
   - name: "create ssh key"
-    local_action: shell ssh-keygen -t rsa -P "" -f id_rsa
+    local_action: shell ssh-keygen -t rsa -m PEM -P "" -f id_rsa
     args:
       creates: id_rsa
     run_once: true
@@ -129,19 +129,6 @@
     tags:
       - sshkey
 
-  - name: "copy public key"
-    become: yes
-    copy:
-      dest: "/home/{{ item }}/.ssh/id_rsa.pub"
-      mode: 0600
-      owner: "{{ item }}"
-      group: oinstall
-      content: "{{ lookup('file', 'id_rsa.pub') }}"
-    with_items:
-      - oracle
-      - grid
-    tags:
-      - sshkey
 
   - name: "create ssh config"
     become: yes
