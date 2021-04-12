@@ -44,7 +44,7 @@
       
   - name: download jdbcrunner
     git:
-      repo: ""{{ GIT_BASE_URL }}{{ JDBCRUNNER_REPO }}"
+      repo: "{{ GIT_BASE_URL }}{{ JDBCRUNNER_REPO }}"
       dest: "~/jdbcrunner"
     when: inventory_hostname == groups["client"][0]
 
@@ -82,7 +82,7 @@
 
   - name: download tpt-oracle
     git:
-      repo: ""{{ GIT_BASE_URL }}{{ TPT_REPO }}"
+      repo: "{{ GIT_BASE_URL }}{{ TPT_REPO }}"
       dest: "~/tpt-oracle"
     when: inventory_hostname == groups["client"][0]
 
