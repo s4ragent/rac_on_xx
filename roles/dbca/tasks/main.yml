@@ -2,6 +2,8 @@
   - name: "dbca_cmd"
     set_fact:
       DBCA_CMD: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -createDatabase -templateName {{ TEMPLATENAME }} -gdbName {{ DBNAME }} -sid {{ SIDNAME }} policyManaged=true createServerPool=true serverPoolName={{ SERVERPOOLNAME }} -createAsContainerDatabase true -numberOfPDBs 1 -pdbName {{ PDBNAME }} -pdbAdminPassword {{ PDBADMINPASSWORD }} -SysPassword {{ SYSPASSWORD }} -SystemPassword {{ SYSTEMPASSWORD }} -emConfiguration NONE -redoLogFileSize {{ REDOFILESIZE }} -recoveryAreaDestination +{{ FRA_DISKGROUP_NAME }} -storageType ASM -asmSysPassword {{ ASMSYSPASSWORD }} -diskGroupName {{ DATA_DISKGROUP_NAME }} -characterSet {{ CHARSET }} -nationalCharacterSet {{ NCHAR }} -totalMemory {{ MEMORYTARGET }} -databaseType {{ DATABASETYPE }}"
+    tags:
+      - dbca
 
   - name: "dbca parallel"
     become: yes
@@ -10,6 +12,8 @@
     register: dbca_ret_code
     failed_when: dbca_ret_code.rc not in [0,6]
     when: inventory_hostname == groups["dbserver"][0] and dbca == "paralell"
+    tags:
+      - dbca
 
   - name: "dbca serial first node"
     become: yes
@@ -20,6 +24,7 @@
     when: inventory_hostname == groups["dbserver"][0] and dbca == "serial"
     tags:
       - dbca1st
+      - dbca
 
   - name: "dbca serial othernode"
     become: yes
@@ -31,6 +36,7 @@
     when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca == "serial"
     tags:
       - dbcaother
+      - dbca
 
   - name: "add pdb service"
     become: yes
@@ -42,6 +48,7 @@
     when: inventory_hostname == groups["dbserver"][0] and dbca != "delete"
     tags:
       - addpdbservice
+      - dbca
 
   - name: "start pdb"
     become: yes
@@ -54,6 +61,7 @@
     tags:
       - addpdbservice
       - startpdbservice
+      - dbca
 
   - name: "delete database"
     become: yes
