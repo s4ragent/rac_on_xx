@@ -80,23 +80,20 @@
   - debug: var=tpccload_result.stdout_lines
     when: inventory_hostname == groups["client"][0]
 
-
-  - name:download tpt-oracle
+  - name: download tpt-oracle
     git:
       repo: ""{{ GIT_BASE_URL }}{{ TPT_REPO }}"
       dest: "~/tpt-oracle"
     when: inventory_hostname == groups["client"][0]
 
-
-
-  - name: Download awr_last.sql
-    become: yes
-    become_user: oracle
-    get_url:
-      url: https://raw.githubusercontent.com/tanelpoder/tpt-oracle/master/awr/awr_last.sql
-      dest: "~/awr_last.sql"
-      mode: '0775'
-    when: inventory_hostname == groups["dbserver"][0]
+#  - name: Download awr_last.sql
+#    become: yes
+#    become_user: oracle
+#    get_url:
+#      url: https://raw.githubusercontent.com/tanelpoder/tpt-oracle/master/awr/awr_last.sql
+#      dest: "~/awr_last.sql"
+#      mode: '0775'
+#    when: inventory_hostname == groups["dbserver"][0]
 
   - name: change awr settings
     become: yes
