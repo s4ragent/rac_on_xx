@@ -81,6 +81,8 @@
     when: inventory_hostname == groups["client"][0]
 
   - name: "download tpt-oracle"
+    become: yes
+    become_user: oracle
     git:
       repo: "{{ GIT_BASE_URL }}{{ TPT_REPO }}"
       dest: "~/tpt-oracle"
@@ -143,6 +145,7 @@
 
   - name: fetch awr.log
     become: yes
+    become_user: oracle
     fetch:
       src: "~/tpt-oracle/awr/awr.log"
       dest: "{{ log_dir }}/awr"
