@@ -84,7 +84,7 @@
     git:
       repo: "{{ GIT_BASE_URL }}{{ TPT_REPO }}"
       dest: "~/tpt-oracle"
-    when: inventory_hostname == groups["client"][0]
+    when: inventory_hostname == groups["dbserver"][0]
 
 #  - name: Download awr_last.sql
 #    become: yes
