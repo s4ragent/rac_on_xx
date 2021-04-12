@@ -68,6 +68,9 @@
   - name: "delete server pool"
     become: yes
     become_user: oracle
+    environment:
+      ORACLE_HOME:
+        "{{ ORA_ORACLE_HOME }}"
     shell: "{{ ORA_ORACLE_HOME }}/bin/srvctl remove srvpool {{ SERVERPOOLNAME }}"
     when: inventory_hostname == groups["dbserver"][0] and dbca == "delete"
     tags:
