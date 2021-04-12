@@ -71,7 +71,7 @@
     environment:
       ORACLE_HOME:
         "{{ GRID_ORACLE_HOME }}"
-    shell: "{{ GRID_ORACLE_HOME }}/bin/srvctl remove srvpool {{ SERVERPOOLNAME }}"
+    shell: "{{ GRID_ORACLE_HOME }}/bin/srvctl remove srvpool -serverpool {{ SERVERPOOLNAME }}"
     when: inventory_hostname == groups["dbserver"][0] and dbca == "delete"
     tags:
       - deletedatabase
