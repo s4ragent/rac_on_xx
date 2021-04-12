@@ -7,12 +7,16 @@
     become: yes
     become_user: oracle
     shell: "{{ DBCA_CMD }} -nodelist {% for host in groups['dbserver'] %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+    register: dbca_ret_code
+    failed_when: dbca_ret_code.rc not in [0,6]
     when: inventory_hostname == groups["dbserver"][0] and dbca == "paralell"
 
   - name: "dbca serial first node"
     become: yes
     become_user: oracle
     shell: "{{ DBCA_CMD }} -nodelist {{ NODENAME }}"
+    register: dbca_ret_code
+    failed_when: dbca_ret_code.rc not in [0,6]
     when: inventory_hostname == groups["dbserver"][0] and dbca == "serial"
     tags:
       - dbca1st
@@ -22,6 +26,8 @@
     become_user: oracle
     shell: "{{ ORA_ORACLE_HOME }}/bin/dbca -silent -addInstance -gdbName {{ DBNAME }} -nodeName {{ hostvars[item.1]['NODENAME'] }}"
     with_indexed_items: "{{ groups['dbserver'] }}"
+    register: dbca_ret_code
+    failed_when: dbca_ret_code.rc not in [0,6]
     when: inventory_hostname == groups["dbserver"][0] and item.0 !=0 and dbca == "serial"
     tags:
       - dbcaother
