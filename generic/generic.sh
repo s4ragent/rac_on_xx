@@ -27,6 +27,14 @@ common_runonly(){
 
 }
 
+
+common_addClient(){
+        echo "INPUT CLIENT_IP"
+        read ClientExtIP
+	common_update_ansible_inventory client001 $ClientExtIP client001 70 client
+}
+
+
 deleteall(){
  common_deleteall $*
         rm -rf /tmp/$CVUQDISK
