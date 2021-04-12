@@ -24,7 +24,9 @@ CVUQDISK: cv/rpm/cvuqdisk-1.0.10-1.rpm
 JDBCDRIVER: jdbc/lib/ojdbc8.jar
 UNZIP: /usr/bin/unzip
 FOWARD_PORT: 1234
-JDBCRUNNER_URL: https://github.com/sh2/jdbcrunner.git
-TPT_URL: 
+GIT_BASE_URL: https://github.com
+JDBCRUNNER_REPO: /sh2/jdbcrunner.git
+TPT_REPO: /tanelpoder/tpt-oracle.git
+
 
 
