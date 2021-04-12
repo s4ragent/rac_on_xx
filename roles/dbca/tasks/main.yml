@@ -52,6 +52,7 @@
     environment:
       ORACLE_HOME:
         "{{ ORA_ORACLE_HOME }}"
+    ignore_errors: true
     when: inventory_hostname == groups["dbserver"][0] and dbca != "delete"
     tags:
       - addpdbservice
