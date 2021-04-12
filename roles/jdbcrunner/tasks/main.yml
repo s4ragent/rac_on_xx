@@ -42,9 +42,9 @@
   - debug: var=createuser_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
       
-  - name:
+  - name:download jdbcrunner
     git:
-      repo: https://github.com/sh2/jdbcrunner.git
+      repo: ""{{ GIT_BASE_URL }}{{ JDBCRUNNER_REPO }}"
       dest: "~/jdbcrunner"
     when: inventory_hostname == groups["client"][0]
 
@@ -79,6 +79,15 @@
 
   - debug: var=tpccload_result.stdout_lines
     when: inventory_hostname == groups["client"][0]
+
+
+  - name:download tpt-oracle
+    git:
+      repo: ""{{ GIT_BASE_URL }}{{ TPT_REPO }}"
+      dest: "~/tpt-oracle"
+    when: inventory_hostname == groups["client"][0]
+
+
 
   - name: Download awr_last.sql
     become: yes
@@ -126,7 +135,7 @@
         exit
         EOF
     args:
-      chdir: "~/"
+      chdir: "~/tpt-oracle/awr/"
     when: inventory_hostname == groups["dbserver"][0]
 
   - name: fetch jdbcrunner.log
@@ -138,6 +147,6 @@
   - name: fetch awr.log
     become: yes
     fetch:
-      src: "/home/oracle/awr.log"
+      src: "~/tpt-oracle/awr/awr.log"
       dest: "{{ log_dir }}/awr"
     when: inventory_hostname == groups["dbserver"][0]
