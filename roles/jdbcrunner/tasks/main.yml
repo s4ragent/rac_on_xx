@@ -42,7 +42,7 @@
   - debug: var=createuser_result.stdout_lines
     when: inventory_hostname == groups["dbserver"][0]
       
-  - name: download jdbcrunner
+  - name: "download jdbcrunner"
     git:
       repo: "{{ GIT_BASE_URL }}{{ JDBCRUNNER_REPO }}"
       dest: "~/jdbcrunner"
@@ -80,7 +80,7 @@
   - debug: var=tpccload_result.stdout_lines
     when: inventory_hostname == groups["client"][0]
 
-  - name: download tpt-oracle
+  - name: "download tpt-oracle"
     git:
       repo: "{{ GIT_BASE_URL }}{{ TPT_REPO }}"
       dest: "~/tpt-oracle"
