@@ -73,8 +73,8 @@
 
   - name: "delete server pool"
     become: yes
-    become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/bin/crsctl delete serverpool {{ SERVERPOOLNAME }}"
+    become_user: oracle
+    shell: "{{ ORA_ORACLE_HOME }}/bin/srvctl remove srvpool {{ SERVERPOOLNAME }}"
     when: inventory_hostname == groups["dbserver"][0] and dbca == "delete"
     tags:
       - deletedatabase
