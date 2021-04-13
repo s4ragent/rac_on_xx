@@ -88,7 +88,7 @@
     become: yes
     become_user: oracle
     shell: |
-      {{ ORA_ORACLE_HOME }}/addnode.sh -silent CLUSTER_NEW_NODES {% for host in groups['dbserver'] %}{% if not loop.first %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %} 
+      {{ ORA_ORACLE_HOME }}/addnode/addnode.sh -silent CLUSTER_NEW_NODES {% for host in groups['dbserver'] %}{% if not loop.first %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %} 
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - seha_addnode   
