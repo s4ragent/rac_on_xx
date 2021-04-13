@@ -84,7 +84,7 @@
     tags:
       - seha_readonly_oraclehome
       
-   - name: "readonly oraclehome"
+  - name: "readonly oraclehome"
     become: yes
     become_user: oracle
     shell: |
