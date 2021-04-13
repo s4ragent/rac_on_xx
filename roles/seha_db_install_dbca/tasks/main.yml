@@ -1,1 +1,115 @@
-#
+---
+  - name: "create oradata"
+    become: yes
+    file:
+      path: "{{ ORA_DATA }}"
+      state: directory
+      owner: oracle
+      group: oinstall
+      mode: 0755
+    tags:
+      - seha_create_oradirectory
+
+  - name: "create orainventory"
+    become: yes
+    file:
+      path: "{{ ORAINVENTORY }}"
+      state: directory
+      owner: oracle
+      group: oinstall
+      mode: 0755
+    tags:
+      - seha_create_oradirectory
+      
+  - set_fact: INSTALL_DB_OPS=""
+    when: INSTALL_DB_OPS is undefined
+
+  - name: "copy db media"
+    become: yes
+    become_user: oracle
+    unarchive:
+      src: "/media/{{ DB_MEDIA }}"
+      dest: "{{ ORA_ORACLE_HOME }}"
+      creates: "{{ ORA_ORACLE_HOME }}/bin"
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - seha_copydbmedia
+      
+  - name: "runInstaller(db)"
+    become: yes
+    become_user: oracle
+    shell: |
+      {{ ORA_ORACLE_HOME }}/runInstaller -silent -applyRU {{ MEDIA_PATH }}/{{ GRID_PATCH_NUM }} \
+      -responseFile {{ ORA_ORACLE_HOME }}/install/response/db_install.rsp -waitforcompletion {{ INSTALL_OPS }} {{ INSTALL_DB_OPS }} \
+      oracle.install.option=INSTALL_DB_SWONLY \
+      ORACLE_HOSTNAME={{ ansible_hostname }} \
+      UNIX_GROUP_NAME=oinstall \
+      INVENTORY_LOCATION={{ ORAINVENTORY }} \
+      SELECTED_LANGUAGES={{ INSTALL_LANG }} \
+      ORACLE_HOME={{ ORA_ORACLE_HOME }} \
+      ORACLE_BASE={{ ORA_ORACLE_BASE }} \
+      oracle.install.db.InstallEdition=SE \
+      oracle.install.db.OSDBA_GROUP=dba \
+      oracle.install.db.OSBACKUPDBA_GROUP=dba \
+      oracle.install.db.OSDGDBA_GROUP=dba \
+      oracle.install.db.OSKMDBA_GROUP=dba \
+      oracle.install.db.OSRACDBA_GROUP=dba \
+      SECURITY_UPDATES_VIA_MYORACLESUPPORT=false \
+      DECLINE_SECURITY_UPDATES=true
+    when: inventory_hostname == groups["dbserver"][0]
+    ignore_errors: True
+    register: runinstallerdb_result
+    failed_when: runinstallerdb_result.rc !=0 and runinstallerdb_result.rc != 250 and runinstallerdb_result.rc != 6
+    tags:
+      - seha_dbinstall
+
+  - name: "orainstrootsh"
+    become: yes
+    shell: "{{ ORAINVENTORY }}/orainstRoot.sh -silent"
+    register: orainstrootsh_result
+    tags:
+      - singledbinstall
+
+  - debug: var=orainstrootsh_result.stdout_lines
+    tags:
+      - singledbinstall
+
+  - name: "db root.sh"
+    become: yes
+    shell: "{{ ORA_ORACLE_HOME }}/root.sh -silent"
+    register: dbrootsh_result
+    tags:
+      - singledbinstall
+
+  - debug: var=dbrootsh_result.stdout_lines
+    tags:
+      - singledbinstall
+  
+  - name: "dbca"
+    become: yes
+    become_user: oracle
+    shell: |
+      {{ ORA_ORACLE_HOME }}/bin/dbca -silent -createDatabase \
+      -templateName {{ TEMPLATENAME }} -gdbName {{ DBNAME }} -sid {{ SIDNAME }} \
+      -createAsContainerDatabase true -numberOfPDBs 1 -pdbName {{ PDBNAME }} \
+      -pdbAdminPassword {{ PDBADMINPASSWORD }} -SysPassword {{ SYSPASSWORD }} -SystemPassword {{ SYSTEMPASSWORD }} \
+      -emConfiguration NONE  -redoLogFileSize {{ REDOFILESIZE }} -datafileDestination {{ORA_DATA}} \
+      -characterSet {{ CHARSET }} -nationalCharacterSet {{ NCHAR }} -totalMemory {{ MEMORYTARGET }} \
+      -databaseType {{ DATABASETYPE }} -ignorePreReqs
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - singledbca
+
+  - name: "lsnrctl"
+    become: yes
+    become_user: oracle
+    environment:
+      ORACLE_HOME:
+        "{{ ORA_ORACLE_HOME }}"
+    shell: |
+      {{ ORA_ORACLE_HOME }}/bin/lsnrctl start && sleep 120s
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - singledbca
+      - singledblsnrctl
+
