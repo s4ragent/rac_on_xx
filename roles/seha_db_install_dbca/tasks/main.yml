@@ -57,12 +57,10 @@
       SECURITY_UPDATES_VIA_MYORACLESUPPORT=false \
       DECLINE_SECURITY_UPDATES=true
     when: inventory_hostname == groups["dbserver"][0]
-    ignore_errors: True
     register: runinstallerdb_result
     failed_when: runinstallerdb_result.rc !=0 and runinstallerdb_result.rc != 250 and runinstallerdb_result.rc != 6
     tags:
       - seha_runInstaller
-
 
   - name: "db root.sh"
     become: yes
@@ -76,3 +74,23 @@
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - seha_runInstaller
+
+  - name: "readonly oraclehome"
+    become: yes
+    become_user: oracle
+    shell: |
+      {{ ORA_ORACLE_HOME }}/roohctl -enable
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - seha_readonly_oraclehome
+      
+   - name: "readonly oraclehome"
+    become: yes
+    become_user: oracle
+    shell: |
+      {{ ORA_ORACLE_HOME }}/addnode.sh -silent CLUSTER_NEW_NODES 
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - seha_addnode   
+      
+      
