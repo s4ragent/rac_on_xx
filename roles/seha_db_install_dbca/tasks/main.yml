@@ -68,48 +68,19 @@
     shell: "{{ ORAINVENTORY }}/orainstRoot.sh -silent"
     register: orainstrootsh_result
     tags:
-      - singledbinstall
+      - seha_dbinstall
 
   - debug: var=orainstrootsh_result.stdout_lines
     tags:
-      - singledbinstall
+      - seha_dbinstall
 
   - name: "db root.sh"
     become: yes
     shell: "{{ ORA_ORACLE_HOME }}/root.sh -silent"
     register: dbrootsh_result
     tags:
-      - singledbinstall
+      - seha_dbinstall
 
   - debug: var=dbrootsh_result.stdout_lines
     tags:
-      - singledbinstall
-  
-  - name: "dbca"
-    become: yes
-    become_user: oracle
-    shell: |
-      {{ ORA_ORACLE_HOME }}/bin/dbca -silent -createDatabase \
-      -templateName {{ TEMPLATENAME }} -gdbName {{ DBNAME }} -sid {{ SIDNAME }} \
-      -createAsContainerDatabase true -numberOfPDBs 1 -pdbName {{ PDBNAME }} \
-      -pdbAdminPassword {{ PDBADMINPASSWORD }} -SysPassword {{ SYSPASSWORD }} -SystemPassword {{ SYSTEMPASSWORD }} \
-      -emConfiguration NONE  -redoLogFileSize {{ REDOFILESIZE }} -datafileDestination {{ORA_DATA}} \
-      -characterSet {{ CHARSET }} -nationalCharacterSet {{ NCHAR }} -totalMemory {{ MEMORYTARGET }} \
-      -databaseType {{ DATABASETYPE }} -ignorePreReqs
-    when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - singledbca
-
-  - name: "lsnrctl"
-    become: yes
-    become_user: oracle
-    environment:
-      ORACLE_HOME:
-        "{{ ORA_ORACLE_HOME }}"
-    shell: |
-      {{ ORA_ORACLE_HOME }}/bin/lsnrctl start && sleep 120s
-    when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - singledbca
-      - singledblsnrctl
-
+      - seha_dbinstall
