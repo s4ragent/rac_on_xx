@@ -79,7 +79,7 @@
     become: yes
     become_user: oracle
     shell: |
-      {{ ORA_ORACLE_HOME }}/roohctl -enable
+      {{ ORA_ORACLE_HOME }}/bin/roohctl -enable
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - seha_readonly_oraclehome
