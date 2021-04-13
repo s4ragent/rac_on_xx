@@ -63,24 +63,16 @@
     tags:
       - seha_runInstaller
 
-  - name: "orainstrootsh"
-    become: yes
-    shell: "{{ ORAINVENTORY }}/orainstRoot.sh -silent"
-    register: orainstrootsh_result
-    tags:
-      - seha_runInstaller
-
-  - debug: var=orainstrootsh_result.stdout_lines
-    tags:
-      - seha_runInstaller
 
   - name: "db root.sh"
     become: yes
     shell: "{{ ORA_ORACLE_HOME }}/root.sh -silent"
+    when: inventory_hostname == groups["dbserver"][0]
     register: dbrootsh_result
     tags:
       - seha_runInstaller
 
   - debug: var=dbrootsh_result.stdout_lines
+    when: inventory_hostname == groups["dbserver"][0]
     tags:
       - seha_runInstaller
