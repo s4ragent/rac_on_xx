@@ -61,26 +61,26 @@
     register: runinstallerdb_result
     failed_when: runinstallerdb_result.rc !=0 and runinstallerdb_result.rc != 250 and runinstallerdb_result.rc != 6
     tags:
-      - seha_dbinstall
+      - seha_runInstaller
 
   - name: "orainstrootsh"
     become: yes
     shell: "{{ ORAINVENTORY }}/orainstRoot.sh -silent"
     register: orainstrootsh_result
     tags:
-      - seha_dbinstall
+      - seha_runInstaller
 
   - debug: var=orainstrootsh_result.stdout_lines
     tags:
-      - seha_dbinstall
+      - seha_runInstaller
 
   - name: "db root.sh"
     become: yes
     shell: "{{ ORA_ORACLE_HOME }}/root.sh -silent"
     register: dbrootsh_result
     tags:
-      - seha_dbinstall
+      - seha_runInstaller
 
   - debug: var=dbrootsh_result.stdout_lines
     tags:
-      - seha_dbinstall
+      - seha_runInstaller
