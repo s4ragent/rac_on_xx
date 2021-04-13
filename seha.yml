@@ -1,0 +1,57 @@
+---
+ - hosts: all
+   any_errors_fatal: true
+   roles:
+     - { role: ssh, tags: ['ssh'] }
+     - { role: misc, tags: ['misc'] }
+     - { role: vxlan, tags: ['vxlan'] }
+     - { role: iperf, tags: ['iperf'], when: "iperf is defined" }
+     - { role: dnsmasq, tags: ['dnsmasq'], when: "dns == 'dnsmasq'" }
+     - { role: dnsmanage, tags: ['dnsmanage'], when: "dns == 'dnsmanage'" }
+     - { role: prereq, tags: ['prereq'] }
+
+ - hosts: storage
+   any_errors_fatal: true
+   roles:
+     - { role: nfsserver, tags: ['nfsserver'], when: "storage_type == 'nfs'" }
+     - { role: targetcli, tags: ['targetcli'], when: "storage_type == 'iscsi'" }
+#      - { role: nbdserver, when: "storage_type == 'nbd'" }
+#      - { role: efs, when: "storage_type == 'efs'" }
+
+ - hosts: dbserver
+   any_errors_fatal: true
+   roles:
+     - { role: vnc, tags: ['vnc'], when: "vnc is defined" }
+     - { role: nfsclient, tags: ['nfsclient'], when: "storage_type == 'nfs' or storage_type == 'efs'" }
+     - { role: iscsiclient, tags: ['iscsiclient'], when: "storage_type == 'iscsi'" }
+     - { role: udev, tags: ['udev'], when: "storage_type == 'iscsi' or storage_type == 'raw'" }
+     - { role: fio, tags: ['fio'], when: "fio is defined" }
+     - { role: cvu, tags: ['cvu'], when: "cvu is defined" }
+
+ - hosts: dbserver
+   any_errors_fatal: true
+   serial: 1
+   roles:
+     - { role: gridinstall, tags: ['gridinstall','installdbca'] }
+
+ - hosts: dbserver
+   roles:
+     - { role: crsctl, tags: ['crsctl','gridinstall','installdbca'] }
+      
+ - hosts: dbserver
+   any_errors_fatal: true
+   roles:
+      - { role: asmca, tags: ['gridinstall','installdbca'] }
+      - { role: dbinstall, tags: ['dbinstall','installdbca'] }
+      - { role: dbca, tags: ['dbca','installdbca'] }
+
+ - hosts: dbserver
+   serial: 1
+   roles:
+      - { role: reboot_crsctl, tags: ['reboot_crsctl','installdbca'] , when: "reboot_crsctl is defined" }
+
+ - hosts: all:!storage
+   any_errors_fatal: true
+   roles:
+      - { role: jdbcrunner, tags: ['jdbcrunner'], when: "jdbcrunner is defined" }
+      - { role: crsctl, tags: ['crsctl'], when: "jdbcrunner is defined" }
