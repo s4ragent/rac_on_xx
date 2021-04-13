@@ -48,7 +48,7 @@
       SELECTED_LANGUAGES={{ INSTALL_LANG }} \
       ORACLE_HOME={{ ORA_ORACLE_HOME }} \
       ORACLE_BASE={{ ORA_ORACLE_BASE }} \
-      oracle.install.db.InstallEdition=SE \
+      oracle.install.db.InstallEdition=SE2 \
       oracle.install.db.OSDBA_GROUP=dba \
       oracle.install.db.OSBACKUPDBA_GROUP=dba \
       oracle.install.db.OSDGDBA_GROUP=dba \
