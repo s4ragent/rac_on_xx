@@ -95,3 +95,22 @@
       - seha_addnode   
       
       
+  - name: remove LOCAL_LISTENER
+    become: yes
+    become_user: oracle
+    shell:
+      cmd: |
+        source ~/.bash_profile
+        export ORACLE_SID=`ps -ef | grep ora_pmon_  | grep -v grep | awk -F 'pmon_' '{print $2}'`
+        sqlplus 'sys/{{ SYSPASSWORD }} as sysdba' <<'EOF'
+        ALTER SYSTEM RESET LOCAL_LISTENER SCOPE = BOTH;
+        exit
+        EOF
+    args:
+      chdir: "~/"
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - seha_remove_listener
+      
+      
+      
