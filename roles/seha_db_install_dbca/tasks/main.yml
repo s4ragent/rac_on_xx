@@ -90,6 +90,7 @@
     shell: |
       {{ ORA_ORACLE_HOME }}/addnode/addnode.sh -silent CLUSTER_NEW_NODES={% for host in groups['dbserver'] %}{% if not loop.first %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %} 
     when: inventory_hostname == groups["dbserver"][0]
+    failed_when: runinstallerdb_result.rc !=0 and  runinstallerdb_result.rc != 6
     tags:
       - seha_addnode   
       
