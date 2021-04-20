@@ -144,7 +144,7 @@
     become_user: oracle
     shell: |
       source ~/.bash_profile
-      {{ ORA_ORACLE_HOME }}/bin/srvctl add service -db {{ DBNAME }} -service {{{ PDBNAME }}sv -pdb {{ PDBNAME }} 
+      {{ ORA_ORACLE_HOME }}/bin/srvctl add service -db {{ DBNAME }} -service {{ PDBNAME }}sv -pdb {{ PDBNAME }} 
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - seha_add_service   
