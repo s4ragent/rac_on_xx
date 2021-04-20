@@ -129,7 +129,7 @@
     tags:
       - seha_remove_listener
       
-  - name: "add service"
+  - name: "add node srvctl"
     become: yes
     become_user: oracle
     shell: |
@@ -137,5 +137,17 @@
       {{ ORA_ORACLE_HOME }}/bin/srvctl modify database -db {{ DBNAME }} -node {% for host in groups['dbserver'] %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %} 
     when: inventory_hostname == groups["dbserver"][0]
     tags:
-      - seha_add_service         
+      - seha_add_srvctl         
       
+  - name: "add service"
+    become: yes
+    become_user: oracle
+    shell: |
+      source ~/.bash_profile
+      {{ ORA_ORACLE_HOME }}/bin/srvctl start service -db {{ DBNAME }} -service {{ DBNAME }}sv 
+    when: inventory_hostname == groups["dbserver"][0]
+    tags:
+      - seha_add_service   
+
+
+
