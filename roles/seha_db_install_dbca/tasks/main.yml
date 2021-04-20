@@ -136,7 +136,6 @@
     shell: |
       {{ ORA_ORACLE_HOME }}/bin/srvctl modify database -db {{ DBNAME }} -node {% for host in groups['dbserver'] %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %} 
     when: inventory_hostname == groups["dbserver"][0]
-    failed_when: runinstallerdb_result.rc !=0 and  runinstallerdb_result.rc != 6
     tags:
       - seha_add_service         
       
