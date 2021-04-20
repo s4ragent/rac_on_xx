@@ -116,8 +116,7 @@
   - name: remove LOCAL_LISTENER
     become: yes
     become_user: oracle
-    shell:
-      cmd: |
+    shell: |
         source ~/.bash_profile
         export ORACLE_SID=`ps -ef | grep ora_pmon_  | grep -v grep | awk -F 'pmon_' '{print $2}'`
         sqlplus 'sys/{{ SYSPASSWORD }} as sysdba' <<'EOF'
@@ -134,6 +133,7 @@
     become: yes
     become_user: oracle
     shell: |
+      source ~/.bash_profile
       {{ ORA_ORACLE_HOME }}/bin/srvctl modify database -db {{ DBNAME }} -node {% for host in groups['dbserver'] %}{{ hostvars[host]['NODENAME'] }}{% if not loop.last %},{% endif %}{% endfor %} 
     when: inventory_hostname == groups["dbserver"][0]
     tags:
