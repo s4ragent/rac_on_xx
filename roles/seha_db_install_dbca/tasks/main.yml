@@ -165,7 +165,7 @@
     become_user: oracle
     shell: |
       source ~/.bash_profile
-      {{ ORA_ORACLE_HOME }}/bin/orapwd FILE="+DATA/{{ DBNAME }}/orapw{{ DBNAME }}" INPUT_FILE="{{ ORA_ORACLE_HOME }}/dbs/orapw{{ DBNAME }}" FORCE=y
+      {{ ORA_ORACLE_HOME }}/bin/orapwd FILE="+DATA/{{ DBNAME }}/orapw{{ DBNAME }}" DBUNIQUENAME="{{ DBNAME }}" INPUT_FILE="{{ ORA_ORACLE_HOME }}/dbs/orapw{{ DBNAME }}" FORCE=y
     when: inventory_hostname == groups["dbserver"][0]
     tags:
       - seha_move_passwd
