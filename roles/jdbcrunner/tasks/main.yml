@@ -31,7 +31,7 @@
       - git
 #      - java-1.7.0-openjdk-devel
       - ant
-    when: inventory_hostname == groups["client"][0]
+    when: inventory_hostname == groups["client"][0] or inventory_hostname == groups["dbserver"][0]
     tags:
       - jdbcrunner
       - installjdbcrunner
