@@ -69,5 +69,9 @@ get_External_IP(){
         echo $External_IP       
 }
 
+get_Internal_IP(){
+	get_External_IP $*
+}
+
 source ./common_menu.sh
 
