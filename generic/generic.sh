@@ -56,10 +56,10 @@ get_External_IP(){
                 NODENAME=$1
         fi
         
-        if [ "$1" = "storage*" ]; then
+        if [ "$1" =~ storage* ]; then
                 External_IP=`cat $VIRT_TYPE/storage.inventory | grep $NODENAME | awk -F "=" '{print $2}'`
         else
-                if [ "$1" = "client" ]; then
+                if [ "$1" =~ client* ]; then
                 	External_IP=`cat $VIRT_TYPE/client.inventory | grep $NODENAME | awk -F "=" '{print $2}'`
         	else
                 	External_IP=`cat $VIRT_TYPE/dbserver.inventory | grep $NODENAME | awk -F "=" '{print $2}'`
