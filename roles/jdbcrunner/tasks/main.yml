@@ -19,7 +19,7 @@
         - git
         - ant
       state: latest
-    when: inventory_hostname == groups["client"][0]
+    when: inventory_hostname == groups["client"][0] or inventory_hostname == groups["dbserver"][0]
 
   - name: "create createuser.sh"
     become: yes
