@@ -44,11 +44,14 @@
      - { role: asmca, tags: ['gridinstall','seha_install_dbca']}
      - { role: seha_db_install_dbca, tags: ['seha_install','seha_install_dbca']}
 
+ - hosts: dbserver
+   roles:
+     - { role: crsctl, tags: ['seha_install_dbca'] }
 
  - hosts: dbserver
    serial: 1
    roles:
-     - { role: reboot_crsctl, tags: ['reboot_crsctl','sehadbca'] , when: "reboot_crsctl is defined" }
+     - { role: reboot_crsctl, tags: ['reboot_crsctl','seha_install_dbca'] , when: "reboot_crsctl is defined" }
 
  - hosts: all:!storage
    any_errors_fatal: true
