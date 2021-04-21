@@ -5,18 +5,14 @@ VIRT_TYPE="generic"
 cd ..
 source ./commonutil.sh
 
+common_addDbServer(){
+	if [ "$1" = "" ]; then
+		echo "INPUT NUMBERS OF DBSERVERS"
+		read nodecount
+	else
+		nodecount=$1
+	fi
 
-#### VIRT_TYPE specific processing  (must define)###
-#$1 nodecount                                  #####
-common_runonly(){
-        echo "INPUT STORAGE_IP"
-        read STORAGEExtIP
-        common_update_all_yml "STORAGE_SERVER: $STORAGEExtIP"
-        common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
-        
-        echo "INPUT NUMBERS OF DBSERVERS"
-        read nodecount
-        
         for i in `seq 1 $nodecount`;
         do
                 NODENAME="$NODEPREFIX"`printf "%.3d" $i`
@@ -24,9 +20,15 @@ common_runonly(){
                 read External_IP
                 common_update_ansible_inventory $NODENAME $External_IP $NODENAME $i dbserver
         done    
-
 }
 
+common_addStorage(){		
+	if [ "$storage_type" = "nfs" -o "$storage_type" = "iscsi" ]; then
+		echo "INPUT STORAGE_IP"
+		read STORAGEExtIP
+		common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
+	fi
+}
 
 common_addClient(){
         echo "INPUT CLIENT_IP"
