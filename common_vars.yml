@@ -27,6 +27,6 @@ FOWARD_PORT: 1234
 GIT_BASE_URL: https://github.com
 JDBCRUNNER_REPO: /sh2/jdbcrunner.git
 TPT_REPO: /tanelpoder/tpt-oracle.git
-
+LINBIT_REPO:/LINBIT/
 
 
