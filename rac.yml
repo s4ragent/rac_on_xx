@@ -21,6 +21,7 @@
    roles:
      - { role: vnc, tags: ['vnc'], when: "vnc is defined" }
      - { role: nfsclient, tags: ['nfsclient'], when: "storage_type == 'nfs' or storage_type == 'nfs-managed'" }
+     - { role: nfsclient, tags: ['linstor'], when: "storage_type == 'linstor'" }
      - { role: iscsiclient, tags: ['iscsiclient'], when: "storage_type == 'iscsi' or storage_type == 'iscsi-managed' or storage_type == 'iscsi-multi'" }
      - { role: udev, tags: ['udev'], when: "storage_type != 'nfs' or storage_type != 'nfs-managed'" }
      - { role: fio, tags: ['fio'], when: "fio is defined" }
