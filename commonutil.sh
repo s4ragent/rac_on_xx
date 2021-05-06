@@ -153,9 +153,11 @@ common_runonly(){
 
 	if [ "$storage_type" = "nfs" -o "$storage_type" = "iscsi" ]; then
 		common_addStorage
+	elif [ "$storage_type" = "nfs-managed" -o "$storage_type" = "iscsi-managed" ]; then
+		common_addManagedStorage
+	else
+		common_update_all_yml ""
 	fi
-	
-
 	
  	common_addDbServer $1
 }
@@ -241,6 +243,10 @@ common_addStorage(){
 
 }
 
+common_addManagedStorage(){
+	#must overtide
+	echo ""
+}
 
 common_addClient(){
 	export TF_VAR_db_servers=`ls $VIRT_TYPE/host_vars/$NODEPREFIX* | wc -l`
