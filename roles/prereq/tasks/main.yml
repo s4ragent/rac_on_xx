@@ -368,6 +368,7 @@
 #        -  libnsl2-devel
         -  unzip
         -  libvirt-devel
+        -  glibc-langpack-en
       state: present
     tags:
       - preinstallpackages
