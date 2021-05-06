@@ -47,13 +47,18 @@ DNS_CON: "System eth0"
 ##NFS_OPS:  "rw,bg,hard,nointr,rsize=65536,wsize=65536,tcp,vers=3,timeo=600,actimeo=0"
 ##DD_CMD: dd
 ##for iSCSI
-storage_type: "iscsi"
-iSCSIName: iqn.2020-07.org.jpoug:444
+#storage_type: "iscsi"
+#iSCSIName: iqn.2020-07.org.jpoug:444
 #restart_iscsi: true
-VOTE_DEV: /dev/asm-vote
-DATA_DEV: /dev/asm-data
-FRA_DEV: /dev/asm-fra
-ASM_STRING: /dev/asm*
+#VOTE_DEV: /dev/asm-vote
+#DATA_DEV: /dev/asm-data
+#FRA_DEV: /dev/asm-fra
+#ASM_STRING: /dev/asm*
+storage_type: "linstor"
+VOTE_DEV: /dev/drbd1000
+DATA_DEV: /dev/drbd1001
+FRA_DEV: /dev/drbd1002
+ASM_STRING: /dev/drbd1*
 ##### common storage value
 ORA_DATA: /u01/oradata
 ### XXX_SIZE is GiB
