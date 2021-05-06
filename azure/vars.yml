@@ -25,6 +25,7 @@ data_sa_type: "Standard_LRS"
 data_disk_size_gb: "100"
 data_disk_mountpoint: "/u01"
 link_local: disable
+disable_chrony : true
 ####common VIRT_TYPE specific value ################
 INSTALL_OPS: "-ignorePrereqFailure"
 MEDIA_COPY: "true"
