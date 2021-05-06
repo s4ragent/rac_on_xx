@@ -150,10 +150,12 @@ common_init(){
 
 common_runonly(){
 	common_init
+
+	if [ "$storage_type" = "nfs" -o "$storage_type" = "iscsi" ]; then
+		common_addStorage
+	fi
 	
-	common_addStorage
-	STORAGEIntIP=`get_Internal_IP storage001`
-	common_update_all_yml "STORAGE_SERVER: $STORAGEIntIP"
+
 	
  	common_addDbServer $1
 }
@@ -231,11 +233,11 @@ common_addStorage(){
 	
 		cd ../
 		
-	if [ "$storage_type" = "nfs" -o "$storage_type" = "iscsi" ]; then
 		STORAGEExtIP=`get_External_IP storage001`
 		common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
-	fi
 	
+		STORAGEIntIP=`get_Internal_IP storage001`
+		common_update_all_yml "STORAGE_SERVER: $STORAGEIntIP"
 
 }
 
