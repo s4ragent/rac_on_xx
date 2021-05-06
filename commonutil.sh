@@ -235,7 +235,7 @@ common_addStorage(){
 		common_update_ansible_inventory storage001 $STORAGEExtIP storage001 0 storage
 	fi
 	
-	if [ "$storage_type" = "nfs" -o "$storage_type" = "nfs-manage" -o "$storage_type" = "iscsi" ]; then
+	if [ "$storage_type" = "nfs" -o "$storage_type" = "nfs-managed" -o "$storage_type" = "iscsi" ]; then
 		STORAGEIntIP=`get_Internal_IP storage001`
 		common_update_all_yml "STORAGE_SERVER: $STORAGEIntIP"
 	fi	
