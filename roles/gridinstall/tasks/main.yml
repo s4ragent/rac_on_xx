@@ -29,19 +29,6 @@
       - download
       - downloadgrid
       
-  - name: "copy grid patch"
-    become: yes
-    become_user: grid
-    unarchive:
-      src: "/media/{{ GRID_PATCH }}"
-      dest: "{{ MEDIA_PATH }}"
-      creates: "{{ MEDIA_PATH }}/{{ GRID_PATCH_NUM }}"
-    when: inventory_hostname == groups["dbserver"][0]
-    tags:
-      - creategridrsp
-      - download
-      - downloadgrid
-      
   - name: "create grid.rsp"
     become: yes
     template:
