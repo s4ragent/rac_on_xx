@@ -180,7 +180,7 @@
       - { user: 'oracle', limit_type: 'hard', limit_item: 'nofile', value: 65536 }
       - { user: 'oracle', limit_type: 'soft', limit_item: 'stack', value: 10240 }
       - { user: 'oracle', limit_type: 'hard', limit_item: 'stack', value: 32768 }  
-      - { user: 'oracle', limit_type: 'hard', limit_item: 'memlock', value: "{{ (( ansible_memtotal_mb|int  ))|int}}"  }  
+      - { user: 'oracle', limit_type: 'hard', limit_item: 'memlock', value: "{{ (( ansible_memtotal_mb|int * 1024 ))|int}}"  }  
       - { user: 'grid', limit_type: 'soft', limit_item: 'nproc', value: 2047 }
       - { user: 'grid', limit_type: 'hard', limit_item: 'nproc', value: 16384 }
       - { user: 'grid', limit_type: 'soft', limit_item: 'nofile', value: 1024 }
