@@ -44,7 +44,7 @@
   - name: "runInstaller(grid)"
     become: yes
     become_user: grid
-    shell: "{{ GRID_ORACLE_HOME }}/gridSetup.sh -silent -applyRU {{ MEDIA_PATH }}/{{ GRID_PATCH_NUM }} -responseFile /home/grid/grid.rsp -waitforcompletion {{ INSTALL_OPS }}"
+    shell: "{{ GRID_ORACLE_HOME }}/gridSetup.sh -silent -responseFile /home/grid/grid.rsp -waitforcompletion {{ INSTALL_OPS }}"
     when: inventory_hostname == groups["dbserver"][0]
     register: runinstallergrid_result
     ignore_errors: True
