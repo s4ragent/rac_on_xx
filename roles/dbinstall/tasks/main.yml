@@ -30,7 +30,7 @@
   - name: "runInstaller(db)"
     become: yes
     become_user: oracle
-    shell: "{{ ORA_ORACLE_HOME }}/runInstaller -silent -applyRU {{ MEDIA_PATH }}/{{ GRID_PATCH_NUM }} -responseFile /home/oracle/db.rsp -waitforcompletion {{ INSTALL_OPS }} {{ INSTALL_DB_OPS }}"
+    shell: "{{ ORA_ORACLE_HOME }}/runInstaller -silent -responseFile /home/oracle/db.rsp -waitforcompletion {{ INSTALL_OPS }} {{ INSTALL_DB_OPS }}"
     when: inventory_hostname == groups["dbserver"][0]
     ignore_errors: True
     register: runinstallerdb_result
