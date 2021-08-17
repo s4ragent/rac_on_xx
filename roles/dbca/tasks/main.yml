@@ -38,30 +38,6 @@
     tags:
       - dbcaother
 
-  - name: "add pdb service"
-    become: yes
-    become_user: oracle
-    shell: "{{ ORA_ORACLE_HOME }}/bin/srvctl add service -d {{ DBNAME }} -pdb {{ PDBNAME }} -s SRV{{ PDBNAME }} -serverpool {{ SERVERPOOLNAME }}"
-    environment:
-      ORACLE_HOME:
-        "{{ ORA_ORACLE_HOME }}"
-    when: inventory_hostname == groups["dbserver"][0] and dbca != "delete"
-    tags:
-      - addpdbservice
-
-  - name: "start pdb"
-    become: yes
-    become_user: oracle
-    shell: "{{ ORA_ORACLE_HOME }}/bin/srvctl start service -d {{ DBNAME }} -s SRV{{ PDBNAME }}"
-    environment:
-      ORACLE_HOME:
-        "{{ ORA_ORACLE_HOME }}"
-    ignore_errors: true
-    when: inventory_hostname == groups["dbserver"][0] and dbca != "delete"
-    tags:
-      - addpdbservice
-      - startpdbservice
-
   - name: "delete database"
     become: yes
     become_user: oracle
