@@ -1,7 +1,7 @@
 ---
   - name: "get device_name"
     become: yes
-    shell: "fdisk -l | grep -v /dev/sda | grep '{{ item }} GiB' | awk -F ' |:' {'print $2'}"
+    shell: "fdisk -l | grep -v /dev/sda | grep -v /dev/mapper | grep '{{ item }} GiB' | awk -F ' |:' {'print $2'}"
     with_items:
       - "{{ VOTE_SIZE }}"
       - "{{ DATA_SIZE }}"
